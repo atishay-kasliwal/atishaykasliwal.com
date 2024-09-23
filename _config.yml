@@ -24,7 +24,7 @@ author:
   avatar           : "profile.png"
   name             : "Atishay Kasliwal"
   pronouns         : # example: "she/her"  
-  bio              : "Persuing Master's in Data Science"
+  bio              : "Master's in Data Science"
   location         : "Centereach, New York"
   employer         : "Stony Brook University"
   uri              : # URL
@@ -32,11 +32,11 @@ author:
 
   # Academic websites
   arxiv            : # URL - Update with the correct link to your profile
-  googlescholar    : "https://scholar.google.com/citations?user=PS_CX0AAAAAJ"
+  googlescholar    : #
   impactstory      : # URL
-  orcid            : "http://orcid.org/yourorcidurl"
+  orcid            : #
   semantic         : # URL
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
+  pubmed           : #
   researchgate     : # URL
 
   # Repositories and software development
@@ -57,7 +57,7 @@ author:
   keybase          : # Username
   instagram        : # Username
   lastfm           : # Username
-  linkedin         : "atishay-kalsiwal"
+  linkedin         : "atishay-kasliwal"
   mastodon         : # URL
   medium           : # URL
   pinterest        : # Username
