@@ -8,13 +8,13 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "Your Name / Site Title"
+title                    : "Atishay Kasliwal"
 title_separator          : "-"
-name                     : &name "Your Name"
-description              : &description "personal description"
-url                      : https://academicpages.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+name                     : &name "Atishay Kasliwal"
+description              : &description "As a seasoned professional with a robust background in computer science, I am passionate about leveraging technology to solve complex problems and drive innovation. I am expanding my expertise by pursuing a Master's in Data Science at Stony Brook University (2024-2026), where I am deepening my knowledge in machine learning, big data, and advanced analytics."
+url                      : https://atishay-kasliwal.github.io/ # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "academicpages/academicpages.github.io"
+repository               : "atishay-kasliwal/atishay-kasliwal.github.io"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
 #               If a field is blank the icon and link will not appear, otherwise it will be shown.
