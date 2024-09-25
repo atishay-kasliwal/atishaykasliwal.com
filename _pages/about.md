@@ -27,5 +27,3 @@ I possess a strong foundation in algorithms and system architecture and am adept
 
 Through this portfolio, I hope to showcase my projects and experiences that reflect my dedication to driving innovation and delivering impactful solutions. I am particularly drawn to organizations that value creativity and collaboration and look forward to discussing how my background aligns with your team's needs.
 
-I appreciate your consideration and look forward to the possibility of contributing to your team.
-
