@@ -1,5 +1,5 @@
 ---
-title: "Paper Title Number 3"
+title: "Analytical Study on India’s COVID-19 Reopening Strategies"
 collection: publications
 permalink: /publication/IJRTI2006010
 category: manuscripts

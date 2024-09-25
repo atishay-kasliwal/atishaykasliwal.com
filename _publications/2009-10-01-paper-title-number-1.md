@@ -1,5 +1,5 @@
 ---
-title: "Paper Title Number 1"
+title: "Survey Paper on “Is India ready to reopen?”"
 collection: publications
 category: manuscripts
 permalink: /publication/IJRTI2006005
