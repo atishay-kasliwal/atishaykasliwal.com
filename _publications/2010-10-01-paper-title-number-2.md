@@ -1,7 +1,7 @@
 ---
 title: "Analytical Study on India’s COVID-19 Reopening Strategies"
 collection: publications
-permalink: https://ijrti.org/papers/IJRTI2006010.pdf
+permalink: /publication/IJRTI2006010
 excerpt: 'This paper is about the number 2. The number 3 is left for future work.'
 date: 2020-06-01
 venue: 'The International Journal for Research Trends and Innovation (IJRTI)'
