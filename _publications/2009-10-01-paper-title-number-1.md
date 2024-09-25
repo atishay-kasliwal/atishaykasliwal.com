@@ -4,7 +4,7 @@ collection: publications
 category: manuscripts
 permalink: /publication/IJRTI2006005
 excerpt: 'This paper is about the number 1. The number 2 is left for future work.'
-date: 2009-10-01
+date: 2020-06-01
 venue: 'The International Journal for Research Trends and Innovation (IJRTI)'
 slidesurl: 'https://ijrti.org/papers/IJRTI2006005.pdf'
 paperurl: 'https://ijrti.org/papers/IJRTI2006005.pdf'
