@@ -1,5 +1,5 @@
 ---
-title: "Analytical Study on India’s COVID-19 Reopening Strategies"
+title: "Paper Title Number 2"
 collection: publications
 permalink: /publication/IJRTI2006010
 excerpt: 'This paper is about the number 2. The number 3 is left for future work.'
