@@ -2,6 +2,7 @@
 title: "Paper Title Number 3"
 collection: publications
 permalink: /publication/IJRTI2006010
+category: manuscripts
 excerpt: 'This paper is about the number 2. The number 3 is left for future work.'
 date: 2020-06-01
 venue: 'The International Journal for Research Trends and Innovation (IJRTI)'
