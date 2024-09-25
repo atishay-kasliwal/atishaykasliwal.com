@@ -1,5 +1,5 @@
 ---
-title: "Paper Title Number 2"
+title: "Paper Title Number 3"
 collection: publications
 permalink: /publication/IJRTI2006010
 excerpt: 'This paper is about the number 2. The number 3 is left for future work.'
