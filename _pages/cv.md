@@ -28,7 +28,6 @@ Work Experience
 
 **Accolite Digital: Senior Software Engineer (2021 - 2024)**
 
-  * **Technologies Used**: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
   * Led the development and deployment of fullstack applications using **Java, JavaScript, SpringBoot, and React**.
   * Designed and implemented **microservices architecture** to enhance scalability and maintainability of software solutions.
   * Developed **distributed ledger technology** applications using R3 Corda for secure and transparent transactions.
@@ -65,7 +64,7 @@ Work Experience
   * Trained and fine-tuned the machine learning model on various datasets, ensuring high accuracy in detecting face masks under different lighting and environmental conditions.
   * Integrated the face mask detection model with real-time video streams, enabling effective and scalable monitoring for practical applications.
 
-**Crime Branch Indore: Technical Intern(2020 - 2021)**
+**Crime Branch Indore: Technical Intern(2020 - 2020)**
 
   * Managed the **Citizen Cop application database**, which facilitated and encouraged voluntary and anonymous crime reporting to promote a crime-free environment.
   * Ensured the integrity of the database by regularly maintaining, updating, and **analyzing crime-related** data submitted through the platform.
@@ -104,5 +103,5 @@ Service and Leadership
 ======
 * Organized a press conference at the **Crime Branch**, drawing 200+ attendees to discuss the return of 500+ stolen phones.
 * Core Committee Member of the **Jain Youth Cricket Club**– For the past 3 years, organized monthly events for 500 people, managed event plans, coordinated with team members, and led a team during a tournament with 16 participating teams.
-* Managed the interviewing of new hires at Accolite, assessing candidates for technical skills and problem-solving abilities.
+* Managed the interviewing of hires at Accolite, assessing candidates for technical skills and problem-solving abilities.
 * Assisted in planning and executing the **Symbioz Annual College Event**, managing logistics, budgeting, and coordinating with various teams to ensure smooth operations and a successful event.

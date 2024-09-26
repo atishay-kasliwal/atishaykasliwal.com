@@ -1,5 +1,5 @@
 ---
-layout: archive
+
 permalink: /
 title: "Atishay Kasliwal [![Resume](https://img.icons8.com/ios-filled/16/000000/pdf.png)](URL_TO_YOUR_RESUME)"
 author_profile: true

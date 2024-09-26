@@ -19,7 +19,6 @@ redirect_from:
 
 **Accolite Digital: Senior Software Engineer (2021 - 2024)**
 
-  * **Technologies Used**: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
   * Led the development and deployment of fullstack applications using **Java, JavaScript, SpringBoot, and React**.
   * Designed and implemented **microservices architecture** to enhance scalability and maintainability of software solutions.
   * Developed **distributed ledger technology** applications using R3 Corda for secure and transparent transactions.
@@ -76,11 +75,3 @@ redirect_from:
   * Optimized backend performance by implementing efficient **database queries and API integration**, resulting in faster loading times for users.
   * Participated in the full software development lifecycle, from requirement gathering and design to deployment and maintenance, ensuring projects were completed on time and met client expectations.
   * Collaborated with cross-functional teams, including designers and project managers, to deliver high-quality, customized web solutions.
- 
-Skills
-======
-* **Programming languages:** Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash, Linux
-* **Technologies and Frameworks:** PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD
-* **Data Science:** Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP, Pandas, Numpy
-* **Databases and Cloud Infrastructures:** MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix
-* **Statistics:** Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Data Visualisation
