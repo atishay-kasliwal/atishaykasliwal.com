@@ -18,10 +18,14 @@ My experience has equipped me with a solid foundation in software development, a
 Education
 ======
 * M.S. in Data Science, Stony Brook University, New York, US (2024-2026)
+  *Course Work: Data Analysis, Statistical Computing, Big Data Analysis, Big Data System (Cloud Computing) 
+
 * B.Tech. in Computer Science and Information Technology, Symbiosis University Of Applied Sciences (2018 - 2022)
+  *Course Work: Analysis and Design of Algorithms, Java 2 Enterprise Edition (J2EE), Introduction to Data Science, Machine Learning, Artificial Intelligence, Advanced Cloud Computing, Cloud Infrastructure & Services
 
 Work experience
 ======
+
 Accolite Digital: Senior Software Engineer (2021 - 2024)
 ===
   * Technologies Used: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
@@ -81,9 +85,7 @@ N-tier Technologies Private Limited: Web Developer (2019 - 2020)
   * Optimized backend performance by implementing efficient database queries and API integration, resulting in faster loading times for users.
   * Participated in the full software development lifecycle, from requirement gathering and design to deployment and maintenance, ensuring projects were completed on time and met client expectations.
   * Collaborated with cross-functional teams, including designers and project managers, to deliver high-quality, customized web solutions.
-
-
-  
+ 
 Skills
 ======
 * Skill 1
