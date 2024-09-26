@@ -34,15 +34,27 @@ Work experience
   * Developed RESTful APIs using SpringBoot to enable seamless communication between frontend and backend services, ensuring high-performance and scalable microservices architecture.
   * Implemented SpringBoot security features, including OAuth2 and JWT-based authentication, to safeguard applications and ensure secure data transactions.
 
-* Fall 2015: Research Assistant
+* Shriffle Technologies Pvt. Limited: Software Engineer Intern (2020 - 2021)
   * Github University
   * Duties included: Merging pull requests
   * Supervisor: Professor Hub
 
-* Summer 2015: Research Assistant
+* Verzeo: Internship Program Artificial Technology (2020 - 2020)
   * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+  * Duties included: Merging pull requests
+  * Supervisor: Professor Hub
+
+* Crime Branch Indore: Technical Intern(2020 - 2021)
+  * Github University
+  * Duties included: Merging pull requests
+  * Supervisor: Professor Hub
+
+* N-tier Technologies Private Limited: Web Developer (2019 - 2020)
+  * Github University
+  * Duties included: Merging pull requests
+  * Supervisor: Professor Hub
+
+
   
 Skills
 ======
@@ -61,4 +73,8 @@ Publications
   
 Service and leadership
 ======
-* Currently signed in to 43 different slack teams
+* Organized a press conference at the Crime Branch, drawing 200+ attendees to discuss the return of 500+ stolen phones.
+* Core Committee Member of the Jain Youth Cricket Club– For the past 3 years, organized monthly events for 500 people,
+managed event plans, coordinated with team members, and led a team during a tournament with 16 participating teams.
+* Managed the interviewing of new hires at Accolite, assessing candidates for technical skills and problem-solving abilities.
+* Assisted in planning and executing the Symbioz Annual College Event, managing logistics, budgeting, and coordinating with various teams to ensure smooth operations and a successful event.
