@@ -2,6 +2,9 @@
 title: "Walmart Sales Prediction"
 excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
 collection: portfolio
+date: 2020-06-01
+slidesurl: 'https://ijrti.org/papers/IJRTI2006010.pdf'
+paperurl: 'https://ijrti.org/papers/IJRTI2006010.pdf'
 ---
 
 This project aims to predict weekly sales for each department across 45 Walmart stores using historical markdown data. The core objective was to develop a robust predictive model to estimate sales performance, leveraging various analytical and machine learning techniques. Key highlights of the project include:
