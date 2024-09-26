@@ -39,7 +39,7 @@ Work experience
   * Implemented security best practices to protect data and applications from vulnerabilities.
   * Participated in client discussions to understand business needs and translate them into technical requirements.
   * Contributed to the continuous improvement of development processes and tools through code refactoring and automation.
-  * Wrote and maintained ****unit test cases** for both frontend (React.js) and backend (SpringBoot, Node.js) components to ensure code quality and reliability.
+  * Wrote and maintained **unit test cases** for both frontend (React.js) and backend (SpringBoot, Node.js) components to ensure code quality and reliability.
   * Leveraged **AWS services**, including Lambda, S3, and DynamoDB, to deploy serverless applications and manage cloud infrastructure.
   * Integrated Firestore for real-time data storage and retrieval, enhancing application performance.
   * Developed **RESTful APIs using SpringBoot** to enable seamless communication between frontend and backend services, ensuring high-performance and scalable microservices architecture.
