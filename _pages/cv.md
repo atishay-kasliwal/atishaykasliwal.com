@@ -18,16 +18,16 @@ My experience has equipped me with a solid foundation in software development, a
 Education
 ======
 * M.S. in Data Science, Stony Brook University, New York, US (2024-2026)
-  *Course Work: Data Analysis, Statistical Computing, Big Data Analysis, Big Data System (Cloud Computing) 
+  * **Course Wor**k: Data Analysis, Statistical Computing, Big Data Analysis, Big Data System (Cloud Computing) 
 
 * B.Tech. in Computer Science and Information Technology, Symbiosis University Of Applied Sciences (2018 - 2022)
-  *Course Work: Analysis and Design of Algorithms, Java 2 Enterprise Edition (J2EE), Introduction to Data Science, Machine Learning, Artificial Intelligence, Advanced Cloud Computing, Cloud Infrastructure & Services
+  * **Course Work**: Analysis and Design of Algorithms, Java 2 Enterprise Edition (J2EE), Introduction to Data Science, Machine Learning, Artificial Intelligence, Advanced Cloud Computing, Cloud Infrastructure & Services
 
 Work experience
 ======
 
-Accolite Digital: Senior Software Engineer (2021 - 2024)
-===
+**Accolite Digital: Senior Software Engineer (2021 - 2024)**
+
   * Technologies Used: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
   * Led the development and deployment of fullstack applications using Java, JavaScript, SpringBoot, and React.
   * Designed and implemented microservices architecture to enhance scalability and maintainability of software solutions.
@@ -88,11 +88,11 @@ N-tier Technologies Private Limited: Web Developer (2019 - 2020)
  
 Skills
 ======
-**Programming languages:** Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash
-**Technologies and Frameworks:** PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD
-**Data Science:** Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP
-**Databases and Cloud Infrastructures:** MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix
-**Statistics:** Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing
+* **Programming languages:** Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash
+* **Technologies and Frameworks:** PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD
+* **Data Science:** Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP
+* **Databases and Cloud Infrastructures:** MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix
+* **Statistics:** Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Data Visualisation
 
 Publications
 ======
