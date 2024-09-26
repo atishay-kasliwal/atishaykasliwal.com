@@ -18,9 +18,9 @@ Work experience
 ======
 * Accolite Digital: Senior Software Engineer (2021 - 2024)
   * Technologies Used: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
-  * Led the development and deployment of full-stack web applications using Java, JavaScript, SpringBoot, and React.js.
+  * Led the development and deployment of fullstack applications using Java, JavaScript, SpringBoot, and React.
   * Designed and implemented microservices architecture to enhance scalability and maintainability of software solutions.
-  * Developed distributed ledger technology (DLT) applications using R3 Corda for secure and transparent transactions.
+  * Developed distributed ledger technology applications using R3 Corda for secure and transparent transactions.
   * Collaborated with cross-functional teams, including product managers and UX designers, to gather requirements and deliver high-quality software solutions.
   * Mentored and guided junior developers and interns, providing technical support and code reviews.
   * Managed the integration of APIs and third-party services using Node.js, ensuring seamless connectivity and data exchange.
