@@ -17,10 +17,10 @@ My experience has equipped me with a solid foundation in software development, a
 
 Education
 ======
-* M.S. in Data Science, Stony Brook University, New York, US (2024-2026)
-  * **Course Wor**k: Data Analysis, Statistical Computing, Big Data Analysis, Big Data System (Cloud Computing) 
+* **M.S. in Data Science, Stony Brook University, New York, US (2024-2026)**
+  * **Course Work**: Data Analysis, Statistical Computing, Big Data Analysis, Big Data System (Cloud Computing) 
 
-* B.Tech. in Computer Science and Information Technology, Symbiosis University Of Applied Sciences (2018 - 2022)
+* **B.Tech. in Computer Science and Information Tech., Symbiosis University Of Applied Sciences (2018 - 2022)**
   * **Course Work**: Analysis and Design of Algorithms, Java 2 Enterprise Edition (J2EE), Introduction to Data Science, Machine Learning, Artificial Intelligence, Advanced Cloud Computing, Cloud Infrastructure & Services
 
 Work experience
