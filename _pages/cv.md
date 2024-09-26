@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Professional Summary"
+title: "Professional Summary [![Resume](https://img.icons8.com/ios-filled/16/000000/pdf.png)](files/Atishay%20Kasliwal.pdf)"
 permalink: /cv/
 author_profile: true
 redirect_from:
