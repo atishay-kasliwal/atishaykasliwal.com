@@ -88,12 +88,11 @@ N-tier Technologies Private Limited: Web Developer (2019 - 2020)
  
 Skills
 ======
-* Skill 1 * Skill 2 * Sub-skill 2.1
-
-  
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+Programming languages: Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash
+Technologies and Frameworks: PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD
+Data Science: Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP
+Databases and Cloud Infrastructures: MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix
+Statistics: Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing
 
 Publications
 ======
