@@ -13,11 +13,11 @@ My experience has equipped me with a solid foundation in software development, a
 
 | **Category**                      | **Skills**                                                                                   |
 |-----------------------------------|---------------------------------------------------------------------------------------------|
-| **Programming Languages**         | Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash, Linux                    |
-| **Technologies and Frameworks**   | PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD                      |
+| **Programming Languages**         | Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash, TypeScript     |
+| **Technologies and Frameworks**   | PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD ,Linux    |
 | **Data Science**                  | Data Analytics, Data Visualization, TensorFlow, Keras, PyTorch, NLP, Pandas, NumPy        |
 | **Databases and Cloud Infrastructures** | MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix                              |
-| **Statistics**                    | Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Data Visualization     |
+| **Statistics**                    | Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Sampling Methods    |
 
 
 Developing Meaningful Solutions with Code and Data
