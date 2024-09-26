@@ -8,13 +8,13 @@ redirect_from:
 ---
 
 {% include base_path %}
-| Company Name                            | Period           | Tech Stack                                                 |
+| Company Name    | Title        | Period           | Tech Stack                                                 |
 |-----------------------------------------|------------------|-----------------------------------------------------------|
-| Accolite Digital                        | 2021 - 2024      | Java, JavaScript, SpringBoot, React.js, Node.js, DLT, R3  |
-| Shriffle Technologies Pvt. Limited     | 2020 - 2021      | Spring Boot, JUnit, SonarQube, Slack API                   |
-| Verzeo                                  | 2020 - 2020      | Python, TensorFlow, SpeechRecognition, gTTS                |
-| Crime Branch Indore                    | 2020 - 2021      | SQL, Data Analysis                                          |
-| N-tier Technologies Private Limited     | 2019 - 2020      | React.js, SpringBoot, HTML/CSS, JavaScript                |
+| Accolite Digital |Senior Software Engineer | 2021 - 2024 | Java, JavaScript, SpringBoot, React.js, Node.js, DLT, R3, AWS, GCP, Azure|
+| Shriffle Technologies Pvt. Limited |Software Engineer Intern | 2020 - 2021 | Spring Boot, JUnit, SonarQube, Slack API |
+| Verzeo    |Internship Program Artifical Technology     | 2020 - 2020 | Python, TensorFlow, SpeechRecognition, gTTS |
+| Crime Branch Indore|   Technical Intern   | 2020 - 2020    | SQL, Data Analysis   |
+| N-tier Technologies Private Limited|Web Developer| 2019 - 2020 | React.js, SpringBoot, HTML/CSS, JavaScript |
 
 
 **Accolite Digital: Senior Software Engineer (2021 - 2024)**
@@ -56,7 +56,7 @@ redirect_from:
   * Trained and fine-tuned the machine learning model on various datasets, ensuring high accuracy in detecting face masks under different lighting and environmental conditions.
   * Integrated the face mask detection model with real-time video streams, enabling effective and scalable monitoring for practical applications.
 
-**Crime Branch Indore: Technical Intern(2020 - 2021)**
+**Crime Branch Indore: Technical Intern (2020 - 2020)**
 
   * Managed the **Citizen Cop application database**, which facilitated and encouraged voluntary and anonymous crime reporting to promote a crime-free environment.
   * Ensured the integrity of the database by regularly maintaining, updating, and **analyzing crime-related** data submitted through the platform.
