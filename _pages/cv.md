@@ -8,6 +8,12 @@ redirect_from:
 ---
 
 {% include base_path %}
+Summary
+======
+As a seasoned professional with a robust background in computer science, I am passionate about leveraging technology to solve complex problems and drive innovation. I am expanding my expertise by pursuing a Master's in Data Science at Stony Brook University (2024-2026), where I am deepening my knowledge in machine learning, big data, and advanced analytics.
+
+My experience has equipped me with a solid foundation in software development, algorithms, and system architecture, which I now apply to the rapidly evolving field of data science. I am eager to connect with like-minded professionals and explore opportunities where I can contribute my skills to impactful projects.
+
 
 Education
 ======
@@ -16,7 +22,7 @@ Education
 
 Work experience
 ======
-* Accolite Digital: Senior Software Engineer (2021 - 2024)
+Accolite Digital: Senior Software Engineer (2021 - 2024)
 ===
   * Technologies Used: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
   * Led the development and deployment of fullstack applications using Java, JavaScript, SpringBoot, and React.
@@ -35,7 +41,8 @@ Work experience
   * Developed RESTful APIs using SpringBoot to enable seamless communication between frontend and backend services, ensuring high-performance and scalable microservices architecture.
   * Implemented SpringBoot security features, including OAuth2 and JWT-based authentication, to safeguard applications and ensure secure data transactions.
 
-* Shriffle Technologies Pvt. Limited: Software Engineer Intern (2020 - 2021)
+Shriffle Technologies Pvt. Limited: Software Engineer Intern (2020 - 2021)
+===
   * Designed and implemented robust RESTful APIs using Spring Boot, streamlining backend services and reducing development time for new features by 40% through effective utilization of Spring Boot’s auto-configuration.
   * Developed a customized Slack bot to automate over 20 routine tasks, improving team efficiency by providing quick access to information and cutting manual workloads by 40%, ultimately boosting overall productivity by 25%.
   * Executed comprehensive unit tests using JUnit, ensuring high code quality and reliability. Integrated SonarQube for continuous inspection and static code analysis, which resulted in a 30% reduction in code defects and maintained high standards throughout the development lifecycle.
@@ -44,7 +51,8 @@ Work experience
   * Documented API endpoints and workflows, ensuring that teams had clear and concise references for future development and maintenance.
   * Continuously monitored and improved the Slack bot’s features, implementing feedback loops to ensure the automation remained aligned with team needs and operational goals.
 
-* Verzeo: Internship Program Artificial Technology (2020 - 2020)
+Verzeo: Internship Program Artificial Technology (2020 - 2020)
+===
   * Led a team of 5 individuals virtually to develop a text-to-speech and speech-to-text converter using Python, coordinating tasks and ensuring effective collaboration among team members.
   * Oversaw the complete project lifecycle, from initial planning and development to the successful submission of the converter to the organization, addressing a major problem.
   * Utilized Python libraries such as SpeechRecognition and gTTS (Google Text-to-Speech) to create robust, efficient conversion tools, ensuring high accuracy in speech recognition and text generation.
@@ -53,7 +61,8 @@ Work experience
   * Trained and fine-tuned the machine learning model on various datasets, ensuring high accuracy in detecting face masks under different lighting and environmental conditions.
   * Integrated the face mask detection model with real-time video streams, enabling effective and scalable monitoring for practical applications.
 
-* Crime Branch Indore: Technical Intern(2020 - 2021)
+Crime Branch Indore: Technical Intern(2020 - 2021)
+===
   * Managed the Citizen Cop application database, which facilitated and encouraged voluntary and anonymous crime reporting to promote a crime-free environment.
   * Ensured the integrity of the database by regularly maintaining, updating, and analyzing crime-related data submitted through the platform.
   * Collaborated with law enforcement teams to ensure reported incidents were properly categorized and stored, enabling quick access for further investigations.
@@ -62,7 +71,8 @@ Work experience
   * Processed and filtered raw crime data, extracting key insights to support crime prevention efforts and reporting trends to relevant authorities.
   * Coordinated with cross-functional teams to ensure smooth data flow and that confidential information was securely managed and protected.
 
-* N-tier Technologies Private Limited: Web Developer (2019 - 2020)
+N-tier Technologies Private Limited: Web Developer (2019 - 2020)
+===
   * Collaborated closely with a Senior Developer on-site, gaining hands-on experience in real-world industrial software development practices.
   * Designed and developed blogs, corporate websites, and e-commerce platforms, using modern web frameworks and tools to ensure a responsive and user-friendly interface.
   * Built a Library Management System from scratch, creating both the frontend and backend, ensuring a seamless user experience and efficient database management.
