@@ -1,6 +1,6 @@
 ---
 title: "Walmart Sales Prediction"
-excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
+excerpt: "Data Science Project in python to predict the sales for each department using historical markdown data from the Walmart dataset containing data of 45 Walmart stores. The purpose of this project is to develop a predictive model and find out the sales of each product at a given Walmart store. This project features a exploratory analysis and my predictive model was primarily based on linear regression<br/><img src='/images/500x300.png'>"
 collection: portfolio
 date: 2020-06-01
 slidesurl: 'https://ijrti.org/papers/IJRTI2006010.pdf'
