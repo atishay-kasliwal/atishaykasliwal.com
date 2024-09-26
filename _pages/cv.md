@@ -45,8 +45,8 @@ Work experience
   * Developed RESTful APIs using SpringBoot to enable seamless communication between frontend and backend services, ensuring high-performance and scalable microservices architecture.
   * Implemented SpringBoot security features, including OAuth2 and JWT-based authentication, to safeguard applications and ensure secure data transactions.
 
-Shriffle Technologies Pvt. Limited: Software Engineer Intern (2020 - 2021)
-===
+**Shriffle Technologies Pvt. Limited: Software Engineer Intern (2020 - 2021)**
+
   * Designed and implemented robust RESTful APIs using Spring Boot, streamlining backend services and reducing development time for new features by 40% through effective utilization of Spring Boot’s auto-configuration.
   * Developed a customized Slack bot to automate over 20 routine tasks, improving team efficiency by providing quick access to information and cutting manual workloads by 40%, ultimately boosting overall productivity by 25%.
   * Executed comprehensive unit tests using JUnit, ensuring high code quality and reliability. Integrated SonarQube for continuous inspection and static code analysis, which resulted in a 30% reduction in code defects and maintained high standards throughout the development lifecycle.
@@ -55,8 +55,8 @@ Shriffle Technologies Pvt. Limited: Software Engineer Intern (2020 - 2021)
   * Documented API endpoints and workflows, ensuring that teams had clear and concise references for future development and maintenance.
   * Continuously monitored and improved the Slack bot’s features, implementing feedback loops to ensure the automation remained aligned with team needs and operational goals.
 
-Verzeo: Internship Program Artificial Technology (2020 - 2020)
-===
+**Verzeo: Internship Program Artificial Technology (2020 - 2020)**
+
   * Led a team of 5 individuals virtually to develop a text-to-speech and speech-to-text converter using Python, coordinating tasks and ensuring effective collaboration among team members.
   * Oversaw the complete project lifecycle, from initial planning and development to the successful submission of the converter to the organization, addressing a major problem.
   * Utilized Python libraries such as SpeechRecognition and gTTS (Google Text-to-Speech) to create robust, efficient conversion tools, ensuring high accuracy in speech recognition and text generation.
@@ -65,8 +65,8 @@ Verzeo: Internship Program Artificial Technology (2020 - 2020)
   * Trained and fine-tuned the machine learning model on various datasets, ensuring high accuracy in detecting face masks under different lighting and environmental conditions.
   * Integrated the face mask detection model with real-time video streams, enabling effective and scalable monitoring for practical applications.
 
-Crime Branch Indore: Technical Intern(2020 - 2021)
-===
+**Crime Branch Indore: Technical Intern(2020 - 2021)**
+
   * Managed the Citizen Cop application database, which facilitated and encouraged voluntary and anonymous crime reporting to promote a crime-free environment.
   * Ensured the integrity of the database by regularly maintaining, updating, and analyzing crime-related data submitted through the platform.
   * Collaborated with law enforcement teams to ensure reported incidents were properly categorized and stored, enabling quick access for further investigations.
@@ -75,22 +75,22 @@ Crime Branch Indore: Technical Intern(2020 - 2021)
   * Processed and filtered raw crime data, extracting key insights to support crime prevention efforts and reporting trends to relevant authorities.
   * Coordinated with cross-functional teams to ensure smooth data flow and that confidential information was securely managed and protected.
 
-N-tier Technologies Private Limited: Web Developer (2019 - 2020)
-===
-  * Collaborated closely with a Senior Developer on-site, gaining hands-on experience in real-world industrial software development practices.
+**N-tier Technologies Private Limited: Web Developer (2019 - 2020)**
+
+  * Collaborated closely with a Senior Developer on-site, gaining hands-on experience in **real-world industrial software development practices**.
   * Designed and developed blogs, corporate websites, and e-commerce platforms, using modern web frameworks and tools to ensure a responsive and user-friendly interface.
-  * Built a Library Management System from scratch, creating both the frontend and backend, ensuring a seamless user experience and efficient database management.
-  * Utilized industry-standard frameworks such as React.js and SpringBoot to develop web applications, enhancing functionality and scalability.
+  * Built a **Library Management System** from scratch, creating both the frontend and backend, ensuring a seamless user experience and efficient database management.
+  * Utilized industry-standard frameworks such as **React.js and SpringBoot** to develop web applications, enhancing functionality and scalability.
   * Worked on enhancing user experience through the development of intuitive, responsive, and interactive web interfaces.
-  * Optimized backend performance by implementing efficient database queries and API integration, resulting in faster loading times for users.
+  * Optimized backend performance by implementing efficient **database queries and API integration**, resulting in faster loading times for users.
   * Participated in the full software development lifecycle, from requirement gathering and design to deployment and maintenance, ensuring projects were completed on time and met client expectations.
   * Collaborated with cross-functional teams, including designers and project managers, to deliver high-quality, customized web solutions.
  
 Skills
 ======
-* **Programming languages:** Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash
+* **Programming languages:** Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash, Linux
 * **Technologies and Frameworks:** PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD
-* **Data Science:** Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP
+* **Data Science:** Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP, Pandas, Numpy
 * **Databases and Cloud Infrastructures:** MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix
 * **Statistics:** Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Data Visualisation
 
@@ -102,8 +102,7 @@ Publications
   
 Service and leadership
 ======
-* Organized a press conference at the Crime Branch, drawing 200+ attendees to discuss the return of 500+ stolen phones.
-* Core Committee Member of the Jain Youth Cricket Club– For the past 3 years, organized monthly events for 500 people,
-managed event plans, coordinated with team members, and led a team during a tournament with 16 participating teams.
+* Organized a press conference at the **Crime Branch**, drawing 200+ attendees to discuss the return of 500+ stolen phones.
+* Core Committee Member of the **Jain Youth Cricket Club**– For the past 3 years, organized monthly events for 500 people, managed event plans, coordinated with team members, and led a team during a tournament with 16 participating teams.
 * Managed the interviewing of new hires at Accolite, assessing candidates for technical skills and problem-solving abilities.
-* Assisted in planning and executing the Symbioz Annual College Event, managing logistics, budgeting, and coordinating with various teams to ensure smooth operations and a successful event.
+* Assisted in planning and executing the **Symbioz Annual College Event**, managing logistics, budgeting, and coordinating with various teams to ensure smooth operations and a successful event.
