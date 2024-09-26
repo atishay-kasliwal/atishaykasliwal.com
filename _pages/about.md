@@ -11,6 +11,15 @@ As a seasoned professional with a robust background in computer science, I am pa
 
 My experience has equipped me with a solid foundation in software development, algorithms, and system architecture, which I now apply to the rapidly evolving field of data science. I am eager to connect with like-minded professionals and explore opportunities where I can contribute my skills to impactful projects.
 
+| **Category**                      | **Skills**                                                                                   |
+|-----------------------------------|---------------------------------------------------------------------------------------------|
+| **Programming Languages**         | Java, JavaScript, Python, C/C++, C#, Scala, MATLAB, SQL, R, Bash, Linux                    |
+| **Technologies and Frameworks**   | PowerBI, Git, Excel, DevOps, Kubernetes, UNIX, Jenkins, Docker, CI/CD                      |
+| **Data Science**                  | Data Analytics, Data Visualization, TensorFlow, Keras, PyTorch, NLP, Pandas, NumPy        |
+| **Databases and Cloud Infrastructures** | MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix                              |
+| **Statistics**                    | Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Data Visualization     |
+
+
 Developing Meaningful Solutions with Code and Data
 ======
 I am excited to share my journey and skills in the realm of technology as I seek opportunities within your organization. With a robust background in computer science and a passion for leveraging technology to tackle complex challenges, I aim to contribute meaningfully through this portfolio.

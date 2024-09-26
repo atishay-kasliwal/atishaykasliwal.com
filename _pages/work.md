@@ -13,8 +13,8 @@ redirect_from:
 | Accolite Digital |Senior Software Engineer | 2021 - 2024 | Java, JavaScript, SpringBoot, React.js, Node.js, DLT, R3, AWS|
 | Shriffle Technologies Pvt. Limited |Software Engineer Intern | 2020 - 2021 | Spring Boot, JUnit, SonarQube, Slack API |
 | Verzeo    |Internship Program Artifical Technology     | 2020 - 2020 | Python, TensorFlow, SpeechRecognition, gTTS |
-| Crime Branch Indore|   Technical Intern   | 2020 - 2020    | SQL, Data Analysis   |
-| N-tier Technologies Private Limited|Web Developer| 2019 - 2020 | React.js, SpringBoot, HTML/CSS, JavaScript |
+| Crime Branch Indore|   Technical Intern   | 2020 - 2020    | SQL, Data Analysis. GCP, Data Visualisation   |
+| N-tier Technologies Private Limited|Web Developer| 2019 - 2020 | React.js, SpringBoot, HTML/CSS, JavaScript, Azure |
 
 
 **Accolite Digital: Senior Software Engineer (2021 - 2024)**
