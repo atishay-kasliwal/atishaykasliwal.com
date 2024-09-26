@@ -1,7 +1,7 @@
 ---
 
 permalink: /
-title: "Atishay Kasliwal [![Resume](https://img.icons8.com/ios-filled/16/000000/pdf.png)](https://github.com/atishay-kasliwal/atishay-kasliwal.github.io/blob/master/files/Atishay%20Kasliwal.pdf)"
+title: "Atishay Kasliwal [![Resume](https://img.icons8.com/ios-filled/16/000000/pdf.png)](files/Atishay%20Kasliwal.pdf)"
 author_profile: true
 redirect_from: 
   - /about/
