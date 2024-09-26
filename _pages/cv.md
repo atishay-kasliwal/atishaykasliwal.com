@@ -17,6 +17,7 @@ Education
 Work experience
 ======
 * Accolite Digital: Senior Software Engineer (2021 - 2024)
+===
   * Technologies Used: Java, Javascript, Springboot, React.js, Node.js, DLT, R3
   * Led the development and deployment of fullstack applications using Java, JavaScript, SpringBoot, and React.
   * Designed and implemented microservices architecture to enhance scalability and maintainability of software solutions.
