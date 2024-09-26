@@ -1,10 +1,9 @@
 ---
 title: "Walmart Sales Prediction [![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github)](https://github.com/atishay-kasliwal/Walmart-Sales-Prediction)"
-excerpt: "Data Science Project in python to predict the sales for each department using historical markdown data from the Walmart dataset containing data of 45 Walmart stores. The purpose of this project is to develop a predictive model and find out the sales of each product at a given Walmart store. This project features a exploratory analysis and my predictive model was primarily based on linear regression<br/><img src='images\hxh.png'>"
+excerpt: "Data Science Project in python to predict the sales for each department using historical markdown data from the Walmart dataset containing data of 45 Walmart stores. The purpose of this project is to develop a predictive model and find out the sales of each product at a given Walmart store. This project features a exploratory analysis and my predictive model was primarily based on linear regression<br/><img src='images/hxh.png'>"
 collection: portfolio
 date: 2020-06-01
-slidesurl: 'https://ijrti.org/papers/IJRTI2006010.pdf'
-paperurl: 'https://ijrti.org/papers/IJRTI2006010.pdf'
+
 ---
 
 This project aims to predict weekly sales for each department across 45 Walmart stores using historical markdown data. The core objective was to develop a robust predictive model to estimate sales performance, leveraging various analytical and machine learning techniques. Key highlights of the project include:
