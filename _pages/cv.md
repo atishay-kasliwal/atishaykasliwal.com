@@ -11,8 +11,8 @@ redirect_from:
 
 Education
 ======
-* M.S. in Data Science, Stony Brook University, 2026
-* B.Tech. in Computer Science and Information Technology, Symbiosis University Of Applied Sciences, 2022
+* M.S. in Data Science, Stony Brook University, New York, US (2024-2026)
+* B.Tech. in Computer Science and Information Technology, Symbiosis University Of Applied Sciences (2018 - 2022)
 
 Work experience
 ======
