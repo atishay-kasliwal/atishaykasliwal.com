@@ -8,23 +8,14 @@ redirect_from:
 ---
 
 {% include base_path %}
-Summary
-======
-As a seasoned professional with a robust background in computer science, I am passionate about leveraging technology to solve complex problems and drive innovation. I am expanding my expertise by pursuing a Master's in Data Science at Stony Brook University (2024-2026), where I am deepening my knowledge in **machine learning, big data, and advanced analytics**.
+| Company Name                            | Period           | Tech Stack                                                 |
+|-----------------------------------------|------------------|-----------------------------------------------------------|
+| Accolite Digital                        | 2021 - 2024      | Java, JavaScript, SpringBoot, React.js, Node.js, DLT, R3  |
+| Shriffle Technologies Pvt. Limited     | 2020 - 2021      | Spring Boot, JUnit, SonarQube, Slack API                   |
+| Verzeo                                  | 2020 - 2020      | Python, TensorFlow, SpeechRecognition, gTTS                |
+| Crime Branch Indore                    | 2020 - 2021      | SQL, Data Analysis                                          |
+| N-tier Technologies Private Limited     | 2019 - 2020      | React.js, SpringBoot, HTML/CSS, JavaScript                |
 
-My experience has equipped me with a solid foundation in **software development, algorithms, and system architecture**, which I now apply to the rapidly evolving field of data science. I am eager to connect with like-minded professionals and explore opportunities where I can contribute my skills to impactful projects.
-
-
-Education
-======
-* **M.S. in Data Science, Stony Brook University, New York, US (2024-2026)**
-  * **Course Work**: Data Analysis, Statistical Computing, Big Data Analysis, Big Data System (Cloud Computing) 
-
-* **B.Tech. in Computer Science and Information Tech., Symbiosis University Of Applied Sciences (2018 - 2022)**
-  * **Course Work**: Analysis and Design of Algorithms, Java 2 Enterprise Edition (J2EE), Introduction to Data Science, Machine Learning, Artificial Intelligence, Advanced Cloud Computing, Cloud Infrastructure & Services
-
-Work experience
-======
 
 **Accolite Digital: Senior Software Engineer (2021 - 2024)**
 
@@ -93,16 +84,3 @@ Skills
 * **Data Science:** Data Analytics, Data Visualization, Tensorflow, Keras, PyTorch, NLP, Pandas, Numpy
 * **Databases and Cloud Infrastructures:** MySQL, PostgreSQL, MongoDB, AWS, GCP, Azure, Hadoop, Unix
 * **Statistics:** Time Series, Bayesian Statistics, Predictive Modeling, A/B Testing, Data Visualisation
-
-Publications
-======
-  <ul>{% for post in site.publications reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Organized a press conference at the **Crime Branch**, drawing 200+ attendees to discuss the return of 500+ stolen phones.
-* Core Committee Member of the **Jain Youth Cricket Club**– For the past 3 years, organized monthly events for 500 people, managed event plans, coordinated with team members, and led a team during a tournament with 16 participating teams.
-* Managed the interviewing of new hires at Accolite, assessing candidates for technical skills and problem-solving abilities.
-* Assisted in planning and executing the **Symbioz Annual College Event**, managing logistics, budgeting, and coordinating with various teams to ensure smooth operations and a successful event.

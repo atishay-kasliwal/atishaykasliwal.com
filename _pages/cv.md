@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "CV"
+title: "Professional Summary"
 permalink: /cv/
 author_profile: true
 redirect_from:
@@ -23,7 +23,7 @@ Education
 * **B.Tech. in Computer Science and Information Tech., Symbiosis University Of Applied Sciences (2018 - 2022)**
   * **Course Work**: Analysis and Design of Algorithms, Java 2 Enterprise Edition (J2EE), Introduction to Data Science, Machine Learning, Artificial Intelligence, Advanced Cloud Computing, Cloud Infrastructure & Services
 
-Work experience
+Work Experience
 ======
 
 **Accolite Digital: Senior Software Engineer (2021 - 2024)**
@@ -100,7 +100,7 @@ Publications
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
   
-Service and leadership
+Service and Leadership
 ======
 * Organized a press conference at the **Crime Branch**, drawing 200+ attendees to discuss the return of 500+ stolen phones.
 * Core Committee Member of the **Jain Youth Cricket Club**– For the past 3 years, organized monthly events for 500 people, managed event plans, coordinated with team members, and led a team during a tournament with 16 participating teams.
