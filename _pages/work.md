@@ -10,7 +10,7 @@ redirect_from:
 {% include base_path %}
 | Company Name    | Title        | Period           | Tech Stack                                                 |
 |-----------------------------------------|------------------|-----------------------------------------------------------|
-| Accolite Digital |Senior Software Engineer | 2021 - 2024 | Java, JavaScript, SpringBoot, React.js, Node.js, DLT, R3, AWS, GCP, Azure|
+| Accolite Digital |Senior Software Engineer | 2021 - 2024 | Java, JavaScript, SpringBoot, React.js, Node.js, DLT, R3, AWS|
 | Shriffle Technologies Pvt. Limited |Software Engineer Intern | 2020 - 2021 | Spring Boot, JUnit, SonarQube, Slack API |
 | Verzeo    |Internship Program Artifical Technology     | 2020 - 2020 | Python, TensorFlow, SpeechRecognition, gTTS |
 | Crime Branch Indore|   Technical Intern   | 2020 - 2020    | SQL, Data Analysis   |
