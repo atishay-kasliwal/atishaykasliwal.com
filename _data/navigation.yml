@@ -5,16 +5,18 @@
 # prevent it from being included in the site.
 
 main:
-  - title: "Publications"
-    url: /publications/
-
-   
-    
-  - title: "Portfolio"
-    url: /portfolio/
-        
     
   - title: "CV"
     url: /cv/
+
+  - title: "Work Experience"
+    url: /work/
     
+  - title: "Publications"
+    url: /publications/
+
+  - title: "Portfolio"
+    url: /portfolio/
+        
+
 
