@@ -1,8 +1,8 @@
 ---
-title: "Twitter-Sentiment-Analyzer  [![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github)](https://github.com/atishay-kasliwal/Twitter-Sentiment-Analyzer)"
+title: "Intel-Image-Classification [![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github)](https://github.com/atishay-kasliwal/Intel-Image-Classification)"
 excerpt: "This project focuses on classifying images of natural scenes from around the world using the Intel Image Classification dataset from Kaggle. The dataset contains six categories: buildings, forest, glacier, mountain, sea, and street. A ResNet-152 neural network model was used, with pre-trained weights updated by training on the provided training dataset (seg_train). The model achieved 90.7% accuracy on the validation dataset (seg_test). Both an offline notebook and a Google Colab notebook were used for experimentation and model training.<br/><img src='/images/image.png'>"
 collection: portfolio
-date: 2020-06-01
+date: 2022-09-01
 
 ---
 
