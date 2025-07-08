@@ -1,38 +1,572 @@
-.App {
-  text-align: center;
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+body, #root, .App {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #181818;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.bg-art {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+  filter: grayscale(1) brightness(0.4) blur(1.5px);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.page-content {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.header, .art-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.2rem 2rem 0 2rem;
+  background: transparent;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  opacity: 0.9;
+  margin-left: 0;
+  text-decoration: none;
+  color: #fff !important;
+}
+
+.nav, .nav.black {
+  display: flex;
+  gap: 2.2rem;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  margin-top: 0.2rem;
+  color: #fff;
+}
+
+.nav a, .nav.black a, .nav .active, .nav.black .active {
+  color: #fff !important;
+  opacity: 0.85;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.nav a:hover, .nav.black a:hover, .nav .active, .nav.black .active {
+  opacity: 1;
+}
+
+.center-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  color: #fff;
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+.center-content h1 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.center-content ul {
+  margin: 0 0 2rem 0;
+  padding-left: 1.5rem;
+}
+
+.center-content li {
+  margin-bottom: 0.7rem;
+  font-size: 1.08rem;
+}
+
+.center-content .highlight {
+  color: #ffb347;
+  font-weight: 600;
+}
+
+.center-content .link {
+  color: #4fc3f7;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.center-content h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 2rem 0 0.7rem 0;
+  color: #fff;
+}
+
+.locations, .hours {
+  margin-bottom: 1.5rem;
+}
+
+.locations strong {
+  color: #fff;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 0 1rem 0;
+  color: #aaa;
+  font-size: 0.95rem;
+  z-index: 2;
+}
+
+/* Libertinus Mono font for logo */
+@font-face {
+  font-family: 'Libertinus Mono';
+  src: local('Libertinus Mono'), local('LibertinusMono-Regular');
+  font-style: normal;
+  font-weight: 400;
+}
+
+.libertinus-mono {
+  font-family: 'Libertinus Mono', 'Fira Mono', 'Consolas', 'Liberation Mono', monospace;
+  font-size: 2.2rem;
+  letter-spacing: 0.1em;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 1s steps(1) infinite;
+  color: #e5e5e5;
+  font-weight: 700;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.art-page {
+  background: #fff;
+  min-height: 100vh;
+  width: 100vw;
+  padding-bottom: 3rem;
+}
+
+.art-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #fff;
+}
+
+.art-header .logo.libertinus-mono {
+  color: #111 !important;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 1.33rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  opacity: 0.9;
+  margin-left: 0;
+}
+
+.nav.black {
+  display: flex;
+  gap: 2.2rem;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  margin-top: 0.2rem;
+}
+
+.nav.black a, .nav.black .active {
+  color: #111 !important;
+  opacity: 0.85;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.nav.black a:hover, .nav.black .active {
+  opacity: 1;
+}
+
+.art-title {
+  text-align: center;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 3.5rem 0 2.5rem 0;
+  color: #222;
+  letter-spacing: 0.05em;
+}
+
+.art-grid {
+  column-count: 3;
+  column-gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 900px) {
+  .art-grid {
+    column-count: 2;
+  }
+}
+@media (max-width: 600px) {
+  .art-grid {
+    column-count: 1;
+  }
+}
+
+.art-tile {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow: hidden;
+  display: block;
+  margin-bottom: 2.5rem;
+  break-inside: avoid;
+}
+
+.art-tile img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.art-grid-fixed {
+  column-count: 3;
+  column-gap: 2rem;
+  width: 90vw;
+  margin: 0 auto;
+  padding: 0 5vw;
+}
+
+@media (max-width: 1100px) {
+  .art-grid-fixed {
+    column-count: 2;
+  }
+}
+@media (max-width: 700px) {
+  .header, .art-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.7rem 0.7rem 0 0.7rem;
+  }
+  .nav, .nav.black {
+    gap: 1.2rem;
+    font-size: 0.95rem;
+  }
+  .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
+    font-size: 1.1rem;
+  }
+  .art-grid {
+    column-count: 1;
+  }
+}
+
+.art-tile-fixed {
+  background: #fff;
+  margin-bottom: 2rem;
+  display: inline-block;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.art-tile-fixed img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.header .logo, .header .nav a, .header .nav .active {
+  color: #fff !important;
+}
+
+.art-header .logo, .art-header .nav a, .art-header .nav .active,
+.nav.black a, .nav.black .active {
+  color: #111 !important;
+}
+
+.exp-edu-list {
+  font-size: 1.08rem;
+  color: #fff;
+}
+
+.site-footer {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  padding: 1.2rem 0 1.2rem 0;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  padding: 0 2rem;
+  font-size: 0.95rem;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: 1.5rem;
+}
+
+.footer-socials a {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.footer-socials a:hover {
+  opacity: 1;
+}
+
+.footer-resume-btn {
+  color: #fff;
+  background: none;
+  border: 1.5px solid #fff;
+  border-radius: 15px;
+  padding: 0.19rem 0.83rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-left: 1.2rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border 0.2s, opacity 0.2s;
+  opacity: 0.85;
+  display: inline-flex;
+  align-items: center;
+  height: 1.575rem;
+}
+
+.footer-resume-btn:hover {
+  background: #fff;
+  color: #111;
+  border: 1.5px solid #fff;
+  opacity: 1;
+}
+
+.landing-two-col {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 1504px;
+  margin: 0 auto;
+  margin-top: 2.5vh;
+  height: 100%;
+}
+
+.landing-left-text {
+  flex: 1 1 0;
+  min-width: 340px;
+  max-width: 690px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent;
+  padding-left: 2vw;
+  height: 100%;
+}
+
+/* Restore previous image style for landing-right-images */
+.landing-right-images {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background: none;
+  border: none;
+  box-shadow: none;
+  margin-top: 4rem;
+}
+
+.landing-right-images img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.landing-grid-3x3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  align-items: center;
+  justify-items: center;
+}
+
+/* Remove custom .landing-grid-3x3 img style so .landing-right-images img applies */
+.landing-grid-3x3 img {
+  /* intentionally left blank to inherit from .landing-right-images img */
+}
+
+/* Remove all extra styling for images in landing-right-images and landing-grid-3x3 */
+.landing-right-images img, .landing-grid-3x3 img {
+  border: none;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0;
+  width: 200px;
+  height: 200px;
+  display: block;
+  object-fit: cover;
+}
+
+/* Remove background and border from landing-right-images container */
+.landing-right-images, .landing-grid-3x3 {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.landing-right-images, .landing-grid-3x3 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 1000px) {
+  .landing-two-col {
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 98vw;
+    align-items: center;
+  }
+  .landing-left-text, .landing-right-images {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .landing-right-images, .landing-grid-3x3 {
+    margin: 0 auto;
+  }
+}
+
+.button-group-theme {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0 1.25rem 0;
+  align-items: center;
+}
+
+.btn-theme {
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.54rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: none;
+  padding: 0.35em 1em;
+  background: none;
+  color: #fff;
+}
+
+.btn-theme.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  box-shadow: 0 1px 4px rgba(37,99,235,0.08);
+}
+
+.btn-theme.btn-outline {
+  background: none;
+  color: #fff;
+  border: 1px solid #fff;
+  box-shadow: none;
+}
+
+.btn-theme.btn-icon {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #fff;
+  padding: 0.35em;
+  font-size: 0.85rem;
+  min-width: 28px;
+  min-height: 28px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-radius: 50%;
+}
+.btn-theme.btn-icon svg {
+  width: 1em;
+  height: 1em;
+  fill: #fff;
 }
 
-.App-link {
-  color: #61dafb;
+.btn-theme svg {
+  fill: #fff;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn-theme.btn-outline svg {
+  stroke: #fff;
+  fill: none;
+}
+
+.btn-theme.btn-outline {
+  border: 1px solid #fff;
+}
+
+.btn-theme.btn-outline span {
+  color: #fff;
 }
