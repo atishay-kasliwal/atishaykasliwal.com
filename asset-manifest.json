@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/atishay-kasliwal.github.io/static/css/main.f855e6bc.css",
+    "main.js": "/atishay-kasliwal.github.io/static/js/main.0fa4fdb8.js",
+    "static/js/453.db9c9e86.chunk.js": "/atishay-kasliwal.github.io/static/js/453.db9c9e86.chunk.js",
+    "static/media/logo.svg": "/atishay-kasliwal.github.io/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/atishay-kasliwal.github.io/index.html",
+    "main.f855e6bc.css.map": "/atishay-kasliwal.github.io/static/css/main.f855e6bc.css.map",
+    "main.0fa4fdb8.js.map": "/atishay-kasliwal.github.io/static/js/main.0fa4fdb8.js.map",
+    "453.db9c9e86.chunk.js.map": "/atishay-kasliwal.github.io/static/js/453.db9c9e86.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.0fa4fdb8.js"
+  ]
+}
