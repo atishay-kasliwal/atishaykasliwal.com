@@ -9,7 +9,7 @@ import img6 from './assets/stony_brook_university_logo.jpeg';
 import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
 import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
 
-const introLine = 'Hello, I am Atishay, a Software Engineer with over 5 years of professional experience, currently pursuing a Master\'s in Data Science from Stony Brook University.';
+const introLine = 'Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master\'s in Data Science from Stony Brook University.';
 const experienceEducation = [
   '• AI, ML research, data analytics @Atrium Health Wake Forest Baptist (2025)',
   '• Business research, data modeling assistant @Stony Brook (2024–2025)',
