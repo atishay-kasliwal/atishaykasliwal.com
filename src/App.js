@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './App.css';
-import img1 from './assets/309122599_156281780379576_5311103158942678487_n.jpg';
 import img3 from './assets/symbiosis.jpg';
 import img4 from './assets/shriffle.png';
 import img5 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
