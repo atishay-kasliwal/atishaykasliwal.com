@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "./static/css/main.67b00ed3.css",
-    "main.js": "./static/js/main.7d5171ff.js",
-    "static/js/453.db9c9e86.chunk.js": "./static/js/453.db9c9e86.chunk.js",
-    "static/media/symbiosis.jpg": "./static/media/symbiosis.160c91672831a3fe7895.jpg",
-    "static/media/shriffle.png": "./static/media/shriffle.097b6fde5c50901a8da9.png",
-    "static/media/stony_brook_university_logo.jpeg": "./static/media/stony_brook_university_logo.3331d111b66572681b96.jpeg",
-    "index.html": "./index.html",
-    "main.67b00ed3.css.map": "./static/css/main.67b00ed3.css.map",
-    "main.7d5171ff.js.map": "./static/js/main.7d5171ff.js.map",
-    "453.db9c9e86.chunk.js.map": "./static/js/453.db9c9e86.chunk.js.map"
+    "main.css": "/atishay-kasliwal.github.io/static/css/main.67b00ed3.css",
+    "main.js": "/atishay-kasliwal.github.io/static/js/main.65f34254.js",
+    "static/js/453.db9c9e86.chunk.js": "/atishay-kasliwal.github.io/static/js/453.db9c9e86.chunk.js",
+    "static/media/symbiosis.jpg": "/atishay-kasliwal.github.io/static/media/symbiosis.160c91672831a3fe7895.jpg",
+    "static/media/shriffle.png": "/atishay-kasliwal.github.io/static/media/shriffle.097b6fde5c50901a8da9.png",
+    "static/media/stony_brook_university_logo.jpeg": "/atishay-kasliwal.github.io/static/media/stony_brook_university_logo.3331d111b66572681b96.jpeg",
+    "index.html": "/atishay-kasliwal.github.io/index.html",
+    "main.67b00ed3.css.map": "/atishay-kasliwal.github.io/static/css/main.67b00ed3.css.map",
+    "main.65f34254.js.map": "/atishay-kasliwal.github.io/static/js/main.65f34254.js.map",
+    "453.db9c9e86.chunk.js.map": "/atishay-kasliwal.github.io/static/js/453.db9c9e86.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.67b00ed3.css",
-    "static/js/main.7d5171ff.js"
+    "static/js/main.65f34254.js"
   ]
 }
