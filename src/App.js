@@ -1,34 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './App.css';
+
+import img1 from './assets/stony_brook_university_college_of_business_logo.jpeg';
+import img8 from './assets/verzeo_logo.jpeg';
 import img3 from './assets/symbiosis.jpg';
 import img4 from './assets/shriffle.png';
 import img5 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
 import img6 from './assets/stony_brook_university_logo.jpeg';
 import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
 import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
+import img9 from './assets/309122599_156281780379576_5311103158942678487_n.jpg';
 
 const introLine = 'Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master\'s in Data Science from Stony Brook University.';
 const experienceEducation = [
-  '• AI, ML research, data analytics @Atrium Health Wake Forest Baptist (2025)',
+  '• AI, ML research, data analytics @Atrium Health Wake Forest (2025)',
   '• Business research, data modeling assistant @Stony Brook (2024–2025)',
   '• Full-stack software engineering, team projects @Accolite (2021–2024)',
   '• Backend systems development and software @Shriffle (2020–2021)',
   '• AI project development and research @Verzeo Learning (2020)',
   '• Data analysis, crime pattern research @Crime Branch Indore (2020)',
-  '• Web app design and frontend development @N-TIER Technologies Pvt Ltd (2019–2020)',
+  '• Web app design and frontend development @N-TIER Pvt Ltd (2019–2020)',
   '',
-  'Education',
   '• MS in Data Science from Stony Brook University (Machine Learning)',
-  '• BTech. from Symbiosis University of Applied Sciences (Computer Science)'
+  '• BTech. from Symbiosis University of Applied Sciences (CSIT)'
 ];
 
 
 function HomePage() {
-  const landingImages = [ img2,  img3, img4, img5, img6, img7];
+  const landingImages = [img1, img2,  img3, img4, img6, img5, img8, img7, img9];
   // Show all images
   const gridImages = landingImages;
+
+  // Testimonialsthis
+  const testimonials = [
+    {
+      text: "Atishay is a fantastic engineer and a great team player. He consistently delivered high-quality work and was always willing to help others. His technical skills and positive attitude made a big difference on our team.",
+      name: "John Doe",
+      company: "TechCorp",
+      post: "Senior Developer",
+      photo: "https://randomuser.me/api/portraits/men/32.jpg"
+    },
+    {
+      text: "Atishay delivered our project ahead of schedule and exceeded expectations. He managed multiple priorities with ease and communicated clearly throughout. His leadership and technical skills made him an invaluable asset to our team.",
+      name: "Jane Smith",
+      company: "InnovateX",
+      post: "Project Manager",
+      photo: "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    {
+      text: "Creative, reliable, and always ready to help. Atishay brought fresh ideas to our data science projects and delivered actionable insights. He was a supportive colleague and fostered a collaborative work environment.",
+      name: "Alex Lee",
+      company: "DataWiz",
+      post: "Data Scientist",
+      photo: "https://randomuser.me/api/portraits/men/65.jpg"
+    },
+    {
+      text: "Atishay's data science insights made a real impact on our business. He enabled us to make data-driven decisions and mentored junior team members. His professionalism set him apart.",
+      name: "Priya Patel",
+      company: "BizAnalytics",
+      post: "Business Analyst",
+      photo: "https://randomuser.me/api/portraits/women/68.jpg"
+    },
+    {
+      text: "A pleasure to work with, highly recommended! Atishay communicated complex concepts clearly and delivered high-quality work on time. His dedication to learning inspired those around him.",
+      name: "Michael Chen",
+      company: "Webify",
+      post: "Frontend Lead",
+      photo: "https://randomuser.me/api/portraits/men/22.jpg"
+    },
+    {
+      text: "Excellent communicator and problem solver. Atishay tackled challenging issues with creativity and determination. His approachable demeanor made him a trusted advisor and mentor.",
+      name: "Sara Kim",
+      company: "CloudNet",
+      post: "Cloud Architect",
+      photo: "https://randomuser.me/api/portraits/women/12.jpg"
+    },
+    {
+      text: "Always brings positive energy to the team. Atishay's enthusiasm and passion motivated everyone to strive for excellence. He built strong relationships and made our workplace more enjoyable.",
+      name: "David Brown",
+      company: "Appify",
+      post: "Mobile Engineer",
+      photo: "https://randomuser.me/api/portraits/men/41.jpg"
+    }
+  ];
+  const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const [fade, setFade] = useState(true);
+  const testimonialsPerRow = 3;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setTestimonialIdx(idx => (idx + testimonialsPerRow) % testimonials.length);
+        setFade(true);
+      }, 500); // fade out for 0.5s, then switch
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+  const getCurrentTestimonials = () => {
+    let result = [];
+    for (let i = 0; i < testimonialsPerRow; i++) {
+      result.push(testimonials[(testimonialIdx + i) % testimonials.length]);
+    }
+    return result;
+  };
+
   return (
     <>
       <Helmet>
@@ -55,39 +132,44 @@ function HomePage() {
           <div className="landing-left-text">
             <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }}>{introLine}</h1>
             <div className="button-group-theme">
-              <a href="/resume.pdf" className="btn-theme btn-primary" download>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
-                  <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#fff"/></svg>
+              <a href="/resume.pdf" className="btn-theme btn-outline btn-lg" download>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.7em' }}>
+                  <svg width="26" height="26" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#fff"/></svg>
                   CV
                 </span>
               </a>
-              <a href="mailto:atishay.kasliwal@gmail.com" className="btn-theme btn-outline">
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
-                  <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M2 4l8 7 8-7" stroke="currentColor" strokeWidth="2"/></svg>
+              <a href="mailto:katishay@gmail.com" className="btn-theme btn-outline btn-lg">
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.7em' }}>
+                  <svg width="26" height="26" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M2 4l8 7 8-7" stroke="currentColor" strokeWidth="2"/></svg>
                   Contact
                 </span>
               </a>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon" aria-label="LinkedIn">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z" fill="currentColor"/></svg>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="LinkedIn">
+                <svg width="26" height="26" fill="none" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z" fill="currentColor"/></svg>
               </a>
-              <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon" aria-label="GitHub">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
+              <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="GitHub">
+                <svg width="26" height="26" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
               </a>
             </div>
             <div className="exp-edu-list" style={{ textAlign: 'left', marginTop: '2rem', width: '100%' }}>
-              {experienceEducation.map((line, idx) =>
-                idx === 6 ? (
-                  <div key={idx} style={{ minHeight: '1.5rem' }}>&nbsp;</div>
-                ) : idx === 6 ? (
-                  <h2 key={idx} style={{ marginTop: '2rem' }}>{line}</h2>
-                ) : (
-                  <div key={idx} style={{ minHeight: '1.5rem' }}>{line}</div>
-                )
-              )}
+              {experienceEducation.map((line, idx) => {
+                // Bold company/college names after '@' or 'from'
+                let renderedLine = line;
+                if (line.includes('@')) {
+                  renderedLine = line.replace(/@(.*?)\s*([\(\[])/, (match, p1, p2) => `@<b>${p1.trim()}</b> ${p2}`);
+                } else if (line.includes('from')) {
+                  renderedLine = line.replace(/from (.*?)\s*([\(\[])/, (match, p1, p2) => `from <b>${p1.trim()}</b> ${p2}`);
+                }
+                // Render as HTML for bold tags
+                if (idx === 7) {
+                  return <div key={idx} style={{ minHeight: '1.5rem' }}>&nbsp;</div>;
+                } else {
+                  return <div key={idx} style={{ minHeight: '1.5rem' }} dangerouslySetInnerHTML={{ __html: renderedLine }} />;
+                }
+              })}
             </div>
           </div>
           <div className="landing-right-images">
-         
             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
               <div className="landing-grid-3x3">
                 {gridImages.map((src, idx) => (
@@ -95,6 +177,27 @@ function HomePage() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+        {/* Testimonial Rotator Full Width */}
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '3rem 0 2rem 0' }}>
+          <div className="testimonial-rotator-row" style={{ display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%', maxWidth: 1504, margin: '0 auto' }}>
+            {getCurrentTestimonials().map((t, idx) => (
+              <div
+                key={idx}
+                className={`testimonial-rotator${fade ? ' fade-in' : ' fade-out'}`}
+                style={{ color: '#fff', fontSize: '0.96rem', fontStyle: 'italic', textAlign: 'left', maxWidth: 420, width: '100%', opacity: 0.92, letterSpacing: '0.01em', transition: 'opacity 0.5s', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minHeight: 180 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                  <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal' }}>{t.name}</div>
+                    <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
+                  </div>
+                </div>
+                <div style={{ fontStyle: 'italic', color: '#fff', fontWeight: 400 }}>{t.text}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -180,7 +283,7 @@ function Footer() {
           <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </a>
-          <a href="mailto:atishay.kasliwal@gmail.com" aria-label="Email">
+          <a href="mailto:katishay@gmail.com" aria-label="Email">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 13.065l-11.985-7.065v14c0 1.104.896 2 2 2h19.97c1.104 0 2-.896 2-2v-14l-11.985 7.065zm11.985-9.065c0-1.104-.896-2-2-2h-19.97c-1.104 0-2 .896-2 2v.217l12 7.083 11.97-7.083v-.217z"/></svg>
           </a>
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="footer-resume-btn">Resume</a>

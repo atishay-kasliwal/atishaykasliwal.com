@@ -405,26 +405,27 @@ body, #root, .App {
   max-width: 690px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background: transparent;
   padding-left: 2vw;
   height: 100%;
+  align-items: flex-start;
 }
 
 /* Restore previous image style for landing-right-images */
 .landing-right-images {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   border-radius: 12px;
   padding-left: 0;
   padding-right: 0;
-  padding-top: 2rem;
+  padding-top: 10vh;
   padding-bottom: 2rem;
   background: none;
   border: none;
   box-shadow: none;
-  margin-top: 4rem;
+  margin-top: 0;
 }
 
 .landing-right-images img {
@@ -440,7 +441,6 @@ body, #root, .App {
 .landing-grid-3x3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
   gap: 1rem;
   width: 100%;
   max-width: 650px;
@@ -569,4 +569,27 @@ body, #root, .App {
 
 .btn-theme.btn-outline span {
   color: #fff;
+}
+
+.fade-in {
+  opacity: 1 !important;
+  transition: opacity 0.5s;
+}
+.fade-out {
+  opacity: 0 !important;
+  transition: opacity 0.5s;
+}
+
+.btn-theme.btn-lg {
+  font-size: 0.81rem;
+  padding: 0.44em 1.10em;
+  border-radius: 10px;
+}
+.btn-theme.btn-lg span {
+  font-size: 0.81rem;
+}
+.btn-theme.btn-lg svg,
+.btn-theme.btn-icon svg {
+  width: 1.9em !important;
+  height: 1.9em !important;
 }
