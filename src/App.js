@@ -156,9 +156,9 @@ function HomePage() {
                 // Bold company/college names after '@' or 'from'
                 let renderedLine = line;
                 if (line.includes('@')) {
-                  renderedLine = line.replace(/@(.*?)\s*([\(\[])/, (match, p1, p2) => `@<b>${p1.trim()}</b> ${p2}`);
+                  renderedLine = line.replace(/@(.+?)\s*([\(\[])/, (match, p1, p2) => `@<b>${p1.trim()}</b> ${p2}`);
                 } else if (line.includes('from')) {
-                  renderedLine = line.replace(/from (.*?)\s*([\(\[])/, (match, p1, p2) => `from <b>${p1.trim()}</b> ${p2}`);
+                  renderedLine = line.replace(/from (.+?)\s*([\(\[])/, (match, p1, p2) => `from <b>${p1.trim()}</b> ${p2}`);
                 }
                 // Render as HTML for bold tags
                 if (idx === 7) {
