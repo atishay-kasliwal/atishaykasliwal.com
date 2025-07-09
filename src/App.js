@@ -36,6 +36,7 @@ function HomePage() {
   // Testimonials
   const testimonials = [
     {
+      
       text: "Atishay is a fantastic engineer and a great team player. He consistently delivered high-quality work and was always willing to help others. His technical skills and positive attitude made a big difference on our team.",
       name: "John Doe",
       company: "TechCorp",
@@ -77,8 +78,24 @@ function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Atishay Kasliwal</title>
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <title>Atishay Kasliwal | Portfolio, Resume, Projects</title>
+        <meta name="description" content="Official website of Atishay Kasliwal. Portfolio, resume, projects, and contact information." />
+        <meta name="keywords" content="Atishay Kasliwal, portfolio, resume, data science, software engineer" />
+        <meta name="author" content="Atishay Kasliwal" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Atishay Kasliwal",
+              "url": "https://atishay-kasliwal.github.io/",
+              "sameAs": [
+                "https://www.linkedin.com/in/atishay-kasliwal/",
+                "https://github.com/atishay-kasliwal"
+              ]
+            }
+          `}
+        </script>
       </Helmet>
       {/* Artistic Background */}
       <div className="bg-art" />
