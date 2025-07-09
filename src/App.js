@@ -33,7 +33,7 @@ function HomePage() {
   // Show all images
   const gridImages = landingImages;
 
-  // Testimonialsthis
+  // Testimonials
   const testimonials = [
     {
       text: "Atishay is a fantastic engineer and a great team player. He consistently delivered high-quality work and was always willing to help others. His technical skills and positive attitude made a big difference on our team.",
@@ -55,47 +55,15 @@ function HomePage() {
       company: "DataWiz",
       post: "Data Scientist",
       photo: "https://randomuser.me/api/portraits/men/65.jpg"
-    },
-    {
-      text: "Atishay's data science insights made a real impact on our business. He enabled us to make data-driven decisions and mentored junior team members. His professionalism set him apart.",
-      name: "Priya Patel",
-      company: "BizAnalytics",
-      post: "Business Analyst",
-      photo: "https://randomuser.me/api/portraits/women/68.jpg"
-    },
-    {
-      text: "A pleasure to work with, highly recommended! Atishay communicated complex concepts clearly and delivered high-quality work on time. His dedication to learning inspired those around him.",
-      name: "Michael Chen",
-      company: "Webify",
-      post: "Frontend Lead",
-      photo: "https://randomuser.me/api/portraits/men/22.jpg"
-    },
-    {
-      text: "Excellent communicator and problem solver. Atishay tackled challenging issues with creativity and determination. His approachable demeanor made him a trusted advisor and mentor.",
-      name: "Sara Kim",
-      company: "CloudNet",
-      post: "Cloud Architect",
-      photo: "https://randomuser.me/api/portraits/women/12.jpg"
-    },
-    {
-      text: "Always brings positive energy to the team. Atishay's enthusiasm and passion motivated everyone to strive for excellence. He built strong relationships and made our workplace more enjoyable.",
-      name: "David Brown",
-      company: "Appify",
-      post: "Mobile Engineer",
-      photo: "https://randomuser.me/api/portraits/men/41.jpg"
     }
   ];
   const [testimonialIdx, setTestimonialIdx] = useState(0);
-  const [fade, setFade] = useState(true);
+  // Remove fade state
   const testimonialsPerRow = 3;
   useEffect(() => {
     const interval = setInterval(() => {
-      setFade(false);
-      setTimeout(() => {
-        setTestimonialIdx(idx => (idx + testimonialsPerRow) % testimonials.length);
-        setFade(true);
-      }, 500); // fade out for 0.5s, then switch
-    }, 8000);
+      setTestimonialIdx(idx => (idx + testimonialsPerRow) % testimonials.length);
+    }, 10000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
   const getCurrentTestimonials = () => {
@@ -138,7 +106,12 @@ function HomePage() {
                   CV
                 </span>
               </a>
-              <a href="mailto:katishay@gmail.com" className="btn-theme btn-outline btn-lg">
+              <a
+                href="https://mail.google.com/mail/?view=cm&to=katishay@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-theme btn-outline btn-lg"
+              >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.7em' }}>
                   <svg width="26" height="26" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M2 4l8 7 8-7" stroke="currentColor" strokeWidth="2"/></svg>
                   Contact
@@ -185,8 +158,8 @@ function HomePage() {
             {getCurrentTestimonials().map((t, idx) => (
               <div
                 key={idx}
-                className={`testimonial-rotator${fade ? ' fade-in' : ' fade-out'}`}
-                style={{ color: '#fff', fontSize: '0.96rem', fontStyle: 'italic', textAlign: 'left', maxWidth: 420, width: '100%', opacity: 0.92, letterSpacing: '0.01em', transition: 'opacity 0.5s', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minHeight: 180 }}
+                className="testimonial-rotator"
+                style={{ color: '#fff', fontSize: '0.96rem', fontStyle: 'italic', textAlign: 'left', maxWidth: 420, width: '100%', opacity: 0.92, letterSpacing: '0.01em', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minHeight: 180 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                   <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
@@ -283,7 +256,12 @@ function Footer() {
           <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </a>
-          <a href="mailto:katishay@gmail.com" aria-label="Email">
+          <a
+            href="https://mail.google.com/mail/?view=cm&to=katishay@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Email"
+          >
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 13.065l-11.985-7.065v14c0 1.104.896 2 2 2h19.97c1.104 0 2-.896 2-2v-14l-11.985 7.065zm11.985-9.065c0-1.104-.896-2-2-2h-19.97c-1.104 0-2 .896-2 2v.217l12 7.083 11.97-7.083v-.217z"/></svg>
           </a>
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="footer-resume-btn">Resume</a>
