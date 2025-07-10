@@ -8,6 +8,7 @@ body, #root, .App {
   padding: 0;
   font-family: 'Montserrat', sans-serif;
   background: #181818;
+  font-size: 0.7695rem;
 }
 
 .bg-art {
@@ -34,13 +35,13 @@ body, #root, .App {
   align-items: flex-start;
   padding: 1.2rem 2rem 0 2rem;
   background: transparent;
-  font-size: 1rem;
+  font-size: 0.7695rem;
   color: #fff;
 }
 
 .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.0773rem;
   font-weight: 400;
   letter-spacing: 0.13em;
   opacity: 0.9;
@@ -53,7 +54,7 @@ body, #root, .App {
   display: flex;
   gap: 2.2rem;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 1rem;
+  font-size: 0.7695rem;
   font-weight: 500;
   letter-spacing: 0.09em;
   margin-top: 0.2rem;
@@ -81,11 +82,11 @@ body, #root, .App {
   color: #fff;
   max-width: 700px;
   margin: 0 auto;
-  font-size: 1rem;
+  font-size: 0.7695rem;
 }
 
 .center-content h1 {
-  font-size: 2rem;
+  font-size: 1.539rem;
   font-weight: 400;
   margin-bottom: 2rem;
   line-height: 1.4;
@@ -114,7 +115,7 @@ body, #root, .App {
 }
 
 .center-content h2 {
-  font-size: 1.1rem;
+  font-size: 0.84645rem;
   font-weight: 600;
   margin: 2rem 0 0.7rem 0;
   color: #fff;
@@ -132,7 +133,7 @@ body, #root, .App {
   text-align: center;
   padding: 2rem 0 1rem 0;
   color: #aaa;
-  font-size: 0.95rem;
+  font-size: 0.731025rem;
   z-index: 2;
 }
 
@@ -180,7 +181,7 @@ body, #root, .App {
 .art-header .logo.libertinus-mono {
   color: #111 !important;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 1.33rem;
+  font-size: 1.197rem;
   font-weight: 400;
   letter-spacing: 0.13em;
   opacity: 0.9;
@@ -314,7 +315,7 @@ body, #root, .App {
 }
 
 .exp-edu-list {
-  font-size: 1.08rem;
+  font-size: 0.83106rem;
   color: #fff;
 }
 
@@ -340,7 +341,7 @@ body, #root, .App {
   width: 100%;
   max-width: 900px;
   padding: 0 2rem;
-  font-size: 0.95rem;
+  font-size: 0.731025rem;
 }
 
 .footer-socials {
@@ -508,7 +509,7 @@ body, #root, .App {
   display: inline-flex;
   align-items: center;
   font-family: inherit;
-  font-size: 0.54rem;
+  font-size: 0.41553rem;
   font-weight: 500;
   border-radius: 8px;
   border: none;
@@ -581,15 +582,25 @@ body, #root, .App {
 }
 
 .btn-theme.btn-lg {
-  font-size: 0.81rem;
+  font-size: 0.623295rem;
   padding: 0.44em 1.10em;
   border-radius: 10px;
 }
 .btn-theme.btn-lg span {
-  font-size: 0.81rem;
+  font-size: 0.623295rem;
 }
 .btn-theme.btn-lg svg,
 .btn-theme.btn-icon svg {
   width: 1.9em !important;
   height: 1.9em !important;
+}
+
+.stonybrook-gradient {
+  background: linear-gradient(to right, #b00302 0%, #b00302 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  display: inline-block;
 }
