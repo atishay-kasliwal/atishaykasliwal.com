@@ -248,7 +248,7 @@ function ArtPage() {
           <Link to="/art">ART</Link>
         </nav>
       </div>
-      <h2 className="art-title">Fine Art</h2>
+      <h2 className="art-title">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
       <div className="art-grid-fixed" style={{ minHeight: '90vh' }}>
         {images.map((src, idx) => (
           <div className="art-tile-fixed" key={idx}>
