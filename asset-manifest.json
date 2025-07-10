@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "./static/css/main.57f4977d.css",
-    "main.js": "./static/js/main.f73f61bd.js",
+    "main.css": "./static/css/main.6b95509e.css",
+    "main.js": "./static/js/main.38eb24d4.js",
     "static/js/453.db9c9e86.chunk.js": "./static/js/453.db9c9e86.chunk.js",
     "static/media/symbiosis.jpg": "./static/media/symbiosis.160c91672831a3fe7895.jpg",
-    "static/media/309122599_156281780379576__n.jpg": "./static/media/309122599_156281780379576_5311103158942678487_n.38f1280499530c3c2202.jpg",
     "static/media/shriffle.png": "./static/media/shriffle.097b6fde5c50901a8da9.png",
+    "static/media/Screenshot 2025-07-10 at 7.52.42 AM.png": "./static/media/Screenshot 2025-07-10 at 7.52.42 AM.a228e779f4fb5f148be9.png",
     "static/media/stony_brook_university_logo.jpeg": "./static/media/stony_brook_university_logo.3331d111b66572681b96.jpeg",
     "index.html": "./index.html",
-    "main.57f4977d.css.map": "./static/css/main.57f4977d.css.map",
-    "main.f73f61bd.js.map": "./static/js/main.f73f61bd.js.map",
+    "main.6b95509e.css.map": "./static/css/main.6b95509e.css.map",
+    "main.38eb24d4.js.map": "./static/js/main.38eb24d4.js.map",
     "453.db9c9e86.chunk.js.map": "./static/js/453.db9c9e86.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.57f4977d.css",
-    "static/js/main.f73f61bd.js"
+    "static/css/main.6b95509e.css",
+    "static/js/main.38eb24d4.js"
   ]
 }

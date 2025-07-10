@@ -11,7 +11,7 @@ import img5 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
 import img6 from './assets/stony_brook_university_logo.jpeg';
 import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
 import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
-import img9 from './assets/309122599_156281780379576_5311103158942678487_n.jpg';
+import img9 from './assets/Screenshot 2025-07-10 at 7.52.42 AM.png';
 
 const introLine = 'Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master\'s in Data Science from Stony Brook University.';
 const experienceEducation = [
@@ -37,25 +37,25 @@ function HomePage() {
   const testimonials = [
     {
       
-      text: "Atishay is a fantastic engineer and a great team player. He consistently delivered high-quality work and was always willing to help others. His technical skills and positive attitude made a big difference on our team.",
-      name: "John Doe",
-      company: "TechCorp",
-      post: "Senior Developer",
-      photo: "https://randomuser.me/api/portraits/men/32.jpg"
-    },
-    {
       text: "Atishay delivered our project ahead of schedule and exceeded expectations. He managed multiple priorities with ease and communicated clearly throughout. His leadership and technical skills made him an invaluable asset to our team.",
-      name: "Jane Smith",
-      company: "InnovateX",
-      post: "Project Manager",
-      photo: "https://randomuser.me/api/portraits/women/44.jpg"
+      name: "Ankit Jain",
+      company: "Accolite Digital",
+      post: "Technical Director",
+      photo: "https://media.licdn.com/dms/image/v2/D5603AQFeoPNYwJWZSg/profile-displayphoto-shrink_400_400/B56Zd5wUFiHQAg-/0/1750094398497?e=1757548800&v=beta&t=MOsxtBZiVPbtotK2LLa_rafOz8fMGXE0GWyswi85apw"
     },
     {
-      text: "Creative, reliable, and always ready to help. Atishay brought fresh ideas to our data science projects and delivered actionable insights. He was a supportive colleague and fostered a collaborative work environment.",
-      name: "Alex Lee",
-      company: "DataWiz",
-      post: "Data Scientist",
-      photo: "https://randomuser.me/api/portraits/men/65.jpg"
+      text: "Atishay developed an NLP pipeline to analyze central bank communications and used GPT-4 to evaluate sentiment and market impact. He designed an LLM-based trading simulation with audit-ready logs and clear visualizations.",
+      name: "Wencui Han",
+      company: "Stony Brook University",
+      post: "Associate Professor",
+      photo: "https://media.licdn.com/dms/image/v2/C4D03AQHoAL7zZmmKFQ/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1517393435717?e=1757548800&v=beta&t=j2HkMJKKNLbJAxxn7vB80vd6uFHV6F5eEFwNfh3pKQs"
+    },
+    {
+      text: "Creative, reliable, and always ready to help. Atishay brought fresh ideas to our Computer Science projects and delivered actionable insights. He was a supportive student and fostered a collaborative work environment.",
+      name: "Neha Gupta",
+      company: "Symbiosis University",
+      post: "Director SCSIT",
+      photo: "https://media.licdn.com/dms/image/v2/C4E03AQGwZZBxpatX1g/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1616052715138?e=1757548800&v=beta&t=Ycq6iM4VsmRkOYS4RM14Spdq13ggnuwXWNREqIKyfCU"
     }
   ];
   const [testimonialIdx, setTestimonialIdx] = useState(0);
@@ -114,7 +114,9 @@ function HomePage() {
         {/* Two-column Main Content */}
         <div className="landing-two-col">
           <div className="landing-left-text">
-            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }}>{introLine}</h1>
+            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }}>
+              Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.
+            </h1>
             <div className="button-group-theme">
               <a href="/resume.pdf" className="btn-theme btn-outline btn-lg" download>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.7em' }}>
@@ -175,7 +177,7 @@ function HomePage() {
               <div
                 key={idx}
                 className="testimonial-rotator"
-                style={{ color: '#fff', fontSize: '0.96rem', fontStyle: 'italic', textAlign: 'left', maxWidth: 420, width: '100%', opacity: 0.92, letterSpacing: '0.01em', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minHeight: 180 }}
+                style={{ color: '#fff', fontSize: '0.96rem', fontStyle: 'normal', textAlign: 'left', maxWidth: 420, width: '100%', opacity: 0.92, letterSpacing: '0.01em', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minHeight: 180 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                   <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
@@ -184,7 +186,7 @@ function HomePage() {
                     <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
                   </div>
                 </div>
-                <div style={{ fontStyle: 'italic', color: '#fff', fontWeight: 400 }}>{t.text}</div>
+                <div style={{ fontStyle: 'normal', color: '#fff', fontWeight: 400 }}>{t.text}</div>
               </div>
             ))}
           </div>
@@ -241,7 +243,7 @@ function ArtPage() {
         <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
           Atishay Kasliwal
         </Link>
-        <nav className="nav black">
+        <nav className="nav">
           <a href="#resume">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
           <Link to="/art">ART</Link>
