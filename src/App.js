@@ -106,10 +106,9 @@ function HomePage() {
             Atishay Kasliwal
           </Link>
           <nav className="nav">
-            <a href="#portfolio">PORTFOLIO</a>
-            <a href="#resume">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-            <Link to="/art">ART</Link>
+             <a href="#resume">RESUME</a>
+             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+             <Link to="/art">ART</Link>
           </nav>
         </div>
         {/* Two-column Main Content */}
@@ -243,7 +242,6 @@ function ArtPage() {
           Atishay Kasliwal
         </Link>
         <nav className="nav black">
-          <a href="#portfolio">PORTFOLIO</a>
           <a href="#resume">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
           <Link to="/art">ART</Link>
@@ -281,7 +279,6 @@ function Footer() {
           >
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 13.065l-11.985-7.065v14c0 1.104.896 2 2 2h19.97c1.104 0 2-.896 2-2v-14l-11.985 7.065zm11.985-9.065c0-1.104-.896-2-2-2h-19.97c-1.104 0-2 .896-2 2v.217l12 7.083 11.97-7.083v-.217z"/></svg>
           </a>
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="footer-resume-btn">Resume</a>
         </span>
       </div>
     </footer>
