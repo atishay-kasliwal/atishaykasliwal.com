@@ -105,7 +105,7 @@ function HomePage() {
             Atishay Kasliwal
           </Link>
           <nav className="nav">
-             <a href="#resume">RESUME</a>
+             <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
              <Link to="/art">ART</Link>
           </nav>
@@ -117,7 +117,7 @@ function HomePage() {
               Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.
             </h1>
             <div className="button-group-theme">
-              <a href="/resume.pdf" className="btn-theme btn-outline btn-lg" download>
+              <a href="/Atishay_Kasliwal.pdf" className="btn-theme btn-outline btn-lg" target="_blank" rel="noopener noreferrer">
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.7em' }}>
                   <svg width="26" height="26" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#fff"/></svg>
                   CV
@@ -243,7 +243,7 @@ function ArtPage() {
           Atishay Kasliwal
         </Link>
         <nav className="nav">
-          <a href="#resume">RESUME</a>
+          <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
           <Link to="/art">ART</Link>
         </nav>
