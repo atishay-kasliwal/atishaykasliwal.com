@@ -1,0 +1,55 @@
+.story-timeline {
+  background: transparent;
+  color: #fff;
+  margin: 3rem 0 0 0;
+  padding: 0 2vw;
+  font-size: 70%;
+}
+.story-title {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.story-cards {
+  display: flex;
+  gap: 2.5rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+.story-card {
+  background: rgba(255,255,255,0.04);
+  
+  min-width: 320px;
+  max-width: 340px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.story-img {
+  width: 100%;
+  max-width: 340px;
+  height: 240px;
+  
+  margin-bottom: 0.5rem;
+  object-fit: cover;
+  display: block;
+  overflow: hidden;
+}
+.story-date {
+  font-size: 1rem;
+  color: #ffb347;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.story-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.story-desc {
+  font-size: 0.8rem;
+  color: #eee;
+} 
