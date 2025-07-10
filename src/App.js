@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import './App.css';
 
 import img1 from './assets/stony_brook_university_college_of_business_logo.jpeg';
-import img8 from './assets/verzeo_logo.jpeg';
+import img8 from './assets/broadcast_co_logo.jpeg';
 import img3 from './assets/symbiosis.jpg';
 import img4 from './assets/shriffle.png';
 import img5 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
@@ -12,6 +12,7 @@ import img6 from './assets/stony_brook_university_logo.jpeg';
 import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
 import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
 import img9 from './assets/Screenshot 2025-07-10 at 7.52.42 AM.png';
+import StoryTimeline from './StoryTimeline';
 
 const experienceEducation = [
   '• AI, ML research, data analytics @Atrium Health Wake Forest (2025)',
@@ -170,7 +171,7 @@ function HomePage() {
           </div>
         </div>
         {/* Testimonial Rotator Full Width */}
-        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '3rem 0 2rem 0' }}>
+        <div style={{ width: '100%', display: 'block', marginTop: '2.5rem' }}>
           <div className="testimonial-rotator-row" style={{ display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%', maxWidth: 1504, margin: '0 auto' }}>
             {getCurrentTestimonials().map((t, idx) => (
               <div
@@ -190,6 +191,7 @@ function HomePage() {
             ))}
           </div>
         </div>
+        <StoryTimeline />
       </div>
     </>
   );
