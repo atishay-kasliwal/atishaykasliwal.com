@@ -13,7 +13,6 @@ import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
 import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
 import img9 from './assets/Screenshot 2025-07-10 at 7.52.42 AM.png';
 
-const introLine = 'Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master\'s in Data Science from Stony Brook University.';
 const experienceEducation = [
   '• AI, ML research, data analytics @Atrium Health Wake Forest (2025)',
   '• Business research, data modeling assistant @Stony Brook (2024–2025)',
