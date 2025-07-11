@@ -41,7 +41,7 @@ const stories = [
     image: 'https://i.pinimg.com/736x/08/2c/54/082c54bd155c8d7de77d51ffd8678156.jpg',
     date: '2021–2023',
     title: 'Software Engineer - Accolite',
-    description: 'Before completing my internship, I was converted to a full-time employeemy responsibilities and confidence both increased significantly, driving my professional growth.'
+    description: 'Before completing my internship, I was converted to a full-time employee my responsibilities and confidence both increased significantly, driving my professional growth.'
   },
   {
     image: 'https://i.pinimg.com/1200x/61/35/08/613508200fbe2933660602aebdd5ba38.jpg',
@@ -52,7 +52,7 @@ const stories = [
   {
     image: img1,
     date: '2018-2022',
-    title: 'Computer Science - Undergraduate',
+    title: 'Computer Science - Undergrad',
     description: 'Completed my undergraduate degree in CSIT from Symbiosis University of Applied Sciences, gaining extensive knowledge and thoroughly enjoying my four years there.'
   },
 
