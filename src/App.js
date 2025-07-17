@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './App.css';
 
-import img1 from './assets/stony_brook_university_college_of_business_logo.jpeg';
+import img1 from './assets/stony_brook_university_college_of_business_logo (1).jpeg';
 import img8 from './assets/broadcast_co_logo.jpeg';
 import img3 from './assets/symbiosis.jpg';
 import img4 from './assets/shriffle.png';
