@@ -192,6 +192,7 @@ function HomePage() {
           </div>
         </div>
         <StoryTimeline />
+        <ImageCarousel />
       </div>
     </>
   );
@@ -260,6 +261,209 @@ function ArtPage() {
           <div className="art-tile-fixed" key={idx}>
             <img src={src} alt={`artwork-${idx}`} />
           </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Image Carousel Component
+function ImageCarousel() {
+  const [currentSet, setCurrentSet] = useState(0);
+  
+  // Using the same images from your art page for the carousel
+  const carouselImages = [
+    'https://i.pinimg.com/736x/47/c2/f1/47c2f1c528654d76214860f6d2afc2ac.jpg', // Fire works 4th of July
+    'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', // Wake forest University
+    'https://i.pinimg.com/736x/c7/de/6a/c7de6a1b54676e8a9070fbaa9601fc9e.jpg', // Blue Cloud Wake forest University
+    'https://i.pinimg.com/736x/c7/7e/a5/c77ea537089d45b70afe9be7216ba432.jpg', // Wake forest University cloud out of the blue
+    'https://i.pinimg.com/736x/83/5d/a0/835da0d88511880ba1b7a114adcc07f1.jpg', // Wake forest rainbow
+    'https://i.pinimg.com/736x/38/ac/84/38ac84f183371337ffe68dd083c950ae.jpg', // Night Festival 
+    'https://i.pinimg.com/736x/82/ec/b7/82ecb7744895473c92c42241c9afe5f8.jpg', // Sun with tree
+    'https://i.pinimg.com/736x/97/32/e6/9732e6d233ae6561e97f87fd7ed47271.jpg', // Wake Forest Wilson Selom art
+    'https://i.pinimg.com/736x/c1/ca/c4/c1cac4cddb0523efc6e88efa30142688.jpg', // New York Rain Horizontal
+    'https://i.pinimg.com/736x/47/80/ba/4780bafefa14c368f7b14bcc29d1f95c.jpg', // Niagara Fall Rainbow
+    'https://i.pinimg.com/736x/37/c0/48/37c048374a1a821113a64e026c47bf83.jpg', // lotus
+    'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
+  ];
+
+  const imagesPerSet = 4;
+  const totalSets = Math.ceil(carouselImages.length / imagesPerSet);
+
+  const nextSet = () => {
+    setCurrentSet((prev) => (prev + 1) % totalSets);
+  };
+
+  const prevSet = () => {
+    setCurrentSet((prev) => (prev - 1 + totalSets) % totalSets);
+  };
+
+  const getCurrentImages = () => {
+    const startIndex = currentSet * imagesPerSet;
+    return carouselImages.slice(startIndex, startIndex + imagesPerSet);
+  };
+
+  return (
+    <div className="image-carousel-section" style={{ 
+      marginTop: '3rem', 
+      padding: '2rem 0',
+      background: 'rgba(255,255,255,0.02)',
+      borderRadius: '16px',
+      margin: '3rem auto',
+      maxWidth: '1200px',
+      width: '100%'
+    }}>
+      <h3 style={{ 
+        textAlign: 'center', 
+        color: '#fff', 
+        marginBottom: '2rem',
+        fontSize: '1.5rem',
+        fontWeight: '500'
+      }}>
+        My Journey Through Photography
+      </h3>
+      
+      <div style={{ 
+        position: 'relative', 
+        display: 'flex', 
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1rem',
+        padding: '0 1rem'
+      }}>
+        {/* Previous Button */}
+        <button
+          onClick={prevSet}
+          style={{
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '50%',
+            width: '48px',
+            height: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#fff',
+            fontSize: '1.2rem',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'rgba(255,255,255,0.2)';
+            e.target.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'rgba(255,255,255,0.1)';
+            e.target.style.transform = 'scale(1)';
+          }}
+        >
+          ←
+        </button>
+
+        {/* Images Container */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '1rem', 
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          maxWidth: '800px'
+        }}>
+          {getCurrentImages().map((src, idx) => (
+            <div key={idx} style={{
+              width: '180px',
+              height: '180px',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.boxShadow = '0 12px 40px rgba(0,0,0,0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
+            }}
+            >
+              <img 
+                src={src} 
+                alt={`Journey ${currentSet * imagesPerSet + idx + 1}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s ease'
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Next Button */}
+        <button
+          onClick={nextSet}
+          style={{
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '50%',
+            width: '48px',
+            height: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#fff',
+            fontSize: '1.2rem',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'rgba(255,255,255,0.2)';
+            e.target.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'rgba(255,255,255,0.1)';
+            e.target.style.transform = 'scale(1)';
+          }}
+        >
+          →
+        </button>
+      </div>
+
+      {/* Dots Indicator */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        gap: '0.5rem', 
+        marginTop: '1.5rem' 
+      }}>
+        {Array.from({ length: totalSets }, (_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSet(idx)}
+            style={{
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
+              border: 'none',
+              background: idx === currentSet ? '#fff' : 'rgba(255,255,255,0.3)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              if (idx !== currentSet) {
+                e.target.style.background = 'rgba(255,255,255,0.5)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (idx !== currentSet) {
+                e.target.style.background = 'rgba(255,255,255,0.3)';
+              }
+            }}
+          />
         ))}
       </div>
     </div>
