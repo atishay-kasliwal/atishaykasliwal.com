@@ -200,28 +200,17 @@ function HomePage() {
 
 function ArtPage() {
   useEffect(() => {
-    // Force scroll to absolute top
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      
-      const artTop = document.getElementById('art-top');
-      if (artTop) {
-        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
-      }
-    }, 50);
+    // Force scroll to absolute top immediately
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     
+    // Also try after a delay
     setTimeout(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      
-      const artTop = document.getElementById('art-top');
-      if (artTop) {
-        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
-      }
-    }, 200);
+    }, 100);
   }, []);
   
   const images = [
@@ -270,7 +259,6 @@ function ArtPage() {
         <title>Atishay Kasliwal</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
-      <div id="art-top" style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px', zIndex: -1 }}></div>
       <div className="art-header">
         <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
           Atishay Kasliwal
@@ -299,7 +287,8 @@ function ImageCarousel() {
   const navigate = useNavigate();
   
   const navigateToArt = () => {
-    navigate('/art');
+    // Navigate with hash to force scroll to top
+    navigate('/art#top');
     
     // Force scroll to absolute top
     setTimeout(() => {
@@ -307,21 +296,14 @@ function ImageCarousel() {
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       
-      const artTop = document.getElementById('art-top');
-      if (artTop) {
-        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
-      }
+      // Remove hash from URL
+      window.history.replaceState(null, null, '/art');
     }, 50);
     
     setTimeout(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      
-      const artTop = document.getElementById('art-top');
-      if (artTop) {
-        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
-      }
     }, 200);
   };
   
