@@ -93,7 +93,7 @@ const stories = [
 export default function StoryTimeline() {
   return (
     <div className="story-timeline">
-      <h2 className="story-title">My Journey</h2>
+      <h2 className="story-title">Journey</h2>
       <div className="story-cards">
         {stories.map((story, idx) => (
           <div className="story-card" key={idx}>
