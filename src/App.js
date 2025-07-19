@@ -306,10 +306,7 @@ function ImageCarousel() {
   return (
     <div className="story-timeline" style={{ 
       background: 'rgba(255,255,255,0.02)',
-      borderRadius: '16px',
-      margin: '3rem auto',
-      maxWidth: '90vw',
-      width: '90%'
+      borderRadius: '16px'
     }}>
       <h2 className="story-title">My Journey Through Photography</h2>
       
