@@ -855,6 +855,8 @@ body, #root, .App {
   .image-carousel-section {
     padding: 1.5rem 0 !important;
     margin: 2rem auto !important;
+    max-width: 95vw !important;
+    width: 95% !important;
   }
   
   .image-carousel-section h3 {
@@ -868,13 +870,14 @@ body, #root, .App {
   }
   
   .image-carousel-section > div > div > div {
-    max-width: 100% !important;
+    max-width: 90vw !important;
+    width: 100% !important;
     gap: 0.5rem !important;
   }
   
   .image-carousel-section > div > div > div > div {
-    width: 140px !important;
-    height: 140px !important;
+    width: 160px !important;
+    height: 160px !important;
   }
   
   .image-carousel-section button {
@@ -885,9 +888,14 @@ body, #root, .App {
 }
 
 @media (max-width: 480px) {
+  .image-carousel-section {
+    max-width: 98vw !important;
+    width: 98% !important;
+  }
+  
   .image-carousel-section > div > div > div > div {
-    width: 120px !important;
-    height: 120px !important;
+    width: 140px !important;
+    height: 140px !important;
   }
   
   .image-carousel-section h3 {
