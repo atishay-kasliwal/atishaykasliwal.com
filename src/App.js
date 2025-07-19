@@ -271,6 +271,16 @@ function ArtPage() {
 // Image Carousel Component
 function ImageCarousel() {
   const [currentSet, setCurrentSet] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Using the same images from your art page for the carousel
   const carouselImages = [
@@ -342,8 +352,8 @@ function ImageCarousel() {
         display: 'flex', 
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '1rem',
-        padding: '0 1rem'
+        gap: windowWidth <= 768 ? '0.5rem' : '1rem',
+        padding: windowWidth <= 768 ? '0 0.5rem' : '0 1rem'
       }}>
         {/* Previous Button */}
         <button
@@ -352,14 +362,14 @@ function ImageCarousel() {
             background: 'rgba(255,255,255,0.1)',
             border: '1px solid rgba(255,255,255,0.2)',
             borderRadius: '50%',
-            width: '48px',
-            height: '48px',
+            width: windowWidth <= 768 ? '40px' : '48px',
+            height: windowWidth <= 768 ? '40px' : '48px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
             color: '#fff',
-            fontSize: '1.2rem',
+            fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
             transition: 'all 0.3s ease',
             backdropFilter: 'blur(10px)'
           }}
@@ -378,18 +388,18 @@ function ImageCarousel() {
         {/* Images Container */}
         <div style={{ 
           display: 'flex', 
-          gap: '1.5rem', 
+          gap: windowWidth <= 768 ? '0.8rem' : '1.5rem', 
           flexWrap: 'wrap',
           justifyContent: 'center',
-          maxWidth: '95vw',
+          maxWidth: windowWidth <= 768 ? '98vw' : '95vw',
           width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
             <div 
               key={idx} 
               style={{
-                width: '290px',
-                height: '290px',
+                width: windowWidth <= 768 ? '140px' : windowWidth <= 1024 ? '200px' : '290px',
+                height: windowWidth <= 768 ? '140px' : windowWidth <= 1024 ? '200px' : '290px',
                 borderRadius: '12px',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
@@ -427,14 +437,14 @@ function ImageCarousel() {
             background: 'rgba(255,255,255,0.1)',
             border: '1px solid rgba(255,255,255,0.2)',
             borderRadius: '50%',
-            width: '48px',
-            height: '48px',
+            width: windowWidth <= 768 ? '40px' : '48px',
+            height: windowWidth <= 768 ? '40px' : '48px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
             color: '#fff',
-            fontSize: '1.2rem',
+            fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
             transition: 'all 0.3s ease',
             backdropFilter: 'blur(10px)'
           }}
@@ -454,11 +464,11 @@ function ImageCarousel() {
       {/* Description Text */}
       <div style={{ 
         marginTop: '2rem',
-        padding: '0 2rem'
+        padding: windowWidth <= 768 ? '0 1rem' : '0 2rem'
       }}>
         <h2 style={{
           color: '#fff',
-          fontSize: '1.5rem',
+          fontSize: windowWidth <= 768 ? '1.2rem' : '1.5rem',
           textAlign: 'center',
           marginBottom: '1rem',
           fontWeight: '600',
@@ -468,13 +478,13 @@ function ImageCarousel() {
         </h2>
         <p style={{
           color: '#fff',
-          fontSize: '1.1rem',
+          fontSize: windowWidth <= 768 ? '0.95rem' : '1.1rem',
           lineHeight: '1.6',
-          maxWidth: '800px',
+          maxWidth: windowWidth <= 768 ? '100%' : '800px',
           margin: '0 auto',
           opacity: '0.9',
           fontStyle: 'italic',
-          textAlign: 'left'
+          textAlign: windowWidth <= 768 ? 'center' : 'left'
         }}>
           {getCurrentDescription()}
         </p>
@@ -484,7 +494,7 @@ function ImageCarousel() {
       <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
-        gap: '0.5rem', 
+        gap: windowWidth <= 768 ? '0.3rem' : '0.5rem', 
         marginTop: '1.5rem' 
       }}>
         {Array.from({ length: totalSets }, (_, idx) => (
@@ -492,8 +502,8 @@ function ImageCarousel() {
             key={idx}
             onClick={() => setCurrentSet(idx)}
             style={{
-              width: '12px',
-              height: '12px',
+              width: windowWidth <= 768 ? '10px' : '12px',
+              height: windowWidth <= 768 ? '10px' : '12px',
               borderRadius: '50%',
               border: 'none',
               background: idx === currentSet ? '#fff' : 'rgba(255,255,255,0.3)',
