@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.cf2c0369.css",
-    "main.js": "/static/js/main.fdb14c33.js",
+    "main.css": "/static/css/main.dd53f70c.css",
+    "main.js": "/static/js/main.0f271d73.js",
     "static/js/453.db9c9e86.chunk.js": "/static/js/453.db9c9e86.chunk.js",
     "static/media/Symbiosis-Indore-Auditorium-Front-View.jpg": "/static/media/Symbiosis-Indore-Auditorium-Front-View.973230010bf3114dcb52.jpg",
     "static/media/symbiosis.jpg": "/static/media/symbiosis.160c91672831a3fe7895.jpg",
@@ -9,12 +9,12 @@
     "static/media/Screenshot 2025-07-10 at 7.52.42 AM.png": "/static/media/Screenshot 2025-07-10 at 7.52.42 AM.a228e779f4fb5f148be9.png",
     "static/media/stony_brook_university_logo.jpeg": "/static/media/stony_brook_university_logo.3331d111b66572681b96.jpeg",
     "index.html": "/index.html",
-    "main.cf2c0369.css.map": "/static/css/main.cf2c0369.css.map",
-    "main.fdb14c33.js.map": "/static/js/main.fdb14c33.js.map",
+    "main.dd53f70c.css.map": "/static/css/main.dd53f70c.css.map",
+    "main.0f271d73.js.map": "/static/js/main.0f271d73.js.map",
     "453.db9c9e86.chunk.js.map": "/static/js/453.db9c9e86.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cf2c0369.css",
-    "static/js/main.fdb14c33.js"
+    "static/css/main.dd53f70c.css",
+    "static/js/main.0f271d73.js"
   ]
 }
