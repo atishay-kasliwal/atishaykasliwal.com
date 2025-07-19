@@ -595,7 +595,7 @@ function ImageCarousel() {
           color: '#fff',
           fontSize: windowWidth <= 768 ? '0.95rem' : '1.1rem',
           lineHeight: '1.6',
-          maxWidth: windowWidth <= 768 ? '100%' : '800px',
+          maxWidth: windowWidth <= 768 ? '100%' : '880px',
           margin: '0 auto',
           opacity: '0.9',
           fontStyle: 'italic',
