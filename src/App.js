@@ -71,7 +71,7 @@ function HomePage() {
   const testimonialsPerRow = 3;
   useEffect(() => {
     const interval = setInterval(() => {
-      setTestimonialIdx(idx => (idx + testimonialsPerRow) % testimonials.length);
+        setTestimonialIdx(idx => (idx + testimonialsPerRow) % testimonials.length);
     }, 10000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
@@ -124,17 +124,17 @@ function HomePage() {
           </Link>
           <nav className="nav">
              <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
-             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-             <Link to="/art">ART</Link>
+            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+            <Link to="/art">ART</Link>
           </nav>
         </div>
         {/* Two-column Main Content */}
         <div className="landing-two-col">
           <div className="landing-left-text">
-            <h1 style={{ minHeight: '3rem', textAlign: 'center', color: '#fff' }}>
+            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }}>
               Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.
             </h1>
-            <div className="button-group-theme">
+            <div className="button-group-theme" style={{ justifyContent: 'flex-start' }}>
               <a href="/Atishay_Kasliwal.pdf" className="btn-theme btn-outline btn-lg" target="_blank" rel="noopener noreferrer">
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.7em' }}>
                   <svg width="27.3" height="27.3" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#fff"/></svg>
@@ -159,7 +159,7 @@ function HomePage() {
                 <svg width="27.3" height="27.3" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
               </a>
             </div>
-            <div className="exp-edu-list" style={{ textAlign: 'center', marginTop: '2rem', width: '100%', fontSize: '1.33em' }}>
+            <div className="exp-edu-list" style={{ textAlign: 'left', marginTop: '2rem', width: '100%', fontSize: '1.33em' }}>
               {experienceEducation.map((line, idx) => {
                 // Bold company/college names after '@' or 'from'
                 let renderedLine = line;
@@ -231,9 +231,9 @@ function HomePage() {
 
             {/* Testimonials Container */}
             <div className="testimonial-rotator-row" style={{ display: 'flex', gap: windowWidth <= 768 ? '1rem' : '2rem', justifyContent: 'center' }}>
-              {getCurrentTestimonials().map((t, idx) => (
-                <div
-                  key={idx}
+            {getCurrentTestimonials().map((t, idx) => (
+              <div
+                key={idx}
                   className="testimonial-rotator"
                   style={{ 
                     color: '#fff', 
@@ -254,14 +254,14 @@ function HomePage() {
                     justifyContent: 'space-between',
                     transition: 'all 0.3s ease'
                   }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-                    <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
-                    <div>
-                      <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal' }}>{t.name}</div>
-                      <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
-                    </div>
+              >
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                  <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal' }}>{t.name}</div>
+                    <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
                   </div>
+                </div>
                   <div style={{ 
                   fontStyle: 'normal', 
                   color: '#fff', 
@@ -271,8 +271,8 @@ function HomePage() {
                   alignItems: 'flex-start',
                   lineHeight: '1.5'
                 }}>{t.text}</div>
-                </div>
-              ))}
+              </div>
+            ))}
             </div>
 
             {/* Next Button */}
