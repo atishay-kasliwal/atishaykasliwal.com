@@ -468,7 +468,7 @@ function ImageCarousel() {
         alignItems: 'center',
         justifyContent: 'center',
         gap: windowWidth <= 768 ? '0.5rem' : '1rem',
-        padding: windowWidth <= 768 ? '0 0.525rem' : '0 1.05rem'
+        padding: windowWidth <= 768 ? '0 0.5775rem' : '0 1.155rem'
       }}>
         {/* Previous Button */}
         <button
@@ -579,7 +579,7 @@ function ImageCarousel() {
       {/* Description Text */}
       <div style={{ 
         marginTop: '2rem',
-        padding: windowWidth <= 768 ? '0 1.05rem' : '0 2.1rem'
+        padding: windowWidth <= 768 ? '0 1.155rem' : '0 2.31rem'
       }}>
         <h2 style={{
           color: '#fff',
