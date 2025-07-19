@@ -308,7 +308,29 @@ function ImageCarousel() {
       background: 'rgba(255,255,255,0.02)',
       borderRadius: '16px'
     }}>
-      <h2 className="story-title">My Journey Through Photography</h2>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginBottom: '2rem' 
+      }}>
+        <h2 className="story-title">My Journey Through Photography</h2>
+        <Link 
+          to="/art" 
+          style={{ 
+            color: '#ffb347', 
+            textDecoration: 'none', 
+            fontSize: '1rem',
+            fontWeight: '500',
+            transition: 'opacity 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => e.target.style.opacity = '0.8'}
+          onMouseLeave={(e) => e.target.style.opacity = '1'}
+        >
+          View Art Page →
+        </Link>
+      </div>
       
       <div style={{ 
         position: 'relative', 
@@ -358,35 +380,45 @@ function ImageCarousel() {
           width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
-            <div key={idx} style={{
-              width: '220px',
-              height: '220px',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'scale(1.05)';
-              e.target.style.boxShadow = '0 12px 40px rgba(0,0,0,0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'scale(1)';
-              e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
-            }}
+            <Link 
+              to="/art" 
+              key={idx} 
+              style={{ 
+                textDecoration: 'none',
+                display: 'block'
+              }}
             >
-              <img 
-                src={src} 
-                alt={`Journey ${currentSet * imagesPerSet + idx + 1}`}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  transition: 'transform 0.3s ease'
-                }}
-              />
-            </div>
+              <div style={{
+                width: '220px',
+                height: '220px',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'scale(1.05)';
+                e.target.style.boxShadow = '0 12px 40px rgba(0,0,0,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
+              }}
+              >
+                <img 
+                  src={src} 
+                  alt={`Journey ${currentSet * imagesPerSet + idx + 1}`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.3s ease'
+                  }}
+                />
+              </div>
+            </Link>
           ))}
         </div>
 
