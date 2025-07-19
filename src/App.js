@@ -199,24 +199,6 @@ function HomePage() {
 }
 
 function ArtPage() {
-  useEffect(() => {
-    // Disable scroll restoration
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-    
-    // Force scroll to top immediately when art page loads
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    
-    // Also try after a very short delay
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 10);
-  }, []);
   
   const images = [
     'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', //701 Wke forest University
@@ -399,16 +381,9 @@ function ImageCarousel() {
           width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
-            <Link 
-              to="/art"
+            <div 
               key={idx} 
-              style={{ 
-                textDecoration: 'none',
-                display: 'block',
-                cursor: 'pointer'
-              }}
-            >
-              <div style={{
+              style={{
                 width: '220px',
                 height: '220px',
                 borderRadius: '12px',
@@ -426,19 +401,18 @@ function ImageCarousel() {
                 e.target.style.transform = 'scale(1)';
                 e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
               }}
-              >
-                <img 
-                  src={src} 
-                  alt={`Journey ${currentSet * imagesPerSet + idx + 1}`}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'transform 0.3s ease'
-                  }}
-                />
-              </div>
-            </Link>
+            >
+              <img 
+                src={src} 
+                alt={`Journey ${currentSet * imagesPerSet + idx + 1}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s ease'
+                }}
+              />
+            </div>
           ))}
         </div>
 
@@ -537,13 +511,6 @@ function Footer() {
 }
 
 function App() {
-  useEffect(() => {
-    // Disable scroll restoration to prevent browser from remembering scroll position
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-  }, []);
-
   return (
     <Router>
       <Routes>
