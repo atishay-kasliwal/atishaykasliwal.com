@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './App.css';
 
@@ -289,28 +289,6 @@ function ArtPage() {
 // Image Carousel Component
 function ImageCarousel() {
   const [currentSet, setCurrentSet] = useState(0);
-  const navigate = useNavigate();
-  
-  const navigateToArt = () => {
-    // Disable scroll restoration
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-    
-    // Force scroll to top BEFORE navigation
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    
-    navigate('/art');
-    
-    // Force scroll to top AFTER navigation too
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 10);
-  };
   
   // Using the same images from your art page for the carousel
   const carouselImages = [
@@ -356,25 +334,21 @@ function ImageCarousel() {
         marginBottom: '2rem' 
       }}>
         <h2 className="story-title">My Journey Through Photography</h2>
-        <button 
-          onClick={navigateToArt}
+        <Link 
+          to="/art"
           style={{ 
             color: '#ffb347', 
             textDecoration: 'none', 
             fontSize: '1rem',
             fontWeight: '500',
             transition: 'opacity 0.3s ease',
-            cursor: 'pointer',
-            background: 'none',
-            border: 'none',
-            padding: '0',
-            fontFamily: 'inherit'
+            cursor: 'pointer'
           }}
           onMouseEnter={(e) => e.target.style.opacity = '0.8'}
           onMouseLeave={(e) => e.target.style.opacity = '1'}
         >
           View Art Page →
-        </button>
+        </Link>
       </div>
       
       <div style={{ 
@@ -425,15 +399,12 @@ function ImageCarousel() {
           width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
-            <button 
-              onClick={navigateToArt}
+            <Link 
+              to="/art"
               key={idx} 
               style={{ 
                 textDecoration: 'none',
                 display: 'block',
-                background: 'none',
-                border: 'none',
-                padding: '0',
                 cursor: 'pointer'
               }}
             >
@@ -467,7 +438,7 @@ function ImageCarousel() {
                   }}
                 />
               </div>
-            </button>
+            </Link>
           ))}
         </div>
 
