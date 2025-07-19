@@ -200,7 +200,17 @@ function HomePage() {
 
 function ArtPage() {
   useEffect(() => {
+    // Force scroll to top with multiple methods
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Also try after a short delay
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 100);
   }, []);
   
   const images = [
@@ -277,15 +287,31 @@ function ImageCarousel() {
   const navigate = useNavigate();
   
   const navigateToArt = () => {
-    navigate('/art');
-    // Force scroll to top immediately and after a delay
+    // Force scroll to top before navigation
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    navigate('/art');
+    
+    // Force scroll to top after navigation
     setTimeout(() => {
       window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }, 50);
+    
     setTimeout(() => {
       window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }, 200);
+    
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 500);
   };
   
   // Using the same images from your art page for the carousel
@@ -542,6 +568,13 @@ function Footer() {
 }
 
 function App() {
+  useEffect(() => {
+    // Disable scroll restoration to prevent browser from remembering scroll position
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
