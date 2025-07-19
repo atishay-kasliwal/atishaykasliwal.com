@@ -178,7 +178,7 @@ function HomePage() {
             </div>
           </div>
           <div className="landing-right-images">
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
               <div className="landing-grid-3x3">
                 {gridImages.map((src, idx) => (
                   <img key={idx} src={src} alt={`Landing ${idx + 1}`} width="200" height="200" />
