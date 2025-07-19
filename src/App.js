@@ -250,7 +250,9 @@ function HomePage() {
                     display: 'flex', 
                     flexDirection: 'column', 
                     alignItems: 'flex-start', 
-                    minHeight: windowWidth <= 768 ? '168px' : '189px' 
+                    height: windowWidth <= 768 ? '200px' : '220px',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.3s ease'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
@@ -260,7 +262,15 @@ function HomePage() {
                       <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
                     </div>
                   </div>
-                  <div style={{ fontStyle: 'normal', color: '#fff', fontWeight: 400 }}>{t.text}</div>
+                  <div style={{ 
+                  fontStyle: 'normal', 
+                  color: '#fff', 
+                  fontWeight: 400,
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  lineHeight: '1.5'
+                }}>{t.text}</div>
                 </div>
               ))}
             </div>
