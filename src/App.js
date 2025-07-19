@@ -288,8 +288,22 @@ function ImageCarousel() {
     'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
   ];
 
-  const imagesPerSet = 10;
+  const imagesPerSet = 8;
   const totalSets = Math.ceil(carouselImages.length / imagesPerSet);
+
+  // Text descriptions for each set of 8 photos
+  const setDescriptions = [
+    "Capturing the vibrant energy of celebrations and the serene beauty of university life. From fireworks lighting up the night sky to the peaceful campus atmosphere, each moment tells a unique story.",
+    "Exploring the intersection of nature and urban landscapes. From rain-soaked city streets to majestic waterfalls, these images capture the dynamic relationship between human civilization and the natural world.",
+    "A journey through diverse cultures and architectural marvels. From ancient temples to modern cityscapes, each photograph reflects the rich tapestry of human experience and cultural heritage."
+  ];
+
+  // Headings for each set of 8 photos
+  const setHeadings = [
+    "Celebrations & Campus Life",
+    "Nature & Urban Landscapes", 
+    "Cultural Heritage & Architecture"
+  ];
 
   const nextSet = () => {
     setCurrentSet((prev) => (prev + 1) % totalSets);
@@ -304,33 +318,23 @@ function ImageCarousel() {
     return carouselImages.slice(startIndex, startIndex + imagesPerSet);
   };
 
+  const getCurrentDescription = () => {
+    return setDescriptions[currentSet] || setDescriptions[setDescriptions.length - 1];
+  };
+
+  const getCurrentHeading = () => {
+    return setHeadings[currentSet] || setHeadings[setHeadings.length - 1];
+  };
+
   return (
     <div className="story-timeline" style={{ 
       background: 'rgba(255,255,255,0.02)',
       borderRadius: '16px'
     }}>
       <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
         marginBottom: '2rem' 
       }}>
-        <h2 className="story-title">My Journey Through Photography</h2>
-        <Link 
-          to="/art"
-          style={{ 
-            color: '#ffb347', 
-            textDecoration: 'none', 
-            fontSize: '1rem',
-            fontWeight: '500',
-            transition: 'opacity 0.3s ease',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => e.target.style.opacity = '0.8'}
-          onMouseLeave={(e) => e.target.style.opacity = '1'}
-        >
-          View Art Page →
-        </Link>
+        <h2 className="story-title">Perspective</h2>
       </div>
       
       <div style={{ 
@@ -377,15 +381,15 @@ function ImageCarousel() {
           gap: '1.5rem', 
           flexWrap: 'wrap',
           justifyContent: 'center',
-          maxWidth: '85vw',
+          maxWidth: '95vw',
           width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
             <div 
               key={idx} 
               style={{
-                width: '220px',
-                height: '220px',
+                width: '290px',
+                height: '290px',
                 borderRadius: '12px',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
@@ -445,6 +449,35 @@ function ImageCarousel() {
         >
           →
         </button>
+      </div>
+
+      {/* Description Text */}
+      <div style={{ 
+        marginTop: '2rem',
+        padding: '0 2rem'
+      }}>
+        <h2 style={{
+          color: '#fff',
+          fontSize: '1.5rem',
+          textAlign: 'center',
+          marginBottom: '1rem',
+          fontWeight: '600',
+          opacity: '0.95'
+        }}>
+          {getCurrentHeading()}
+        </h2>
+        <p style={{
+          color: '#fff',
+          fontSize: '1.1rem',
+          lineHeight: '1.6',
+          maxWidth: '800px',
+          margin: '0 auto',
+          opacity: '0.9',
+          fontStyle: 'italic',
+          textAlign: 'left'
+        }}>
+          {getCurrentDescription()}
+        </p>
       </div>
 
       {/* Dots Indicator */}
