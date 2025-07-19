@@ -130,7 +130,7 @@ function HomePage() {
         </div>
         {/* Two-column Main Content */}
         <div className="landing-two-col">
-          <div className="landing-left-text" style={{ marginTop: '1.4rem' }}>
+          <div className="landing-left-text" style={{ marginTop: '2rem' }}>
             <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }}>
               Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.
             </h1>
