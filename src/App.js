@@ -317,6 +317,7 @@ function ImageCarousel() {
         <h2 className="story-title">My Journey Through Photography</h2>
         <Link 
           to="/art" 
+          onClick={() => window.scrollTo(0, 0)}
           style={{ 
             color: '#ffb347', 
             textDecoration: 'none', 
@@ -382,6 +383,7 @@ function ImageCarousel() {
           {getCurrentImages().map((src, idx) => (
             <Link 
               to="/art" 
+              onClick={() => window.scrollTo(0, 0)}
               key={idx} 
               style={{ 
                 textDecoration: 'none',
