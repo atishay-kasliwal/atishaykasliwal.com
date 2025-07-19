@@ -200,17 +200,24 @@ function HomePage() {
 
 function ArtPage() {
   useEffect(() => {
-    // Force scroll to top with multiple methods
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    
-    // Also try after a short delay
+    // Scroll to the top anchor element
     setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+      const artTop = document.getElementById('art-top');
+      if (artTop) {
+        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo(0, 0);
+      }
     }, 100);
+    
+    setTimeout(() => {
+      const artTop = document.getElementById('art-top');
+      if (artTop) {
+        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }, 300);
   }, []);
   
   const images = [
@@ -255,6 +262,7 @@ function ArtPage() {
 
   return (
     <div className="art-page">
+      <div id="art-top" style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px' }}></div>
       <Helmet>
         <title>Atishay Kasliwal</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
@@ -287,31 +295,26 @@ function ImageCarousel() {
   const navigate = useNavigate();
   
   const navigateToArt = () => {
-    // Force scroll to top before navigation
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    
     navigate('/art');
     
-    // Force scroll to top after navigation
+    // Scroll to the top anchor element
     setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 50);
+      const artTop = document.getElementById('art-top');
+      if (artTop) {
+        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }, 100);
     
     setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 200);
-    
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 500);
+      const artTop = document.getElementById('art-top');
+      if (artTop) {
+        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }, 300);
   };
   
   // Using the same images from your art page for the carousel
