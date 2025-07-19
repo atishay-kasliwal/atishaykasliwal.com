@@ -199,6 +199,10 @@ function HomePage() {
 }
 
 function ArtPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const images = [
     'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', //701 Wke forest University
     'https://i.pinimg.com/736x/c7/de/6a/c7de6a1b54676e8a9070fbaa9601fc9e.jpg', //702 Blue Cloud Wke forest University
@@ -274,9 +278,14 @@ function ImageCarousel() {
   
   const navigateToArt = () => {
     navigate('/art');
+    // Force scroll to top immediately and after a delay
+    window.scrollTo(0, 0);
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
+      window.scrollTo(0, 0);
+    }, 50);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 200);
   };
   
   // Using the same images from your art page for the carousel
