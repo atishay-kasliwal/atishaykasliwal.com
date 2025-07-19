@@ -287,7 +287,7 @@ function ImageCarousel() {
     'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
   ];
 
-  const imagesPerSet = 4;
+  const imagesPerSet = 10;
   const totalSets = Math.ceil(carouselImages.length / imagesPerSet);
 
   const nextSet = () => {
@@ -310,8 +310,8 @@ function ImageCarousel() {
       background: 'rgba(255,255,255,0.02)',
       borderRadius: '16px',
       margin: '3rem auto',
-      maxWidth: '1200px',
-      width: '100%'
+      maxWidth: '90vw',
+      width: '90%'
     }}>
       <h3 style={{ 
         textAlign: 'center', 
@@ -364,15 +364,16 @@ function ImageCarousel() {
         {/* Images Container */}
         <div style={{ 
           display: 'flex', 
-          gap: '1rem', 
+          gap: '1.5rem', 
           flexWrap: 'wrap',
           justifyContent: 'center',
-          maxWidth: '800px'
+          maxWidth: '85vw',
+          width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
             <div key={idx} style={{
-              width: '180px',
-              height: '180px',
+              width: '220px',
+              height: '220px',
               borderRadius: '12px',
               overflow: 'hidden',
               boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
