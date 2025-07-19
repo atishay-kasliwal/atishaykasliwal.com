@@ -59,6 +59,7 @@ function HomePage() {
     }
   ];
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // Remove fade state
   const testimonialsPerRow = 3;
   useEffect(() => {
@@ -67,6 +68,15 @@ function HomePage() {
     }, 10000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const getCurrentTestimonials = () => {
     let result = [];
     for (let i = 0; i < testimonialsPerRow; i++) {
@@ -172,12 +182,28 @@ function HomePage() {
         </div>
         {/* Testimonial Rotator Full Width */}
         <div style={{ width: '100%', display: 'block', marginTop: '2.5rem' }}>
-          <div className="testimonial-rotator-row" style={{ display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%', maxWidth: 1504, margin: '0 auto' }}>
+          <div className="testimonial-rotator-row" style={{ display: 'flex', gap: windowWidth <= 768 ? '1rem' : '2rem', justifyContent: 'center', width: '100%', maxWidth: 1504, margin: '0 auto' }}>
             {getCurrentTestimonials().map((t, idx) => (
               <div
                 key={idx}
                 className="testimonial-rotator"
-                style={{ color: '#fff', fontSize: '0.96rem', fontStyle: 'normal', textAlign: 'left', maxWidth: 420, width: '100%', opacity: 0.92, letterSpacing: '0.01em', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minHeight: 180 }}
+                style={{ 
+                  color: '#fff', 
+                  fontSize: windowWidth <= 768 ? '0.85rem' : '0.96rem', 
+                  fontStyle: 'normal', 
+                  textAlign: 'left', 
+                  maxWidth: windowWidth <= 768 ? '300px' : windowWidth <= 1024 ? '380px' : '420px', 
+                  width: '100%', 
+                  opacity: 0.92, 
+                  letterSpacing: '0.01em', 
+                  background: 'rgba(255,255,255,0.04)', 
+                  borderRadius: 12, 
+                  padding: windowWidth <= 768 ? '1rem 1.2rem' : '1.2rem 1.5rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'flex-start', 
+                  minHeight: windowWidth <= 768 ? '160px' : '180px' 
+                }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                   <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
@@ -388,18 +414,18 @@ function ImageCarousel() {
         {/* Images Container */}
         <div style={{ 
           display: 'flex', 
-          gap: windowWidth <= 768 ? '0.8rem' : '1.5rem', 
+          gap: windowWidth <= 768 ? '0.92rem' : '1.74rem', 
           flexWrap: 'wrap',
           justifyContent: 'center',
-          maxWidth: windowWidth <= 768 ? '98vw' : '95vw',
+          maxWidth: windowWidth <= 768 ? '100vw' : '97vw',
           width: '100%'
         }}>
           {getCurrentImages().map((src, idx) => (
             <div 
               key={idx} 
               style={{
-                width: windowWidth <= 768 ? '140px' : windowWidth <= 1024 ? '200px' : '290px',
-                height: windowWidth <= 768 ? '140px' : windowWidth <= 1024 ? '200px' : '290px',
+                width: windowWidth <= 768 ? '162px' : windowWidth <= 1024 ? '232px' : '336px',
+                height: windowWidth <= 768 ? '162px' : windowWidth <= 1024 ? '232px' : '336px',
                 borderRadius: '12px',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
