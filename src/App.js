@@ -200,24 +200,28 @@ function HomePage() {
 
 function ArtPage() {
   useEffect(() => {
-    // Scroll to the top anchor element
+    // Force scroll to absolute top
     setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
       const artTop = document.getElementById('art-top');
       if (artTop) {
-        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.scrollTo(0, 0);
+        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
       }
-    }, 100);
+    }, 50);
     
     setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
       const artTop = document.getElementById('art-top');
       if (artTop) {
-        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.scrollTo(0, 0);
+        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
       }
-    }, 300);
+    }, 200);
   }, []);
   
   const images = [
@@ -262,11 +266,11 @@ function ArtPage() {
 
   return (
     <div className="art-page">
-      <div id="art-top" style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px' }}></div>
       <Helmet>
         <title>Atishay Kasliwal</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
+      <div id="art-top" style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px', zIndex: -1 }}></div>
       <div className="art-header">
         <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
           Atishay Kasliwal
@@ -297,24 +301,28 @@ function ImageCarousel() {
   const navigateToArt = () => {
     navigate('/art');
     
-    // Scroll to the top anchor element
+    // Force scroll to absolute top
     setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
       const artTop = document.getElementById('art-top');
       if (artTop) {
-        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.scrollTo(0, 0);
+        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
       }
-    }, 100);
+    }, 50);
     
     setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
       const artTop = document.getElementById('art-top');
       if (artTop) {
-        artTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        window.scrollTo(0, 0);
+        artTop.scrollIntoView({ behavior: 'instant', block: 'start' });
       }
-    }, 300);
+    }, 200);
   };
   
   // Using the same images from your art page for the carousel
