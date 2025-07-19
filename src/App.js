@@ -56,6 +56,13 @@ function HomePage() {
       company: "Symbiosis University",
       post: "Director SCSIT",
       photo: "https://media.licdn.com/dms/image/v2/C4E03AQGwZZBxpatX1g/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1616052715138?e=1757548800&v=beta&t=Ycq6iM4VsmRkOYS4RM14Spdq13ggnuwXWNREqIKyfCU"
+    },
+    {
+      text: "Atishay delivered our product on time and with perfection. His attention to detail and technical expertise ensured flawless execution. He communicated effectively throughout the process and exceeded our quality expectations.",
+      name: "Brains and Taxes",
+      company: "Brains and Taxes",
+      post: "Private Limited",
+      photo: "https://media.licdn.com/dms/image/v2/C560BAQEd1j3_piip1g/company-logo_200_200/company-logo_200_200/0/1630607308942/brains_and_taxes_private_limited_logo?e=1755734400&v=beta&t=2ynMu1vykLyId1Uf0HWdcFVtbP8TNixI80qA-zyntxQ"
     }
   ];
   const [testimonialIdx, setTestimonialIdx] = useState(0);
@@ -182,39 +189,111 @@ function HomePage() {
         </div>
         {/* Testimonial Rotator Full Width */}
         <div style={{ width: '100%', display: 'block', marginTop: '2.5rem' }}>
-          <div className="testimonial-rotator-row" style={{ display: 'flex', gap: windowWidth <= 768 ? '1rem' : '2rem', justifyContent: 'center', width: '100%', maxWidth: 1504, margin: '0 auto' }}>
-            {getCurrentTestimonials().map((t, idx) => (
-              <div
-                key={idx}
-                className="testimonial-rotator"
-                style={{ 
-                  color: '#fff', 
-                  fontSize: windowWidth <= 768 ? '0.85rem' : '0.96rem', 
-                  fontStyle: 'normal', 
-                  textAlign: 'left', 
-                  maxWidth: windowWidth <= 768 ? '300px' : windowWidth <= 1024 ? '380px' : '420px', 
-                  width: '100%', 
-                  opacity: 0.92, 
-                  letterSpacing: '0.01em', 
-                  background: 'rgba(255,255,255,0.04)', 
-                  borderRadius: 12, 
-                  padding: windowWidth <= 768 ? '1rem 1.2rem' : '1.2rem 1.5rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'flex-start', 
-                  minHeight: windowWidth <= 768 ? '160px' : '180px' 
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-                  <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
-                  <div>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal' }}>{t.name}</div>
-                    <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
+          <div style={{ 
+            position: 'relative', 
+            display: 'flex', 
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: windowWidth <= 768 ? '1rem' : '2rem',
+            width: '100%', 
+            maxWidth: 1504, 
+            margin: '0 auto' 
+          }}>
+            {/* Previous Button */}
+            <button
+              onClick={() => setTestimonialIdx((prev) => (prev - testimonialsPerRow + testimonials.length) % testimonials.length)}
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '50%',
+                width: windowWidth <= 768 ? '40px' : '48px',
+                height: windowWidth <= 768 ? '40px' : '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#fff',
+                fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              ←
+            </button>
+
+            {/* Testimonials Container */}
+            <div className="testimonial-rotator-row" style={{ display: 'flex', gap: windowWidth <= 768 ? '1rem' : '2rem', justifyContent: 'center' }}>
+              {getCurrentTestimonials().map((t, idx) => (
+                <div
+                  key={idx}
+                  className="testimonial-rotator"
+                  style={{ 
+                    color: '#fff', 
+                    fontSize: windowWidth <= 768 ? '0.89rem' : '1.01rem', 
+                    fontStyle: 'normal', 
+                    textAlign: 'left', 
+                    maxWidth: windowWidth <= 768 ? '300px' : windowWidth <= 1024 ? '380px' : '420px', 
+                    width: '100%', 
+                    opacity: 0.92, 
+                    letterSpacing: '0.01em', 
+                    background: 'rgba(255,255,255,0.04)', 
+                    borderRadius: 12, 
+                    padding: windowWidth <= 768 ? '1.05rem 1.26rem' : '1.26rem 1.58rem', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'flex-start', 
+                    minHeight: windowWidth <= 768 ? '168px' : '189px' 
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                    <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
+                    <div>
+                      <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal' }}>{t.name}</div>
+                      <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
+                    </div>
                   </div>
+                  <div style={{ fontStyle: 'normal', color: '#fff', fontWeight: 400 }}>{t.text}</div>
                 </div>
-                <div style={{ fontStyle: 'normal', color: '#fff', fontWeight: 400 }}>{t.text}</div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={() => setTestimonialIdx((prev) => (prev + testimonialsPerRow) % testimonials.length)}
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '50%',
+                width: windowWidth <= 768 ? '40px' : '48px',
+                height: windowWidth <= 768 ? '40px' : '48px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#fff',
+                fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              →
+            </button>
           </div>
         </div>
         <StoryTimeline />
