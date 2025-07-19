@@ -304,25 +304,14 @@ function ImageCarousel() {
   };
 
   return (
-    <div className="image-carousel-section" style={{ 
-      marginTop: '3rem', 
-      padding: '0 2vw',
+    <div className="story-timeline" style={{ 
       background: 'rgba(255,255,255,0.02)',
       borderRadius: '16px',
       margin: '3rem auto',
       maxWidth: '90vw',
       width: '90%'
     }}>
-      <h3 style={{ 
-        textAlign: 'left', 
-        color: '#fff', 
-        marginBottom: '2rem',
-        fontSize: '1.5rem',
-        fontWeight: '600',
-        letterSpacing: '0.05em'
-      }}>
-        My Journey Through Photography
-      </h3>
+      <h2 className="story-title">My Journey Through Photography</h2>
       
       <div style={{ 
         position: 'relative', 
