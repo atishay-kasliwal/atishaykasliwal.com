@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './App.css';
@@ -388,24 +388,6 @@ function ImageCarousel() {
   const [currentSet, setCurrentSet] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Recalculate imagesPerSet when window width changes
-  useEffect(() => {
-    const newImagesPerSet = getImagesPerSet();
-    if (newImagesPerSet !== imagesPerSet) {
-      // Reset to first set when changing grid size to avoid empty sets
-      setCurrentSet(0);
-    }
-  }, [windowWidth, getImagesPerSet, imagesPerSet]);
-  
   // Using the same images from your art page for the carousel
   const carouselImages = [
     'https://i.pinimg.com/736x/47/c2/f1/47c2f1c528654d76214860f6d2afc2ac.jpg', // Fire works 4th of July
@@ -423,7 +405,7 @@ function ImageCarousel() {
   ];
 
   // Responsive grid configuration
-  const getImagesPerSet = () => {
+  const getImagesPerSet = useCallback(() => {
     if (windowWidth <= 768) {
       return 4; // 2x2 for mobile
     } else if (windowWidth <= 1024) {
@@ -431,10 +413,28 @@ function ImageCarousel() {
     } else {
       return 8; // 4x4 for full resolution
     }
-  };
+  }, [windowWidth]);
 
   const imagesPerSet = getImagesPerSet();
   const totalSets = Math.ceil(carouselImages.length / imagesPerSet);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Recalculate imagesPerSet when window width changes
+  useEffect(() => {
+    const newImagesPerSet = getImagesPerSet();
+    if (newImagesPerSet !== imagesPerSet) {
+      // Reset to first set when changing grid size to avoid empty sets
+      setCurrentSet(0);
+    }
+  }, [windowWidth, getImagesPerSet, imagesPerSet]);
 
   // Text descriptions for each set of photos
   const setDescriptions = [
