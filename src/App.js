@@ -396,6 +396,15 @@ function ImageCarousel() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Recalculate imagesPerSet when window width changes
+  useEffect(() => {
+    const newImagesPerSet = getImagesPerSet();
+    if (newImagesPerSet !== imagesPerSet) {
+      // Reset to first set when changing grid size to avoid empty sets
+      setCurrentSet(0);
+    }
+  }, [windowWidth, getImagesPerSet, imagesPerSet]);
   
   // Using the same images from your art page for the carousel
   const carouselImages = [
@@ -413,17 +422,28 @@ function ImageCarousel() {
     'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
   ];
 
-  const imagesPerSet = 8;
+  // Responsive grid configuration
+  const getImagesPerSet = () => {
+    if (windowWidth <= 768) {
+      return 4; // 2x2 for mobile
+    } else if (windowWidth <= 1024) {
+      return 6; // 3x3 for small screens
+    } else {
+      return 8; // 4x4 for full resolution
+    }
+  };
+
+  const imagesPerSet = getImagesPerSet();
   const totalSets = Math.ceil(carouselImages.length / imagesPerSet);
 
-  // Text descriptions for each set of 8 photos
+  // Text descriptions for each set of photos
   const setDescriptions = [
     "Capturing the vibrant energy of celebrations and the serene beauty of university life. From fireworks lighting up the night sky to the peaceful campus atmosphere, each moment tells a unique story.",
     "Exploring the intersection of nature and urban landscapes. From rain-soaked city streets to majestic waterfalls, these images capture the dynamic relationship between human civilization and the natural world.",
     "A journey through diverse cultures and architectural marvels. From ancient temples to modern cityscapes, each photograph reflects the rich tapestry of human experience and cultural heritage."
   ];
 
-  // Headings for each set of 8 photos
+  // Headings for each set of photos
   const setHeadings = [
     "Celebrations & Campus Life",
     "Nature & Urban Landscapes", 
@@ -502,9 +522,9 @@ function ImageCarousel() {
 
         {/* Images Container */}
         <div style={{ 
-          display: 'flex', 
-          gap: windowWidth <= 768 ? '0.92rem' : '1.74rem', 
-          flexWrap: 'wrap',
+          display: 'grid',
+          gridTemplateColumns: windowWidth <= 768 ? 'repeat(2, 1fr)' : windowWidth <= 1024 ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)',
+          gap: windowWidth <= 768 ? '0.92rem' : '1.74rem',
           justifyContent: 'center',
           maxWidth: windowWidth <= 768 ? '100vw' : '97vw',
           width: '100%'
@@ -513,8 +533,7 @@ function ImageCarousel() {
             <div 
               key={idx} 
               style={{
-                width: windowWidth <= 768 ? '162px' : windowWidth <= 1024 ? '232px' : '336px',
-                height: windowWidth <= 768 ? '162px' : windowWidth <= 1024 ? '232px' : '336px',
+                aspectRatio: '1',
                 borderRadius: '12px',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
