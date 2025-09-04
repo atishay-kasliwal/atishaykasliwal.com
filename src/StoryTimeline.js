@@ -24,7 +24,7 @@ const stories = [
     description: 'Got my first on-campus job with the Residential Safety Program, where I met many new people, learned a lot, and gained great experience.'
   },
     {image: 'https://www.stonybrook.edu/commcms/studentaffairs/for/images/dvtn.jpg',
-    date: '2024-2025',
+    date: '2024-2026',
     title: 'Data Science - Graduate',
     description: 'My time at Accolite ended as I moved to the USA to pursue my master’s in DS at Stony Brook University. Excited to join this new, multidisciplinary program.'
  },
@@ -58,7 +58,7 @@ const stories = [
 
 
   {
-    image: 'https://media.licdn.com/dms/image/v2/C4E22AQHDukjXwqYXYQ/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1592505948609?e=1755129600&v=beta&t=6Wz8AzhDVBvcMGdCic4KNOAnzQgEuW41i0Fe8C4a2-Q',
+    image: 'https://i.pinimg.com/736x/27/fb/a0/27fba0a76dbf4e71440f44cefc6836f2.jpg',
     date: '2021',
     title: 'Analytics and ML - COVID-19',
     description: 'Using survey data, we created a machine learning model to develop a predictive tool and published my second paper.'
@@ -77,7 +77,7 @@ const stories = [
   },
 
   {
-    image: 'https://media.licdn.com/dms/image/v2/C4D22AQGkwulh0Npu9Q/feedshare-shrink_1280/feedshare-shrink_1280/0/1657647605151?e=1755129600&v=beta&t=KqktReysnED5RzRX_Xu9xWum2WfOnoKk38cPvs9tUoY',
+    image: 'https://i.pinimg.com/1200x/9f/3f/23/9f3f231ea5c491d8e13f6c3a3971a50a.jpg',
     date: '2020',
     title: 'Backend Developer - Broadcastt.co',
     description: 'Showcasing my skills and leveraging connections, I landed my first freelancing job, handling multiple projects and gaining valuable professional experience.'
