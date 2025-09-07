@@ -37,44 +37,51 @@ function HomePage() {
   const testimonials = [
     {
       
-      text: "Atishay delivered our project ahead of schedule and exceeded expectations. He managed multiple priorities with ease and communicated clearly throughout. His leadership and technical skills made him an invaluable asset to our team.",
-      name: "Ankit Jain",
+      text: "Atishay delivered our project ahead of schedule and exceeded expectations. His technical skills made him invaluable.",
+      name: "Ankit Jain⭐⭐⭐⭐⭐",
       company: "Accolite Digital",
       post: "Technical Director",
       photo: "https://media.licdn.com/dms/image/v2/D5603AQFeoPNYwJWZSg/profile-displayphoto-shrink_400_400/B56Zd5wUFiHQAg-/0/1750094398497?e=1757548800&v=beta&t=MOsxtBZiVPbtotK2LLa_rafOz8fMGXE0GWyswi85apw"
     },
     {
-      text: "Atishay developed an NLP pipeline to analyze central bank communications and used GPT-4 to evaluate sentiment and market impact. He designed an LLM-based trading simulation with audit-ready logs and clear visualizations.",
-      name: "Wencui Han",
+      text: "Atishay developed an NLP pipeline and designed an LLM-based trading simulation with clear visualizations.",
+      name: "Wencui Han⭐⭐⭐⭐⭐",
       company: "Stony Brook University",
-      post: "Associate Professor",
+      post: "Professor",
       photo: "https://media.licdn.com/dms/image/v2/C4D03AQHoAL7zZmmKFQ/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1517393435717?e=1757548800&v=beta&t=j2HkMJKKNLbJAxxn7vB80vd6uFHV6F5eEFwNfh3pKQs"
     },
     {
-      text: "Creative, reliable, and always ready to help. Atishay brought fresh ideas to our Computer Science projects and delivered actionable insights. He was a supportive student and fostered a collaborative work environment.",
-      name: "Neha Gupta",
+      text: "Creative and reliable, Atishay brought fresh ideas to our projects and fostered a collaborative environment.",
+      name: "Neha Gupta⭐⭐⭐⭐⭐",
       company: "Symbiosis University",
       post: "Director SCSIT",
       photo: "https://media.licdn.com/dms/image/v2/C4E03AQGwZZBxpatX1g/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1616052715138?e=1757548800&v=beta&t=Ycq6iM4VsmRkOYS4RM14Spdq13ggnuwXWNREqIKyfCU"
     },
     {
-      text: "Atishay delivered our product on time and with perfection. His attention to detail and technical expertise ensured flawless execution. He communicated effectively throughout the process and exceeded our quality expectations.",
-      name: "Brains and Taxes",
+      text: "Atishay delivered our product on time with perfection. His technical expertise exceeded our expectations.",
+      name: "Gunjan Jain⭐⭐⭐⭐⭐",
       company: "Brains and Taxes",
       post: "Private Limited",
-      photo: "https://media.licdn.com/dms/image/v2/C560BAQEd1j3_piip1g/company-logo_200_200/company-logo_200_200/0/1630607308942/brains_and_taxes_private_limited_logo?e=1755734400&v=beta&t=2ynMu1vykLyId1Uf0HWdcFVtbP8TNixI80qA-zyntxQ"
+      photo: "https://media.licdn.com/dms/image/v2/C560BAQEd1j3_piip1g/company-logo_200_200/company-logo_200_200/0/1630607308942/brains_and_taxes_private_limited_logo?e=1759968000&v=beta&t=8BxoNamFekkGJtpAj6qn3Kjaxpg1Gn85Y3AQmcnYH-A"
+    },
+    {
+      text: "Atishay's ML expertise was instrumental in our research. His technical skills made our project a huge success.",
+      name: "Dr. Goldy Khanna⭐⭐⭐⭐⭐",
+      company: "Wake Forest University",
+      post: "Cerebrovascular & Skull Base Neurosurgeon",
+      photo: "https://media.licdn.com/dms/image/v2/D5603AQFmQXJjA1CVLA/profile-displayphoto-crop_800_800/B56ZiCOYy5HUAM-/0/1754531467040?e=1759968000&v=beta&t=Uiv9xXwtLasoV9DQ5_FjQfaita0MVdMAdU0yxzDKkmo"
+    },
+    {
+      text: "Working with Atishay was a pleasure. His innovative approach made him exceptional.",
+      name: "Michael Chen⭐⭐⭐⭐⭐",
+      company: "Wake Forest University",
+      post: "Assistant Professor",
+      photo: "https://media.licdn.com/dms/image/v2/D4E03AQF0BPnzsnvEiA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1643213755898?e=1759968000&v=beta&t=yw2ShbYe34ghREmP0-AE0ACxm1SJKvLLKRNyrwEWzQQ"
     }
   ];
-  const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // Remove fade state
   const testimonialsPerRow = 3;
-  useEffect(() => {
-    const interval = setInterval(() => {
-        setTestimonialIdx(idx => (idx + testimonialsPerRow) % testimonials.length);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, [testimonials.length]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -85,11 +92,7 @@ function HomePage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   const getCurrentTestimonials = () => {
-    let result = [];
-    for (let i = 0; i < testimonialsPerRow; i++) {
-      result.push(testimonials[(testimonialIdx + i) % testimonials.length]);
-    }
-    return result;
+    return testimonials;
   };
 
   return (
@@ -187,82 +190,59 @@ function HomePage() {
             </div>
           </div>
         </div>
-        {/* Testimonial Rotator Full Width */}
-        <div style={{ width: '100%', display: 'block', marginTop: '2.5rem' }}>
+        {/* Testimonials Grid */}
+        <div style={{ width: '100%', display: 'block', marginTop: '1rem', marginBottom: '0' }}>
           <div style={{ 
-            position: 'relative', 
-            display: 'flex', 
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: windowWidth <= 768 ? '1rem' : '2rem',
             width: '100%', 
-            maxWidth: 1504, 
-            margin: '0 auto' 
+            maxWidth: '1540px', 
+            margin: '0 auto',
+            padding: windowWidth <= 768 ? '1rem 2rem 0.2rem 2rem' : '1.2rem 2.5rem 0.3rem 2.5rem'
           }}>
-            {/* Previous Button */}
-            <button
-              onClick={() => setTestimonialIdx((prev) => (prev - testimonialsPerRow + testimonials.length) % testimonials.length)}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '50%',
-                width: windowWidth <= 768 ? '40px' : '48px',
-                height: windowWidth <= 768 ? '40px' : '48px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#fff',
-                fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'scale(1)';
-              }}
-            >
-              ←
-            </button>
-
             {/* Testimonials Container */}
-            <div className="testimonial-rotator-row" style={{ display: 'flex', gap: windowWidth <= 768 ? '1rem' : '2rem', justifyContent: 'center' }}>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: windowWidth <= 768 ? 'repeat(1, 1fr)' : windowWidth <= 1024 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+              gridTemplateRows: windowWidth <= 768 ? 'repeat(6, auto)' : windowWidth <= 1024 ? 'repeat(3, auto)' : 'repeat(2, auto)',
+              gap: windowWidth <= 768 ? '0.8rem' : '1rem',
+              justifyContent: 'center',
+              width: '100%'
+            }}>
             {getCurrentTestimonials().map((t, idx) => (
               <div
                 key={idx}
-                  className="testimonial-rotator"
-                  style={{ 
-                    color: '#fff', 
-                    fontSize: windowWidth <= 768 ? '0.89rem' : '1.01rem', 
-                    fontStyle: 'normal', 
-                    textAlign: 'left', 
-                    maxWidth: windowWidth <= 768 ? '300px' : windowWidth <= 1024 ? '380px' : '420px', 
-                    width: '100%', 
-                    opacity: 0.92, 
-                    letterSpacing: '0.01em', 
-                    background: 'rgba(255,255,255,0.04)', 
-                    borderRadius: 12, 
-                    padding: windowWidth <= 768 ? '1.05rem 1.26rem' : '1.26rem 1.58rem', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'flex-start', 
-                    height: windowWidth <= 768 ? '200px' : '220px',
-                    justifyContent: 'space-between',
-                    transition: 'all 0.3s ease'
-                  }}
+                style={{ 
+                  color: '#fff', 
+                  fontSize: windowWidth <= 768 ? '0.89rem' : '1.01rem', 
+                  fontStyle: 'normal', 
+                  textAlign: 'left', 
+                  width: '100%', 
+                  opacity: 0.92, 
+                  letterSpacing: '0.01em', 
+                  background: 'rgba(255,255,255,0.04)', 
+                  borderRadius: 12, 
+                  padding: windowWidth <= 768 ? '0.5rem 0.5rem 0.5rem 0.5rem' : '0.6rem 0.6rem 0.6rem 0.6rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'flex-start', 
+                  height: 'auto',
+                  justifyContent: 'space-between',
+                  transition: 'all 0.3s ease',
+                  border: '0.5px solid rgba(255,255,255,0.1)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                  margin: 0,
+                }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.3rem' }}>
                   <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
                   <div>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal' }}>{t.name}</div>
+                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                      <span>{t.name.split('⭐⭐⭐⭐⭐')[0].trim()}</span>
+                      <span style={{ color: '#ffd700', fontSize: '1.4em' }}>⭐⭐⭐⭐⭐</span>
+                    </div>
                     <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
                   </div>
                 </div>
-                  <div style={{ 
+                <div style={{ 
                   fontStyle: 'normal', 
                   color: '#fff', 
                   fontWeight: 400,
@@ -274,36 +254,6 @@ function HomePage() {
               </div>
             ))}
             </div>
-
-            {/* Next Button */}
-            <button
-              onClick={() => setTestimonialIdx((prev) => (prev + testimonialsPerRow) % testimonials.length)}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '50%',
-                width: windowWidth <= 768 ? '40px' : '48px',
-                height: windowWidth <= 768 ? '40px' : '48px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#fff',
-                fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'scale(1)';
-              }}
-            >
-              →
-            </button>
           </div>
         </div>
         <StoryTimeline />
@@ -402,6 +352,10 @@ function ImageCarousel() {
     'https://i.pinimg.com/736x/47/80/ba/4780bafefa14c368f7b14bcc29d1f95c.jpg', // Niagara Fall Rainbow
     'https://i.pinimg.com/736x/37/c0/48/37c048374a1a821113a64e026c47bf83.jpg', // lotus
     'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
+       'https://i.pinimg.com/736x/f7/c0/ce/f7c0cef5c09f71605a8ccee99114e95c.jpg', //25 New York Yello Taxi
+    'https://i.pinimg.com/736x/7b/30/ee/7b30ee92245350786bf70b88802c1a0a.jpg',// 26 MAn with Diya
+    'https://i.pinimg.com/736x/be/24/58/be2458a58771772b60fa757d52214b70.jpg', // 27 Chicago In Day light skyline
+    'https://i.pinimg.com/736x/e2/f0/e6/e2f0e616411462c8c7c431a1d72f47fc.jpg', // 28 Portyard 
   ];
 
   // Responsive grid configuration
