@@ -80,8 +80,6 @@ function HomePage() {
     }
   ];
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  // Remove fade state
-  const testimonialsPerRow = 3;
 
   useEffect(() => {
     const handleResize = () => {
