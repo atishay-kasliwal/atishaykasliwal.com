@@ -58,7 +58,7 @@ body, #root, .App {
 
 .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 1.0773rem;
+  font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.13em;
   opacity: 0.9;
@@ -71,7 +71,7 @@ body, #root, .App {
   display: flex;
   gap: 2.2rem;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 0.7695rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.09em;
   margin-top: 0.2rem;
@@ -198,7 +198,7 @@ body, #root, .App {
 .art-header .logo.libertinus-mono {
   color: #111 !important;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 1.197rem;
+  font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.13em;
   opacity: 0.9;
@@ -209,7 +209,7 @@ body, #root, .App {
   display: flex;
   gap: 2.2rem;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.09em;
   margin-top: 0.2rem;
@@ -298,7 +298,7 @@ body, #root, .App {
     flex-wrap: wrap;
   }
   .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
   .landing-two-col {
     flex-direction: column;
@@ -444,6 +444,7 @@ body, #root, .App {
   background: #111;
   color: #fff;
   padding: 1.2rem 0 1.2rem 0;
+  margin-top: 3rem;
   position: relative;
   bottom: 0;
   left: 0;
