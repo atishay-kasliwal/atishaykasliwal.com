@@ -216,7 +216,7 @@ function HomePage() {
                   width: '100%', 
                   opacity: 0.92, 
                   letterSpacing: '0.01em', 
-                  background: 'rgba(255,255,255,0.04)', 
+                  background: 'transparent', 
                   borderRadius: 12, 
                   padding: windowWidth <= 768 ? '0.5rem 0.5rem 0.5rem 0.5rem' : '0.6rem 0.6rem 0.6rem 0.6rem', 
                   display: 'flex', 
@@ -225,8 +225,8 @@ function HomePage() {
                   height: 'auto',
                   justifyContent: 'space-between',
                   transition: 'all 0.3s ease',
-                  border: '0.5px solid rgba(255,255,255,0.1)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                  border: 'none',
+                  boxShadow: 'none',
                   margin: 0,
                 }}
               >
@@ -425,7 +425,7 @@ function ImageCarousel() {
 
   return (
     <div className="story-timeline" style={{ 
-      background: 'rgba(255,255,255,0.02)',
+      background: 'transparent',
       borderRadius: '16px'
     }}>
       <div style={{ 
@@ -446,7 +446,7 @@ function ImageCarousel() {
         <button
           onClick={prevSet}
           style={{
-            background: 'rgba(255,255,255,0.1)',
+            background: 'transparent',
             border: '1px solid rgba(255,255,255,0.2)',
             borderRadius: '50%',
             width: windowWidth <= 768 ? '40px' : '48px',
@@ -461,11 +461,11 @@ function ImageCarousel() {
             backdropFilter: 'blur(10px)'
           }}
           onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(255,255,255,0.2)';
+            e.target.style.background = 'transparent';
             e.target.style.transform = 'scale(1.1)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(255,255,255,0.1)';
+            e.target.style.background = 'transparent';
             e.target.style.transform = 'scale(1)';
           }}
         >
@@ -520,7 +520,7 @@ function ImageCarousel() {
         <button
           onClick={nextSet}
           style={{
-            background: 'rgba(255,255,255,0.1)',
+            background: 'transparent',
             border: '1px solid rgba(255,255,255,0.2)',
             borderRadius: '50%',
             width: windowWidth <= 768 ? '40px' : '48px',
@@ -535,11 +535,11 @@ function ImageCarousel() {
             backdropFilter: 'blur(10px)'
           }}
           onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(255,255,255,0.2)';
+            e.target.style.background = 'transparent';
             e.target.style.transform = 'scale(1.1)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(255,255,255,0.1)';
+            e.target.style.background = 'transparent';
             e.target.style.transform = 'scale(1)';
           }}
         >
@@ -592,18 +592,18 @@ function ImageCarousel() {
               height: windowWidth <= 768 ? '10px' : '12px',
               borderRadius: '50%',
               border: 'none',
-              background: idx === currentSet ? '#fff' : 'rgba(255,255,255,0.3)',
+              background: idx === currentSet ? '#fff' : 'transparent',
               cursor: 'pointer',
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={(e) => {
               if (idx !== currentSet) {
-                e.target.style.background = 'rgba(255,255,255,0.5)';
+                e.target.style.background = 'transparent';
               }
             }}
             onMouseLeave={(e) => {
               if (idx !== currentSet) {
-                e.target.style.background = 'rgba(255,255,255,0.3)';
+                e.target.style.background = 'transparent';
               }
             }}
           />
