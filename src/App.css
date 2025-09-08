@@ -443,7 +443,7 @@ body, #root, .App {
   width: 100%;
   background: #111;
   color: #fff;
-  padding: 1.2rem 0 1.2rem 0;
+  padding: 1.6rem 0 1.6rem 0; /* increased vertical padding */
   margin-top: 3rem;
   position: relative;
   bottom: 0;
