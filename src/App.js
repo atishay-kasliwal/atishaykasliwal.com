@@ -73,7 +73,7 @@ function HomePage() {
     },
     {
       text: "Working with Atishay was a pleasure. His innovative approach made him exceptional.",
-      name: "Michael Chen⭐⭐⭐⭐⭐",
+      name: "Dr. Da Ma⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Assistant Professor",
       photo: "https://media.licdn.com/dms/image/v2/D4E03AQF0BPnzsnvEiA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1643213755898?e=1759968000&v=beta&t=yw2ShbYe34ghREmP0-AE0ACxm1SJKvLLKRNyrwEWzQQ"
