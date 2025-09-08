@@ -16,6 +16,12 @@ const stories = [
     title: 'Research Assistant - SBU',
     description: 'Working with Professor Wencui Han at Stony Brook University has been a wonderful experience. I learned a lot about finance, and developed predictive models.'
   },
+  {
+    image: 'https://i.pinimg.com/736x/fb/aa/bc/fbaabc9d28cce6c9fd9b92cde394a0c7.jpg',
+    date: '2025',
+    title: 'Graduate Assistant - Mailroom',
+    description: 'I support the campus mailroom by managing packages, organizing mail, and assisting students and staff, building strong organizational and time management skills.'
+  },
 
   {
     image: 'https://www.jkokolakis.com/wp-content/uploads/2017/09/600-Bed-Residence-Hall-9-752x500.jpg',
@@ -64,7 +70,7 @@ const stories = [
     description: 'Using survey data, we created a machine learning model to develop a predictive tool and published my second paper.'
   },
   {
-    image: 'https://i.pinimg.com/736x/1d/f8/fe/1df8fee4e347fdcb9ef02a9cd184063a.jpg',
+    image: 'https://i.pinimg.com/736x/e9/d6/77/e9d677636ca112c696833f051bcb9a15.jpg',
     date: '2021',
     title: 'Survey Research - COVID-19',
     description: 'During the peak of the pandemic, I conducted a survey-based research project and published my first paper on the effects of COVID-19 after lockdowns were lifted'
