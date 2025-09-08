@@ -13,6 +13,7 @@ import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
 import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
 import img9 from './assets/Screenshot 2025-07-10 at 7.52.42 AM.png';
 import StoryTimeline from './StoryTimeline';
+import Projects from './Projects';
 
 const experienceEducation = [
   '• AI, ML research, data analytics @Atrium Health Wake Forest (2025)',
@@ -127,6 +128,7 @@ function HomePage() {
              <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
+            <Link to="/projects">PROJECTS</Link>
           </nav>
         </div>
         {/* Two-column Main Content */}
@@ -317,6 +319,7 @@ function ArtPage() {
           <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
           <Link to="/art">ART</Link>
+          <Link to="/projects">PROJECTS</Link>
         </nav>
       </div>
       <h2 className="art-title">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -645,6 +648,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/art" element={<ArtPage />} />
+        <Route path="/projects" element={<Projects />} />
       </Routes>
       <Footer />
     </Router>
