@@ -1,0 +1,113 @@
+.projects-page {
+  background: #fff;
+  color: #111;
+  min-height: 100vh;
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.2rem 2rem 0 2rem;
+  background: #fff;
+}
+
+.projects-header .logo.libertinus-mono {
+  color: #111 !important;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+}
+
+.project-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  padding: 0 2rem;
+}
+
+.project-section:nth-child(even) {
+  grid-template-columns: 1fr 2fr;
+}
+
+.project-images {
+  display: grid;
+  gap: 1rem;
+}
+
+/* Layout variants */
+.project-section.hero .project-images {
+  grid-template-columns: 1fr;
+}
+
+.project-section.mosaic-1 .project-images {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: 180px;
+}
+
+.project-section.mosaic-2 .project-images {
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-auto-rows: 160px;
+}
+
+.project-section.mosaic-3 .project-images {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 160px;
+}
+
+.project-section.mosaic-4 .project-images {
+  grid-template-columns: 1fr;
+}
+
+.project-img-tile {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.project-img-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-text {
+  background: #fff;
+  color: #111;
+  padding: 1rem 1rem;
+}
+
+.project-text h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+}
+
+.project-text p {
+  margin: 0 0 0.7rem 0;
+  line-height: 1.6;
+}
+
+.project-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+@media (max-width: 900px) {
+  .project-section, .project-section:nth-child(even) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .project-section { padding: 0 1rem; }
+  .project-section .project-images { grid-auto-rows: 140px; }
+}
+
+
