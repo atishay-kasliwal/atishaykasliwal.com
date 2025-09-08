@@ -235,9 +235,9 @@ function HomePage() {
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.3rem' }}>
                   <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
                   <div>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.5rem' }}>
                       <span>{t.name.split('⭐⭐⭐⭐⭐')[0].trim()}</span>
-                      <span style={{ color: '#ffd700', fontSize: '1.4em' }}>⭐⭐⭐⭐⭐</span>
+                      <span style={{ color: '#ffd700', fontSize: '1.2em', marginLeft: '2.0rem' }}>⭐⭐⭐⭐⭐</span>
                     </div>
                     <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
                   </div>

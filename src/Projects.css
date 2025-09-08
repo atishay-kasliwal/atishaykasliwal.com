@@ -1,37 +1,29 @@
 .projects-page {
-  background: #fff;
-  color: #111;
+  background: #181818;
+  color: #fff;
   min-height: 100vh;
 }
 
-.projects-header {
+/* Center the overall projects content */
+/* keep header layout unchanged; center only the projects list */
+.projects-list {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1.2rem 2rem 0 2rem;
-  background: #fff;
-}
-
-.projects-header .logo.libertinus-mono {
-  color: #111 !important;
-  font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 400;
-  letter-spacing: 0.13em;
+  flex-direction: column;
+  align-items: center; /* center project containers horizontally */
 }
 
 .project-section {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.6fr 1fr;
   gap: 2rem;
   align-items: center;
-  max-width: 1200px;
-  margin: 2.5rem auto;
-  padding: 0 2rem;
-}
-
-.project-section:nth-child(even) {
-  grid-template-columns: 1fr 2fr;
+  justify-items: center; /* center items inside the grid */
+  width: 100%;
+  max-width: 80vw; /* ~80% of screen width */
+  margin: 8vh auto; /* generous vertical rhythm */
+  min-height: 80vh; /* each project takes ~80% of viewport height */
+  padding: 0;
 }
 
 .project-images {
@@ -39,29 +31,27 @@
   gap: 1rem;
 }
 
-/* Layout variants */
-.project-section.hero .project-images {
-  grid-template-columns: 1fr;
-}
+/* Template variants */
+.project-section.tpl-hero .project-images.hero-one { grid-template-columns: 1fr; }
 
-.project-section.mosaic-1 .project-images {
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: 180px;
-}
-
-.project-section.mosaic-2 .project-images {
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  grid-auto-rows: 160px;
-}
-
-.project-section.mosaic-3 .project-images {
+.project-section.tpl-strip-cards .project-images.strip-cards {
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 160px;
+  grid-auto-rows: 180px;
+  align-items: end;
 }
+.project-section.tpl-strip-cards .project-img-tile.card { border-radius: 10px; overflow: hidden; }
 
-.project-section.mosaic-4 .project-images {
-  grid-template-columns: 1fr;
+.project-section.tpl-grid-collage .project-images.grid-collage {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 140px;
 }
+.project-section.tpl-grid-collage .project-img-tile.span-2-row { grid-row: span 2; }
+
+.project-section.tpl-split-banner .project-images.split-banner {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: 60vh;
+}
+.project-section.tpl-split-banner .project-img-tile.tall img { object-position: center; }
 
 .project-img-tile {
   width: 100%;
@@ -79,26 +69,36 @@
 }
 
 .project-text {
-  background: #fff;
-  color: #111;
-  padding: 1rem 1rem;
+  background: transparent;
+  color: #fff;
+  padding: 0.5rem 0;
 }
 
 .project-text h3 {
   margin: 0 0 0.5rem 0;
-  font-size: 1.4rem;
+  font-size: 1.82rem; /* ~30% larger */
 }
 
 .project-text p {
   margin: 0 0 0.7rem 0;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 1.3rem; /* ~30% larger */
 }
 
 .project-meta {
   display: flex;
   gap: 1rem;
   font-size: 0.95rem;
-  color: #444;
+  color: #bbb;
+}
+
+.project-cta {
+  margin-top: 0.9rem;
+  border-radius: 12px;
+  padding: 0.41em 0.91em; /* +10% from current */
+  border: 1px solid #fff;
+  color: #fff;
+  font-size: 0.81rem; /* +10% from current */
 }
 
 @media (max-width: 900px) {
@@ -106,8 +106,70 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  .project-section { padding: 0 1rem; }
+  .project-section { padding: 0 1rem; max-width: 94vw; margin: 6vh auto; }
   .project-section .project-images { grid-auto-rows: 140px; }
+}
+
+/* ========== Dedicated template: Reflect Banner (project 2) ========== */
+.project-section.tpl-reflect-banner {
+  grid-template-columns: 2fr 0.9fr;
+}
+.project-section.tpl-reflect-banner .project-images.reflect-left {
+  grid-template-columns: 1fr;
+}
+.project-section.tpl-reflect-banner .hero-with-reflect {
+  position: relative;
+  width: 100%;
+  height: 45vh;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+}
+.project-section.tpl-reflect-banner .hero-with-reflect img.hero { width: 100%; height: 100%; object-fit: cover; display: block; }
+.project-section.tpl-reflect-banner .hero-with-reflect .reflect-wrap {
+  height: 20vh;
+  overflow: hidden;
+  position: relative;
+}
+.project-section.tpl-reflect-banner .hero-with-reflect img.reflect {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scaleY(-1);
+  filter: blur(2px) opacity(0.65);
+}
+.project-section.tpl-reflect-banner .project-copy-card {
+  background: transparent; /* remove gray background */
+  border: none;
+  backdrop-filter: none;
+  margin-top: 1rem;
+  padding: 0; /* align to clean layout */
+}
+.project-section.tpl-reflect-banner .project-copy-card h3 { margin: 0 0 0.5rem 0; font-size: 1.3rem; }
+.project-section.tpl-reflect-banner .project-copy-card p { margin: 0; line-height: 1.6; color: #e6e6e6; }
+
+.project-section.tpl-reflect-banner .right-tall { display: flex; align-items: stretch; justify-content: flex-start; }
+.project-section.tpl-reflect-banner .tall-image-wrap {
+  position: relative;
+  height: 65vh;
+  width: 100%;
+  border-left: 1px solid rgba(255,255,255,0.15);
+}
+.project-section.tpl-reflect-banner .tall-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 8px; }
+.project-section.tpl-reflect-banner .vertical-label {
+  position: absolute;
+  right: -0.6rem;
+  top: 50%;
+  transform: translate(100%, -50%) rotate(90deg);
+  transform-origin: right center;
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.9);
+}
+
+@media (max-width: 900px) {
+  .project-section.tpl-reflect-banner { grid-template-columns: 1fr; }
+  .project-section.tpl-reflect-banner .tall-image-wrap { height: 45vh; margin-top: 1rem; }
 }
 
 
