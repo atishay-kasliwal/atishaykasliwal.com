@@ -247,11 +247,38 @@ body, #root, .App {
 @media (max-width: 900px) {
   .art-grid {
     column-count: 2;
+    column-gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .art-tile {
+    margin-bottom: 1.5rem;
   }
 }
+
 @media (max-width: 600px) {
   .art-grid {
     column-count: 1;
+    column-gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .art-tile {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body, #root, .App {
+    font-size: 0.7rem;
+  }
+  
+  .art-grid {
+    padding: 0 0.25rem;
+  }
+  
+  .art-tile {
+    margin-bottom: 0.8rem;
   }
 }
 
@@ -300,6 +327,22 @@ body, #root, .App {
   .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
     font-size: 1.3rem;
   }
+}
+
+@media (max-width: 480px) {
+  .header, .art-header {
+    padding: 0.5rem 0.5rem 0 0.5rem;
+  }
+  .nav, .nav.black {
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+  .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 700px) {
   .landing-two-col {
     flex-direction: column;
     gap: 1.2rem;

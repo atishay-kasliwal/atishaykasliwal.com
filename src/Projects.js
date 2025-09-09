@@ -1,7 +1,195 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Projects.css';
 import { Helmet } from 'react-helmet';
+
+// Project carousel component
+function ProjectCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  // Generate 20 projects with diverse images and proper titles
+  const projects = [
+    {
+      id: 1,
+      title: `ТУР №1`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 2,
+      title: `ТУР №2`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 3,
+      title: `ТУР №3`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 4,
+      title: `ТУР №4`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 5,
+      title: `ТУР №5`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 6,
+      title: `ТУР №6`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 7,
+      title: `ТУР №7`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 8,
+      title: `ТУР №8`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 9,
+      title: `ТУР №9`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 10,
+      title: `ТУР №10`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1433477155337-9aea4e790195?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 11,
+      title: `ТУР №11`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1496386260002-3e5b8c28f44b?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 12,
+      title: `ТУР №12`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1445307806294-bff7f67ff225?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 13,
+      title: `ТУР №13`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1505764706515-aa95265c5abc?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 14,
+      title: `ТУР №14`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 15,
+      title: `ТУР №15`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 16,
+      title: `ТУР №16`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 17,
+      title: `ТУР №17`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 18,
+      title: `ТУР №18`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 19,
+      title: `ТУР №19`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+      id: 20,
+      title: `ТУР №20`,
+      description: `и получите незабываемые`,
+      image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
+    }
+  ];
+
+  const projectsPerPage = windowWidth <= 768 ? 4 : 5;
+  const maxIndex = projects.length - projectsPerPage;
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const currentProjects = projects.slice(
+    currentIndex,
+    currentIndex + projectsPerPage
+  );
+
+  return (
+    <div className="project-carousel">
+      <div className="carousel-header">
+        <h2>ПОПУЛЯРНЫЕ ТУРЫ</h2>
+        <p>и получите незабываемые эмоции</p>
+      </div>
+      
+      <div className="carousel-container">
+        <div className="carousel-grid">
+          {currentProjects.map((project) => (
+            <div key={project.id} className="project-card">
+              <div className="project-image" style={{ backgroundImage: `url(${project.image})` }}>
+                <div className="project-info">
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="carousel-navigation">
+        <button className="carousel-btn prev" onClick={prevSlide}>
+          ←
+        </button>
+        <button className="carousel-btn next" onClick={nextSlide}>
+          →
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // Lightweight page that showcases project sections with alternating image mosaics and text
 export default function Projects() {
@@ -99,6 +287,8 @@ export default function Projects() {
             <Link to="/projects" className="active">PROJECTS</Link>
           </nav>
         </div>
+
+        <ProjectCarousel />
 
         <div className="projects-list">
         {sections.map((s, idx) => (
