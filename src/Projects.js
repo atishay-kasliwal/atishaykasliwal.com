@@ -227,69 +227,6 @@ function ProjectCarousel() {
 
 // Lightweight page that showcases project sections with alternating image mosaics and text
 export default function Projects() {
-  const sections = [
-    {
-      title: 'About Me',
-      description:
-        'Engineer and researcher passionate about building reliable products and human-centered data systems. I love working across the stack, crafting clean UIs, scalable services, and practical ML features.',
-      layout: 'tpl-hero',
-      images: [
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2070&auto=format&fit=crop',
-      ],
-      link: 'https://github.com/atishay-kasliwal',
-    },
-    {
-      title: 'Project Name 2',
-      description:
-        'A visual exploration app that helps people browse large media libraries via fast search and compact layouts.',
-      layout: 'tpl-reflect-banner',
-      images: [
-        'https://images.unsplash.com/photo-1505764706515-aa95265c5abc?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=2069&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?q=80&w=1974&auto=format&fit=crop',
-      ],
-      link: 'https://github.com/atishay-kasliwal',
-    },
-    {
-      title: 'Project Name 6',
-      description:
-        'Built a geospatial pipeline to render location-aware stories. Optimized for mobile latency with prefetch and image tiling.',
-      layout: 'tpl-grid-collage',
-      images: [
-        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2069&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2069&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1964&auto=format&fit=crop',
-      ],
-      link: 'https://github.com/atishay-kasliwal',
-    },
-    {
-      title: 'Project Name 8',
-      description:
-        'Multi-image stories laid out in a neat grid. Drag-and-drop editor with autosave and share links.',
-      layout: 'tpl-split-banner',
-      images: [
-        'https://images.unsplash.com/photo-1433477155337-9aea4e790195?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1496386260002-3e5b8c28f44b?q=80&w=1974&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2069&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1445307806294-bff7f67ff225?q=80&w=2071&auto=format&fit=crop',
-      ],
-      link: 'https://github.com/atishay-kasliwal',
-    },
-    {
-      title: 'Project Name 10',
-      description:
-        'A clean storytelling template with emphasis on typography and edge-to-edge imagery.',
-      layout: 'tpl-hero',
-      images: [
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2070&auto=format&fit=crop',
-      ],
-      link: 'https://github.com/atishay-kasliwal',
-    },
-  ];
-
   // Google Analytics lightweight init and pageview for Projects
   useEffect(() => {
     const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
