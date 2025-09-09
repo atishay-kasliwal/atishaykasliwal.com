@@ -1,12 +1,12 @@
-.projects-page {
+.milestones-page {
   background: #181818;
   color: #fff;
   min-height: 100vh;
 }
 
-/* Center the overall projects content */
-/* keep header layout unchanged; center only the projects list */
-.projects-list {
+/* Center the overall milestones content */
+/* keep header layout unchanged; center only the milestones list */
+.milestones-list {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -265,7 +265,7 @@
   background: transparent;
   border: none;
   color: #fff;
-  width: 115px;
+  width: 177px;
   height: 36px;
   font-size: 2.4rem;
   cursor: pointer;
@@ -401,7 +401,7 @@
   }
   
   .carousel-btn {
-    width: 101px;
+    width: 155px;
     height: 30px;
     font-size: 1.92rem;
   }
