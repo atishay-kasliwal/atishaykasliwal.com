@@ -128,7 +128,7 @@ function HomePage() {
              <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <Link to="/projects">PROJECTS</Link>
+            <Link to="/projects">MILESTONES</Link>
           </nav>
         </div>
         {/* Two-column Main Content */}
@@ -319,7 +319,7 @@ function ArtPage() {
           <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
           <Link to="/art">ART</Link>
-          <Link to="/projects">PROJECTS</Link>
+          <Link to="/projects">MILESTONES</Link>
         </nav>
       </div>
       <h2 className="art-title">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -532,7 +532,7 @@ function ImageCarousel() {
             background: 'transparent',
             border: 'none',
             color: '#fff',
-            width: windowWidth <= 768 ? '140px' : '160px',
+            width: windowWidth <= 768 ? '180px' : '200px',
             height: windowWidth <= 768 ? '30px' : '36px',
             fontSize: windowWidth <= 768 ? '1.92rem' : '2.4rem',
             cursor: 'pointer',
@@ -552,7 +552,24 @@ function ImageCarousel() {
             e.target.style.transform = 'scale(1)';
           }}
         >
-          ←
+          <div style={{
+            width: '100%',
+            height: '2px',
+            backgroundColor: '#fff',
+            position: 'relative',
+            opacity: '0.7'
+          }}>
+            <div style={{
+              position: 'absolute',
+              left: '0',
+              top: '-6px',
+              width: '0',
+              height: '0',
+              borderRight: '12px solid #fff',
+              borderTop: '7px solid transparent',
+              borderBottom: '7px solid transparent'
+            }}></div>
+          </div>
         </button>
         <button
           onClick={nextSet}
@@ -560,7 +577,7 @@ function ImageCarousel() {
             background: 'transparent',
             border: 'none',
             color: '#fff',
-            width: windowWidth <= 768 ? '140px' : '160px',
+            width: windowWidth <= 768 ? '180px' : '200px',
             height: windowWidth <= 768 ? '30px' : '36px',
             fontSize: windowWidth <= 768 ? '1.92rem' : '2.4rem',
             cursor: 'pointer',
@@ -580,7 +597,24 @@ function ImageCarousel() {
             e.target.style.transform = 'scale(1)';
           }}
         >
-          →
+          <div style={{
+            width: '100%',
+            height: '2px',
+            backgroundColor: '#fff',
+            position: 'relative',
+            opacity: '0.7'
+          }}>
+            <div style={{
+              position: 'absolute',
+              right: '0',
+              top: '-6px',
+              width: '0',
+              height: '0',
+              borderLeft: '12px solid #fff',
+              borderTop: '7px solid transparent',
+              borderBottom: '7px solid transparent'
+            }}></div>
+          </div>
         </button>
       </div>
 
