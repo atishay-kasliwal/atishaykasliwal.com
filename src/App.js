@@ -91,7 +91,7 @@ function HomePage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   const getCurrentTestimonials = () => {
-    return testimonials;
+    return windowWidth <= 768 ? testimonials.slice(0, 3) : testimonials;
   };
 
   return (
@@ -393,9 +393,9 @@ function ImageCarousel() {
 
   // Text descriptions for each set of photos
   const setDescriptions = [
-    "Capturing the vibrant energy of celebrations and the serene beauty of university life. From fireworks lighting up the night sky to the peaceful campus atmosphere, each moment tells a unique story.",
-    "Exploring the intersection of nature and urban landscapes. From rain-soaked city streets to majestic waterfalls, these images capture the dynamic relationship between human civilization and the natural world.",
-    "A journey through diverse cultures and architectural marvels. From ancient temples to modern cityscapes, each photograph reflects the rich tapestry of human experience and cultural heritage."
+    "Capturing the vibrant energy of celebrations and the serene beauty of university life.",
+    "Exploring the intersection of nature and urban landscapes. From rain-soaked city streets to majestic waterfalls, these images capture the dynamic relationship between human",
+    "A journey through diverse cultures and architectural marvels. From ancient temples to modern cityscapes."
   ];
 
   // Headings for each set of photos
@@ -437,52 +437,20 @@ function ImageCarousel() {
         <h2 className="story-title">Perspective</h2>
       </div>
       
+      {/* Images Container */}
       <div style={{ 
-        position: 'relative', 
-        display: 'flex', 
-        alignItems: 'center',
+        display: 'flex',
         justifyContent: 'center',
-        gap: windowWidth <= 768 ? '0.5rem' : '1rem',
-        padding: windowWidth <= 768 ? '0 0.5775rem' : '0 1.155rem'
+        marginBottom: '2rem'
       }}>
-        {/* Previous Button */}
-        <button
-          onClick={prevSet}
-          style={{
-            background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: '50%',
-            width: windowWidth <= 768 ? '40px' : '48px',
-            height: windowWidth <= 768 ? '40px' : '48px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: '#fff',
-            fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
-            transition: 'all 0.3s ease',
-            backdropFilter: 'blur(10px)'
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.background = 'transparent';
-            e.target.style.transform = 'scale(1.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = 'transparent';
-            e.target.style.transform = 'scale(1)';
-          }}
-        >
-          ←
-        </button>
-
-        {/* Images Container */}
         <div style={{ 
           display: 'grid',
           gridTemplateColumns: windowWidth <= 768 ? 'repeat(2, 1fr)' : windowWidth <= 1024 ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)',
-          gap: windowWidth <= 768 ? '0.92rem' : '1.74rem',
+          gap: windowWidth <= 768 ? '0.8rem' : '1.74rem',
           justifyContent: 'center',
-          maxWidth: windowWidth <= 768 ? '100vw' : '97vw',
-          width: '100%'
+          maxWidth: windowWidth <= 768 ? '95vw' : '97vw',
+          width: '100%',
+          padding: windowWidth <= 768 ? '0 1rem' : '0'
         }}>
           {getCurrentImages().map((src, idx) => (
             <div 
@@ -518,31 +486,97 @@ function ImageCarousel() {
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Next Button */}
+      {/* Description Text */}
+      <div style={{ 
+        marginTop: '2rem',
+        width: '95%',
+        margin: '2rem auto 0 auto'
+      }}>
+        <h2 style={{
+          color: '#fff',
+          fontSize: windowWidth <= 480 ? '1rem' : windowWidth <= 768 ? '1.2rem' : '1.5rem',
+          textAlign: 'center',
+          marginBottom: windowWidth <= 480 ? '0.8rem' : '1rem',
+          fontWeight: '600',
+          opacity: '0.9',
+          padding: windowWidth <= 480 ? '0 1rem' : '0'
+        }}>
+          {getCurrentHeading()}
+        </h2>
+        <p style={{
+          color: '#fff',
+          fontSize: windowWidth <= 480 ? '0.8rem' : windowWidth <= 768 ? '0.95rem' : '1.1rem',
+          lineHeight: '1.6',
+          width: windowWidth <= 480 ? '100%' : '95%',
+          margin: '0 auto',
+          opacity: '0.9',
+          textAlign: 'center',
+          padding: windowWidth <= 480 ? '0 1rem' : '0'
+        }}>
+          {getCurrentDescription()}
+        </p>
+      </div>
+
+      {/* Navigation Buttons */}
+      <div style={{ 
+        display: 'flex',
+        justifyContent: 'center',
+        gap: windowWidth <= 768 ? '1rem' : '2rem',
+        marginTop: '0.686rem'
+      }}>
+        <button
+          onClick={prevSet}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#fff',
+            width: windowWidth <= 768 ? '140px' : '160px',
+            height: windowWidth <= 768 ? '30px' : '36px',
+            fontSize: windowWidth <= 768 ? '1.92rem' : '2.4rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease',
+            fontWeight: '200',
+            opacity: '0.7'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.opacity = '0.7';
+            e.target.style.transform = 'scale(1)';
+          }}
+        >
+          ←
+        </button>
         <button
           onClick={nextSet}
           style={{
             background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: '50%',
-            width: windowWidth <= 768 ? '40px' : '48px',
-            height: windowWidth <= 768 ? '40px' : '48px',
+            border: 'none',
+            color: '#fff',
+            width: windowWidth <= 768 ? '140px' : '160px',
+            height: windowWidth <= 768 ? '30px' : '36px',
+            fontSize: windowWidth <= 768 ? '1.92rem' : '2.4rem',
+            cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer',
-            color: '#fff',
-            fontSize: windowWidth <= 768 ? '1rem' : '1.2rem',
             transition: 'all 0.3s ease',
-            backdropFilter: 'blur(10px)'
+            fontWeight: '200',
+            opacity: '0.7'
           }}
           onMouseEnter={(e) => {
-            e.target.style.background = 'transparent';
-            e.target.style.transform = 'scale(1.1)';
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'scale(1.05)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = 'transparent';
+            e.target.style.opacity = '0.7';
             e.target.style.transform = 'scale(1)';
           }}
         >
@@ -550,68 +584,6 @@ function ImageCarousel() {
         </button>
       </div>
 
-      {/* Description Text */}
-      <div style={{ 
-        marginTop: '2rem',
-        padding: windowWidth <= 768 ? '0 1.155rem' : '0 2.31rem'
-      }}>
-        <h2 style={{
-          color: '#fff',
-          fontSize: windowWidth <= 768 ? '1.2rem' : '1.5rem',
-          textAlign: 'center',
-          marginBottom: '1rem',
-          fontWeight: '600',
-          opacity: '0.95'
-        }}>
-          {getCurrentHeading()}
-        </h2>
-        <p style={{
-          color: '#fff',
-          fontSize: windowWidth <= 768 ? '0.95rem' : '1.1rem',
-          lineHeight: '1.6',
-          maxWidth: windowWidth <= 768 ? '100%' : '880px',
-          margin: '0 auto',
-          opacity: '0.9',
-          fontStyle: 'italic',
-          textAlign: windowWidth <= 768 ? 'center' : 'left'
-        }}>
-          {getCurrentDescription()}
-        </p>
-      </div>
-
-      {/* Dots Indicator */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        gap: windowWidth <= 768 ? '0.3rem' : '0.5rem', 
-        marginTop: '1.5rem' 
-      }}>
-        {Array.from({ length: totalSets }, (_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentSet(idx)}
-            style={{
-              width: windowWidth <= 768 ? '10px' : '12px',
-              height: windowWidth <= 768 ? '10px' : '12px',
-              borderRadius: '50%',
-              border: 'none',
-              background: idx === currentSet ? '#fff' : 'transparent',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              if (idx !== currentSet) {
-                e.target.style.background = 'transparent';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (idx !== currentSet) {
-                e.target.style.background = 'transparent';
-              }
-            }}
-          />
-        ))}
-      </div>
     </div>
   );
 }

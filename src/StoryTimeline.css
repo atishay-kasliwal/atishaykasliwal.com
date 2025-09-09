@@ -18,38 +18,204 @@
   padding-bottom: 1rem;
 }
 .story-card {
-  background: rgba(255,255,255,0.04);
-  
+  background: transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.15);
+  height: 440px;
   min-width: 320px;
   max-width: 340px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.story-img {
-  width: 100%;
-  max-width: 340px;
-  height: 240px;
-  
-  margin-bottom: 0.5rem;
-  object-fit: cover;
+  position: relative;
   display: block;
-  overflow: hidden;
+}
+
+.story-card:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.story-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+  border-radius: 8px;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.story-img::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 2;
 }
 .story-date {
   font-size: 1rem;
-  color: #ffb347;
-  font-weight: 500;
+  color: #fff;
+  font-weight: 700;
   margin-bottom: 0.5rem;
+  position: absolute;
+  bottom: 0.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 3;
 }
 .story-card-title {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.5rem;
+  position: absolute;
+  bottom: 2.1rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 3;
+  color: #fff;
+  line-height: 1.3;
 }
 .story-desc {
   font-size: 0.8rem;
   color: #eee;
-} 
+  position: relative;
+  z-index: 3;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.journey-description {
+  margin: 3rem 0;
+  padding: 0 2vw;
+  text-align: left;
+}
+
+.journey-description p {
+  color: #fff;
+  font-size: 1rem;
+  opacity: 0.95;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .story-timeline {
+    padding: 0 1rem;
+    font-size: 65%;
+  }
+  
+  .story-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  
+  .story-cards {
+    gap: 2rem;
+    padding-bottom: 0.8rem;
+  }
+  
+  .story-card {
+    min-width: 300px;
+    max-width: 320px;
+    height: 400px;
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  
+  .story-date {
+    font-size: 1rem;
+    bottom: 0.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    font-weight: 700;
+  }
+  
+  .story-card-title {
+    font-size: 1rem;
+    bottom: 2.1rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  
+  .journey-description {
+    margin: 2.5rem 0;
+    padding: 0 1rem;
+  }
+  
+  .journey-description p {
+    font-size: 0.95rem;
+    opacity: 0.95;
+  }
+}
+
+@media (max-width: 480px) {
+  .story-timeline {
+    padding: 0 0.5rem;
+    font-size: 60%;
+  }
+  
+  .story-title {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  
+  .story-cards {
+    gap: 1.5rem;
+    padding-bottom: 0.6rem;
+  }
+  
+  .story-card {
+    min-width: 280px;
+    max-width: 300px;
+    height: 360px;
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  
+  .story-date {
+    font-size: 0.9rem;
+    bottom: 0.4rem;
+    left: 1.2rem;
+    right: 1.2rem;
+    font-weight: 700;
+  }
+  
+  .story-card-title {
+    font-size: 0.9rem;
+    bottom: 1.9rem;
+    left: 1.2rem;
+    right: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  
+  .journey-description {
+    margin: 2rem 0;
+    padding: 0 0.5rem;
+  }
+  
+  .journey-description p {
+    font-size: 0.9rem;
+    opacity: 0.95;
+  }
+}

@@ -8,38 +8,38 @@ const stories = [
     image: 'https://myfox8.com/wp-content/uploads/sites/17/2016/07/promo293230600.jpg?w=640',
     date: '2025',
     title: 'AI ML - Wake Forest',
-    description: 'I got my first opportunity out of grad school at Wake Forest, where I gained hands-on experience working with medical clinical data and MRI images for AI research projects'
+    description: ''
   },
   {
     image: 'https://sbmatters.stonybrook.edu/wp-content/uploads/2023/08/Umbilic-Torus.jpeg',
     date: '2024–2025',
     title: 'Research Assistant - SBU',
-    description: 'Working with Professor Wencui Han at Stony Brook University has been a wonderful experience. I learned a lot about finance, and developed predictive models.'
+    description: ''
   },
   {
     image: 'https://i.pinimg.com/736x/fb/aa/bc/fbaabc9d28cce6c9fd9b92cde394a0c7.jpg',
     date: '2025',
     title: 'Graduate Assistant - Mailroom',
-    description: 'I support the campus mailroom by managing packages, organizing mail, and assisting students and staff, building strong organizational and time management skills.'
+    description: ''
   },
 
   {
     image: 'https://www.jkokolakis.com/wp-content/uploads/2017/09/600-Bed-Residence-Hall-9-752x500.jpg',
     date: '2024–2025',
     title: 'Residencial Safety Program - SBU',
-    description: 'Got my first on-campus job with the Residential Safety Program, where I met many new people, learned a lot, and gained great experience.'
+    description: ''
   },
     {image: 'https://www.stonybrook.edu/commcms/studentaffairs/for/images/dvtn.jpg',
     date: '2024-2026',
     title: 'Data Science - Graduate',
-    description: 'My time at Accolite ended as I moved to the USA to pursue my master’s in DS at Stony Brook University. Excited to join this new, multidisciplinary program.'
+    description: ''
  },
 
   {
     image: 'https://i.ytimg.com/vi/MiZf2qRBQ7k/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCsno81_sYAASs6LZHeei9o5v18iw',
     date: '2023–2024',
     title: 'Senior Software Engineer - Accolite',
-    description: 'After completing two years, I was promoted to Senior Software Engineer, leading multiple projects and gaining hands-on experience with blockchain technology.'
+    description: ''
   },
 
 
@@ -47,19 +47,19 @@ const stories = [
     image: 'https://i.pinimg.com/736x/08/2c/54/082c54bd155c8d7de77d51ffd8678156.jpg',
     date: '2021–2023',
     title: 'Software Engineer - Accolite',
-    description: 'Before completing my internship, I was converted to a full-time employee my responsibilities and confidence both increased significantly, driving my professional growth.'
+    description: ''
   },
   {
     image: 'https://i.pinimg.com/1200x/61/35/08/613508200fbe2933660602aebdd5ba38.jpg',
     date: '2021',
     title: 'Software Intern - Accolite Digital',
-    description: 'My first experience at a company with over 20,000 employees marked my career start. During my internship, I worked for clients in telecommunications, gaining exposure.'
+    description: ''
   },
   {
     image: img1,
     date: '2018-2022',
     title: 'Computer Science - Undergrad',
-    description: 'Completed my undergraduate degree in CSIT from Symbiosis University of Applied Sciences, gaining extensive knowledge and thoroughly enjoying my four years there.'
+    description: ''
   },
 
 
@@ -67,32 +67,32 @@ const stories = [
     image: 'https://i.pinimg.com/736x/27/fb/a0/27fba0a76dbf4e71440f44cefc6836f2.jpg',
     date: '2021',
     title: 'Analytics and ML - COVID-19',
-    description: 'Using survey data, we created a machine learning model to develop a predictive tool and published my second paper.'
+    description: ''
   },
   {
     image: 'https://i.pinimg.com/736x/e9/d6/77/e9d677636ca112c696833f051bcb9a15.jpg',
     date: '2021',
     title: 'Survey Research - COVID-19',
-    description: 'During the peak of the pandemic, I conducted a survey-based research project and published my first paper on the effects of COVID-19 after lockdowns were lifted'
+    description: ''
   },
   {
     image: 'https://i.pinimg.com/1200x/d1/87/a5/d187a51c688056fe9bb8d56e9da113a1.jpg',
     date: '2021',
     title: 'Cyber Security Analyst - CBIMP',
-    description: 'Over the summer of 2021, I worked with my city’s cyber department, executed press conferences, and gained hands-on experience in cybersecurity and analysis.'
+    description: ''
   },
 
   {
     image: 'https://i.pinimg.com/1200x/9f/3f/23/9f3f231ea5c491d8e13f6c3a3971a50a.jpg',
     date: '2020',
     title: 'Backend Developer - Broadcastt.co',
-    description: 'Showcasing my skills and leveraging connections, I landed my first freelancing job, handling multiple projects and gaining valuable professional experience.'
+    description: ''
   },
   {
     image: 'https://i.pinimg.com/736x/15/bb/b9/15bbb97130b2971626b24f77d614a385.jpg',
     date: '2019-2020',
     title: 'Web Application Developer - N-TIER',
-    description: 'Started my career at N-TIER, designing and developing multiple frontend web applications with creativity and efficiency. I never imagined I would reach this far.'
+    description: ''
   }
 ];
 
@@ -106,9 +106,12 @@ export default function StoryTimeline() {
             <img src={story.image} alt={story.title} className="story-img" />
             <div className="story-date">{story.date}</div>
             <div className="story-card-title">{story.title}</div>
-            <div className="story-desc">{story.description}</div>
+            {story.description && <div className="story-desc">{story.description}</div>}
           </div>
         ))}
+      </div>
+      <div className="journey-description">
+        <p>From internships to graduate studies, each step has shaped my path in technology and research. This journey reflects continuous growth, learning, and the pursuit of excellence in every</p>
       </div>
     </div>
   );
