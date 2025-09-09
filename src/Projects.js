@@ -21,124 +21,124 @@ function ProjectCarousel() {
   const projects = [
     {
       id: 1,
-      title: `ТУР №1`,
-      description: `и получите незабываемые`,
+      title: `Software Engineer`,
+      description: `Accolite Digital`,
       image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400&auto=format&fit=crop',
     },
     {
       id: 2,
-      title: `ТУР №2`,
-      description: `и получите незабываемые`,
+      title: `Web Developer Intern`,
+      description: `N-tier Pvt Ltd`,
       image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
     },
     {
       id: 3,
-      title: `ТУР №3`,
-      description: `и получите незабываемые`,
+      title: `Frontend Developer`,
+      description: `Shriffle Technologies`,
       image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
     },
     {
       id: 4,
-      title: `ТУР №4`,
-      description: `и получите незабываемые`,
+      title: `Full Stack Developer`,
+      description: `Bounteous Accolite`,
       image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
     },
     {
       id: 5,
-      title: `ТУР №5`,
-      description: `и получите незабываемые`,
+      title: `UI/UX Designer`,
+      description: `Freelance Projects`,
       image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
     },
     {
       id: 6,
-      title: `ТУР №6`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
+      title: `Web Developer Intern`,
+      description: `N-tier Pvt Ltd`,
+      image: 'https://i.pinimg.com/736x/15/bb/b9/15bbb97130b2971626b24f77d614a385.jpg',
     },
-    {
-      id: 7,
-      title: `ТУР №7`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 8,
-      title: `ТУР №8`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 9,
-      title: `ТУР №9`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 10,
-      title: `ТУР №10`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1433477155337-9aea4e790195?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 11,
-      title: `ТУР №11`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1496386260002-3e5b8c28f44b?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 12,
-      title: `ТУР №12`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1445307806294-bff7f67ff225?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 13,
-      title: `ТУР №13`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1505764706515-aa95265c5abc?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 14,
-      title: `ТУР №14`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 15,
-      title: `ТУР №15`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 16,
-      title: `ТУР №16`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 17,
-      title: `ТУР №17`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 18,
-      title: `ТУР №18`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 19,
-      title: `ТУР №19`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 20,
-      title: `ТУР №20`,
-      description: `и получите незабываемые`,
-      image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
-    }
+    // {
+    //   id: 7,
+    //   title: `ТУР №7`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 8,
+    //   title: `ТУР №8`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 9,
+    //   title: `ТУР №9`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 10,
+    //   title: `ТУР №10`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1433477155337-9aea4e790195?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 11,
+    //   title: `ТУР №11`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1496386260002-3e5b8c28f44b?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 12,
+    //   title: `ТУР №12`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1445307806294-bff7f67ff225?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 13,
+    //   title: `ТУР №13`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1505764706515-aa95265c5abc?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 14,
+    //   title: `ТУР №14`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 15,
+    //   title: `ТУР №15`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 16,
+    //   title: `ТУР №16`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 17,
+    //   title: `ТУР №17`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 18,
+    //   title: `ТУР №18`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 19,
+    //   title: `ТУР №19`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
+    // },
+    // {
+    //   id: 20,
+    //   title: `ТУР №20`,
+    //   description: `и получите незабываемые`,
+    //   image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
+    // }
   ];
 
   const projectsPerPage = windowWidth <= 768 ? 4 : 5;
@@ -160,8 +160,8 @@ function ProjectCarousel() {
   return (
     <div className="project-carousel">
       <div className="carousel-header">
-        <h2>ПОПУЛЯРНЫЕ ТУРЫ</h2>
-        <p>и получите незабываемые эмоции</p>
+        <h2>Growth Milestones</h2>
+        <p>Showcasing Milestones That Define My Story</p>
       </div>
       
       <div className="carousel-container">
@@ -181,10 +181,44 @@ function ProjectCarousel() {
       
       <div className="carousel-navigation">
         <button className="carousel-btn prev" onClick={prevSlide}>
-          ←
+          <div style={{
+            width: '100%',
+            height: '2px',
+            backgroundColor: '#fff',
+            position: 'relative',
+            opacity: '0.7'
+          }}>
+            <div style={{
+              position: 'absolute',
+              left: '0',
+              top: '-6px',
+              width: '0',
+              height: '0',
+              borderRight: '12px solid #fff',
+              borderTop: '7px solid transparent',
+              borderBottom: '7px solid transparent'
+            }}></div>
+          </div>
         </button>
         <button className="carousel-btn next" onClick={nextSlide}>
-          →
+          <div style={{
+            width: '100%',
+            height: '2px',
+            backgroundColor: '#fff',
+            position: 'relative',
+            opacity: '0.7'
+          }}>
+            <div style={{
+              position: 'absolute',
+              right: '0',
+              top: '-6px',
+              width: '0',
+              height: '0',
+              borderLeft: '12px solid #fff',
+              borderTop: '7px solid transparent',
+              borderBottom: '7px solid transparent'
+            }}></div>
+          </div>
         </button>
       </div>
     </div>
@@ -270,9 +304,9 @@ export default function Projects() {
   }, []);
 
   return (
-    <div className="projects-page">
+    <div className="milestones-page">
       <Helmet>
-        <title>Projects | Atishay Kasliwal</title>
+        <title>Milestones | Atishay Kasliwal</title>
       </Helmet>
       <div className="bg-art" />
       <div className="page-content">
@@ -284,16 +318,16 @@ export default function Projects() {
             <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <Link to="/projects" className="active">PROJECTS</Link>
+            <Link to="/projects" className="active">MILESTONES</Link>
           </nav>
         </div>
 
         <ProjectCarousel />
 
-        <div className="projects-list">
+        {/* <div className="milestones-list">
         {sections.map((s, idx) => (
           <section key={idx} className={`project-section ${s.layout}`}>
-            {/* Template: Hero (large image + side text) */}
+            Template: Hero (large image + side text)
             {s.layout === 'tpl-hero' && (
               <>
                 <div className="project-images hero-one">
@@ -313,7 +347,7 @@ export default function Projects() {
               </>
             )}
 
-            {/* Template: Strip Cards (row of small cards over baseline) */}
+            Template: Strip Cards (row of small cards over baseline)
             {s.layout === 'tpl-strip-cards' && (
               <>
                 <div className="project-images strip-cards">
@@ -335,7 +369,7 @@ export default function Projects() {
               </>
             )}
 
-            {/* Template: Reflect Banner (hero with reflection + tall right image + text) */}
+            Template: Reflect Banner (hero with reflection + tall right image + text)
             {s.layout === 'tpl-reflect-banner' && (
               <>
                 <div className="project-images reflect-left">
@@ -359,7 +393,7 @@ export default function Projects() {
               </>
             )}
 
-            {/* Template: Grid Collage (balanced collage) */}
+            Template: Grid Collage (balanced collage)
             {s.layout === 'tpl-grid-collage' && (
               <>
                 <div className="project-images grid-collage">
@@ -381,7 +415,7 @@ export default function Projects() {
               </>
             )}
 
-            {/* Template: Split Banner (tall image column + copy) */}
+            Template: Split Banner (tall image column + copy)
             {s.layout === 'tpl-split-banner' && (
               <>
                 <div className="project-images split-banner">
@@ -404,7 +438,7 @@ export default function Projects() {
             )}
           </section>
         ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );
