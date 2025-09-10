@@ -338,7 +338,11 @@ function HomePage() {
         <div style={{
           padding: '4rem 2rem',
           background: 'transparent',
-          color: '#fff'
+          color: '#fff',
+          minHeight: '80vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
         }}>
           <div style={{ 
             marginBottom: '0.7rem' 
