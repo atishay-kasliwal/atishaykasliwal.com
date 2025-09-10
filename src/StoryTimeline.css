@@ -6,16 +6,24 @@
   font-size: 70%;
 }
 .story-title {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  margin-bottom: 0.7rem;
+  font-weight: bold;
   letter-spacing: 0.05em;
+  color: #fff;
+  text-align: left;
 }
 .story-cards {
   display: flex;
   gap: 2.5rem;
   overflow-x: auto;
-  padding-bottom: 1rem;
+  padding-bottom: 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.story-cards::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
 }
 .story-card {
   background: transparent;
@@ -117,15 +125,17 @@
   }
   
   .story-title {
-    font-size: 1.3rem;
-    margin-bottom: 1.8rem;
-    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 0.7rem;
+    font-weight: bold;
     letter-spacing: 0.05em;
+    color: #fff;
+    text-align: left;
   }
   
   .story-cards {
     gap: 2rem;
-    padding-bottom: 0.8rem;
+    padding-bottom: 0;
   }
   
   .story-card {
@@ -172,15 +182,17 @@
   }
   
   .story-title {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 0.7rem;
+    font-weight: bold;
     letter-spacing: 0.05em;
+    color: #fff;
+    text-align: left;
   }
   
   .story-cards {
     gap: 1.5rem;
-    padding-bottom: 0.6rem;
+    padding-bottom: 0;
   }
   
   .story-card {
