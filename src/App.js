@@ -373,7 +373,7 @@ function HomePage() {
               <div style={{
                 position: 'relative',
                 width: '100%',
-                height: '64vh',
+                height: '51vh',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.1)'
