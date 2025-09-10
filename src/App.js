@@ -174,6 +174,13 @@ function HomePage() {
     <>
       <Helmet>
         <title>Atishay Kasliwal | Portfolio, Resume, Projects</title>
+        <link rel="canonical" href="https://atishay-kasliwal.github.io/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Atishay Kasliwal | Portfolio, Resume, Projects" />
+        <meta property="og:description" content="Explore projects, experience, and ways to connect with Atishay Kasliwal." />
+        <meta property="og:url" content="https://atishay-kasliwal.github.io/" />
+        <meta property="og:image" content="https://atishay-kasliwal.github.io/atishaylogo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="description" content="Official website of Atishay Kasliwal. Portfolio, resume, projects, and contact information." />
         <meta name="keywords" content="Atishay Kasliwal, portfolio, resume, data science, software engineer" />
         <meta name="author" content="Atishay Kasliwal" />
@@ -598,6 +605,13 @@ function ArtPage() {
     <div className="art-page">
       <Helmet>
         <title>Atishay Kasliwal</title>
+        <link rel="canonical" href="https://atishay-kasliwal.github.io/art" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Art | Atishay Kasliwal" />
+        <meta property="og:description" content="Photo stories and visual moments by Atishay Kasliwal." />
+        <meta property="og:url" content="https://atishay-kasliwal.github.io/art" />
+        <meta property="og:image" content="https://atishay-kasliwal.github.io/atishaylogo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
       <div className="art-header">
@@ -649,6 +663,20 @@ function ImageCarousel() {
     'https://i.pinimg.com/736x/47/c2/f1/47c2f1c528654d76214860f6d2afc2ac.jpg', // Fire works 4th of July
 
 
+
+
+    'https://i.pinimg.com/736x/5a/17/a9/5a17a9694a69b5d675a7a99f491434ef.jpg',
+    'https://i.pinimg.com/736x/ec/38/8b/ec388ba9f19539061ea051b50cd57c34.jpg',
+    'https://i.pinimg.com/736x/2a/8e/e2/2a8ee2543d17c796c0050884ab30489f.jpg',
+    'https://i.pinimg.com/736x/98/64/3d/98643dc406f955e9fef0b14f05352472.jpg',
+    'https://i.pinimg.com/736x/6a/fb/19/6afb198eb9629d336993998181286468.jpg',
+    'https://i.pinimg.com/736x/1f/9e/2a/1f9e2a5c420c15b931a11d52720f5f53.jpg',
+    'https://i.pinimg.com/736x/12/8e/c7/128ec74a59fe5e278e6a8813639140bf.jpg',
+    'https://i.pinimg.com/736x/f3/dc/5b/f3dc5be1c19424a96f255bbd4a55d86e.jpg',
+
+
+
+
    'https://i.pinimg.com/736x/fc/bc/4f/fcbc4ff8af26e6b958b526b8432e6317.jpg',
    'https://i.pinimg.com/736x/22/a8/67/22a867fdb6650b56f4f1cac8b610e543.jpg',
    'https://i.pinimg.com/736x/05/91/dc/0591dc0a54e52b00240c3640247611c6.jpg',
@@ -660,14 +688,6 @@ function ImageCarousel() {
 
 
 
-   'https://i.pinimg.com/736x/5a/17/a9/5a17a9694a69b5d675a7a99f491434ef.jpg',
-   'https://i.pinimg.com/736x/ec/38/8b/ec388ba9f19539061ea051b50cd57c34.jpg',
-   'https://i.pinimg.com/736x/2a/8e/e2/2a8ee2543d17c796c0050884ab30489f.jpg',
-   'https://i.pinimg.com/736x/98/64/3d/98643dc406f955e9fef0b14f05352472.jpg',
-   'https://i.pinimg.com/736x/6a/fb/19/6afb198eb9629d336993998181286468.jpg',
-   'https://i.pinimg.com/736x/1f/9e/2a/1f9e2a5c420c15b931a11d52720f5f53.jpg',
-   'https://i.pinimg.com/736x/12/8e/c7/128ec74a59fe5e278e6a8813639140bf.jpg',
-   'https://i.pinimg.com/736x/f3/dc/5b/f3dc5be1c19424a96f255bbd4a55d86e.jpg',
 
   ];
 
@@ -706,19 +726,21 @@ function ImageCarousel() {
   // Text descriptions for each set of photos
   const setDescriptions = [
     "Fall is a season of reflection in my photography. Through golden trees, crisp air, and soft light, I capture how change feels gentle yet powerful in its silence.",
+   
     "A glimpse of my summer in Wake Forest through my lens — moments of skies, art, and experiences that shaped my internship journey.",
-    "A breathtaking escape to Niagara Falls — a reminder of nature's power and beauty during my summer journey.",
+
     "My spring in New York was a tapestry of iconic skylines, city lights, sunsets, and unforgettable city adventures—each moment seen through my own lens.",
 
-
+    "A breathtaking escape to Niagara Falls — a reminder of nature's power and beauty during my summer journey.",
   ];
 
   // Headings for each set of photos
   const setHeadings = [
     "Stony Brook University - Fall 2025", 
     "Wake Forest University - Atrium Health -  Summer 2025",
+    "New York - Spring 2025",
     "Niagara Falls - Fall 2024",
-    "New York - Spring 2025"
+
   ];
 
   const nextSet = () => {
