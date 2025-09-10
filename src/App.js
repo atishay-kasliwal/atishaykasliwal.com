@@ -204,7 +204,6 @@ function HomePage() {
              <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <Link to="/projects">MILESTONES</Link>
           </nav>
         </div>
         {/* Two-column Main Content */}
@@ -339,17 +338,19 @@ function HomePage() {
         <div style={{
           padding: '4rem 2rem',
           background: 'transparent',
-          color: '#fff',
-          textAlign: 'center'
+          color: '#fff'
         }}>
-          <h2 style={{
-            fontSize: '2.5rem',
-            fontWeight: 'bold',
-            marginBottom: '3rem',
-            color: '#fff'
+          <div style={{ 
+            marginBottom: '0.7rem' 
           }}>
-            Contact me
-          </h2>
+            <h2 style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              marginBottom: '2rem',
+              color: '#fff',
+              textAlign: 'center'
+            }}>Contact me</h2>
+          </div>
           
           <div style={{
             display: 'flex',
@@ -370,9 +371,9 @@ function HomePage() {
                 color: '#fff'
               }}>
                 <div>katishay@gmail.com</div>
-                <div>(555) 555-5555</div>
-                <div>123 Demo Street</div>
-                <div>New York, NY 12345</div>
+                <div>(924) 246-1198</div>
+                <div>Stony Brook, NY</div>
+                <div>New York, NY 11720</div>
               </div>
             </div>
             
@@ -591,7 +592,6 @@ function ArtPage() {
           <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
           <Link to="/art">ART</Link>
-          <Link to="/projects">MILESTONES</Link>
         </nav>
       </div>
       <h2 className="art-title">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -614,6 +614,15 @@ function ImageCarousel() {
   // Using the same images from your art page for the carousel
   const carouselImages = [
     
+    'https://i.pinimg.com/736x/fb/5e/63/fb5e63355a29e9b5729f2f2025a68119.jpg', // New York Rain Horizontal
+    'https://i.pinimg.com/736x/1e/39/b9/1e39b962cf5f029bd99c3d7cdb227b10.jpg', // Niagara Fall Rainbow
+    'https://i.pinimg.com/736x/d7/2c/4b/d72c4b63e3d6ad60a0265602decb658a.jpg', // lotus
+    'https://i.pinimg.com/736x/1e/56/82/1e568265dad4a61cc7f035db615adb8c.jpg', // Charminar Hyderabad
+    'https://i.pinimg.com/736x/96/95/34/9695344516d9f174350156e02015a02e.jpg', //25 New York Yello Taxi
+    'https://i.pinimg.com/736x/7f/29/f6/7f29f634b5372c29ff87530b469663d8.jpg',// 26 MAn with Diya
+    'https://i.pinimg.com/736x/28/6e/33/286e337b9da229cb1ab89b39a169fdb5.jpg', // 27 Chicago In Day light skyline
+    'https://i.pinimg.com/736x/13/6f/cd/136fcde68735970c6d9d2243764556c4.jpg', // 28 Portyard 
+
     'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', // Wake forest University
     'https://i.pinimg.com/736x/a6/8e/20/a68e209bc74c38891d4310997f59f6e2.jpg', // Wake Forest Wall Painting 
     'https://i.pinimg.com/736x/c7/7e/a5/c77ea537089d45b70afe9be7216ba432.jpg', // Wake forest University cloud out of the blue
@@ -624,15 +633,26 @@ function ImageCarousel() {
     'https://i.pinimg.com/736x/47/c2/f1/47c2f1c528654d76214860f6d2afc2ac.jpg', // Fire works 4th of July
 
 
+   'https://i.pinimg.com/736x/fc/bc/4f/fcbc4ff8af26e6b958b526b8432e6317.jpg',
+   'https://i.pinimg.com/736x/22/a8/67/22a867fdb6650b56f4f1cac8b610e543.jpg',
+   'https://i.pinimg.com/736x/05/91/dc/0591dc0a54e52b00240c3640247611c6.jpg',
+   'https://i.pinimg.com/736x/5e/28/39/5e2839adcfb7ced01c911b9ff7b5a809.jpg',
+   'https://i.pinimg.com/736x/51/da/58/51da58d005c1102de3335bcf6eb13c91.jpg',
+   'https://i.pinimg.com/736x/cb/d1/18/cbd11861876cd2bcdc85f60f65b18ec3.jpg',
+   'https://i.pinimg.com/736x/1d/16/c9/1d16c98bfbc89ffd5d884c77f86350eb.jpg',
+   'https://i.pinimg.com/736x/54/ae/d3/54aed3fb62679a7a844bfe44d08d546d.jpg',
 
-    'https://i.pinimg.com/736x/c1/ca/c4/c1cac4cddb0523efc6e88efa30142688.jpg', // New York Rain Horizontal
-    'https://i.pinimg.com/736x/47/80/ba/4780bafefa14c368f7b14bcc29d1f95c.jpg', // Niagara Fall Rainbow
-    'https://i.pinimg.com/736x/37/c0/48/37c048374a1a821113a64e026c47bf83.jpg', // lotus
-    'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
-    'https://i.pinimg.com/736x/f7/c0/ce/f7c0cef5c09f71605a8ccee99114e95c.jpg', //25 New York Yello Taxi
-    'https://i.pinimg.com/736x/7b/30/ee/7b30ee92245350786bf70b88802c1a0a.jpg',// 26 MAn with Diya
-    'https://i.pinimg.com/736x/be/24/58/be2458a58771772b60fa757d52214b70.jpg', // 27 Chicago In Day light skyline
-    'https://i.pinimg.com/736x/e2/f0/e6/e2f0e616411462c8c7c431a1d72f47fc.jpg', // 28 Portyard 
+
+
+   'https://i.pinimg.com/736x/5a/17/a9/5a17a9694a69b5d675a7a99f491434ef.jpg',
+   'https://i.pinimg.com/736x/ec/38/8b/ec388ba9f19539061ea051b50cd57c34.jpg',
+   'https://i.pinimg.com/736x/2a/8e/e2/2a8ee2543d17c796c0050884ab30489f.jpg',
+   'https://i.pinimg.com/736x/98/64/3d/98643dc406f955e9fef0b14f05352472.jpg',
+   'https://i.pinimg.com/736x/6a/fb/19/6afb198eb9629d336993998181286468.jpg',
+   'https://i.pinimg.com/736x/1f/9e/2a/1f9e2a5c420c15b931a11d52720f5f53.jpg',
+   'https://i.pinimg.com/736x/12/8e/c7/128ec74a59fe5e278e6a8813639140bf.jpg',
+   'https://i.pinimg.com/736x/f3/dc/5b/f3dc5be1c19424a96f255bbd4a55d86e.jpg',
+
   ];
 
   // Responsive grid configuration
@@ -669,16 +689,20 @@ function ImageCarousel() {
 
   // Text descriptions for each set of photos
   const setDescriptions = [
+    "Fall is a season of reflection in my photography. Through golden trees, crisp air, and soft light, I capture how change feels gentle yet powerful in its silence.",
     "A glimpse of my summer in Wake Forest through my lens — moments of skies, art, and experiences that shaped my internship journey.",
-    "Exploring the intersection of nature and urban landscapes. From rain-soaked city streets to majestic waterfalls, these images capture the dynamic relationship between human",
-    "A journey through diverse cultures and architectural marvels. From ancient temples to modern cityscapes."
+    "A breathtaking escape to Niagara Falls — a reminder of nature's power and beauty during my summer journey.",
+    "My spring in New York was a tapestry of iconic skylines, city lights, sunsets, and unforgettable city adventures—each moment seen through my own lens.",
+
+
   ];
 
   // Headings for each set of photos
   const setHeadings = [
+    "Stony Brook University - Fall 2025", 
     "Wake Forest University - Atrium Health -  Summer 2025",
-    "Nature & Urban Landscapes", 
-    "Cultural Heritage & Architecture"
+    "Niagara Falls - Fall 2024",
+    "New York - Spring 2025"
   ];
 
   const nextSet = () => {
@@ -710,7 +734,13 @@ function ImageCarousel() {
       <div style={{ 
         marginBottom: '0.7rem' 
       }}>
-        <h2 className="story-title">Perspective</h2>
+        <h2 style={{
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          marginBottom: '0.7rem',
+          color: '#fff',
+          textAlign: 'left'
+        }}>Perspective</h2>
       </div>
       
       {/* Images Container */}
