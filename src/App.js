@@ -374,7 +374,7 @@ function HomePage() {
                 border: '1px solid rgba(255,255,255,0.1)'
               }}>
                 <img
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop"
+                  src="https://i.pinimg.com/736x/fd/81/ca/fd81ca55ee96e180fbf96441bd0f5345.jpg"
                   alt="Contact visual placeholder"
                   style={{
                     display: 'block',
