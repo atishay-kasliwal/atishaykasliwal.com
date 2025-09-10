@@ -360,20 +360,29 @@ function HomePage() {
             gap: '3rem',
             alignItems: 'flex-start'
           }}>
-            {/* Contact Information */}
+            {/* Contact Visual (left) - placeholder image for now */}
             <div style={{
               flex: '1',
               textAlign: 'left'
             }}>
               <div style={{
-                fontSize: '1.1rem',
-                lineHeight: '2',
-                color: '#fff'
+                position: 'relative',
+                width: '100%',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                border: '1px solid rgba(255,255,255,0.1)'
               }}>
-                <div>katishay@gmail.com</div>
-                <div>(924) 246-1198</div>
-                <div>Stony Brook, NY</div>
-                <div>New York, NY 11720</div>
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop"
+                  alt="Contact visual placeholder"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
               </div>
             </div>
             
