@@ -111,7 +111,7 @@ export default function StoryTimeline() {
         ))}
       </div>
       <div className="journey-description">
-        <p>From internships to graduate studies, each step has shaped my path in technology and research. This journey reflects continuous growth, learning, and the pursuit of excellence in every</p>
+        <p>From internships to graduate studies, every step has shaped my path in technology and research. This journey embodies continuous growth, learning, and the pursuit of excellence in all endeavors.</p>
       </div>
     </div>
   );
