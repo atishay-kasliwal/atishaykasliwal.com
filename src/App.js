@@ -359,14 +359,15 @@ function HomePage() {
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            maxWidth: '1000px',
+            maxWidth: '90vw',
+            width: '90vw',
             margin: '0 auto',
-            gap: '3rem',
+            gap: '2rem',
             alignItems: 'flex-start'
           }}>
             {/* Contact Visual (left) - placeholder image for now */}
             <div style={{
-              flex: '1',
+              flex: '1.1',
               textAlign: 'left'
             }}>
               <div style={{
