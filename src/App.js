@@ -363,7 +363,7 @@ function HomePage() {
             width: '80vw',
             margin: '0 auto',
             gap: '2rem',
-            alignItems: 'flex-start'
+            alignItems: 'center'
           }}>
             {/* Contact Visual (left) - placeholder image for now */}
             <div style={{
@@ -378,7 +378,7 @@ function HomePage() {
                 border: '1px solid rgba(255,255,255,0.1)'
               }}>
                 <img
-                  src="https://i.pinimg.com/736x/8c/77/f7/8c77f79e789000871b22395ba0204954.jpg"
+                  src="https://i.pinimg.com/736x/e9/f6/5d/e9f65d058e6548b8fe4803922cda2a3e.jpg"
                   alt="Contact visual placeholder"
                   style={{
                     display: 'block',
@@ -393,7 +393,10 @@ function HomePage() {
             {/* Contact Form */}
             <div style={{
               flex: '1',
-              textAlign: 'left'
+              textAlign: 'left',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
             }}>
               <form onSubmit={handleSubmit} style={{
                 display: 'flex',
