@@ -385,7 +385,8 @@ function HomePage() {
                     display: 'block',
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover'
+                    objectFit: 'cover',
+                    objectPosition: 'top center'
                   }}
                 />
               </div>
