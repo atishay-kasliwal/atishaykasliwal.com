@@ -359,8 +359,8 @@ function HomePage() {
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            maxWidth: '90vw',
-            width: '90vw',
+            maxWidth: '85vw',
+            width: '85vw',
             margin: '0 auto',
             gap: '2rem',
             alignItems: 'flex-start'
