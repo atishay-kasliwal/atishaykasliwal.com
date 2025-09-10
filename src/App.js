@@ -359,8 +359,8 @@ function HomePage() {
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            maxWidth: '85vw',
-            width: '85vw',
+            maxWidth: '80vw',
+            width: '80vw',
             margin: '0 auto',
             gap: '2rem',
             alignItems: 'flex-start'
@@ -378,7 +378,7 @@ function HomePage() {
                 border: '1px solid rgba(255,255,255,0.1)'
               }}>
                 <img
-                  src="https://i.pinimg.com/736x/a2/31/50/a23150383cf66c36412eb8c0b0a0fd04.jpg"
+                  src="https://i.pinimg.com/736x/8c/77/f7/8c77f79e789000871b22395ba0204954.jpg"
                   alt="Contact visual placeholder"
                   style={{
                     display: 'block',
