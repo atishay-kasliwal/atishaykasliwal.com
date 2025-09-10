@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import emailjs from '@emailjs/browser';
 import './App.css';
 
 import img1 from './assets/stony_brook_university_college_of_business_logo (1).jpeg';
@@ -33,6 +34,81 @@ function HomePage() {
   const landingImages = [img1, img2,  img3, img4, img6, img5, img8, img7, img9];
   // Show all images
   const gridImages = landingImages;
+  
+  // Contact form state
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState('');
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+      setFormStatus('Please fill in all required fields.');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setFormStatus('Please enter a valid email address.');
+      return;
+    }
+
+    try {
+      setFormStatus('Sending message...');
+      
+      // EmailJS configuration - Use environment variables for security
+      const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_41gb29b';
+      const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_lngej99';
+      const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '482xxVfxQh18uEiHh';
+      
+      // Template parameters
+      const templateParams = {
+        from_name: `${formData.firstName} ${formData.lastName}`,
+        from_email: formData.email,
+        message: formData.message,
+        to_email: 'katishay@gmail.com'
+      };
+      
+      // Send email using EmailJS
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        message: ''
+      });
+      
+      setFormStatus('Thank you! Your message has been sent successfully.');
+      
+      // Clear status message after 5 seconds
+      setTimeout(() => {
+        setFormStatus('');
+      }, 5000);
+      
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setFormStatus('Sorry, there was an error sending your message. Please try again or email me directly at katishay@gmail.com');
+    }
+  };
 
   // Testimonials
   const testimonials = [
@@ -258,6 +334,202 @@ function HomePage() {
         </div>
         <StoryTimeline />
         <ImageCarousel />
+        
+        {/* Contact Section */}
+        <div style={{
+          padding: '4rem 2rem',
+          background: 'transparent',
+          color: '#fff',
+          textAlign: 'center'
+        }}>
+          <h2 style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            marginBottom: '3rem',
+            color: '#fff'
+          }}>
+            Contact me
+          </h2>
+          
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            maxWidth: '1000px',
+            margin: '0 auto',
+            gap: '3rem',
+            alignItems: 'flex-start'
+          }}>
+            {/* Contact Information */}
+            <div style={{
+              flex: '1',
+              textAlign: 'left'
+            }}>
+              <div style={{
+                fontSize: '1.1rem',
+                lineHeight: '2',
+                color: '#fff'
+              }}>
+                <div>katishay@gmail.com</div>
+                <div>(555) 555-5555</div>
+                <div>123 Demo Street</div>
+                <div>New York, NY 12345</div>
+              </div>
+            </div>
+            
+            {/* Contact Form */}
+            <div style={{
+              flex: '1',
+              textAlign: 'left'
+            }}>
+              <form onSubmit={handleSubmit} style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}>
+                <div>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontSize: '1rem',
+                    color: '#fff'
+                  }}>
+                    Name (required)
+                  </label>
+                  <div style={{
+                    display: 'flex',
+                    gap: '1rem'
+                  }}>
+                    <input
+                      type="text"
+                      name="firstName"
+                      placeholder="First Name"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      style={{
+                        flex: '1',
+                        background: 'transparent',
+                        border: 'none',
+                        borderBottom: '1px solid #fff',
+                        padding: '0.5rem 0',
+                        color: '#fff',
+                        fontSize: '1rem',
+                        outline: 'none'
+                      }}
+                    />
+                    <input
+                      type="text"
+                      name="lastName"
+                      placeholder="Last Name"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      style={{
+                        flex: '1',
+                        background: 'transparent',
+                        border: 'none',
+                        borderBottom: '1px solid #fff',
+                        padding: '0.5rem 0',
+                        color: '#fff',
+                        fontSize: '1rem',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontSize: '1rem',
+                    color: '#fff'
+                  }}>
+                    Email (required)
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: '1px solid #fff',
+                      padding: '0.5rem 0',
+                      color: '#fff',
+                      fontSize: '1rem',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+                
+                <div>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontSize: '1rem',
+                    color: '#fff'
+                  }}>
+                    Message (required)
+                  </label>
+                  <textarea
+                    name="message"
+                    placeholder="Message"
+                    rows="4"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: '1px solid #fff',
+                      padding: '0.5rem 0',
+                      color: '#fff',
+                      fontSize: '1rem',
+                      outline: 'none',
+                      resize: 'vertical'
+                    }}
+                  />
+                </div>
+                
+                <button
+                  type="submit"
+                  style={{
+                    alignSelf: 'flex-end',
+                    background: '#fff',
+                    color: '#000',
+                    border: '1px solid #000',
+                    padding: '0.8rem 2rem',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  SUBMIT
+                </button>
+                
+                {/* Status Message */}
+                {formStatus && (
+                  <div style={{
+                    marginTop: '1rem',
+                    padding: '0.8rem',
+                    background: formStatus.includes('error') || formStatus.includes('Please') ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 255, 0, 0.1)',
+                    border: `1px solid ${formStatus.includes('error') || formStatus.includes('Please') ? '#ff6b6b' : '#51cf66'}`,
+                    borderRadius: '4px',
+                    color: '#fff',
+                    fontSize: '0.9rem',
+                    textAlign: 'center'
+                  }}>
+                    {formStatus}
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -341,19 +613,23 @@ function ImageCarousel() {
 
   // Using the same images from your art page for the carousel
   const carouselImages = [
-    'https://i.pinimg.com/736x/47/c2/f1/47c2f1c528654d76214860f6d2afc2ac.jpg', // Fire works 4th of July
+    
     'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', // Wake forest University
-    'https://i.pinimg.com/736x/c7/de/6a/c7de6a1b54676e8a9070fbaa9601fc9e.jpg', // Blue Cloud Wake forest University
+    'https://i.pinimg.com/736x/a6/8e/20/a68e209bc74c38891d4310997f59f6e2.jpg', // Wake Forest Wall Painting 
     'https://i.pinimg.com/736x/c7/7e/a5/c77ea537089d45b70afe9be7216ba432.jpg', // Wake forest University cloud out of the blue
-    'https://i.pinimg.com/736x/83/5d/a0/835da0d88511880ba1b7a114adcc07f1.jpg', // Wake forest rainbow
-    'https://i.pinimg.com/736x/38/ac/84/38ac84f183371337ffe68dd083c950ae.jpg', // Night Festival 
-    'https://i.pinimg.com/736x/82/ec/b7/82ecb7744895473c92c42241c9afe5f8.jpg', // Sun with tree
     'https://i.pinimg.com/736x/97/32/e6/9732e6d233ae6561e97f87fd7ed47271.jpg', // Wake Forest Wilson Selom art
+    'https://i.pinimg.com/736x/83/5d/a0/835da0d88511880ba1b7a114adcc07f1.jpg', // Wake forest rainbow
+    'https://i.pinimg.com/736x/1d/92/68/1d926844a290cabf830e75fe1a0723d5.jpg', // Wake forest University Chumnny
+    'https://i.pinimg.com/736x/c7/de/6a/c7de6a1b54676e8a9070fbaa9601fc9e.jpg', // Blue Cloud Wake forest University
+    'https://i.pinimg.com/736x/47/c2/f1/47c2f1c528654d76214860f6d2afc2ac.jpg', // Fire works 4th of July
+
+
+
     'https://i.pinimg.com/736x/c1/ca/c4/c1cac4cddb0523efc6e88efa30142688.jpg', // New York Rain Horizontal
     'https://i.pinimg.com/736x/47/80/ba/4780bafefa14c368f7b14bcc29d1f95c.jpg', // Niagara Fall Rainbow
     'https://i.pinimg.com/736x/37/c0/48/37c048374a1a821113a64e026c47bf83.jpg', // lotus
     'https://i.pinimg.com/736x/ff/cf/ee/ffcfee499f19a898b02c2edfa0d50e29.jpg', // Charminar Hyderabad
-       'https://i.pinimg.com/736x/f7/c0/ce/f7c0cef5c09f71605a8ccee99114e95c.jpg', //25 New York Yello Taxi
+    'https://i.pinimg.com/736x/f7/c0/ce/f7c0cef5c09f71605a8ccee99114e95c.jpg', //25 New York Yello Taxi
     'https://i.pinimg.com/736x/7b/30/ee/7b30ee92245350786bf70b88802c1a0a.jpg',// 26 MAn with Diya
     'https://i.pinimg.com/736x/be/24/58/be2458a58771772b60fa757d52214b70.jpg', // 27 Chicago In Day light skyline
     'https://i.pinimg.com/736x/e2/f0/e6/e2f0e616411462c8c7c431a1d72f47fc.jpg', // 28 Portyard 
@@ -393,14 +669,14 @@ function ImageCarousel() {
 
   // Text descriptions for each set of photos
   const setDescriptions = [
-    "Capturing the vibrant energy of celebrations and the serene beauty of university life.",
+    "A glimpse of my summer in Wake Forest through my lens — moments of skies, art, and experiences that shaped my internship journey.",
     "Exploring the intersection of nature and urban landscapes. From rain-soaked city streets to majestic waterfalls, these images capture the dynamic relationship between human",
     "A journey through diverse cultures and architectural marvels. From ancient temples to modern cityscapes."
   ];
 
   // Headings for each set of photos
   const setHeadings = [
-    "Celebrations & Campus Life",
+    "Wake Forest University - Atrium Health -  Summer 2025",
     "Nature & Urban Landscapes", 
     "Cultural Heritage & Architecture"
   ];
@@ -432,7 +708,7 @@ function ImageCarousel() {
       borderRadius: '16px'
     }}>
       <div style={{ 
-        marginBottom: '2rem' 
+        marginBottom: '0.7rem' 
       }}>
         <h2 className="story-title">Perspective</h2>
       </div>
@@ -441,14 +717,14 @@ function ImageCarousel() {
       <div style={{ 
         display: 'flex',
         justifyContent: 'center',
-        marginBottom: '2rem'
+        marginBottom: '0.7rem'
       }}>
         <div style={{ 
           display: 'grid',
           gridTemplateColumns: windowWidth <= 768 ? 'repeat(2, 1fr)' : windowWidth <= 1024 ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)',
-          gap: windowWidth <= 768 ? '0.8rem' : '1.74rem',
+          gap: windowWidth <= 768 ? '0.7rem' : '1.3rem',
           justifyContent: 'center',
-          maxWidth: windowWidth <= 768 ? '95vw' : '97vw',
+          maxWidth: windowWidth <= 768 ? '90vw' : '92vw',
           width: '100%',
           padding: windowWidth <= 768 ? '0 1rem' : '0'
         }}>
@@ -490,15 +766,15 @@ function ImageCarousel() {
 
       {/* Description Text */}
       <div style={{ 
-        marginTop: '2rem',
+        marginTop: '0.7rem',
         width: '95%',
-        margin: '2rem auto 0 auto'
+        margin: '0.7rem auto 0 auto'
       }}>
         <h2 style={{
           color: '#fff',
           fontSize: windowWidth <= 480 ? '1rem' : windowWidth <= 768 ? '1.2rem' : '1.5rem',
           textAlign: 'center',
-          marginBottom: windowWidth <= 480 ? '0.8rem' : '1rem',
+          marginBottom: windowWidth <= 480 ? '0.4rem' : '0.5rem',
           fontWeight: '600',
           opacity: '0.9',
           padding: windowWidth <= 480 ? '0 1rem' : '0'
@@ -524,7 +800,7 @@ function ImageCarousel() {
         display: 'flex',
         justifyContent: 'center',
         gap: windowWidth <= 768 ? '1rem' : '2rem',
-        marginTop: '0.686rem'
+        marginTop: '0.3rem'
       }}>
         <button
           onClick={prevSet}
