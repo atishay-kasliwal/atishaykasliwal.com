@@ -373,20 +373,18 @@ function HomePage() {
               <div style={{
                 position: 'relative',
                 width: '100%',
-                height: '51vh',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.1)'
               }}>
                 <img
-                  src="https://i.pinimg.com/736x/fd/81/ca/fd81ca55ee96e180fbf96441bd0f5345.jpg"
+                  src="https://i.pinimg.com/736x/a2/31/50/a23150383cf66c36412eb8c0b0a0fd04.jpg"
                   alt="Contact visual placeholder"
                   style={{
                     display: 'block',
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'top center'
+                    objectFit: 'cover'
                   }}
                 />
               </div>
