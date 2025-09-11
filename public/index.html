@@ -5,7 +5,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RX5HTCRR3X"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){dataLayer.push(arguments);}  
       gtag('js', new Date());
       gtag('config', 'G-RX5HTCRR3X');
     </script>
@@ -49,6 +49,18 @@
         ]
       }
     </script>
+
+    <!-- SPA redirect decoder (works with 404.html) -->
+    <script>
+      (function() {
+        var l = window.location;
+        if (l.search && l.search.indexOf('?/') === 1) {
+          var decoded = l.search.slice(2).split('&').map(function(s) { return s.replace(/~and~/g, '&'); }).join('?');
+          window.history.replaceState(null, null, decoded + l.hash);
+        }
+      })();
+    </script>
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/atishaylogo.png" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/atishaylogo.png" />
     <link rel="icon" sizes="16x16" type="image/png" href="%PUBLIC_URL%/atishaylogo.png" />
