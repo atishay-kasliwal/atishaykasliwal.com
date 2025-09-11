@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://atishay-kasliwal.github.io/</loc>
+    <loc>https://atishaykasliwal.com/</loc>
     <lastmod>2025-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://atishay-kasliwal.github.io/atishaylogo.png</image:loc>
+      <image:loc>https://atishaykasliwal.com/atishaylogo.png</image:loc>
       <image:title>Atishay Kasliwal</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://atishay-kasliwal.github.io/art</loc>
+    <loc>https://atishaykasliwal.com/art</loc>
     <lastmod>2025-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -22,7 +22,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://atishay-kasliwal.github.io/projects</loc>
+    <loc>https://atishaykasliwal.com/projects</loc>
     <lastmod>2025-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

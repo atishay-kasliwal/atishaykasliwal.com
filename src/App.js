@@ -174,12 +174,12 @@ function HomePage() {
     <>
       <Helmet>
         <title>Atishay Kasliwal | Portfolio, Resume, Projects</title>
-        <link rel="canonical" href="https://atishay-kasliwal.github.io/" />
+        <link rel="canonical" href="https://atishaykasliwal.com/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Atishay Kasliwal | Portfolio, Resume, Projects" />
         <meta property="og:description" content="Explore projects, experience, and ways to connect with Atishay Kasliwal." />
-        <meta property="og:url" content="https://atishay-kasliwal.github.io/" />
-        <meta property="og:image" content="https://atishay-kasliwal.github.io/atishaylogo.png" />
+        <meta property="og:url" content="https://atishaykasliwal.com/" />
+        <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="description" content="Official website of Atishay Kasliwal. Portfolio, resume, projects, and contact information." />
         <meta name="keywords" content="Atishay Kasliwal, portfolio, resume, data science, software engineer" />
@@ -605,12 +605,12 @@ function ArtPage() {
     <div className="art-page">
       <Helmet>
         <title>Atishay Kasliwal</title>
-        <link rel="canonical" href="https://atishay-kasliwal.github.io/art" />
+        <link rel="canonical" href="https://atishaykasliwal.com/art" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Art | Atishay Kasliwal" />
         <meta property="og:description" content="Photo stories and visual moments by Atishay Kasliwal." />
-        <meta property="og:url" content="https://atishay-kasliwal.github.io/art" />
-        <meta property="og:image" content="https://atishay-kasliwal.github.io/atishaylogo.png" />
+        <meta property="og:url" content="https://atishaykasliwal.com/art" />
+        <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
