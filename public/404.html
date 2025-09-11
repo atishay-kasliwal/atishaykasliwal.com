@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Atishay Kasliwal | Portfolio</title>
-    <script>
-      // Redirect to main app for client-side routing
-      window.location.replace('/');
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+      /*
+       * SPA GitHub Pages redirect script
+       * https://github.com/rafgraph/spa-github-pages
+       * This script takes the current path and redirects to /?/<path>#<hash>
+       * so the SPA can restore the correct route client-side.
+       */
+      (function() {
+        var l = window.location;
+        var redirect = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/?/' + l.pathname.replace(/^\//, '') + l.search + l.hash;
+        window.location.replace(redirect);
+      })();
     </script>
   </head>
   <body>
-    <p>Redirecting...</p>
+    Redirecting...
   </body>
 </html>
