@@ -31,6 +31,10 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://atishaykasliwal.com/" />
 
+    <!-- Rel=me profile assertions -->
+    <link rel="me" href="https://www.linkedin.com/in/atishay-kasliwal/" />
+    <link rel="me" href="https://github.com/atishay-kasliwal" />
+
     <!-- Redirect github.io host to custom domain to consolidate indexing -->
     <script>
       (function () {
@@ -59,8 +63,11 @@
       {
         "@context": "https://schema.org",
         "@type": "Person",
+        "@id": "https://atishaykasliwal.com/#person",
         "name": "Atishay Kasliwal",
         "url": "https://atishaykasliwal.com/",
+        "image": "https://atishaykasliwal.com/atishaylogo.png",
+        "description": "Software engineer and data scientist building ML-powered products and experiences.",
         "jobTitle": "Software Engineer & Data Scientist",
         "alumniOf": {
           "@type": "CollegeOrUniversity",
@@ -70,6 +77,11 @@
           "@type": "Organization",
           "name": "Independent"
         },
+        "knowsAbout": [
+          "machine learning",
+          "data science",
+          "full-stack development"
+        ],
         "sameAs": [
           "https://www.linkedin.com/in/atishay-kasliwal/",
           "https://github.com/atishay-kasliwal"
@@ -80,8 +92,10 @@
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
+        "@id": "https://atishaykasliwal.com/#website",
         "name": "Atishay Kasliwal",
         "url": "https://atishaykasliwal.com/",
+        "publisher": { "@id": "https://atishaykasliwal.com/#person" },
         "potentialAction": {
           "@type": "SearchAction",
           "target": "https://www.google.com/search?q={search_term_string}+site:atishaykasliwal.com",
