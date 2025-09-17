@@ -31,6 +31,17 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://atishaykasliwal.com/" />
 
+    <!-- Redirect github.io host to custom domain to consolidate indexing -->
+    <script>
+      (function () {
+        var host = window.location.hostname;
+        if (host && /github\.io$/i.test(host)) {
+          var target = 'https://atishaykasliwal.com' + window.location.pathname + window.location.search + window.location.hash;
+          window.location.replace(target);
+        }
+      })();
+    </script>
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Atishay Kasliwal | Data Scientist, Portfolio, Resume" />
