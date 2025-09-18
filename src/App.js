@@ -273,7 +273,7 @@ function HomePage() {
           </div>
         </div>
         {/* Testimonials Grid */}
-        <div style={{ width: '100%', display: 'block', marginTop: '1rem', marginBottom: '0' }}>
+        <div id="testimonials-section" style={{ width: '100%', display: 'block', marginTop: '1rem', marginBottom: '0' }}>
           <div style={{ 
             width: '100%', 
             maxWidth: '1540px', 
@@ -338,8 +338,12 @@ function HomePage() {
             </div>
           </div>
         </div>
-        <StoryTimeline />
-        <ImageCarousel />
+        <div id="journey-section">
+          <StoryTimeline />
+        </div>
+        <div id="perspective-section">
+          <ImageCarousel />
+        </div>
         
         {/* Contact Section */}
         <div style={{

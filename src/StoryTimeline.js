@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './StoryTimeline.css';
 
 import img1 from './assets/Symbiosis-Indore-Auditorium-Front-View.jpg';
@@ -97,20 +97,134 @@ const stories = [
 ];
 
 export default function StoryTimeline() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const cardsPerView = 5;
+
+  const nextCard = () => {
+    setCurrentIndex((prev) => {
+      const maxIndex = Math.max(0, stories.length - cardsPerView);
+      return Math.min(prev + 1, maxIndex);
+    });
+  };
+
+  const prevCard = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
   return (
     <div className="story-timeline">
       <h2 className="story-title">Journey</h2>
       <div className="story-cards">
-        {stories.map((story, idx) => (
-          <div className="story-card" key={idx}>
-            <img src={story.image} alt={story.title} className="story-img" />
-            <div className="story-date">{story.date}</div>
-            <div className="story-card-title">{story.title}</div>
-            {story.description && <div className="story-desc">{story.description}</div>}
-          </div>
-        ))}
+        <div 
+          className="story-cards-container"
+          style={{
+            transform: `translateX(-${currentIndex * (340 + 40)}px)`,
+            transition: 'transform 0.5s ease'
+          }}
+        >
+          {stories.map((story, idx) => (
+            <div className="story-card" key={idx}>
+              <img src={story.image} alt={story.title} className="story-img" />
+              <div className="story-date">{story.date}</div>
+              <div className="story-card-title">{story.title}</div>
+              {story.description && <div className="story-desc">{story.description}</div>}
+            </div>
+          ))}
+        </div>
       </div>
       <div className="journey-description">
+        <div className="journey-button-container">
+          <button
+            onClick={prevCard}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#fff',
+              width: '200px',
+              height: '36px',
+              fontSize: '2.4rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              fontWeight: '200',
+              opacity: '0.7'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.opacity = '1';
+              e.target.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.opacity = '0.7';
+              e.target.style.transform = 'scale(1)';
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '2px',
+              backgroundColor: '#fff',
+              position: 'relative',
+              opacity: '0.7'
+            }}>
+              <div style={{
+                position: 'absolute',
+                left: '0',
+                top: '-6px',
+                width: '0',
+                height: '0',
+                borderRight: '12px solid #fff',
+                borderTop: '7px solid transparent',
+                borderBottom: '7px solid transparent'
+              }}></div>
+            </div>
+          </button>
+          <button
+            onClick={nextCard}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#fff',
+              width: '200px',
+              height: '36px',
+              fontSize: '2.4rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              fontWeight: '200',
+              opacity: '0.7'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.opacity = '1';
+              e.target.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.opacity = '0.7';
+              e.target.style.transform = 'scale(1)';
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '2px',
+              backgroundColor: '#fff',
+              position: 'relative',
+              opacity: '0.7'
+            }}>
+              <div style={{
+                position: 'absolute',
+                right: '0',
+                top: '-6px',
+                width: '0',
+                height: '0',
+                borderLeft: '12px solid #fff',
+                borderTop: '7px solid transparent',
+                borderBottom: '7px solid transparent'
+              }}></div>
+            </div>
+          </button>
+        </div>
         <p>From internships to graduate studies, every step has shaped my path in technology and research. This journey embodies continuous growth, learning, and the pursuit of excellence in all endeavors.</p>
       </div>
     </div>
