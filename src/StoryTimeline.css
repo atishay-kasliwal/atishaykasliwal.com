@@ -15,11 +15,16 @@
 }
 .story-cards {
   display: flex;
-  gap: 2.5rem;
-  overflow-x: auto;
+  overflow: hidden;
   padding-bottom: 0;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  width: 100%;
+  position: relative;
+}
+
+.story-cards-container {
+  display: flex;
+  gap: 2.5rem;
+  transition: transform 0.5s ease;
 }
 
 .story-cards::-webkit-scrollbar {
@@ -36,6 +41,12 @@
   max-width: 340px;
   position: relative;
   display: block;
+  flex-shrink: 0;
+}
+
+.story-card.active {
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
 .story-card:hover {
@@ -117,6 +128,13 @@
   padding: 0;
 }
 
+.journey-button-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .story-timeline {
@@ -172,6 +190,12 @@
   .journey-description p {
     font-size: 0.95rem;
     opacity: 0.95;
+  }
+  
+  .journey-button-container {
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    gap: 1rem;
   }
 }
 
@@ -229,5 +253,11 @@
   .journey-description p {
     font-size: 0.9rem;
     opacity: 0.95;
+  }
+  
+  .journey-button-container {
+    margin-bottom: 1.2rem;
+    justify-content: center;
+    gap: 1rem;
   }
 }
