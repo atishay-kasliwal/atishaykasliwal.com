@@ -118,42 +118,42 @@ function HomePage() {
       name: "Ankit Jain⭐⭐⭐⭐⭐",
       company: "Accolite Digital",
       post: "Technical Director",
-      photo: "https://media.licdn.com/dms/image/v2/D5603AQFeoPNYwJWZSg/profile-displayphoto-shrink_400_400/B56Zd5wUFiHQAg-/0/1750094398497?e=1757548800&v=beta&t=MOsxtBZiVPbtotK2LLa_rafOz8fMGXE0GWyswi85apw"
+      photo: "https://i.pravatar.cc/150?img=1"
     },
     {
       text: "Atishay developed an NLP pipeline and designed an LLM-based trading simulation with clear visualizations.",
       name: "Wencui Han⭐⭐⭐⭐⭐",
       company: "Stony Brook University",
       post: "Professor",
-      photo: "https://media.licdn.com/dms/image/v2/C4D03AQHoAL7zZmmKFQ/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1517393435717?e=1757548800&v=beta&t=j2HkMJKKNLbJAxxn7vB80vd6uFHV6F5eEFwNfh3pKQs"
+      photo: "https://i.pravatar.cc/150?img=2"
     },
     {
       text: "Creative and reliable, Atishay brought fresh ideas to our projects and fostered a collaborative environment.",
       name: "Neha Gupta⭐⭐⭐⭐⭐",
       company: "Symbiosis University",
       post: "Director SCSIT",
-      photo: "https://media.licdn.com/dms/image/v2/C4E03AQGwZZBxpatX1g/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1616052715138?e=1757548800&v=beta&t=Ycq6iM4VsmRkOYS4RM14Spdq13ggnuwXWNREqIKyfCU"
+      photo: "https://i.pravatar.cc/150?img=3"
     },
     {
       text: "Atishay delivered our product on time with perfection. His technical expertise exceeded our expectations.",
       name: "Gunjan Jain⭐⭐⭐⭐⭐",
       company: "Brains and Taxes",
       post: "Private Limited",
-      photo: "https://media.licdn.com/dms/image/v2/C560BAQEd1j3_piip1g/company-logo_200_200/company-logo_200_200/0/1630607308942/brains_and_taxes_private_limited_logo?e=1759968000&v=beta&t=8BxoNamFekkGJtpAj6qn3Kjaxpg1Gn85Y3AQmcnYH-A"
+      photo: "https://i.pravatar.cc/150?img=4"
     },
     {
       text: "Atishay's ML expertise was instrumental in our research. His technical skills made our project a huge success.",
       name: "Dr. Goldy Khanna⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Cerebrovascular & Skull Base Neurosurgeon",
-      photo: "https://media.licdn.com/dms/image/v2/D5603AQFmQXJjA1CVLA/profile-displayphoto-crop_800_800/B56ZiCOYy5HUAM-/0/1754531467040?e=1759968000&v=beta&t=Uiv9xXwtLasoV9DQ5_FjQfaita0MVdMAdU0yxzDKkmo"
+      photo: "https://i.pravatar.cc/150?img=5"
     },
     {
       text: "Working with Atishay was a pleasure. His innovative approach made him exceptional.",
       name: "Dr. Da Ma⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Assistant Professor",
-      photo: "https://media.licdn.com/dms/image/v2/D4E03AQF0BPnzsnvEiA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1643213755898?e=1759968000&v=beta&t=yw2ShbYe34ghREmP0-AE0ACxm1SJKvLLKRNyrwEWzQQ"
+      photo: "https://i.pravatar.cc/150?img=6"
     }
   ];
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
