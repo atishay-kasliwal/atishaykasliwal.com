@@ -118,42 +118,42 @@ function HomePage() {
       name: "Ankit Jain⭐⭐⭐⭐⭐",
       company: "Accolite Digital",
       post: "Technical Director",
-      photo: "https://i.pravatar.cc/150?img=1"
+      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ankit&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
     },
     {
       text: "Atishay developed an NLP pipeline and designed an LLM-based trading simulation with clear visualizations.",
       name: "Wencui Han⭐⭐⭐⭐⭐",
       company: "Stony Brook University",
       post: "Professor",
-      photo: "https://i.pravatar.cc/150?img=2"
+      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Wencui&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
     },
     {
       text: "Creative and reliable, Atishay brought fresh ideas to our projects and fostered a collaborative environment.",
       name: "Neha Gupta⭐⭐⭐⭐⭐",
       company: "Symbiosis University",
       post: "Director SCSIT",
-      photo: "https://i.pravatar.cc/150?img=3"
+      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Neha&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
     },
     {
       text: "Atishay delivered our product on time with perfection. His technical expertise exceeded our expectations.",
       name: "Gunjan Jain⭐⭐⭐⭐⭐",
       company: "Brains and Taxes",
       post: "Private Limited",
-      photo: "https://i.pravatar.cc/150?img=4"
+      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Gunjan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
     },
     {
       text: "Atishay's ML expertise was instrumental in our research. His technical skills made our project a huge success.",
       name: "Dr. Goldy Khanna⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Cerebrovascular & Skull Base Neurosurgeon",
-      photo: "https://i.pravatar.cc/150?img=5"
+      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Goldy&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
     },
     {
       text: "Working with Atishay was a pleasure. His innovative approach made him exceptional.",
       name: "Dr. Da Ma⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Assistant Professor",
-      photo: "https://i.pravatar.cc/150?img=6"
+      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=DaMa&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
     }
   ];
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
