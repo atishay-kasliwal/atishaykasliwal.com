@@ -17,12 +17,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "postbuild": "cp build/index.html build/404.html && cp -r build/* docs/",
+    "build": "react-scripts build && cp build/index.html build/404.html && cp _redirects build/",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -42,8 +39,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://atishay-kasliwal.github.io/",
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
-  }
+  "homepage": "https://atishaykasliwal.com"
 }
