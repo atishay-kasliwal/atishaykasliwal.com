@@ -39,5 +39,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://atishaykasliwal.com"
+  "homepage": "https://atishaykasliwal.com",
+  "devDependencies": {
+    "wrangler": "^4.45.3"
+  }
 }
