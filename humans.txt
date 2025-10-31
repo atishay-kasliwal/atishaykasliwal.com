@@ -1,13 +1,13 @@
 /* TEAM */
 Developer: Atishay Kasliwal
-Site: https://atishay-kasliwal.github.io/
-Twitter: N/A
+Site: https://atishaykasliwal.com/
+Twitter: @AtiahayKasliwal
 Location: New York, NY, USA
 
 /* SITE */
 Standards: HTML5, CSS3, JS (React)
 Components: React, react-helmet, CRA
-Hosting: GitHub Pages
+Hosting: Cloudflare Pages
 Build: react-scripts
 
 /* THANKS */
