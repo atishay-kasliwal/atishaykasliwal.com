@@ -30,6 +30,9 @@ jobs:
       - name: Build
         run: npm run build
       
+      - name: Install Wrangler
+        run: npm install -g wrangler@latest
+      
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -37,5 +40,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: atishay-kasliwal-github-io
           directory: build
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
