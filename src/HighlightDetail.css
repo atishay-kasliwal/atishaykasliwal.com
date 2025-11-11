@@ -3,6 +3,19 @@
   background: #0a0a0a;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
+  /* Prevent unwanted scrolling on page load */
+  overflow-x: hidden;
+  /* Ensure page starts at top */
+  scroll-behavior: auto;
+  /* Prevent layout shift by ensuring page has height immediately */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure header takes up space immediately to prevent layout shift */
+.highlight-detail-page .header {
+  flex-shrink: 0;
+  min-height: 60px; /* Ensure header has minimum height */
 }
 
 /* Ensure document sections have no background */
@@ -20,11 +33,22 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  flex: 1;
+  /* Ensure container has minimum height to prevent layout shift */
+  min-height: 400px;
+  /* Ensure content is rendered and takes space */
+  display: block;
 }
 
 .highlight-detail-header {
   margin-bottom: 3rem;
   padding-top: 2rem;
+  /* Ensure header takes up space immediately - make it taller */
+  min-height: 300px;
+  display: block;
+  /* Ensure header content is visible and takes space */
+  position: relative;
+  z-index: 1;
 }
 
 .back-link {
@@ -164,6 +188,10 @@
   scroll-behavior: auto;
   /* Prevent iframe from causing page scroll */
   scroll-margin: 0 !important;
+  /* Prevent iframe from receiving focus on load (which can cause scroll) */
+  pointer-events: auto;
+  /* Ensure iframe doesn't cause scroll on load */
+  visibility: visible;
 }
 
 /* Prevent page scroll when iframe is clicked or focused */
@@ -182,6 +210,23 @@
 /* Ensure iframe doesn't trigger scroll-into-view */
 .document-iframe:focus {
   outline: none;
+}
+
+/* Prevent iframes from causing scroll on page load */
+.document-embed-container {
+  /* Prevent scroll into view when iframe loads */
+  scroll-margin-top: 0 !important;
+  scroll-margin-bottom: 0 !important;
+  /* Ensure container doesn't cause scroll */
+  scroll-snap-align: none !important;
+}
+
+/* Delay iframe loading slightly to allow scroll-to-top to complete first */
+.highlight-detail-page .document-iframe {
+  /* Initially prevent iframe from loading (will be enabled after scroll-to-top) */
+  /* This is handled in JavaScript, but CSS ensures no scroll behavior */
+  scroll-margin: 0 !important;
+  scroll-padding: 0 !important;
 }
 
 .document-external-link {

@@ -8,8 +8,8 @@ import MRIimage from './assets/atrium health.jpg';
 import wakeatishay from './assets/wakwforest.jpg';
 import braint1 from './assets/T1.png';
 import Gemma from './assets/Gemma.png';
-import hosp from './assets/hosp.jpg';
-import Moviedata from './assets/Movie.jpg';
+import hosp from './assets/2016-azure-sql-integrations-1.jpeg';
+import Moviedata from './assets/bigdata.jpg';
 // Banner block content - customize these arrays for different banner content
 // Each item can be:
 //   - A string: displays as text (e.g., 'MACHINE LEARNING')
@@ -69,7 +69,7 @@ export const projectsData = [
     title: 'Data Analytics Platform',
     description: 'Data modeling and business intelligence solutions for enterprise clients',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&h=600&auto=format&fit=crop',
-    link: '#',
+    link: 'https://www.linkedin.com/in/atishay-kasliwal/',
     category: 'Data Science',
     size: 'wide',
     span: 4, // Row 1: Double width (spans 2 columns)
@@ -78,12 +78,12 @@ export const projectsData = [
     layout: 'text-carousel', // New layout: text blocks top, carousel bottom
     leftText: {
       label: 'Behind the Designs',
-      title: 'Shaping Experiences That Make Life Simpler',
-      description: "I'm a product designer focused on building clean, intuitive interfaces that solve real-world problems."
+      title: 'Atirum Health Wake Forest Baptist Hospital',
+      description: "I'm a Senior Software Engineer specializing in building scalable, user centered solutions that address complex healthcare challenges."
     },
     rightText: {
       subtitle: "Let's Build Something Meaningful Together",
-      buttonText: 'Get in touch'
+      buttonText: 'LinkedIn'
     },
     carouselImages: [
       wakeforeststudent,
@@ -170,36 +170,36 @@ export const projectsData = [
   // },
   {
     id: 13,
-    title: 'Natural Language Processing',
-    description: 'End-to-end NLP pipeline for text processing, sentiment analysis, and language understanding',
+    title: 'Gemma NLP Research',
+    description: 'Advanced NLP research using Google\'s Gemma models for language understanding and text analysis',
     image: Gemma,
     link: '/Highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde',
     uuid: 'a1b2c3d4-e5f6-4789-a012-3456789abcde',
-    category: 'NLP',
+    category: 'Research & NLP',
     size: 'medium',
     span: 2, // Row 4: Equal (1/3 width)
     textOverlay: true // Text overlay on image
   },  
   {
     id: 14,
-    title: 'Natural Language Processing',
-    description: 'End-to-end NLP pipeline for text processing, sentiment analysis, and language understanding',
+    title: 'Movie Data Analytics',
+    description: 'Data-driven analytics platform for movie insights, sentiment analysis, and audience preferences',
     image: Moviedata,
     link: '/Highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef',
     uuid: 'b2c3d4e5-f6a7-4890-b123-456789abcdef',
-    category: 'NLP',
+    category: 'Data Analytics',
     size: 'medium',
     span: 2, // Row 4: Equal (1/3 width)
     textOverlay: true // Text overlay on image
   }, 
    {
     id: 15,
-    title: 'Natural Language Processing',
-    description: 'End-to-end NLP pipeline for text processing, sentiment analysis, and language understanding',
+    title: 'Hospitality AI Solutions',
+    description: 'AI-powered solutions for the hospitality industry, focusing on customer experience and operational efficiency',
     image: hosp,
     link: '/Highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
     uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
-    category: 'NLP',
+    category: 'AI & Hospitality',
     size: 'medium',
     span: 2, // Row 4: Equal (1/3 width)
     textOverlay: true // Text overlay on image
@@ -481,7 +481,7 @@ export default function Projects() {
                           <div className="project-card-number" translate="no">#{String(displayIndex + 1).padStart(2, '0')}</div>
                           <h3 className="project-card-title" translate="no">{project.title}</h3>
                           <p className="project-card-description" translate="no">{project.description}</p>
-                          {project.uuid ? (
+                          {/* {project.uuid ? (
                             <Link 
                               to={project.link} 
                               className="project-card-link"
@@ -499,7 +499,7 @@ export default function Projects() {
                             >
                               View Project →
                             </a>
-                          )}
+                          )} */}
                         </div>
                       )}
                     </>
