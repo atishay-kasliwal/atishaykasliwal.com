@@ -37,5 +37,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: atishay-kasliwal-github-io
           directory: build
-          wranglerVersion: '4'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
