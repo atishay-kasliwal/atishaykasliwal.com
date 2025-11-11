@@ -2,380 +2,539 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Projects.css';
 import { Helmet } from 'react-helmet';
+import wakeforeststudent from './assets/WakeForsetstudent.JPG';
+import conference from './assets/confremce.JPG';
+import MRIimage from './assets/atrium health.jpg';
+import wakeatishay from './assets/wakwforest.jpg';
+import braint1 from './assets/T1.png';
+import Gemma from './assets/Gemma.png';
+import hosp from './assets/hosp.jpg';
+import Moviedata from './assets/Movie.jpg';
+// Banner block content - customize these arrays for different banner content
+// Each item can be:
+//   - A string: displays as text (e.g., 'MACHINE LEARNING')
+//   - An object with 'image': displays an image (e.g., { image: 'https://...' })
+//   - An object with 'image' and 'alt': displays an image with alt text (e.g., { image: 'https://...', alt: 'Description' })
 
-// Project carousel component
-function ProjectCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+const bannerBlocksTop = [
+ 
+  { image: '/fidelity-logo.png', alt: 'Fidelity Investments' },
+  { image: '/accolite-logo.png', alt: 'Accolite Digital' },
+  { image: '/sbu-logo.png', alt: 'Stony Brook University' },
+  { image: '/suas-logo.png', alt: 'Symbiosis University of Applied Sciences' },
+  { image: '/atrium-logo.png', alt: 'Atrium Health Wake Forest Baptist' },
+  { image: '/wfu-logo.png', alt: 'Wake Forest University' },
+  { image: '/bt-group-logo.png', alt: 'BT Group' },
+  { image: '/bounteous-logo.png', alt: 'Bounteous' },
+  { image: '/banner-logo.png', alt: 'Logo' },
+  { image: '/t-mobile-logo.png', alt: 'T-Mobile' }
+  // Add more images like this:
+  // { image: '/your-image.png', alt: 'Description' },
+  // { image: 'https://your-image-url.com/image.jpg', alt: 'Description' },
+];
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
+const bannerBlocksBottom = [
+  'Software Developer',
+  'Research Assistant',
+  'Artificial Intelligence Intern',
+  'Software Intern',
+  'Senior Software Engineer'
+  // Add images like this:
+  // { image: 'https://your-image-url.com/image.jpg', alt: 'Description' },
+  // { image: 'https://your-image-url.com/image2.jpg' },
+];
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  
-  // Generate 20 projects with diverse images and proper titles
-  const projects = [
-    {
-      id: 1,
-      title: `Software Engineer`,
-      description: `Accolite Digital`,
-      image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400&auto=format&fit=crop',
+// Projects data - you can customize these with your actual projects
+export const projectsData = [
+  {
+    id: 1,
+    title: 'Healthcare AI Research',
+    description: 'Machine learning research and healthcare data analytics at Atrium Health Wake Forest',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
+    link: '/Highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    category: 'Research',
+    size: 'tall',
+    span: 2, // Row 1: Normal width
+    layout: 'two-squares', // Two equal square images
+    squareImages: [
+      conference,
+      MRIimage
+    ],
+    textOverlay: true // Hide text content below
+  },
+  {
+    id: 2,
+    title: 'Data Analytics Platform',
+    description: 'Data modeling and business intelligence solutions for enterprise clients',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&h=600&auto=format&fit=crop',
+    link: '#',
+    category: 'Data Science',
+    size: 'wide',
+    span: 4, // Row 1: Double width (spans 2 columns)
+    textOverlay: true,
+    overlayLayout: 'split', // Split layout: text on left, image on right
+    layout: 'text-carousel', // New layout: text blocks top, carousel bottom
+    leftText: {
+      label: 'Behind the Designs',
+      title: 'Shaping Experiences That Make Life Simpler',
+      description: "I'm a product designer focused on building clean, intuitive interfaces that solve real-world problems."
     },
-    {
-      id: 2,
-      title: `Web Developer Intern`,
-      description: `N-tier Pvt Ltd`,
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
+    rightText: {
+      subtitle: "Let's Build Something Meaningful Together",
+      buttonText: 'Get in touch'
     },
-    {
-      id: 3,
-      title: `Frontend Developer`,
-      description: `Shriffle Technologies`,
-      image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 4,
-      title: `Full Stack Developer`,
-      description: `Bounteous Accolite`,
-      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 5,
-      title: `UI/UX Designer`,
-      description: `Freelance Projects`,
-      image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
-    },
-    {
-      id: 6,
-      title: `Web Developer Intern`,
-      description: `N-tier Pvt Ltd`,
-      image: 'https://i.pinimg.com/736x/15/bb/b9/15bbb97130b2971626b24f77d614a385.jpg',
-    },
-    // {
-    //   id: 7,
-    //   title: `ТУР №7`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 8,
-    //   title: `ТУР №8`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 9,
-    //   title: `ТУР №9`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 10,
-    //   title: `ТУР №10`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1433477155337-9aea4e790195?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 11,
-    //   title: `ТУР №11`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1496386260002-3e5b8c28f44b?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 12,
-    //   title: `ТУР №12`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1445307806294-bff7f67ff225?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 13,
-    //   title: `ТУР №13`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1505764706515-aa95265c5abc?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 14,
-    //   title: `ТУР №14`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 15,
-    //   title: `ТУР №15`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 16,
-    //   title: `ТУР №16`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 17,
-    //   title: `ТУР №17`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 18,
-    //   title: `ТУР №18`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 19,
-    //   title: `ТУР №19`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=400&auto=format&fit=crop',
-    // },
-    // {
-    //   id: 20,
-    //   title: `ТУР №20`,
-    //   description: `и получите незабываемые`,
-    //   image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
-    // }
-  ];
+    carouselImages: [
+      wakeforeststudent,
+      wakeatishay,
+      braint1
+    ]
+  },
+  // {
+  //   id: 3,
+  //   title: 'Full-Stack Applications',
+  //   description: 'Enterprise software engineering and team projects at Accolite Digital',
+  //   image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&h=600&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Software Engineering',
+  //   size: 'medium',
+  //   span: 2 // Row 2: Equal (1/3 width)
+  // },
+  // {
+  //   id: 4,
+  //   title: 'Backend Systems',
+  //   description: 'Backend systems development and software architecture at Shriffle Technologies',
+  //   image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=600&h=800&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Backend',
+  //   size: 'tall',
+  //   span: 2 // Row 2: Equal (1/3 width)
+  // },
+  // {
+  //   id: 5,
+  //   title: 'AI Project Development',
+  //   description: 'AI project development and research at Verzeo Learning',
+  //   image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=800&h=500&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'AI/ML',
+  //   size: 'wide',
+  //   span: 2 // Row 2: Equal (1/3 width)
+  // },
+  // {
+  //   id: 6,
+  //   title: 'Predictive Analytics System',
+  //   description: 'Advanced analytics platform for pattern recognition and predictive modeling in law enforcement',
+  //   image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&h=600&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Data Analysis',
+  //   size: 'medium',
+  //   span: 4, // Row 3: Double width (spans 2 columns)
+  //   textOverlay: true,
+  //   overlayLayout: 'split', // Split layout: text on left, image on right
+  //   layout: 'text-carousel', // New layout: text blocks top, carousel bottom
+  //   leftText: {
+  //     label: 'Data Insights',
+  //     title: 'Transforming Data Into Actionable Intelligence',
+  //     description: "Leveraging advanced analytics and machine learning to uncover patterns and drive informed decision-making in law enforcement."
+  //   },
+  //   rightText: {
+  //     subtitle: "Building Smarter Solutions Through Data",
+  //     buttonText: 'View Project'
+  //   },
+  //   carouselImages: [
+  //     'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
+  //     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&h=800&auto=format&fit=crop',
+  //     'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&h=800&auto=format&fit=crop'
+  //   ]
+  // },
+  // {
+  //   id: 7,
+  //   title: 'Enterprise Web Platform',
+  //   description: 'Full-stack web application development with modern UI/UX design principles',
+  //   image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=600&h=800&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Frontend',
+  //   size: 'tall',
+  //   span: 2 // Row 3: Normal width
+  // },
+  // {
+  //   id: 8,
+  //   title: 'AI Trading System',
+  //   description: 'LLM-powered trading simulation platform with real-time data visualization and analytics',
+  //   image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&h=600&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'NLP',
+  //   size: 'wide',
+  //   span: 2 // Row 4: Equal (1/3 width)
+  // },
+  {
+    id: 13,
+    title: 'Natural Language Processing',
+    description: 'End-to-end NLP pipeline for text processing, sentiment analysis, and language understanding',
+    image: Gemma,
+    link: '/Highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde',
+    uuid: 'a1b2c3d4-e5f6-4789-a012-3456789abcde',
+    category: 'NLP',
+    size: 'medium',
+    span: 2, // Row 4: Equal (1/3 width)
+    textOverlay: true // Text overlay on image
+  },  
+  {
+    id: 14,
+    title: 'Natural Language Processing',
+    description: 'End-to-end NLP pipeline for text processing, sentiment analysis, and language understanding',
+    image: Moviedata,
+    link: '/Highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef',
+    uuid: 'b2c3d4e5-f6a7-4890-b123-456789abcdef',
+    category: 'NLP',
+    size: 'medium',
+    span: 2, // Row 4: Equal (1/3 width)
+    textOverlay: true // Text overlay on image
+  }, 
+   {
+    id: 15,
+    title: 'Natural Language Processing',
+    description: 'End-to-end NLP pipeline for text processing, sentiment analysis, and language understanding',
+    image: hosp,
+    link: '/Highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    category: 'NLP',
+    size: 'medium',
+    span: 2, // Row 4: Equal (1/3 width)
+    textOverlay: true // Text overlay on image
+  },
+  // {
+  //   id: 10,
+  //   title: 'Machine Learning Solutions',
+  //   description: 'Comprehensive ML models and data science applications for business intelligence',
+  //   image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&h=500&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Data Science',
+  //   size: 'wide',
+  //   span: 2 // Row 4: Equal (1/3 width)
+  // },
+  // {
+  //   id: 11,
+  //   title: 'Enterprise Software',
+  //   description: 'Senior software engineering projects and enterprise solutions',
+  //   image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=600&h=800&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Software Engineering',
+  //   size: 'tall',
+  //   span: 3 // Row 5: Equal (50% width each)
+  // },
+  // {
+  //   id: 12,
+  //   title: 'COVID-19 Analytics',
+  //   description: 'Analytics and ML projects focused on COVID-19 data analysis',
+  //   image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=600&h=600&auto=format&fit=crop',
+  //   link: '#',
+  //   category: 'Data Analysis',
+  //   size: 'medium',
+  //   span: 3 // Row 5: Equal (50% width each)
+  // }
+];
 
-  const projectsPerPage = windowWidth <= 768 ? 4 : 5;
-  const maxIndex = projects.length - projectsPerPage;
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
-
-  const currentProjects = projects.slice(
-    currentIndex,
-    currentIndex + projectsPerPage
-  );
-
-  return (
-    <div className="project-carousel">
-      <div className="carousel-header">
-        <h2>Growth Milestones</h2>
-        <p>Showcasing Milestones That Define My Story</p>
-      </div>
-      
-      <div className="carousel-container">
-        <div className="carousel-grid">
-          {currentProjects.map((project) => (
-            <div key={project.id} className="project-card">
-              <div className="project-image" style={{ backgroundImage: `url(${project.image})` }}>
-                <div className="project-info">
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="carousel-navigation">
-        <button className="carousel-btn prev" onClick={prevSlide}>
-          <div style={{
-            width: '100%',
-            height: '2px',
-            backgroundColor: '#fff',
-            position: 'relative',
-            opacity: '0.7'
-          }}>
-            <div style={{
-              position: 'absolute',
-              left: '0',
-              top: '-6px',
-              width: '0',
-              height: '0',
-              borderRight: '12px solid #fff',
-              borderTop: '7px solid transparent',
-              borderBottom: '7px solid transparent'
-            }}></div>
-          </div>
-        </button>
-        <button className="carousel-btn next" onClick={nextSlide}>
-          <div style={{
-            width: '100%',
-            height: '2px',
-            backgroundColor: '#fff',
-            position: 'relative',
-            opacity: '0.7'
-          }}>
-            <div style={{
-              position: 'absolute',
-              right: '0',
-              top: '-6px',
-              width: '0',
-              height: '0',
-              borderLeft: '12px solid #fff',
-              borderTop: '7px solid transparent',
-              borderBottom: '7px solid transparent'
-            }}></div>
-          </div>
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// Lightweight page that showcases project sections with alternating image mosaics and text
+// Projects page with grid layout
 export default function Projects() {
-  // Google Analytics lightweight init and pageview for Projects
+  // Mobile menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   useEffect(() => {
     const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
     if (!window.dataLayer) {
       window.dataLayer = window.dataLayer || [];
       function gtag(){ window.dataLayer.push(arguments); }
       gtag('js', new Date());
-      gtag('config', gaId, { page_path: '/projects' });
-    } else {
-      window.dataLayer.push({ event: 'page_view', page_path: '/projects' });
-    }
+          gtag('config', gaId, { page_path: '/highlights' });
+        } else {
+          window.dataLayer.push({ event: 'page_view', page_path: '/highlights' });
+        }
   }, []);
 
+
   return (
-    <div className="milestones-page">
+    <div className="projects-page" translate="no">
       <Helmet>
-        <title>Milestones | Atishay Kasliwal</title>
+        <html lang="en" translate="no" />
+        <title>Highlights | Atishay Kasliwal</title>
+        <meta name="description" content="Portfolio of highlights by Atishay Kasliwal - AI/ML, Data Science, Software Engineering, and Full-Stack Development" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
       </Helmet>
-      <div className="bg-art" />
-      <div className="page-content">
-        <div className="header">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <div className="bg-art" translate="no" />
+      <div className="page-content" translate="no">
+        <div className="header" translate="no">
+          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
             Atishay Kasliwal
           </Link>
-          <nav className="nav">
-            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-            <Link to="/art">ART</Link>
-            <Link to="/projects" className="active">MILESTONES</Link>
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            translate="no"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            <Link to="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
+            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+            <Link to="/art" translate="no">ART</Link>
           </nav>
         </div>
 
-        <ProjectCarousel />
-
-        {/* <div className="milestones-list">
-        {sections.map((s, idx) => (
-          <section key={idx} className={`project-section ${s.layout}`}>
-            Template: Hero (large image + side text)
-            {s.layout === 'tpl-hero' && (
-              <>
-                <div className="project-images hero-one">
-                  <div className="project-img-tile">
-                    <img src={s.images[0]} alt={`${s.title}-hero`} />
+        <div className="projects-container" translate="no">
+              <div className="projects-banner-container" translate="no">
+                {/* Top Row - blocks */}
+                <div className="projects-running-banner projects-banner-row-top" translate="no">
+                  <div className="projects-banner-content" translate="no">
+                    {[...Array(2)].map((_, repeatIndex) => (
+                      bannerBlocksTop.map((block, index) => {
+                        const isImage = typeof block === 'object' && block.image;
+                        const blockKey = `block-top-${repeatIndex}-${index}`;
+                        const isAccolite = isImage && block.image === '/accolite-logo.png';
+                        const isBannerLogo = isImage && block.image === '/banner-logo.png';
+                        const isBounteous = isImage && block.image === '/bounteous-logo.png';
+                        const isBTGroup = isImage && block.image === '/bt-group-logo.png';
+                        const isAtrium = isImage && block.image === '/atrium-logo.png';
+                        
+                        return (
+                          <div 
+                            key={blockKey} 
+                            className={`projects-banner-block ${isImage ? 'banner-block-image' : 'banner-block-text'} ${isAccolite ? 'accolite-logo' : ''} ${isBannerLogo ? 'banner-logo' : ''} ${isBounteous ? 'bounteous-logo' : ''} ${isBTGroup ? 'bt-group-logo' : ''} ${isAtrium ? 'atrium-logo' : ''}`}
+                            translate="no"
+                            style={isImage ? {
+                              '--block-index': index,
+                              backgroundImage: `url(${block.image})`,
+                              backgroundSize: isAccolite ? '101%' : (isBannerLogo ? '71%' : (isBounteous ? '101%' : (isBTGroup ? '101%' : (isAtrium ? '52%' : 'contain')))),
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat'
+                            } : { '--block-index': index }}
+                          >
+                            {!isImage && block}
+                          </div>
+                        );
+                      })
+                    ))}
                   </div>
                 </div>
-                <aside className="project-text">
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
-                  <div className="project-meta">
-                    <span>Role: Software Engineer</span>
-                    <span>Stack: React, Node, Python</span>
+                {/* Bottom Row - blocks */}
+                {/* <div className="projects-running-banner projects-banner-row-bottom" translate="no">
+                  <div className="projects-banner-content" translate="no">
+                    {[...Array(2)].map((_, repeatIndex) => (
+                      bannerBlocksBottom.map((block, index) => {
+                        const isImage = typeof block === 'object' && block.image;
+                        const blockKey = `block-bottom-${repeatIndex}-${index}`;
+                        
+                        return (
+                          <div 
+                            key={blockKey} 
+                            className={`projects-banner-block ${isImage ? 'banner-block-image' : 'banner-block-text'}`}
+                            translate="no"
+                            style={isImage ? {
+                              '--block-index': index,
+                              backgroundImage: `url(${block.image})`,
+                              backgroundSize: 'contain',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat'
+                            } : { '--block-index': index }}
+                          >
+                            {!isImage && block}
+                          </div>
+                        );
+                      })
+                    ))}
                   </div>
-                  <a className="btn-theme btn-outline project-cta" href={s.link} target="_blank" rel="noopener noreferrer">View Project</a>
-                </aside>
-              </>
-            )}
+                </div> */}
+              </div>
 
-            Template: Strip Cards (row of small cards over baseline)
-            {s.layout === 'tpl-strip-cards' && (
-              <>
-                <div className="project-images strip-cards">
-                  {s.images.map((src, i) => (
-                    <div key={i} className="project-img-tile card">
-                      <img src={src} alt={`${s.title}-${i}`} />
+          <div className="projects-grid" translate="no">
+            {projectsData
+              .filter(project => ![5, 11, 12].includes(project.id))
+              .map((project, index) => {
+                // Recalculate index after filtering for proper numbering
+                const filteredProjects = projectsData.filter(p => ![5, 11, 12].includes(p.id));
+                const displayIndex = filteredProjects.findIndex(p => p.id === project.id);
+                return (
+              <div 
+                key={project.id} 
+                className={`project-card-grid project-card-${project.size || 'medium'} ${project.span === 3 ? 'span-3' : project.span === 4 ? 'span-4' : project.span === 6 ? 'span-6' : ''} ${project.textOverlay ? 'text-overlay' : ''} notranslate`}
+                translate="no"
+              >
+                <div 
+                  className={`project-card-image ${project.overlayLayout === 'split' ? 'overlay-split' : ''} ${project.layout === 'text-carousel' ? 'text-carousel-layout' : ''} ${project.layout === 'two-squares' ? 'two-squares-layout' : ''}`}
+                  style={project.imageHeight ? { height: project.imageHeight } : {}}
+                >
+                  {project.layout === 'two-squares' ? (
+                    <div className="project-square-images" translate="no">
+                      {project.squareImages && project.squareImages.slice(0, 2).map((img, imgIndex) => (
+                        <div
+                          key={imgIndex}
+                          className="project-square-image"
+                          translate="no"
+                        >
+                          <img src={img} alt={`${project.title} - Square ${imgIndex + 1}`} translate="no" />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <aside className="project-text">
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
-                  <div className="project-meta">
-                    <span>Role: Software Engineer</span>
-                    <span>Stack: React, Node, Python</span>
-                  </div>
-                  <a className="btn-theme btn-outline project-cta" href={s.link} target="_blank" rel="noopener noreferrer">View Project</a>
-                </aside>
-              </>
-            )}
-
-            Template: Reflect Banner (hero with reflection + tall right image + text)
-            {s.layout === 'tpl-reflect-banner' && (
-              <>
-                <div className="project-images reflect-left">
-                  <div className="hero-with-reflect">
-                    <img className="hero" src={s.images[0]} alt={`${s.title}-hero`} />
-                    <div className="reflect-wrap">
-                      <img className="reflect" src={s.images[0]} alt={`${s.title}-hero-reflect`} />
+                  ) : project.layout === 'text-carousel' ? (
+                    <div className="project-text-carousel-container" translate="no">
+                      {/* Top Section: Two Text Blocks */}
+                      <div className="project-text-blocks" translate="no">
+                        <div className="project-text-block-left" translate="no">
+                          {project.leftText?.label && (
+                            <div className="project-text-label" translate="no">{project.leftText.label}</div>
+                          )}
+                          {project.leftText?.title && (
+                            <h2 className="project-text-title" translate="no">{project.leftText.title}</h2>
+                          )}
+                          {project.leftText?.description && (
+                            <p className="project-text-description" translate="no">{project.leftText.description}</p>
+                          )}
+                        </div>
+                        <div className="project-text-block-right" translate="no">
+                          {project.rightText?.subtitle && (
+                            <p className="project-text-subtitle" translate="no">{project.rightText.subtitle}</p>
+                          )}
+                          {project.rightText?.buttonText && (
+                            project.uuid ? (
+                              <Link 
+                                to={project.link} 
+                                className="project-text-button"
+                                translate="no"
+                              >
+                                {project.rightText.buttonText}
+                                <span className="button-arrow">→</span>
+                              </Link>
+                            ) : (
+                              <a 
+                                href={project.link} 
+                                className="project-text-button"
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                translate="no"
+                              >
+                                {project.rightText.buttonText}
+                                <span className="button-arrow">→</span>
+                              </a>
+                            )
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Bottom Section: Image Carousel - 3 images grid */}
+                      {project.carouselImages && project.carouselImages.length > 0 && (
+                        <div className="project-carousel-container" translate="no">
+                          <div className="project-carousel-images" translate="no">
+                            {project.carouselImages.slice(0, 3).map((img, imgIndex) => (
+                              <div
+                                key={imgIndex}
+                                className="project-carousel-image"
+                                translate="no"
+                              >
+                                <img src={img} alt={`${project.title} - Image ${imgIndex + 1}`} translate="no" />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <div className="project-copy-card">
-                    <h3>{s.title}</h3>
-                    <p>{s.description}</p>
-                    <a className="btn-theme btn-outline project-cta" href={s.link} target="_blank" rel="noopener noreferrer">View Project</a>
-                  </div>
+                  ) : project.overlayLayout === 'split' ? (
+                    <>
+                      <div className="project-card-split-content" translate="no">
+                        <div className="project-card-split-text" translate="no">
+                          <div className="project-card-number" translate="no">#{String(displayIndex + 1).padStart(2, '0')}</div>
+                          <h3 className="project-card-title" translate="no">{project.title}</h3>
+                          <p className="project-card-description" translate="no">{project.description}</p>
+                          {project.uuid ? (
+                            <Link 
+                              to={project.link} 
+                              className="project-card-link"
+                              translate="no"
+                            >
+                              View
+                            </Link>
+                          ) : (
+                            <a 
+                              href={project.link} 
+                              className="project-card-link"
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              translate="no"
+                            >
+                              View
+                            </a>
+                          )}
+                        </div>
+                        <div className="project-card-split-image" translate="no">
+                          <img src={project.image} alt={project.title} translate="no" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <img src={project.image} alt={project.title} translate="no" />
+                      {project.textOverlay && (
+                        <div className="project-card-overlay-content" translate="no">
+                          <div className="project-card-number" translate="no">#{String(displayIndex + 1).padStart(2, '0')}</div>
+                          <h3 className="project-card-title" translate="no">{project.title}</h3>
+                          <p className="project-card-description" translate="no">{project.description}</p>
+                          {project.uuid ? (
+                            <Link 
+                              to={project.link} 
+                              className="project-card-link"
+                              translate="no"
+                            >
+                              View Project →
+                            </Link>
+                          ) : (
+                            <a 
+                              href={project.link} 
+                              className="project-card-link"
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              translate="no"
+                            >
+                              View Project →
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
-                <aside className="project-text right-tall">
-                  <div className="tall-image-wrap">
-                    <img src={s.images[1]} alt={`${s.title}-tall`} />
+                {!project.textOverlay && (
+                  <div className="project-card-content" translate="no">
+                    <div className="project-card-number" translate="no">#{String(displayIndex + 1).padStart(2, '0')}</div>
+                    <h3 className="project-card-title" translate="no">{project.title}</h3>
+                    <p className="project-card-description" translate="no">{project.description}</p>
+                    {project.uuid ? (
+                      <Link 
+                        to={project.link} 
+                        className="project-card-link"
+                        translate="no"
+                      >
+                        View
+                      </Link>
+                    ) : (
+                      <a 
+                        href={project.link} 
+                        className="project-card-link"
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        translate="no"
+                      >
+                        View
+                      </a>
+                    )}
                   </div>
-                </aside>
-              </>
-            )}
-
-            Template: Grid Collage (balanced collage)
-            {s.layout === 'tpl-grid-collage' && (
-              <>
-                <div className="project-images grid-collage">
-                  {s.images.map((src, i) => (
-                    <div key={i} className={`project-img-tile ${i === 0 ? 'span-2-row' : ''}`}>
-                      <img src={src} alt={`${s.title}-${i}`} />
-                    </div>
-                  ))}
-                </div>
-                <aside className="project-text">
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
-                  <div className="project-meta">
-                    <span>Role: Software Engineer</span>
-                    <span>Stack: React, Node, Python</span>
-                  </div>
-                  <a className="btn-theme btn-outline project-cta" href={s.link} target="_blank" rel="noopener noreferrer">View Project</a>
-                </aside>
-              </>
-            )}
-
-            Template: Split Banner (tall image column + copy)
-            {s.layout === 'tpl-split-banner' && (
-              <>
-                <div className="project-images split-banner">
-                  {s.images.slice(0, 3).map((src, i) => (
-                    <div key={i} className="project-img-tile tall">
-                      <img src={src} alt={`${s.title}-tall-${i}`} />
-                    </div>
-                  ))}
-                </div>
-                <aside className="project-text">
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
-                  <div className="project-meta">
-                    <span>Role: Software Engineer</span>
-                    <span>Stack: React, Node, Python</span>
-                  </div>
-                  <a className="btn-theme btn-outline project-cta" href={s.link} target="_blank" rel="noopener noreferrer">View Project</a>
-                </aside>
-              </>
-            )}
-          </section>
-        ))}
-        </div> */}
+                )}
+              </div>
+                );
+              })}
+          </div>
+        </div>
       </div>
     </div>
   );

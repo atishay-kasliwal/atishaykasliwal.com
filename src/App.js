@@ -4,17 +4,24 @@ import { Helmet } from 'react-helmet';
 import emailjs from '@emailjs/browser';
 import './App.css';
 
-import img1 from './assets/stony_brook_university_college_of_business_logo (1).jpeg';
-import img8 from './assets/broadcast_co_logo.jpeg';
-import img3 from './assets/symbiosis.jpg';
-import img4 from './assets/shriffle.png';
-import img5 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
+import img1 from './assets/FidelityLogo.png';
+import img8 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
+import img3 from './assets/T-Mobile_logo_202.png';
+import img4 from './assets/bt-logo-redesign-sq-1.jpg';
+import img5 from './assets/broadcast_co_logo.jpeg';
 import img6 from './assets/stony_brook_university_logo.jpeg';
-import img7 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
-import img2 from './assets/Accolite Digital_iduk-Sna9f_3.png';
-import img9 from './assets/Screenshot 2025-07-10 at 7.52.42 AM.png';
+import img7 from './assets/Accolite Digital_iduk-Sna9f_3.png';
+import img2 from './assets/Bounteous_idOCx6cSKH_0.jpeg';
+import img9 from './assets/shriffle.png';
+import ankitPhoto from './assets/Ankit Jain.jpeg';
+import wencuiPhoto from './assets/Prof.jpeg';
+import nehaPhoto from './assets/Neha gupta.jpeg';
+import goldyPhoto from './assets/goldey.jpeg';
+import daMaPhoto from './assets/da ma.jpeg';
+import gunjanPhoto from './assets/gunjanjain.jpg';
 import StoryTimeline from './StoryTimeline';
 import Projects from './Projects';
+import HighlightDetail from './HighlightDetail';
 
 const experienceEducation = [
   '• AI, ML research, data analytics @Atrium Health Wake Forest (2025)',
@@ -34,6 +41,9 @@ function HomePage() {
   const landingImages = [img1, img2,  img3, img4, img6, img5, img8, img7, img9];
   // Show all images
   const gridImages = landingImages;
+  
+  // Mobile menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Contact form state
   const [formData, setFormData] = useState({
@@ -118,42 +128,42 @@ function HomePage() {
       name: "Ankit Jain⭐⭐⭐⭐⭐",
       company: "Accolite Digital",
       post: "Technical Director",
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ankit&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
+      photo: ankitPhoto
     },
     {
       text: "Atishay developed an NLP pipeline and designed an LLM-based trading simulation with clear visualizations.",
       name: "Wencui Han⭐⭐⭐⭐⭐",
       company: "Stony Brook University",
       post: "Professor",
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Wencui&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
+      photo: wencuiPhoto
     },
     {
       text: "Creative and reliable, Atishay brought fresh ideas to our projects and fostered a collaborative environment.",
       name: "Neha Gupta⭐⭐⭐⭐⭐",
       company: "Symbiosis University",
       post: "Director SCSIT",
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Neha&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
+      photo: nehaPhoto
     },
     {
       text: "Atishay delivered our product on time with perfection. His technical expertise exceeded our expectations.",
       name: "Gunjan Jain⭐⭐⭐⭐⭐",
       company: "Brains and Taxes",
       post: "Private Limited",
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Gunjan&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
+      photo: gunjanPhoto
     },
     {
       text: "Atishay's ML expertise was instrumental in our research. His technical skills made our project a huge success.",
       name: "Dr. Goldy Khanna⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Cerebrovascular & Skull Base Neurosurgeon",
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Goldy&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
+      photo: goldyPhoto
     },
     {
       text: "Working with Atishay was a pleasure. His innovative approach made him exceptional.",
       name: "Dr. Da Ma⭐⭐⭐⭐⭐",
       company: "Wake Forest University",
       post: "Assistant Professor",
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=DaMa&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=150"
+      photo: daMaPhoto
     }
   ];
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -173,15 +183,18 @@ function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Atishay Kasliwal | Portfolio, Resume, Projects</title>
+        <html lang="en" translate="no" />
+        <title>Atishay Kasliwal | Portfolio, Resume, Highlights</title>
         <link rel="canonical" href="https://atishaykasliwal.com/" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Atishay Kasliwal | Portfolio, Resume, Projects" />
-        <meta property="og:description" content="Explore projects, experience, and ways to connect with Atishay Kasliwal." />
+        <meta property="og:title" content="Atishay Kasliwal | Portfolio, Resume, Highlights" />
+        <meta property="og:description" content="Explore highlights, experience, and ways to connect with Atishay Kasliwal." />
         <meta property="og:url" content="https://atishaykasliwal.com/" />
         <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="description" content="Official website of Atishay Kasliwal. Portfolio, resume, projects, and contact information." />
+        <meta name="description" content="Official website of Atishay Kasliwal. Portfolio, resume, highlights, and contact information." />
         <meta name="keywords" content="Atishay Kasliwal, portfolio, resume, data science, software engineer" />
         <meta name="author" content="Atishay Kasliwal" />
         <script type="application/ld+json">
@@ -200,23 +213,32 @@ function HomePage() {
         </script>
       </Helmet>
       {/* Artistic Background */}
-      <div className="bg-art" />
-      <div className="page-content">
+      <div className="bg-art" translate="no" />
+      <div className="page-content" translate="no">
         {/* Header */}
-        <div className="header">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div className="header" translate="no">
+          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
             Atishay Kasliwal
           </Link>
-          <nav className="nav">
-             <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            translate="no"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/highlights">HIGHLIGHTS</Link>
+            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
           </nav>
         </div>
         {/* Two-column Main Content */}
-        <div className="landing-two-col">
-          <div className="landing-left-text" style={{ marginTop: '2.5rem' }}>
-            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }}>
+        <div className="landing-two-col" translate="no">
+          <div className="landing-left-text" style={{ marginTop: '2.5rem' }} translate="no">
+            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }} translate="no">
               Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.
             </h1>
             <div className="button-group-theme" style={{ justifyContent: 'flex-start' }}>
@@ -244,7 +266,7 @@ function HomePage() {
                 <svg width="27.3" height="27.3" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
               </a>
             </div>
-            <div className="exp-edu-list" style={{ textAlign: 'left', marginTop: '2rem', width: '100%', fontSize: '1.33em' }}>
+            <div className="exp-edu-list" style={{ textAlign: 'left', marginTop: '2rem', width: '100%', fontSize: '1.33em' }} translate="no">
               {experienceEducation.map((line, idx) => {
                 // Bold company/college names after '@' or 'from'
                 let renderedLine = line;
@@ -262,18 +284,18 @@ function HomePage() {
               })}
             </div>
           </div>
-          <div className="landing-right-images">
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
-              <div className="landing-grid-3x3">
+          <div className="landing-right-images" translate="no">
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }} translate="no">
+              <div className="landing-grid-3x3" translate="no">
                 {gridImages.map((src, idx) => (
-                  <img key={idx} src={src} alt={`Landing ${idx + 1}`} width="200" height="200" />
+                  <img key={idx} src={src} alt={`Landing ${idx + 1}`} width="200" height="200" translate="no" />
                 ))}
               </div>
             </div>
           </div>
         </div>
         {/* Testimonials Grid */}
-        <div id="testimonials-section" style={{ width: '100%', display: 'block', marginTop: '1rem', marginBottom: '0' }}>
+        <div id="testimonials-section" style={{ width: '100%', display: 'block', marginTop: '1rem', marginBottom: '0' }} translate="no">
           <div style={{ 
             width: '100%', 
             maxWidth: '1540px', 
@@ -338,15 +360,15 @@ function HomePage() {
             </div>
           </div>
         </div>
-        <div id="journey-section">
+        <div id="journey-section" translate="no">
           <StoryTimeline />
         </div>
-        <div id="perspective-section">
+        <div id="perspective-section" translate="no">
           <ImageCarousel />
         </div>
         
         {/* Contact Section */}
-        <div style={{
+        <div id="contact-section" style={{
           padding: '4rem 2rem',
           background: 'transparent',
           color: '#fff',
@@ -354,17 +376,17 @@ function HomePage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center'
-        }}>
+        }} translate="no">
           <div style={{ 
             marginBottom: '0.7rem' 
-          }}>
+          }} translate="no">
             <h2 style={{
               fontSize: '2.5rem',
               fontWeight: 'bold',
               marginBottom: '2rem',
               color: '#fff',
               textAlign: 'center'
-            }}>Contact me</h2>
+            }} translate="no">Contact me</h2>
           </div>
           
           <div style={{
@@ -375,19 +397,19 @@ function HomePage() {
             margin: '0 auto',
             gap: '2rem',
             alignItems: 'center'
-          }}>
+          }} translate="no">
             {/* Contact Visual (left) - placeholder image for now */}
             <div style={{
               flex: '1.1',
               textAlign: 'left'
-            }}>
+            }} translate="no">
               <div style={{
                 position: 'relative',
                 width: '100%',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.1)'
-              }}>
+              }} translate="no">
                 <img
                   src="https://i.pinimg.com/736x/e9/f6/5d/e9f65d058e6548b8fe4803922cda2a3e.jpg"
                   alt="Contact visual placeholder"
@@ -397,6 +419,7 @@ function HomePage() {
                     height: '100%',
                     objectFit: 'cover'
                   }}
+                  translate="no"
                 />
               </div>
             </div>
@@ -408,25 +431,25 @@ function HomePage() {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center'
-            }}>
+            }} translate="no">
               <form onSubmit={handleSubmit} style={{
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '1.5rem'
-              }}>
-                <div>
+              }} translate="no">
+                <div translate="no">
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
                     fontSize: '1rem',
                     color: '#fff'
-                  }}>
+                  }} translate="no">
                     Name (required)
                   </label>
                   <div style={{
                     display: 'flex',
                     gap: '1rem'
-                  }}>
+                  }} translate="no">
                     <input
                       type="text"
                       name="firstName"
@@ -443,6 +466,7 @@ function HomePage() {
                         fontSize: '1rem',
                         outline: 'none'
                       }}
+                      translate="no"
                     />
                     <input
                       type="text"
@@ -460,17 +484,18 @@ function HomePage() {
                         fontSize: '1rem',
                         outline: 'none'
                       }}
+                      translate="no"
                     />
                   </div>
                 </div>
                 
-                <div>
+                <div translate="no">
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
                     fontSize: '1rem',
                     color: '#fff'
-                  }}>
+                  }} translate="no">
                     Email (required)
                   </label>
                   <input
@@ -489,16 +514,17 @@ function HomePage() {
                       fontSize: '1rem',
                       outline: 'none'
                     }}
+                    translate="no"
                   />
                 </div>
                 
-                <div>
+                <div translate="no">
                   <label style={{
                     display: 'block',
                     marginBottom: '0.5rem',
                     fontSize: '1rem',
                     color: '#fff'
-                  }}>
+                  }} translate="no">
                     Message (required)
                   </label>
                   <textarea
@@ -518,6 +544,7 @@ function HomePage() {
                       outline: 'none',
                       resize: 'vertical'
                     }}
+                    translate="no"
                   />
                 </div>
                 
@@ -535,6 +562,7 @@ function HomePage() {
                     textTransform: 'uppercase',
                     letterSpacing: '0.5px'
                   }}
+                  translate="no"
                 >
                   SUBMIT
                 </button>
@@ -550,7 +578,7 @@ function HomePage() {
                     color: '#fff',
                     fontSize: '0.9rem',
                     textAlign: 'center'
-                  }}>
+                  }} translate="no">
                     {formStatus}
                   </div>
                 )}
@@ -564,6 +592,8 @@ function HomePage() {
 }
 
 function ArtPage() {
+  // Mobile menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const images = [
     'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', //701 Wke forest University
@@ -606,10 +636,13 @@ function ArtPage() {
   ];
 
   return (
-    <div className="art-page">
+    <div className="art-page" translate="no">
       <Helmet>
+        <html lang="en" translate="no" />
         <title>Atishay Kasliwal</title>
         <link rel="canonical" href="https://atishaykasliwal.com/art" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Art | Atishay Kasliwal" />
         <meta property="og:description" content="Photo stories and visual moments by Atishay Kasliwal." />
@@ -618,21 +651,30 @@ function ArtPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
-      <div className="art-header">
-        <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <div className="art-header" translate="no">
+        <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
           Atishay Kasliwal
         </Link>
-        <nav className="nav">
-          <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
-          <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-          <Link to="/art">ART</Link>
+        <button 
+          className="mobile-menu-toggle black" 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+          translate="no"
+        >
+          {isMobileMenuOpen ? '✕' : '☰'}
+        </button>
+        <nav className={`nav black ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+          <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
+          <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+          <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+          <Link to="/art" translate="no">ART</Link>
         </nav>
       </div>
-      <h2 className="art-title">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
-      <div className="art-grid-fixed" style={{ minHeight: '90vh' }}>
+      <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
+      <div className="art-grid-fixed" style={{ minHeight: '90vh' }} translate="no">
         {images.map((src, idx) => (
-          <div className="art-tile-fixed" key={idx}>
-            <img src={src} alt={`artwork-${idx}`} />
+          <div className="art-tile-fixed" key={idx} translate="no">
+            <img src={src} alt={`artwork-${idx}`} translate="no" />
           </div>
         ))}
       </div>
@@ -727,6 +769,16 @@ function ImageCarousel() {
     }
   }, [windowWidth, getImagesPerSet, imagesPerSet]);
 
+  // Auto-advance carousel every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSet((prev) => (prev + 1) % totalSets);
+    }, 5000); // 5 seconds = 5000 milliseconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [totalSets]);
+
   // Text descriptions for each set of photos
   const setDescriptions = [
     "Fall is a season of reflection in my photography. Through golden trees, crisp air, and soft light, I capture how change feels gentle yet powerful in its silence.",
@@ -772,17 +824,17 @@ function ImageCarousel() {
     <div className="story-timeline" style={{ 
       background: 'transparent',
       borderRadius: '16px'
-    }}>
+    }} translate="no">
       <div style={{ 
         marginBottom: '0.7rem' 
-      }}>
+      }} translate="no">
         <h2 style={{
           fontSize: '2.5rem',
           fontWeight: 'bold',
           marginBottom: '0.7rem',
           color: '#fff',
           textAlign: 'left'
-        }}>Perspective</h2>
+        }} translate="no">Perspective</h2>
       </div>
       
       {/* Images Container */}
@@ -972,14 +1024,14 @@ function ImageCarousel() {
 
 function Footer() {
   return (
-    <footer className="site-footer">
-      <div className="footer-content">
-        <span>© {new Date().getFullYear()} Atishay Kasliwal</span>
-        <span className="footer-socials">
-          <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+    <footer className="site-footer" translate="no">
+      <div className="footer-content" translate="no">
+        <span translate="no">© {new Date().getFullYear()} Atishay Kasliwal</span>
+        <span className="footer-socials" translate="no">
+          <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" translate="no">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z"/></svg>
           </a>
-          <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" aria-label="GitHub" translate="no">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </a>
           <a
@@ -987,6 +1039,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Email"
+            translate="no"
           >
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 13.065l-11.985-7.065v14c0 1.104.896 2 2 2h19.97c1.104 0 2-.896 2-2v-14l-11.985 7.065zm11.985-9.065c0-1.104-.896-2-2-2h-19.97c-1.104 0-2 .896-2 2v.217l12 7.083 11.97-7.083v-.217z"/></svg>
           </a>
@@ -997,12 +1050,21 @@ function Footer() {
 }
 
 function App() {
+  // Prevent scroll to top on route changes
+  useEffect(() => {
+    // Disable automatic scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/art" element={<ArtPage />} />
-        <Route path="/projects" element={<Projects />} />
+        <Route path="/highlights" element={<Projects />} />
+        <Route path="/Highlights/:uuid" element={<HighlightDetail />} />
       </Routes>
       <Footer />
     </Router>
