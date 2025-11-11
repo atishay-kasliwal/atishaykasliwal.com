@@ -20,6 +20,56 @@ body, #root, .App {
   width: 100vw;
   max-width: 100vw;
   overflow-x: hidden;
+  translate: no;
+}
+
+/* Prevent Google Translate globally */
+html.notranslate,
+html[translate="no"],
+body.notranslate,
+body[translate="no"],
+#root,
+#root *,
+.notranslate,
+[translate="no"] {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Hide all Google Translate elements */
+.skiptranslate,
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-te-menu-value,
+.goog-te-menu-frame,
+.goog-te-ftab,
+.goog-te-gadget,
+.goog-te-combo,
+#google_translate_element,
+#google_translate_element2 {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Hide translate iframes */
+iframe[src*="translate.google"],
+iframe[src*="translate.googleapis"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Prevent body shift when translate bar appears */
+body {
+  top: 0 !important;
+  position: relative !important;
 }
 .page-content, .landing-two-col, .art-page, .art-grid-fixed, .center-content, .footer-content, .site-footer {
   width: 100vw;
@@ -108,6 +158,22 @@ body, #root, .App {
   margin-bottom: 2rem;
   line-height: 1.4;
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  .center-content h1 {
+    font-size: 1.3rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .center-content h1 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+  }
 }
 
 .center-content ul {
@@ -313,32 +379,110 @@ body, #root, .App {
     column-count: 2;
   }
 }
-@media (max-width: 700px) {
+/* Mobile Navigation Styles */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu-toggle.black {
+  color: #111;
+}
+
+@media (max-width: 768px) {
   .header, .art-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    position: relative;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    z-index: 1001;
+  }
+  
+  .nav, .nav.black {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.98);
     flex-direction: column;
     align-items: flex-start;
-    padding: 0.7rem 0.7rem 0 0.7rem;
+    justify-content: flex-start;
+    padding: 5rem 2rem 2rem 2rem;
+    gap: 2rem;
+    font-size: 1.2rem;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
   }
-  .nav, .nav.black {
-    gap: 1.2rem;
-    font-size: 1rem;
-    flex-wrap: wrap;
+  
+  .nav.black {
+    background: rgba(255, 255, 255, 0.98);
   }
+  
+  .nav.open, .nav.black.open {
+    transform: translateX(0);
+  }
+  
+  .nav a, .nav.black a {
+    padding: 1rem 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.1rem;
+  }
+  
+  .nav.black a {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    color: #111 !important;
+  }
+  
   .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    z-index: 1001;
   }
 }
 
 @media (max-width: 480px) {
   .header, .art-header {
-    padding: 0.5rem 0.5rem 0 0.5rem;
+    padding: 0.75rem 1rem;
   }
+  
   .nav, .nav.black {
-    gap: 1rem;
-    font-size: 0.9rem;
+    padding: 4.5rem 1.5rem 2rem 1.5rem;
+    gap: 1.5rem;
   }
+  
+  .nav a, .nav.black a {
+    font-size: 1rem;
+    padding: 0.875rem 0;
+  }
+  
   .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
     font-size: 1.1rem;
+  }
+  
+  .mobile-menu-toggle {
+    font-size: 1.3rem;
+    padding: 0.4rem;
   }
 }
 
@@ -447,6 +591,87 @@ body, #root, .App {
     font-size: 1rem;
     padding: 0.5em 1.2em;
     border-radius: 10px;
+    min-height: 44px;
+  }
+  
+  /* Contact Section Mobile Styles */
+  #contact-section {
+    padding: 2rem 1rem !important;
+    min-height: auto !important;
+  }
+  
+  #contact-section h2 {
+    font-size: 1.8rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  /* Contact form container - stack on mobile */
+  #contact-section > div:last-child {
+    flex-direction: column !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    gap: 2rem !important;
+  }
+  
+  /* Contact visual - full width on mobile */
+  #contact-section > div:last-child > div:first-child {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Contact form - full width on mobile */
+  #contact-section > div:last-child > div:last-child {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Form inputs - touch-friendly */
+  #contact-section input,
+  #contact-section textarea {
+    min-height: 44px !important;
+    padding: 0.75rem 0 !important;
+    font-size: 1rem !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  /* Name inputs - stack on mobile */
+  #contact-section input[type="text"][name="firstName"],
+  #contact-section input[type="text"][name="lastName"] {
+    flex: 1 1 100% !important;
+  }
+  
+  #contact-section > div:last-child > div:last-child > form > div:first-child > div {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  /* Submit button - full width on mobile */
+  #contact-section button[type="submit"] {
+    align-self: stretch !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 1rem 2rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #contact-section {
+    padding: 1.5rem 0.75rem !important;
+  }
+  
+  #contact-section h2 {
+    font-size: 1.5rem !important;
+    margin-bottom: 1.2rem !important;
+  }
+  
+  #contact-section input,
+  #contact-section textarea {
+    font-size: 0.95rem !important;
   }
 }
 
@@ -506,6 +731,53 @@ body, #root, .App {
   max-width: 900px;
   padding: 0 2rem;
   font-size: 0.731025rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  
+  .footer-socials {
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .footer-resume-btn {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    padding: 0 0.75rem;
+    gap: 1rem;
+    font-size: 0.7rem;
+  }
+  
+  .footer-socials {
+    gap: 1rem;
+  }
+  
+  .footer-socials a {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .footer-resume-btn {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+  }
 }
 
 .footer-socials {
@@ -684,6 +956,10 @@ body, #root, .App {
   padding: 0.35em 1em;
   background: none;
   color: #fff;
+  min-height: 44px; /* Touch-friendly target size */
+  min-width: 44px; /* Touch-friendly target size */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .btn-theme.btn-primary {

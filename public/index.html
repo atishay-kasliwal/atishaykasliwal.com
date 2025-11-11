@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
   <head>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -21,12 +21,155 @@
     <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/atishaylogo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta name="google" content="notranslate" />
+    <meta name="google-translate-customization" content="no" />
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="language" content="English" />
     <meta
       name="description"
       content="Atishay Kasliwal – software engineer and data scientist. Portfolio, resume, projects, and contact."
     />
     <meta name="keywords" content="Atishay Kasliwal, Data Scientist, Portfolio, Resume, Software Engineer, Projects" />
     <meta name="author" content="Atishay Kasliwal" />
+    
+    <!-- Prevent Google Translate popup -->
+    <script>
+      (function() {
+        // Disable Google Translate immediately
+        if (window.google && window.google.translate) {
+          window.google.translate.TranslateElement = function() {};
+          if (window.google.translate.TranslateElement.prototype) {
+            window.google.translate.TranslateElement.prototype = {};
+          }
+        }
+        
+        // Function to hide translate elements
+        function hideTranslateElements() {
+          var elements = [
+            'google_translate_element',
+            'google_translate_element2',
+            'goog-te-banner-frame',
+            'goog-te-balloon-frame',
+            'goog-te-menu-value',
+            'goog-te-menu-frame',
+            'goog-te-ftab',
+            'goog-te-gadget',
+            'goog-te-combo'
+          ];
+          elements.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) {
+              el.style.display = 'none';
+              el.style.visibility = 'hidden';
+              el.style.height = '0';
+              el.style.width = '0';
+              el.style.opacity = '0';
+            }
+          });
+          
+          // Hide by class
+          var classElements = document.getElementsByClassName('skiptranslate');
+          for (var i = 0; i < classElements.length; i++) {
+            classElements[i].style.display = 'none';
+            classElements[i].style.visibility = 'hidden';
+          }
+          
+          // Hide iframes
+          var iframes = document.getElementsByTagName('iframe');
+          for (var j = 0; j < iframes.length; j++) {
+            if (iframes[j].src && iframes[j].src.indexOf('translate.google') !== -1) {
+              iframes[j].style.display = 'none';
+              iframes[j].style.visibility = 'hidden';
+            }
+          }
+        }
+        
+        // Run immediately and on DOM ready
+        hideTranslateElements();
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', hideTranslateElements);
+        }
+        
+        // Run on page load
+        window.addEventListener('load', hideTranslateElements);
+        
+        // Run periodically to catch dynamically added elements
+        setInterval(hideTranslateElements, 500);
+        
+        // Prevent translation prompt
+        document.addEventListener('DOMContentLoaded', function() {
+          var html = document.documentElement;
+          html.setAttribute('translate', 'no');
+          if (html.className.indexOf('notranslate') === -1) {
+            html.className = html.className + ' notranslate';
+          }
+          var body = document.body;
+          if (body) {
+            body.setAttribute('translate', 'no');
+            if (body.className.indexOf('notranslate') === -1) {
+              body.className = body.className + ' notranslate';
+            }
+          }
+          
+          // Mark root element
+          var root = document.getElementById('root');
+          if (root) {
+            root.setAttribute('translate', 'no');
+            root.className = root.className + ' notranslate';
+          }
+        });
+      })();
+    </script>
+    <style>
+      /* Hide all Google Translate elements */
+      .skiptranslate,
+      .goog-te-banner-frame,
+      .goog-te-balloon-frame,
+      .goog-te-menu-value,
+      .goog-te-menu-frame,
+      .goog-te-ftab,
+      .goog-te-gadget,
+      .goog-te-combo,
+      #google_translate_element,
+      #google_translate_element2 {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        left: -9999px !important;
+      }
+      
+      /* Prevent body shift */
+      body {
+        top: 0 !important;
+        position: relative !important;
+      }
+      
+      /* Mark all content as notranslate */
+      html.notranslate,
+      html[translate="no"],
+      body.notranslate,
+      body[translate="no"],
+      .notranslate,
+      [translate="no"],
+      #root,
+      #root * {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+      }
+      
+      /* Hide translate iframes */
+      iframe[src*="translate.google"],
+      iframe[src*="translate.googleapis"] {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    </style>
 
     <!-- Canonical -->
     <link rel="canonical" href="https://atishaykasliwal.com/" />
@@ -128,14 +271,14 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Atishay Kasliwal | Data Scientist, Portfolio, Resume</title>
   </head>
-  <body>
+  <body translate="no">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5QZR9SWX"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <!-- SEO-visible but visually hidden H1 for name relevance -->
-    <h1 style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Atishay Kasliwal</h1>
+    <h1 style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" translate="no">Atishay Kasliwal</h1>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root" translate="no"></div>
   </body>
 </html>

@@ -135,6 +135,13 @@
   gap: 2rem;
 }
 
+.journey-button-container button {
+  min-width: 44px;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .story-timeline {

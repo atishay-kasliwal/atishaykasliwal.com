@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StoryTimeline.css';
 
 import img1 from './assets/Symbiosis-Indore-Auditorium-Front-View.jpg';
@@ -93,41 +93,61 @@ const stories = [
 export default function StoryTimeline() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsPerView = 5;
+  const maxIndex = Math.max(0, stories.length - cardsPerView);
 
   const nextCard = () => {
     setCurrentIndex((prev) => {
-      const maxIndex = Math.max(0, stories.length - cardsPerView);
-      return Math.min(prev + 1, maxIndex);
+      const next = prev + 1;
+      // Loop back to the beginning when reaching the end
+      return next > maxIndex ? 0 : next;
     });
   };
 
   const prevCard = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    setCurrentIndex((prev) => {
+      // Loop to the end when going back from the beginning
+      return prev === 0 ? maxIndex : prev - 1;
+    });
   };
 
+  // Auto-scroll carousel every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const next = prev + 1;
+        // Loop back to the beginning when reaching the end
+        return next > maxIndex ? 0 : next;
+      });
+    }, 5000); // 5 seconds = 5000 milliseconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [maxIndex]); // Only re-run when maxIndex changes (e.g., on window resize)
+
   return (
-    <div className="story-timeline">
-      <h2 className="story-title">Journey</h2>
-      <div className="story-cards">
+    <div className="story-timeline" translate="no">
+      <h2 className="story-title" translate="no">Journey</h2>
+      <div className="story-cards" translate="no">
         <div 
           className="story-cards-container"
           style={{
             transform: `translateX(-${currentIndex * (340 + 40)}px)`,
             transition: 'transform 0.5s ease'
           }}
+          translate="no"
         >
           {stories.map((story, idx) => (
-            <div className="story-card" key={idx}>
-              <img src={story.image} alt={story.title} className="story-img" />
-              <div className="story-date">{story.date}</div>
-              <div className="story-card-title">{story.title}</div>
-              {story.description && <div className="story-desc">{story.description}</div>}
+            <div className="story-card" key={idx} translate="no">
+              <img src={story.image} alt={story.title} className="story-img" translate="no" />
+              <div className="story-date" translate="no">{story.date}</div>
+              <div className="story-card-title" translate="no">{story.title}</div>
+              {story.description && <div className="story-desc" translate="no">{story.description}</div>}
             </div>
           ))}
         </div>
       </div>
-      <div className="journey-description">
-        <div className="journey-button-container">
+      <div className="journey-description" translate="no">
+        <div className="journey-button-container" translate="no">
           <button
             onClick={prevCard}
             style={{
@@ -145,6 +165,7 @@ export default function StoryTimeline() {
               fontWeight: '200',
               opacity: '0.7'
             }}
+            translate="no"
             onMouseEnter={(e) => {
               e.target.style.opacity = '1';
               e.target.style.transform = 'scale(1.05)';
@@ -160,7 +181,7 @@ export default function StoryTimeline() {
               backgroundColor: '#fff',
               position: 'relative',
               opacity: '0.7'
-            }}>
+            }} translate="no">
               <div style={{
                 position: 'absolute',
                 left: '0',
@@ -170,7 +191,7 @@ export default function StoryTimeline() {
                 borderRight: '12px solid #fff',
                 borderTop: '7px solid transparent',
                 borderBottom: '7px solid transparent'
-              }}></div>
+              }} translate="no"></div>
             </div>
           </button>
           <button
@@ -190,6 +211,7 @@ export default function StoryTimeline() {
               fontWeight: '200',
               opacity: '0.7'
             }}
+            translate="no"
             onMouseEnter={(e) => {
               e.target.style.opacity = '1';
               e.target.style.transform = 'scale(1.05)';
@@ -205,7 +227,7 @@ export default function StoryTimeline() {
               backgroundColor: '#fff',
               position: 'relative',
               opacity: '0.7'
-            }}>
+            }} translate="no">
               <div style={{
                 position: 'absolute',
                 right: '0',
@@ -215,11 +237,11 @@ export default function StoryTimeline() {
                 borderLeft: '12px solid #fff',
                 borderTop: '7px solid transparent',
                 borderBottom: '7px solid transparent'
-              }}></div>
+              }} translate="no"></div>
             </div>
           </button>
         </div>
-        <p>From internships to graduate studies, every step has shaped my path in technology and research. This journey embodies continuous growth, learning, and the pursuit of excellence in all endeavors.</p>
+        <p translate="no">From internships to graduate studies, every step has shaped my path in technology and research. This journey embodies continuous growth, learning, and the pursuit of excellence in all endeavors.</p>
       </div>
     </div>
   );
