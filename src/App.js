@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import emailjs from '@emailjs/browser';
 import './App.css';
@@ -1050,16 +1050,38 @@ function Footer() {
 }
 
 function App() {
-  // Prevent scroll to top on route changes
+  // Handle scroll position on route changes
   useEffect(() => {
     // Disable automatic scroll restoration
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
+    
+    // Scroll to top on route changes (except when going back)
+    const handleRouteChange = () => {
+      // Small delay to ensure route has changed
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        if (document.documentElement) {
+          document.documentElement.scrollTop = 0;
+        }
+        if (document.body) {
+          document.body.scrollTop = 0;
+        }
+      }, 0);
+    };
+    
+    // Listen for popstate (back/forward navigation)
+    window.addEventListener('popstate', handleRouteChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, []);
 
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/art" element={<ArtPage />} />
@@ -1069,6 +1091,105 @@ function App() {
       <Footer />
     </Router>
   );
+}
+
+// Component to scroll to top on route changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Scroll to top immediately when route changes - do this synchronously first
+    // Multiple methods to ensure it works across all browsers
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      if (document.documentElement) {
+        document.documentElement.scrollTop = 0;
+        document.documentElement.scrollLeft = 0;
+      }
+      if (document.body) {
+        document.body.scrollTop = 0;
+        document.body.scrollLeft = 0;
+      }
+      // Force scroll on html element
+      const html = document.documentElement;
+      if (html.scrollTop !== 0) html.scrollTop = 0;
+      if (html.scrollLeft !== 0) html.scrollLeft = 0;
+    };
+    
+    // Scroll immediately multiple times
+    scrollToTop();
+    scrollToTop();
+    scrollToTop();
+    
+    // Also prevent any focus-related scrolling
+    const preventFocusScroll = (e) => {
+      // Prevent scroll-into-view on focus during initial page load
+      if (e.target && typeof e.target.scrollIntoView === 'function') {
+        // Temporarily disable scrollIntoView
+        const originalScrollIntoView = e.target.scrollIntoView;
+        e.target.scrollIntoView = function() {
+          // Don't allow scroll-into-view during initial load
+          return;
+        };
+        // Restore after a delay
+        setTimeout(() => {
+          e.target.scrollIntoView = originalScrollIntoView;
+        }, 2000);
+      }
+    };
+    
+    // Prevent focus scroll during initial load
+    document.addEventListener('focusin', preventFocusScroll, { capture: true, once: false });
+    
+    // Scroll multiple times aggressively to catch any late-rendering content
+    const timeouts = [0, 1, 2, 5, 10, 25, 50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1500, 2000].map(delay => 
+      setTimeout(scrollToTop, delay)
+    );
+    
+    // Also prevent scroll events that would move away from top during first 2 seconds
+    let scrollPreventionActive = true;
+    const preventScroll = (e) => {
+      if (scrollPreventionActive) {
+        const currentScroll = window.scrollY || window.pageYOffset || 0;
+        if (currentScroll > 10) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          scrollToTop();
+          return false;
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', preventScroll, { passive: false, capture: true });
+    
+    // Monitor scroll position and force back to top
+    const scrollMonitor = setInterval(() => {
+      if (scrollPreventionActive) {
+        const currentScroll = window.scrollY || window.pageYOffset || 0;
+        if (currentScroll > 10) {
+          scrollToTop();
+        }
+      }
+    }, 25);
+    
+    // Disable scroll prevention after 2.5 seconds
+    setTimeout(() => {
+      scrollPreventionActive = false;
+      window.removeEventListener('scroll', preventScroll, { capture: true });
+      document.removeEventListener('focusin', preventFocusScroll, { capture: true });
+      clearInterval(scrollMonitor);
+    }, 2500);
+    
+    return () => {
+      timeouts.forEach(timeout => clearTimeout(timeout));
+      window.removeEventListener('scroll', preventScroll, { capture: true });
+      document.removeEventListener('focusin', preventFocusScroll, { capture: true });
+      clearInterval(scrollMonitor);
+    };
+  }, [pathname]);
+
+  return null;
 }
 
 export default App;
