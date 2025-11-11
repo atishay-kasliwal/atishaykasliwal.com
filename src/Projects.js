@@ -33,16 +33,17 @@ const bannerBlocksTop = [
   // { image: 'https://your-image-url.com/image.jpg', alt: 'Description' },
 ];
 
-const bannerBlocksBottom = [
-  'Software Developer',
-  'Research Assistant',
-  'Artificial Intelligence Intern',
-  'Software Intern',
-  'Senior Software Engineer'
-  // Add images like this:
-  // { image: 'https://your-image-url.com/image.jpg', alt: 'Description' },
-  // { image: 'https://your-image-url.com/image2.jpg' },
-];
+// Bottom banner is currently commented out - uncomment if needed
+// const bannerBlocksBottom = [
+//   'Software Developer',
+//   'Research Assistant',
+//   'Artificial Intelligence Intern',
+//   'Software Intern',
+//   'Senior Software Engineer'
+//   // Add images like this:
+//   // { image: 'https://your-image-url.com/image.jpg', alt: 'Description' },
+//   // { image: 'https://your-image-url.com/image2.jpg' },
+// ];
 
 // Projects data - you can customize these with your actual projects
 export const projectsData = [
@@ -433,7 +434,7 @@ export default function Projects() {
                                 className="project-carousel-image"
                                 translate="no"
                               >
-                                <img src={img} alt={`${project.title} - Image ${imgIndex + 1}`} translate="no" />
+                                <img src={img} alt={`${project.title} - ${imgIndex + 1}`} translate="no" />
                               </div>
                             ))}
                           </div>
