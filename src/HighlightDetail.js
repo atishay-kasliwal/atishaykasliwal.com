@@ -87,7 +87,6 @@ export default function HighlightDetail() {
   
   // Additional scroll handling after paint
   useEffect(() => {
-    const pageLoadTimestamp = Date.now();
     let scrollPreventionActive = true;
     
     // Function to scroll to top
