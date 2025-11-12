@@ -804,10 +804,14 @@ function ImageCarousel() {
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowWidth(window.innerWidth);
+      const width = window.innerWidth;
+      setWindowWidth(width);
+      setIsMobile(width <= 768);
     };
 
     window.addEventListener('resize', handleResize);
+    // Set initial mobile state
+    setIsMobile(window.innerWidth <= 768);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
