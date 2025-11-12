@@ -92,8 +92,19 @@ const stories = [
 
 export default function StoryTimeline() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const cardsPerView = 5;
   const maxIndex = Math.max(0, stories.length - cardsPerView);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const nextCard = () => {
     setCurrentIndex((prev) => {
@@ -110,8 +121,13 @@ export default function StoryTimeline() {
     });
   };
 
-  // Auto-scroll carousel every 5 seconds
+  // Auto-scroll carousel every 5 seconds (only on desktop)
   useEffect(() => {
+    if (isMobile) {
+      // Disable auto-scroll on mobile - let users scroll manually
+      return;
+    }
+    
     const interval = setInterval(() => {
       setCurrentIndex((prev) => {
         const next = prev + 1;
@@ -122,7 +138,7 @@ export default function StoryTimeline() {
 
     // Cleanup interval on unmount
     return () => clearInterval(interval);
-  }, [maxIndex]); // Only re-run when maxIndex changes (e.g., on window resize)
+  }, [maxIndex, isMobile]); // Only re-run when maxIndex or isMobile changes
 
   return (
     <div className="story-timeline" translate="no">
@@ -130,9 +146,12 @@ export default function StoryTimeline() {
       <div className="story-cards" translate="no">
         <div 
           className="story-cards-container"
-          style={{
+          style={!isMobile ? {
             transform: `translateX(-${currentIndex * (340 + 40)}px)`,
             transition: 'transform 0.5s ease'
+          } : {
+            transform: 'none',
+            transition: 'none'
           }}
           translate="no"
         >
