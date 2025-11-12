@@ -15,8 +15,13 @@
 }
 .story-cards {
   display: flex;
-  overflow: hidden;
-  padding-bottom: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  padding-bottom: 1rem;
   width: 100%;
   position: relative;
 }
@@ -24,11 +29,21 @@
 .story-cards-container {
   display: flex;
   gap: 2.5rem;
-  transition: transform 0.5s ease;
+  width: max-content;
+  transition: none;
 }
 
 .story-cards::-webkit-scrollbar {
-  display: none; /* WebKit browsers */
+  height: 4px;
+}
+
+.story-cards::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.story-cards::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 .story-card {
   background: transparent;
@@ -39,6 +54,7 @@
   height: 440px;
   min-width: 320px;
   max-width: 340px;
+  width: 340px;
   position: relative;
   display: block;
   flex-shrink: 0;
@@ -128,18 +144,9 @@
   padding: 0;
 }
 
+/* Navigation buttons removed - using native scrolling instead */
 .journey-button-container {
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.journey-button-container button {
-  min-width: 44px;
-  min-height: 44px;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  display: none;
 }
 
 /* Mobile Responsiveness */
@@ -158,45 +165,15 @@
     text-align: left;
   }
   
-  .story-cards {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    padding-bottom: 1rem;
-  }
-  
-  .story-cards::-webkit-scrollbar {
-    height: 4px;
-  }
-  
-  .story-cards::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .story-cards::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-  }
-  
   .story-cards-container {
-    display: flex;
     gap: 1.5rem;
-    transform: none !important;
-    transition: none;
-    width: max-content;
   }
   
   .story-card {
     min-width: 280px;
     max-width: 280px;
+    width: 280px;
     height: 400px;
-    background: transparent;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.15);
-    flex-shrink: 0;
   }
   
   .story-date {
@@ -225,11 +202,6 @@
     font-size: 0.95rem;
     opacity: 0.95;
   }
-  
-  /* Hide navigation buttons on mobile */
-  .journey-button-container {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -247,45 +219,15 @@
     text-align: left;
   }
   
-  .story-cards {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    padding-bottom: 1rem;
-  }
-  
-  .story-cards::-webkit-scrollbar {
-    height: 4px;
-  }
-  
-  .story-cards::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .story-cards::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-  }
-  
   .story-cards-container {
-    display: flex;
     gap: 1.2rem;
-    transform: none !important;
-    transition: none;
-    width: max-content;
   }
   
   .story-card {
     min-width: 260px;
     max-width: 260px;
+    width: 260px;
     height: 360px;
-    background: transparent;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.15);
-    flex-shrink: 0;
   }
   
   .story-date {
@@ -313,10 +255,5 @@
   .journey-description p {
     font-size: 0.9rem;
     opacity: 0.95;
-  }
-  
-  /* Hide navigation buttons on mobile */
-  .journey-button-container {
-    display: none;
   }
 }
