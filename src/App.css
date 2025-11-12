@@ -892,9 +892,7 @@ body {
 }
 
 /* Remove custom .landing-grid-3x3 img style so .landing-right-images img applies */
-.landing-grid-3x3 img {
-  /* intentionally left blank to inherit from .landing-right-images img */
-}
+/* (removed empty ruleset - inherits from .landing-right-images img) */
 
 /* Remove all extra styling for images in landing-right-images and landing-grid-3x3 */
 .landing-right-images img, .landing-grid-3x3 img {
