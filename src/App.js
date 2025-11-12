@@ -235,6 +235,56 @@ function HomePage() {
             <Link to="/art">ART</Link>
           </nav>
         </div>
+        
+        {/* Highlights Banner - Mobile Only */}
+        <div className="landing-highlights-banner mobile-only" translate="no">
+          <div className="landing-banner-container" translate="no">
+            <div className="landing-running-banner landing-banner-row-top" translate="no">
+              <div className="landing-banner-content" translate="no">
+                {[...Array(2)].map((_, repeatIndex) => (
+                  [
+                    { image: '/fidelity-logo.png', alt: 'Fidelity Investments' },
+                    { image: '/accolite-logo.png', alt: 'Accolite Digital' },
+                    { image: '/sbu-logo.png', alt: 'Stony Brook University' },
+                    { image: '/suas-logo.png', alt: 'Symbiosis University of Applied Sciences' },
+                    { image: '/atrium-logo.png', alt: 'Atrium Health Wake Forest Baptist' },
+                    { image: '/wfu-logo.png', alt: 'Wake Forest University' },
+                    { image: '/bt-group-logo.png', alt: 'BT Group' },
+                    { image: '/bounteous-logo.png', alt: 'Bounteous' },
+                    { image: '/banner-logo.png', alt: 'Logo' },
+                    { image: '/t-mobile-logo.png', alt: 'T-Mobile' }
+                  ].map((block, index) => {
+                    const isImage = typeof block === 'object' && block.image;
+                    const blockKey = `landing-banner-${repeatIndex}-${index}`;
+                    const isAccolite = isImage && block.image === '/accolite-logo.png';
+                    const isBannerLogo = isImage && block.image === '/banner-logo.png';
+                    const isBounteous = isImage && block.image === '/bounteous-logo.png';
+                    const isBTGroup = isImage && block.image === '/bt-group-logo.png';
+                    const isAtrium = isImage && block.image === '/atrium-logo.png';
+                    
+                    return (
+                      <div 
+                        key={blockKey} 
+                        className={`landing-banner-block ${isImage ? 'landing-banner-image' : 'landing-banner-text'}`}
+                        translate="no"
+                        style={isImage ? {
+                          '--block-index': index,
+                          backgroundImage: `url(${block.image})`,
+                          backgroundSize: isAccolite ? '101%' : (isBannerLogo ? '71%' : (isBounteous ? '101%' : (isBTGroup ? '101%' : (isAtrium ? '52%' : 'contain')))),
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat'
+                        } : { '--block-index': index }}
+                      >
+                        {!isImage && block}
+                      </div>
+                    );
+                  })
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        
         {/* Two-column Main Content */}
         <div className="landing-two-col" translate="no">
           <div className="landing-left-text" style={{ marginTop: '2.5rem' }} translate="no">
