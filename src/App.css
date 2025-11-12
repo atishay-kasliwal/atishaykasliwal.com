@@ -1180,10 +1180,14 @@ body {
   }
 }
 
-/* Image Carousel Responsive Styles - Mobile Scrolling */
+/* Image Carousel Responsive Styles - Horizontal Scrolling for All Screen Sizes */
 .image-carousel-images-container {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .image-carousel-images-container::-webkit-scrollbar {
@@ -1199,26 +1203,26 @@ body {
   border-radius: 2px;
 }
 
+.image-carousel-grid {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+}
+
+.image-carousel-grid > div {
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px) {
   .image-carousel-images-container {
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-behavior: smooth !important;
-    padding-bottom: 1rem !important;
-  }
-  
-  .image-carousel-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    width: max-content !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
   
   .image-carousel-grid > div {
     min-width: 280px !important;
     width: 280px !important;
     height: 280px !important;
-    flex-shrink: 0;
   }
 }
 

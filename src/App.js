@@ -734,9 +734,7 @@ function ArtPage() {
 
 // Image Carousel Component
 function ImageCarousel() {
-  const [currentSet, setCurrentSet] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   // Using the same images from your art page for the carousel
   const carouselImages = [
@@ -788,97 +786,14 @@ function ImageCarousel() {
 
   ];
 
-  // Responsive grid configuration
-  const getImagesPerSet = useCallback(() => {
-    if (windowWidth <= 768) {
-      return 4; // 2x2 for mobile
-    } else if (windowWidth <= 1024) {
-      return 6; // 3x3 for small screens
-    } else {
-      return 8; // 4x4 for full resolution
-    }
-  }, [windowWidth]);
-
-  const imagesPerSet = getImagesPerSet();
-  const totalSets = Math.ceil(carouselImages.length / imagesPerSet);
-
   useEffect(() => {
     const handleResize = () => {
-      const width = window.innerWidth;
-      setWindowWidth(width);
-      setIsMobile(width <= 768);
+      setWindowWidth(window.innerWidth);
     };
 
     window.addEventListener('resize', handleResize);
-    // Set initial mobile state
-    setIsMobile(window.innerWidth <= 768);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Recalculate imagesPerSet when window width changes
-  useEffect(() => {
-    const newImagesPerSet = getImagesPerSet();
-    if (newImagesPerSet !== imagesPerSet) {
-      // Reset to first set when changing grid size to avoid empty sets
-      setCurrentSet(0);
-    }
-  }, [windowWidth, getImagesPerSet, imagesPerSet]);
-
-  // Auto-advance carousel every 5 seconds (only on desktop)
-  useEffect(() => {
-    if (isMobile) {
-      // Disable auto-scroll on mobile - let users scroll manually
-      return;
-    }
-    
-    const interval = setInterval(() => {
-      setCurrentSet((prev) => (prev + 1) % totalSets);
-    }, 5000); // 5 seconds = 5000 milliseconds
-
-    // Cleanup interval on unmount
-    return () => clearInterval(interval);
-  }, [totalSets, isMobile]);
-
-  // Text descriptions for each set of photos
-  const setDescriptions = [
-    "Fall is a season of reflection in my photography. Through golden trees, crisp air, and soft light, I capture how change feels gentle yet powerful in its silence.",
-   
-    "A glimpse of my summer in Wake Forest through my lens — moments of skies, art, and experiences that shaped my internship journey.",
-
-    "My spring in New York was a tapestry of iconic skylines, city lights, sunsets, and unforgettable city adventures—each moment seen through my own lens.",
-
-    "A breathtaking escape to Niagara Falls — a reminder of nature's power and beauty during my summer journey.",
-  ];
-
-  // Headings for each set of photos
-  const setHeadings = [
-    "Stony Brook University - Fall 2025", 
-    "Wake Forest University - Atrium Health -  Summer 2025",
-    "New York - Spring 2025",
-    "Niagara Falls - Fall 2024",
-
-  ];
-
-  const nextSet = () => {
-    setCurrentSet((prev) => (prev + 1) % totalSets);
-  };
-
-  const prevSet = () => {
-    setCurrentSet((prev) => (prev - 1 + totalSets) % totalSets);
-  };
-
-  const getCurrentImages = () => {
-    const startIndex = currentSet * imagesPerSet;
-    return carouselImages.slice(startIndex, startIndex + imagesPerSet);
-  };
-
-  const getCurrentDescription = () => {
-    return setDescriptions[currentSet] || setDescriptions[setDescriptions.length - 1];
-  };
-
-  const getCurrentHeading = () => {
-    return setHeadings[currentSet] || setHeadings[setHeadings.length - 1];
-  };
 
   return (
     <div className="story-timeline" style={{ 
@@ -897,35 +812,34 @@ function ImageCarousel() {
         }} translate="no">Perspective</h2>
       </div>
       
-      {/* Images Container */}
+      {/* Images Container - Horizontal scrolling for all screen sizes */}
       <div 
         className="image-carousel-images-container"
         style={{ 
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           marginBottom: '0.7rem',
-          overflowX: isMobile ? 'auto' : 'visible',
+          overflowX: 'auto',
           overflowY: 'hidden',
-          WebkitOverflowScrolling: isMobile ? 'touch' : 'auto',
-          scrollBehavior: isMobile ? 'smooth' : 'auto',
-          paddingBottom: isMobile ? '1rem' : '0'
+          WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'smooth',
+          paddingBottom: '1rem',
+          paddingLeft: windowWidth <= 768 ? '1rem' : '2vw',
+          paddingRight: windowWidth <= 768 ? '1rem' : '2vw'
         }}
       >
         <div 
           className="image-carousel-grid"
           style={{ 
-          display: isMobile ? 'flex' : 'grid',
-          flexDirection: isMobile ? 'row' : 'unset',
-          gridTemplateColumns: !isMobile ? (windowWidth <= 1024 ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)') : 'unset',
+          display: 'flex',
+          flexDirection: 'row',
           gap: windowWidth <= 768 ? '0.7rem' : '1.3rem',
-          justifyContent: 'center',
-          maxWidth: windowWidth <= 768 ? '100%' : '92vw',
-          width: isMobile ? 'max-content' : '100%',
-          padding: windowWidth <= 768 ? '0 1rem' : '0'
+          width: 'max-content',
+          padding: 0
         }}>
-          {(isMobile ? carouselImages : getCurrentImages()).map((src, idx) => (
+          {carouselImages.map((src, idx) => (
             <div 
-              key={isMobile ? idx : `${currentSet}-${idx}`}
+              key={idx}
               style={{
                 aspectRatio: '1',
                 borderRadius: '12px',
@@ -934,27 +848,23 @@ function ImageCarousel() {
                 border: '1px solid rgba(255,255,255,0.1)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 cursor: 'pointer',
-                width: isMobile ? '280px' : 'auto',
-                height: isMobile ? '280px' : 'auto',
+                width: windowWidth <= 480 ? '260px' : windowWidth <= 768 ? '280px' : '320px',
+                height: windowWidth <= 480 ? '260px' : windowWidth <= 768 ? '280px' : '320px',
                 flexShrink: 0,
-                minWidth: isMobile ? '280px' : 'unset'
+                minWidth: windowWidth <= 480 ? '260px' : windowWidth <= 768 ? '280px' : '320px'
               }}
               onMouseEnter={(e) => {
-                if (!isMobile) {
-                  e.target.style.transform = 'scale(1.05)';
-                  e.target.style.boxShadow = '0 12px 40px rgba(0,0,0,0.4)';
-                }
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.4)';
               }}
               onMouseLeave={(e) => {
-                if (!isMobile) {
-                  e.target.style.transform = 'scale(1)';
-                  e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
-                }
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
               }}
             >
               <img 
                 src={src} 
-                alt={isMobile ? `Perspective ${idx + 1}` : `Journey ${currentSet * imagesPerSet + idx + 1}`}
+                alt={`Perspective ${idx + 1}`}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -966,140 +876,6 @@ function ImageCarousel() {
           ))}
         </div>
       </div>
-
-      {/* Description Text - Only show on desktop */}
-      {!isMobile && (
-        <div style={{ 
-          marginTop: '0.7rem',
-          width: '95%',
-          margin: '0.7rem auto 0 auto'
-        }}>
-          <h2 style={{
-            color: '#fff',
-            fontSize: windowWidth <= 480 ? '1rem' : windowWidth <= 768 ? '1.2rem' : '1.5rem',
-            textAlign: 'center',
-            marginBottom: windowWidth <= 480 ? '0.4rem' : '0.5rem',
-            fontWeight: '600',
-            opacity: '0.9',
-            padding: windowWidth <= 480 ? '0 1rem' : '0'
-          }}>
-            {getCurrentHeading()}
-          </h2>
-          <p style={{
-            color: '#fff',
-            fontSize: windowWidth <= 480 ? '0.8rem' : windowWidth <= 768 ? '0.95rem' : '1.1rem',
-            lineHeight: '1.6',
-            width: windowWidth <= 480 ? '100%' : '95%',
-            margin: '0 auto',
-            opacity: '0.9',
-            textAlign: 'center',
-            padding: windowWidth <= 480 ? '0 1rem' : '0'
-          }}>
-            {getCurrentDescription()}
-          </p>
-        </div>
-      )}
-
-      {/* Navigation Buttons - Hidden on mobile */}
-      {!isMobile && (
-        <div style={{ 
-          display: 'flex',
-          justifyContent: 'center',
-          gap: windowWidth <= 768 ? '1rem' : '2rem',
-          marginTop: '0.3rem'
-        }}>
-          <button
-            onClick={prevSet}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#fff',
-              width: windowWidth <= 768 ? '180px' : '200px',
-              height: windowWidth <= 768 ? '30px' : '36px',
-              fontSize: windowWidth <= 768 ? '1.92rem' : '2.4rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              fontWeight: '200',
-              opacity: '0.7'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.opacity = '1';
-              e.target.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.opacity = '0.7';
-              e.target.style.transform = 'scale(1)';
-            }}
-          >
-            <div style={{
-              width: '100%',
-              height: '2px',
-              backgroundColor: '#fff',
-              position: 'relative',
-              opacity: '0.7'
-            }}>
-              <div style={{
-                position: 'absolute',
-                left: '0',
-                top: '-6px',
-                width: '0',
-                height: '0',
-                borderRight: '12px solid #fff',
-                borderTop: '7px solid transparent',
-                borderBottom: '7px solid transparent'
-              }}></div>
-            </div>
-          </button>
-          <button
-            onClick={nextSet}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#fff',
-              width: windowWidth <= 768 ? '180px' : '200px',
-              height: windowWidth <= 768 ? '30px' : '36px',
-              fontSize: windowWidth <= 768 ? '1.92rem' : '2.4rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s ease',
-              fontWeight: '200',
-              opacity: '0.7'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.opacity = '1';
-              e.target.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.opacity = '0.7';
-              e.target.style.transform = 'scale(1)';
-            }}
-          >
-            <div style={{
-              width: '100%',
-              height: '2px',
-              backgroundColor: '#fff',
-              position: 'relative',
-              opacity: '0.7'
-            }}>
-              <div style={{
-                position: 'absolute',
-                right: '0',
-                top: '-6px',
-                width: '0',
-                height: '0',
-                borderLeft: '12px solid #fff',
-                borderTop: '7px solid transparent',
-                borderBottom: '7px solid transparent'
-              }}></div>
-            </div>
-          </button>
-        </div>
-      )}
 
     </div>
   );
