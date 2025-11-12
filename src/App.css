@@ -712,6 +712,13 @@ body {
   color: #fff;
 }
 
+/* Hide experience/education list on mobile */
+@media (max-width: 768px) {
+  .exp-edu-list {
+    display: none;
+  }
+}
+
 .site-footer {
   width: 100%;
   background: #111;
