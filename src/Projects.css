@@ -950,23 +950,49 @@
     align-self: flex-start;
   }
   
-  .project-carousel-images {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+  .project-carousel-container {
+    padding: 0 !important;
+    min-height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  }
+  
+  .project-carousel-container::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .project-carousel-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .project-carousel-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
   }
 
-  .project-carousel-container {
-    padding: 0; /* No padding on tablet */
-    min-height: auto;
+  .project-carousel-images {
+    display: flex !important;
+    flex-direction: row !important;
+    grid-template-columns: none !important;
+    gap: 1rem !important;
+    width: max-content !important;
+    padding-bottom: 1rem;
   }
 
   .project-carousel-image {
-    width: 100% !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    width: 280px !important;
     height: 0 !important;
     padding-bottom: 133.333% !important; /* Maintain same 3:4 aspect ratio on mobile using padding technique */
     aspect-ratio: unset !important; /* Remove aspect-ratio to avoid conflicts */
     min-height: 0 !important;
     max-height: none !important;
+    flex-shrink: 0;
   }
 
   .projects-banner-container {
