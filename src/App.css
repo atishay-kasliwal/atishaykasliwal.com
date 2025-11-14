@@ -1024,7 +1024,7 @@ body {
 .btn-theme.btn-secondary {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border: 1.425px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -1045,7 +1045,7 @@ body {
 .btn-theme.btn-outline {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border: 1.425px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
