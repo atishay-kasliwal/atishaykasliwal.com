@@ -593,33 +593,33 @@ body {
     gap: 1rem;
   }
   .btn-theme, .btn-theme.btn-lg {
-    font-size: 0.9rem;
-    padding: 0.7em 1.4em;
-    border-radius: 10px;
-    min-height: 48px;
+    font-size: 0.855rem;
+    padding: 0.665em 1.33em;
+    border-radius: 9.5px;
+    min-height: 45.6px;
   }
   
   .button-group-theme {
-    gap: 0.75rem;
+    gap: 0.7125rem;
     margin: 1.25rem 0;
   }
   
   .btn-theme.btn-lg svg {
-    width: 18px;
-    height: 18px;
+    width: 17.1px;
+    height: 17.1px;
   }
   
   .btn-theme.btn-icon {
-    min-width: 48px;
-    min-height: 48px;
-    width: 48px;
-    height: 48px;
-    padding: 0.65em;
+    min-width: 45.6px;
+    min-height: 45.6px;
+    width: 45.6px;
+    height: 45.6px;
+    padding: 0.6175em;
   }
   
   .btn-theme.btn-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 20.9px;
+    height: 20.9px;
   }
   
   /* Contact Section Mobile Styles */
@@ -969,7 +969,7 @@ body {
 
 .button-group-theme {
   display: flex;
-  gap: 1rem;
+  gap: 0.95rem;
   margin: 1.5rem 0 1.5rem 0;
   align-items: center;
   flex-wrap: nowrap;
@@ -980,19 +980,19 @@ body {
   align-items: center;
   justify-content: center;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9025rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  border-radius: 12px;
+  border-radius: 11.4px;
   border: none;
   outline: none;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0.75em 1.5em;
+  padding: 0.7125em 1.425em;
   background: none;
   color: #fff;
-  min-height: 48px; /* Touch-friendly target size */
+  min-height: 45.6px; /* Touch-friendly target size */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   position: relative;
@@ -1060,18 +1060,18 @@ body {
 
 .btn-theme.btn-icon {
   background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border: 1.425px solid rgba(255, 255, 255, 0.4);
   color: #fff;
-  padding: 0.75em;
-  font-size: 0.85rem;
-  min-width: 52px;
-  min-height: 52px;
-  width: 52px;
-  height: 52px;
+  padding: 0.7125em;
+  font-size: 0.8075rem;
+  min-width: 49.4px;
+  min-height: 49.4px;
+  width: 49.4px;
+  height: 49.4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 11.4px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1090,8 +1090,8 @@ body {
 }
 
 .btn-theme.btn-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 22.8px;
+  height: 22.8px;
   fill: currentColor;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1153,20 +1153,20 @@ body {
 }
 
 .btn-theme.btn-lg {
-  font-size: 1rem;
-  padding: 0.875em 1.75em;
-  border-radius: 12px;
-  min-height: 52px;
+  font-size: 0.95rem;
+  padding: 0.83125em 1.6625em;
+  border-radius: 11.4px;
+  min-height: 49.4px;
 }
 
 .btn-theme.btn-lg span {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
 }
 
 .btn-theme.btn-lg svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   flex-shrink: 0;
 }
 
