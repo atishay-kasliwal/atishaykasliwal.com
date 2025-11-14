@@ -593,33 +593,33 @@ body {
     gap: 1rem;
   }
   .btn-theme, .btn-theme.btn-lg {
-    font-size: 0.855rem;
-    padding: 0.665em 1.33em;
-    border-radius: 9.5px;
-    min-height: 45.6px;
+    font-size: 0.79515rem;
+    padding: 0.61845em 1.2369em;
+    border-radius: 8.835px;
+    min-height: 42.408px;
   }
   
   .button-group-theme {
-    gap: 0.7125rem;
+    gap: 0.662625rem;
     margin: 1.25rem 0;
   }
   
   .btn-theme.btn-lg svg {
-    width: 17.1px;
-    height: 17.1px;
+    width: 15.903px;
+    height: 15.903px;
   }
   
   .btn-theme.btn-icon {
-    min-width: 45.6px;
-    min-height: 45.6px;
-    width: 45.6px;
-    height: 45.6px;
-    padding: 0.6175em;
+    min-width: 42.408px;
+    min-height: 42.408px;
+    width: 42.408px;
+    height: 42.408px;
+    padding: 0.574275em;
   }
   
   .btn-theme.btn-icon svg {
-    width: 20.9px;
-    height: 20.9px;
+    width: 19.437px;
+    height: 19.437px;
   }
   
   /* Contact Section Mobile Styles */
@@ -969,7 +969,7 @@ body {
 
 .button-group-theme {
   display: flex;
-  gap: 0.95rem;
+  gap: 0.8835rem;
   margin: 1.5rem 0 1.5rem 0;
   align-items: center;
   flex-wrap: nowrap;
@@ -980,19 +980,19 @@ body {
   align-items: center;
   justify-content: center;
   font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 0.9025rem;
+  font-size: 0.839325rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  border-radius: 11.4px;
+  border-radius: 10.602px;
   border: none;
   outline: none;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0.7125em 1.425em;
+  padding: 0.6620625em 1.324125em;
   background: none;
   color: #fff;
-  min-height: 45.6px; /* Touch-friendly target size */
+  min-height: 42.408px; /* Touch-friendly target size */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   position: relative;
@@ -1003,28 +1003,28 @@ body {
 .btn-theme.btn-primary-action {
   background: rgba(255, 255, 255, 0.95);
   color: #000;
-  border: 1.9px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 1.9px 7.6px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(255, 255, 255, 0.4);
+  border: 1.767px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1.767px 7.068px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(255, 255, 255, 0.4);
   font-weight: 700;
 }
 
 .btn-theme.btn-primary-action:hover {
   background: #fff;
   border-color: #fff;
-  transform: translateY(-2.85px);
-  box-shadow: 0 5.7px 19px rgba(255, 255, 255, 0.3), 0 0 0 3.8px rgba(255, 255, 255, 0.1);
+  transform: translateY(-2.6505px);
+  box-shadow: 0 5.301px 17.67px rgba(255, 255, 255, 0.3), 0 0 0 3.534px rgba(255, 255, 255, 0.1);
 }
 
 .btn-theme.btn-primary-action:active {
-  transform: translateY(-0.95px);
-  box-shadow: 0 1.9px 7.6px rgba(255, 255, 255, 0.25);
+  transform: translateY(-0.8835px);
+  box-shadow: 0 1.767px 7.068px rgba(255, 255, 255, 0.25);
 }
 
 /* Secondary Action Buttons - Contact, LinkedIn, GitHub */
 .btn-theme.btn-secondary {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  border: 1.425px solid rgba(255, 255, 255, 0.4);
+  border: 1.32525px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -1032,20 +1032,20 @@ body {
 .btn-theme.btn-secondary:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.7);
-  transform: translateY(-1.9px);
-  box-shadow: 0 3.8px 15.2px rgba(255, 255, 255, 0.2);
+  transform: translateY(-1.767px);
+  box-shadow: 0 3.534px 14.136px rgba(255, 255, 255, 0.2);
 }
 
 .btn-theme.btn-secondary:active {
   transform: translateY(0);
-  box-shadow: 0 1.9px 7.6px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1.767px 7.068px rgba(255, 255, 255, 0.15);
 }
 
 /* Legacy support for btn-outline */
 .btn-theme.btn-outline {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  border: 1.425px solid rgba(255, 255, 255, 0.4);
+  border: 1.32525px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1054,24 +1054,24 @@ body {
 .btn-theme.btn-outline:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.7);
-  transform: translateY(-1.9px);
-  box-shadow: 0 3.8px 15.2px rgba(255, 255, 255, 0.2);
+  transform: translateY(-1.767px);
+  box-shadow: 0 3.534px 14.136px rgba(255, 255, 255, 0.2);
 }
 
 .btn-theme.btn-icon {
   background: rgba(255, 255, 255, 0.08);
-  border: 1.425px solid rgba(255, 255, 255, 0.4);
+  border: 1.32525px solid rgba(255, 255, 255, 0.4);
   color: #fff;
-  padding: 0.7125em;
-  font-size: 0.8075rem;
-  min-width: 49.4px;
-  min-height: 49.4px;
-  width: 49.4px;
-  height: 49.4px;
+  padding: 0.6620625em;
+  font-size: 0.750975rem;
+  min-width: 45.942px;
+  min-height: 45.942px;
+  width: 45.942px;
+  height: 45.942px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 11.4px;
+  border-radius: 10.602px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1080,18 +1080,18 @@ body {
 .btn-theme.btn-icon:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.7);
-  transform: translateY(-1.9px);
-  box-shadow: 0 3.8px 15.2px rgba(255, 255, 255, 0.2);
+  transform: translateY(-1.767px);
+  box-shadow: 0 3.534px 14.136px rgba(255, 255, 255, 0.2);
 }
 
 .btn-theme.btn-icon:active {
   transform: translateY(0);
-  box-shadow: 0 1.9px 7.6px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1.767px 7.068px rgba(255, 255, 255, 0.15);
 }
 
 .btn-theme.btn-icon svg {
-  width: 22.8px;
-  height: 22.8px;
+  width: 21.204px;
+  height: 21.204px;
   fill: currentColor;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1153,20 +1153,20 @@ body {
 }
 
 .btn-theme.btn-lg {
-  font-size: 0.95rem;
-  padding: 0.83125em 1.6625em;
-  border-radius: 11.4px;
-  min-height: 49.4px;
+  font-size: 0.8835rem;
+  padding: 0.7730625em 1.546125em;
+  border-radius: 10.602px;
+  min-height: 45.942px;
 }
 
 .btn-theme.btn-lg span {
-  font-size: 0.95rem;
+  font-size: 0.8835rem;
   font-weight: 600;
 }
 
 .btn-theme.btn-lg svg {
-  width: 19px;
-  height: 19px;
+  width: 17.67px;
+  height: 17.67px;
   flex-shrink: 0;
 }
 
