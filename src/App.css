@@ -593,10 +593,20 @@ body {
     gap: 1rem;
   }
   .btn-theme, .btn-theme.btn-lg {
-    font-size: 1rem;
-    padding: 0.5em 1.2em;
+    font-size: 0.9rem;
+    padding: 0.7em 1.4em;
     border-radius: 10px;
-    min-height: 44px;
+    min-height: 48px;
+  }
+  
+  .button-group-theme {
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+  
+  .btn-theme.btn-lg svg {
+    width: 18px;
+    height: 18px;
   }
   
   /* Contact Section Mobile Styles */
@@ -946,8 +956,8 @@ body {
 
 .button-group-theme {
   display: flex;
-  gap: 0.75rem;
-  margin: 1rem 0 1.25rem 0;
+  gap: 1rem;
+  margin: 1.5rem 0 1.5rem 0;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -955,44 +965,84 @@ body {
 .btn-theme {
   display: inline-flex;
   align-items: center;
-  font-family: inherit;
-  font-size: 0.41553rem;
-  font-weight: 500;
-  border-radius: 8px;
+  justify-content: center;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 12px;
   border: none;
   outline: none;
   cursor: pointer;
   text-decoration: none;
-  transition: none;
-  padding: 0.35em 1em;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.75em 1.5em;
   background: none;
   color: #fff;
-  min-height: 44px; /* Touch-friendly target size */
-  min-width: 44px; /* Touch-friendly target size */
+  min-height: 48px; /* Touch-friendly target size */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-theme.btn-primary {
-  background: #2563eb;
+/* Primary Action Button - Resume Download */
+.btn-theme.btn-primary-action {
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(255, 255, 255, 0.4);
+  font-weight: 700;
+}
+
+.btn-theme.btn-primary-action:hover {
+  background: #fff;
+  border-color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.btn-theme.btn-primary-action:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25);
+}
+
+/* Secondary Action Buttons - Contact, LinkedIn, GitHub */
+.btn-theme.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  border: none;
-  box-shadow: 0 1px 4px rgba(37,99,235,0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
+.btn-theme.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+}
+
+.btn-theme.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Legacy support for btn-outline */
 .btn-theme.btn-outline {
-  background: none;
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: none;
-  transition: all 0.3s ease;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-theme.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
 }
 
 .btn-theme.btn-icon {
@@ -1018,27 +1068,43 @@ body {
   fill: #fff;
 }
 
-.btn-theme.btn-outline svg {
+/* Icon styles for outline buttons */
+.btn-theme.btn-outline svg,
+.btn-theme.btn-secondary svg {
   stroke: #fff;
   fill: none;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* LinkedIn and GitHub buttons use fill, not stroke */
-.btn-theme.btn-outline svg[fill="currentColor"] {
+.btn-theme.btn-outline svg[fill="currentColor"],
+.btn-theme.btn-secondary svg[fill="currentColor"] {
   stroke: none;
   fill: currentColor;
 }
 
-.btn-theme.btn-outline:hover svg {
-  transform: scale(1.05);
+.btn-theme.btn-outline:hover svg,
+.btn-theme.btn-secondary:hover svg {
+  transform: scale(1.1) translateY(-1px);
 }
 
-.btn-theme.btn-outline span {
-  color: #fff;
+/* Primary action button icons */
+.btn-theme.btn-primary-action svg {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme.btn-primary-action:hover svg {
+  transform: scale(1.1) translateY(-1px);
+}
+
+.btn-theme.btn-outline span,
+.btn-theme.btn-secondary span,
+.btn-theme.btn-primary-action span {
+  color: inherit;
   display: flex;
   align-items: center;
-  gap: 0.7em;
+  gap: 0.75em;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-in {
@@ -1051,14 +1117,23 @@ body {
 }
 
 .btn-theme.btn-lg {
-  font-size: 0.623295rem;
-  padding: 0.44em 1.10em;
-  border-radius: 10px;
+  font-size: 1rem;
+  padding: 0.875em 1.75em;
+  border-radius: 12px;
+  min-height: 52px;
 }
+
 .btn-theme.btn-lg span {
-  font-size: 0.623295rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
-.btn-theme.btn-lg svg,
+
+.btn-theme.btn-lg svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .btn-theme.btn-icon svg {
   width: 1.9em !important;
   height: 1.9em !important;
