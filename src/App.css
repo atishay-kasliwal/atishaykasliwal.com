@@ -946,9 +946,10 @@ body {
 
 .button-group-theme {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.75rem;
   margin: 1rem 0 1.25rem 0;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .btn-theme {
@@ -982,8 +983,16 @@ body {
 .btn-theme.btn-outline {
   background: none;
   color: #fff;
-  border: 1px solid #fff;
+  border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.btn-theme.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
 }
 
 .btn-theme.btn-icon {
@@ -1012,6 +1021,17 @@ body {
 .btn-theme.btn-outline svg {
   stroke: #fff;
   fill: none;
+  transition: transform 0.3s ease;
+}
+
+/* LinkedIn and GitHub buttons use fill, not stroke */
+.btn-theme.btn-outline svg[fill="currentColor"] {
+  stroke: none;
+  fill: currentColor;
+}
+
+.btn-theme.btn-outline:hover svg {
+  transform: scale(1.05);
 }
 
 .btn-theme.btn-outline {
@@ -1020,6 +1040,9 @@ body {
 
 .btn-theme.btn-outline span {
   color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
 }
 
 .fade-in {
