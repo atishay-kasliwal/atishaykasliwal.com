@@ -1034,10 +1034,6 @@ body {
   transform: scale(1.05);
 }
 
-.btn-theme.btn-outline {
-  border: 1px solid #fff;
-}
-
 .btn-theme.btn-outline span {
   color: #fff;
   display: flex;
