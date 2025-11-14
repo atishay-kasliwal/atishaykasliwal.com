@@ -609,6 +609,19 @@ body {
     height: 18px;
   }
   
+  .btn-theme.btn-icon {
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0.65em;
+  }
+  
+  .btn-theme.btn-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  
   /* Contact Section Mobile Styles */
   #contact-section {
     padding: 2rem 1rem !important;
@@ -959,7 +972,7 @@ body {
   gap: 1rem;
   margin: 1.5rem 0 1.5rem 0;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .btn-theme {
@@ -1046,22 +1059,45 @@ body {
 }
 
 .btn-theme.btn-icon {
-  background: rgba(255,255,255,0.08);
-  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
   color: #fff;
-  padding: 0.35em;
+  padding: 0.75em;
   font-size: 0.85rem;
-  min-width: 28px;
-  min-height: 28px;
+  min-width: 52px;
+  min-height: 52px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.btn-theme.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+}
+
+.btn-theme.btn-icon:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+
 .btn-theme.btn-icon svg {
-  width: 1em;
-  height: 1em;
-  fill: #fff;
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme.btn-icon:hover svg {
+  transform: scale(1.1) translateY(-1px);
 }
 
 .btn-theme svg {
@@ -1134,10 +1170,7 @@ body {
   flex-shrink: 0;
 }
 
-.btn-theme.btn-icon svg {
-  width: 1.9em !important;
-  height: 1.9em !important;
-}
+/* Icon button styles are defined above in .btn-theme.btn-icon svg */
 
 .stonybrook-gradient {
   background: linear-gradient(to right, #b00302 0%, #b00302 100%);
