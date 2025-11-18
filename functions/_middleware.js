@@ -17,16 +17,18 @@ export async function onRequest(context) {
     pathname === '/favicon.ico' ||
     pathname === '/manifest.json' ||
     pathname === '/humans.txt' ||
-    pathname === '/security.txt'
+    pathname === '/security.txt' ||
+    pathname === '/index.html'
   ) {
     return context.next();
   }
   
-  // For all other routes (SPA routes), serve index.html
+  // For all other routes (SPA routes), rewrite to index.html
   // This allows React Router to handle the routing client-side
-  const indexUrl = new URL('/index.html', context.request.url);
+  const newUrl = new URL(context.request.url);
+  newUrl.pathname = '/index.html';
   return context.next({
-    rewrite: indexUrl
+    request: new Request(newUrl, context.request)
   });
 }
 
