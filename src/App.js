@@ -24,16 +24,16 @@ import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
 
 const experienceEducation = [
-  '• AI, ML research, data analytics @Atrium Health Wake Forest (2025)',
-  '• Business research, data modeling assistant @Stony Brook (2024–2025)',
-  '• Full-stack software engineering, team projects @Accolite (2021–2024)',
-  '• Backend systems development and software @Shriffle (2020–2021)',
-  '• AI project development and research @Verzeo Learning (2020)',
-  '• Data analysis, crime pattern research @Crime Branch Indore (2020)',
-  '• Web app design and frontend development @N-TIER Pvt Ltd (2019–2020)',
+  '- Artificial Intelligence and Analytics  <strong>Atrium Health Wake Forest</strong> (2025)',
+  '- Research Assistant <strong>Stony Brook University</strong> (2024–2025)',
+  '- Senior Software Engineer <strong>Fidelity Investments</strong> (2021–2024)',
+  '- Software Developer <strong>Shriffle</strong> (2020–2021)',
+  '- Artificial Intelligence Project Development <strong>Verzeo Learning</strong> (2020)',
+  '- Data Analyst <strong>Crime Branch Indore</strong> (2020)',
+  '- Web Application Developer <strong>N-TIER Pvt Ltd</strong> (2019–2020)',
   '',
-  '• MS in Data Science from Stony Brook University (Machine Learning)',
-  '• BTech. from Symbiosis University of Applied Sciences (CSIT)'
+  '- MS in Data Science from <strong>Stony Brook University</strong> ',
+  '- Bachelor of Technology in CSIT <strong>Symbiosis University of Applied Sciences</strong>'
 ];
 
 
@@ -184,29 +184,68 @@ function HomePage() {
     <>
       <Helmet>
         <html lang="en" translate="no" />
-        <title>Atishay Kasliwal | Portfolio, Resume, Highlights</title>
+        <title>Atishay Kasliwal — Full-Stack Engineer & Data Scientist | Portfolio & Resume</title>
         <link rel="canonical" href="https://atishaykasliwal.com/" />
         <meta name="google" content="notranslate" />
         <meta name="google-translate-customization" content="no" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Atishay Kasliwal | Portfolio, Resume, Highlights" />
-        <meta property="og:description" content="Explore highlights, experience, and ways to connect with Atishay Kasliwal." />
+        <meta property="og:title" content="Atishay Kasliwal — Full-Stack Engineer & Data Scientist" />
+        <meta property="og:description" content="Portfolio & resume of Atishay Kasliwal — React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience, currently pursuing MS in Data Science at Stony Brook University." />
         <meta property="og:url" content="https://atishaykasliwal.com/" />
         <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="description" content="Official website of Atishay Kasliwal. Portfolio, resume, highlights, and contact information." />
-        <meta name="keywords" content="Atishay Kasliwal, portfolio, resume, data science, software engineer" />
+        <meta name="twitter:title" content="Atishay Kasliwal — Full-Stack Engineer & Data Scientist" />
+        <meta name="twitter:description" content="Portfolio & resume of Atishay Kasliwal — React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
+        <meta name="description" content="Atishay Kasliwal — Full-Stack Engineer & Data Scientist. Portfolio, resume, and projects. Software engineer with 5+ years experience at Fidelity Investments, currently pursuing MS in Data Science at Stony Brook University. React, Next.js, Node, Python, GCP, AI/ML." />
+        <meta name="keywords" content="Atishay Kasliwal, Atishay Kasliwal portfolio, Atishay Kasliwal resume, data scientist, software engineer, full-stack engineer, React developer, Python developer, Stony Brook University, Fidelity Investments, Atrium Health Wake Forest" />
         <meta name="author" content="Atishay Kasliwal" />
         <script type="application/ld+json">
           {`
             {
               "@context": "https://schema.org",
               "@type": "Person",
+              "@id": "https://atishaykasliwal.com/#person",
               "name": "Atishay Kasliwal",
-              "url": "https://atishay-kasliwal.github.io/",
+              "url": "https://atishaykasliwal.com/",
+              "image": "https://atishaykasliwal.com/atishaylogo.png",
+              "description": "Full-Stack Engineer & Data Scientist — React / Next.js, Node, Python, GCP, AI/ML engineer.",
+              "jobTitle": "Full-Stack Engineer & Data Scientist",
+              "email": "katishay@gmail.com",
+              "alumniOf": [
+                {
+                  "@type": "CollegeOrUniversity",
+                  "name": "Stony Brook University"
+                },
+                {
+                  "@type": "CollegeOrUniversity",
+                  "name": "Symbiosis University of Applied Sciences"
+                }
+              ],
+              "worksFor": [
+                {
+                  "@type": "Organization",
+                  "name": "Atrium Health Wake Forest",
+                  "jobTitle": "AI/ML Research & Analytics"
+                },
+                {
+                  "@type": "Organization",
+                  "name": "Stony Brook University",
+                  "jobTitle": "Research Assistant"
+                }
+              ],
+              "hasOccupation": {
+                "@type": "Occupation",
+                "name": "Software Engineer",
+                "occupationLocation": {
+                  "@type": "City",
+                  "name": "New York"
+                }
+              },
               "sameAs": [
                 "https://www.linkedin.com/in/atishay-kasliwal/",
-                "https://github.com/atishay-kasliwal"
+                "https://github.com/atishay-kasliwal",
+                "https://x.com/AtiahayKasliwal",
+                "https://www.instagram.com/atishay_kasliwal/"
               ]
             }
           `}
@@ -218,7 +257,7 @@ function HomePage() {
         {/* Header */}
         <div className="header" translate="no">
           <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
-            Atishay Kasliwal
+            <strong>Atishay Kasliwal</strong>
           </Link>
           <button 
             className="mobile-menu-toggle" 
@@ -288,8 +327,8 @@ function HomePage() {
         {/* Two-column Main Content */}
         <div className="landing-two-col" translate="no">
           <div className="landing-left-text" style={{ marginTop: '2.5rem' }} translate="no">
-            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff' }} translate="no">
-              Hello, I am Atishay Kasliwal, a Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.
+            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff', fontSize: 'clamp(0.5rem, 4vw, 1.5rem)', fontWeight: 'inherit', lineHeight: '1.5' }} translate="no">
+              Hello, I am <strong>Atishay Kasliwal</strong>, a Software Engineer with over <strong>5 years</strong> of professional experience, currently pursuing a Master's in Data Science from <strong>Stony Brook University</strong>.
             </h1>
             <div className="button-group-theme" style={{ justifyContent: 'flex-start' }}>
               <a href="/resume/Atishay_Kasliwal_Resume.pdf" className="btn-theme btn-primary-action btn-lg" target="_blank" rel="noopener noreferrer">
@@ -316,18 +355,11 @@ function HomePage() {
             </div>
             <div className="exp-edu-list" style={{ textAlign: 'left', marginTop: '2rem', width: '100%', fontSize: '1.33em' }} translate="no">
               {experienceEducation.map((line, idx) => {
-                // Bold company/college names after '@' or 'from'
-                let renderedLine = line;
-                if (line.includes('@')) {
-                  renderedLine = line.replace(/@(.+?)\s*([([])/, (match, p1, p2) => `@<b>${p1.trim()}</b> ${p2}`);
-                } else if (line.includes('from')) {
-                  renderedLine = line.replace(/from (.+?)\s*([([])/, (match, p1, p2) => `from <b>${p1.trim()}</b> ${p2}`);
-                }
-                // Render as HTML for bold tags
+                // Render as HTML for bold tags (already formatted with <strong> tags)
                 if (idx === 7) {
                   return <div key={idx} style={{ minHeight: '1.5rem' }}>&nbsp;</div>;
                 } else {
-                  return <div key={idx} style={{ minHeight: '1.5rem' }} dangerouslySetInnerHTML={{ __html: renderedLine }} />;
+                  return <div key={idx} style={{ minHeight: '1.5rem' }} dangerouslySetInnerHTML={{ __html: line }} />;
                 }
               })}
             </div>
@@ -1165,7 +1197,7 @@ function Footer() {
   return (
     <footer className="site-footer" translate="no">
       <div className="footer-content" translate="no">
-        <span translate="no">© {new Date().getFullYear()} Atishay Kasliwal</span>
+        <span translate="no">© {new Date().getFullYear()} <strong>Atishay Kasliwal</strong> — Full-Stack Engineer & Data Scientist</span>
         <span className="footer-socials" translate="no">
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" translate="no">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z"/></svg>
