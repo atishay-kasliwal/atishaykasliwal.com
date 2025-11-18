@@ -1,0 +1,55 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import '../src/index.css';
+import '../src/App.css';
+import '../components/Projects.css';
+import '../components/HighlightDetail.css';
+import '../components/StoryTimeline.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
+export default function App({ Component, pageProps }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Disable automatic scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  useEffect(() => {
+    // Scroll to top on route changes
+    const handleRouteChange = () => {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        if (document.documentElement) {
+          document.documentElement.scrollTop = 0;
+        }
+        if (document.body) {
+          document.body.scrollTop = 0;
+        }
+      }, 0);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
+
+  return (
+    <>
+      <Head>
+        <html lang="en" translate="no" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
+      <Component {...pageProps} />
+    </>
+  );
+}
+
