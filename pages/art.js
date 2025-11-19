@@ -57,6 +57,7 @@ export default function ArtPage() {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <div className="art-page" translate="no">
+        {/* Art page has its own header - Header from _app.js is hidden for this page */}
         <div className="art-header" translate="no">
           <Link href="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
             Atishay Kasliwal

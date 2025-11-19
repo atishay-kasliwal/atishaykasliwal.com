@@ -258,25 +258,6 @@ export default function Projects() {
       <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
         {/* Header removed - using Header from _app.js instead */}
-        <div className="header" translate="no">
-          <Link href="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            <strong>Atishay Kasliwal</strong>
-          </Link>
-          <button 
-            className="mobile-menu-toggle" 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            translate="no"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            <Link href="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
-            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
-            <Link href="/art" translate="no">ART</Link>
-          </nav>
-        </div>
 
         <div className="projects-container" translate="no">
               <div className="projects-banner-container" translate="no">
