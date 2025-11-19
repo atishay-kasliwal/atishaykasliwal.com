@@ -234,6 +234,9 @@ export default function HomePage() {
         }} />
       </Head>
       
+      {/* Background image for landing page */}
+      <div className="bg-art" translate="no" />
+      
       {/* Note: Header and Footer are in _app.js */}
       
       {/* Highlights Banner - Mobile Only */}
