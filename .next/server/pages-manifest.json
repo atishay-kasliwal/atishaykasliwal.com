@@ -1,10 +1,10 @@
 {
   "/_app": "pages/_app.js",
-  "/highlights": "pages/highlights.html",
   "/art": "pages/art.html",
-  "/_document": "pages/_document.js",
+  "/highlights/[uuid]": "pages/highlights/[uuid].html",
+  "/highlights": "pages/highlights.html",
   "/": "pages/index.html",
   "/_error": "pages/_error.js",
-  "/highlights/[uuid]": "pages/highlights/[uuid].html",
+  "/_document": "pages/_document.js",
   "/404": "pages/404.html"
 }
