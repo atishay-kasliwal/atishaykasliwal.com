@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import wakeforeststudent from '../src/assets/WakeForsetstudent.JPG';
-import conference from '../src/assets/confremce.JPG';
-import MRIimage from '../src/assets/atrium health.jpg';
-import wakeatishay from '../src/assets/wakwforest.jpg';
-import braint1 from '../src/assets/T1.png';
-import Gemma from '../src/assets/Gemma.png';
-import hosp from '../src/assets/2016-azure-sql-integrations-1.jpeg';
-import Moviedata from '../src/assets/bigdata.jpg';
+// Images moved to public folder - use direct paths
+const wakeforeststudent = '/WakeForsetstudent.JPG';
+const conference = '/confremce.JPG';
+const MRIimage = '/atrium health.jpg';
+const wakeatishay = '/wakwforest.jpg';
+const braint1 = '/T1.png';
+const Gemma = '/Gemma.png';
+const hosp = '/2016-azure-sql-integrations-1.jpeg';
+const Moviedata = '/bigdata.jpg';
 // Banner block content - customize these arrays for different banner content
 // Each item can be:
 //   - A string: displays as text (e.g., 'MACHINE LEARNING')
