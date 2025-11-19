@@ -1,0 +1,19 @@
+/* Test CSS file to verify CSS loading */
+body {
+  border-top: 5px solid red !important;
+}
+
+.header {
+  border: 3px solid blue !important;
+}
+
+/* Make it very obvious if this CSS loads */
+.test-css-loaded {
+  display: block;
+  background: yellow;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
