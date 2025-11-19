@@ -3,21 +3,22 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import emailjs from '@emailjs/browser';
-import img1 from '../src/assets/FidelityLogo.png';
-import img8 from '../src/assets/atrium_health_wake_forest_baptist_logo.jpeg';
-import img3 from '../src/assets/T-Mobile_logo_202.png';
-import img4 from '../src/assets/bt-logo-redesign-sq-1.jpg';
-import img5 from '../src/assets/broadcast_co_logo.jpeg';
-import img6 from '../src/assets/stony_brook_university_logo.jpeg';
-import img7 from '../src/assets/Accolite Digital_iduk-Sna9f_3.png';
-import img2 from '../src/assets/Bounteous_idOCx6cSKH_0.jpeg';
-import img9 from '../src/assets/shriffle.png';
-import ankitPhoto from '../src/assets/Ankit Jain.jpeg';
-import wencuiPhoto from '../src/assets/Prof.jpeg';
-import nehaPhoto from '../src/assets/Neha gupta.jpeg';
-import goldyPhoto from '../src/assets/goldey.jpeg';
-import daMaPhoto from '../src/assets/da ma.jpeg';
-import gunjanPhoto from '../src/assets/gunjanjain.jpg';
+// Images moved to public folder - use direct paths
+const img1 = '/FidelityLogo.png';
+const img8 = '/atrium_health_wake_forest_baptist_logo.jpeg';
+const img3 = '/T-Mobile_logo_202.png';
+const img4 = '/bt-logo-redesign-sq-1.jpg';
+const img5 = '/broadcast_co_logo.jpeg';
+const img6 = '/stony_brook_university_logo.jpeg';
+const img7 = '/Accolite Digital_iduk-Sna9f_3.png';
+const img2 = '/Bounteous_idOCx6cSKH_0.jpeg';
+const img9 = '/shriffle.png';
+const ankitPhoto = '/Ankit Jain.jpeg';
+const wencuiPhoto = '/Prof.jpeg';
+const nehaPhoto = '/Neha gupta.jpeg';
+const goldyPhoto = '/goldey.jpeg';
+const daMaPhoto = '/da ma.jpeg';
+const gunjanPhoto = '/gunjanjain.jpg';
 import StoryTimeline from '../components/StoryTimeline';
 import SkillsSection from '../components/SkillsSection';
 
@@ -327,7 +328,7 @@ export default function HomePage() {
           <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }} translate="no">
             <div className="landing-grid-3x3" translate="no">
               {gridImages.map((src, idx) => (
-                <img key={idx} src={src.src || src} alt={`Landing ${idx + 1}`} width="200" height="200" translate="no" />
+                <img key={idx} src={src} alt={`Landing ${idx + 1}`} width="200" height="200" translate="no" />
               ))}
             </div>
           </div>
@@ -369,7 +370,7 @@ export default function HomePage() {
                 <p style={{ margin: 0, lineHeight: '1.5' }} translate="no">{t.text}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginTop: 'auto' }} translate="no">
                   <img 
-                    src={t.photo.src || t.photo} 
+                    src={t.photo} 
                     alt={t.name} 
                     style={{ 
                       width: '40px', 
