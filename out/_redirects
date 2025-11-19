@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects - SPA fallback
+# Note: Next.js static export creates actual HTML files, so this is mainly for edge cases
+/*    /index.html   200
