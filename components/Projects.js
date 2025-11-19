@@ -257,9 +257,10 @@ export default function Projects() {
     <div className="projects-page" translate="no">
       <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
+        {/* Header removed - using Header from _app.js instead */}
         <div className="header" translate="no">
           <Link href="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            Atishay Kasliwal
+            <strong>Atishay Kasliwal</strong>
           </Link>
           <button 
             className="mobile-menu-toggle" 

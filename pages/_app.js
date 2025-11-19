@@ -36,6 +36,9 @@ export default function App({ Component, pageProps }) {
     };
   }, [router]);
 
+  // Hide Header/Footer for art page (it has its own header)
+  const isArtPage = router.pathname === '/art';
+
   return (
     <>
       <Head>
@@ -44,9 +47,9 @@ export default function App({ Component, pageProps }) {
         <meta name="google-translate-customization" content="no" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
-      <Header />
+      {!isArtPage && <Header />}
       <Component {...pageProps} />
-      <Footer />
+      {!isArtPage && <Footer />}
     </>
   );
 }
