@@ -6,8 +6,9 @@ const nextConfig = {
     unoptimized: true, // Required for static export
   },
   // Works with both GitHub Pages and Cloudflare Pages
-  basePath: process.env.NODE_ENV === 'production' && process.env.GITHUB_PAGES ? '/atishay-kasliwal.github.io' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' && process.env.GITHUB_PAGES ? '/atishay-kasliwal.github.io' : '',
+  // Remove basePath and assetPrefix for Cloudflare Pages
+  basePath: '',
+  assetPrefix: '',
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(JPG|jpg|jpeg|png|gif|svg)$/i,
