@@ -10,6 +10,7 @@ export default function Document() {
         <link rel="stylesheet" href="/projects.css" />
         <link rel="stylesheet" href="/highlight-detail.css" />
         <link rel="stylesheet" href="/story-timeline.css" />
+        <link rel="stylesheet" href="/test.css" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
