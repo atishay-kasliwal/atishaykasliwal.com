@@ -237,11 +237,6 @@ export default function HomePage() {
       {/* Background image for landing page */}
       <div className="bg-art" translate="no" />
       
-      {/* Test CSS indicator - remove after verification */}
-      <div className="test-css-loaded" translate="no">
-        ✅ CSS IS LOADING - If you see this yellow box, CSS files are working!
-      </div>
-      
       {/* Note: Header and Footer are in _app.js */}
       
       {/* Highlights Banner - Mobile Only */}
