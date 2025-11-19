@@ -1,66 +1,85 @@
-# Fix GitHub Actions Deployment
+# 🚨 FIX: Highlights Page Not Deploying
 
-## Common Issues and Solutions
+## The Problem
+Cloudflare Pages is not deploying the highlights page because the build settings are incorrect.
 
-### Issue 1: Missing Secrets (Most Common)
+## ✅ Solution: Update Cloudflare Pages Settings
 
-The GitHub Actions workflow needs these secrets:
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
+### Step 1: Go to Cloudflare Dashboard
+1. Go to: https://dash.cloudflare.com
+2. Select your account
+3. Go to **Pages** → Your project (atishaykasliwal.github.io)
 
-**Fix:**
-1. Go to: https://github.com/atishay-kasliwal/atishay-kasliwal.github.io/settings/secrets/actions
-2. Click "New repository secret"
-3. Add `CLOUDFLARE_API_TOKEN`:
-   - Get from: https://dash.cloudflare.com/profile/api-tokens
-   - Click "Create Token"
-   - Use "Edit Cloudflare Workers" template
-   - Or create custom token with "Cloudflare Pages:Edit" permission
-   - Copy the token and add it as secret
-4. Add `CLOUDFLARE_ACCOUNT_ID`:
-   - Get from Cloudflare dashboard (right sidebar)
-   - Or run: `npx wrangler whoami` to see account ID
-   - Add it as secret
+### Step 2: Update Build Settings
+1. Click **Settings** (left sidebar)
+2. Click **Builds & deployments**
+3. Scroll to **Build configuration**
 
-### Issue 2: API Token Permissions
+### Step 3: Update These Settings
 
-Make sure the token has these permissions:
-- Account: Cloudflare Pages:Edit
-- Account: Account:Read
-
-### Issue 3: Wrong Project Name (Fixed)
-
-✅ Already fixed - project name is now: `atishay-kasliwal-github-io`
-
-## Quick Fix Steps
-
-1. **Get Account ID:**
-   ```bash
-   npx wrangler whoami
-   ```
-
-2. **Create API Token:**
-   - Visit: https://dash.cloudflare.com/profile/api-tokens
-   - Click "Create Token"
-   - Use "Edit Cloudflare Workers" template
-   - Or create custom token with Pages:Edit permission
-
-3. **Add Secrets to GitHub:**
-   - Go to: Settings > Secrets and variables > Actions
-   - Add both secrets
-
-4. **Trigger Workflow:**
-   - Go to: Actions > Deploy to Cloudflare Pages
-   - Click "Run workflow"
-
-## Alternative: Use Manual Deployment
-
-Since manual deployment works, you can also:
-```bash
-./deploy-cloudflare-now.sh
+**Build command:**
+```
+npm run build
 ```
 
-Or:
-```bash
-npx wrangler pages deploy ./build --project-name=atishay-kasliwal-github-io
+**Build output directory:**
 ```
+out
+```
+⚠️ **IMPORTANT:** Must be `out` (not `build` or anything else)
+
+**Root directory:**
+```
+/
+```
+(Leave empty or set to `/`)
+
+**Node.js version:**
+```
+18
+```
+(or latest available - 18, 19, or 20)
+
+### Step 4: Save and Redeploy
+1. Click **Save** at the bottom
+2. Go to **Deployments** tab
+3. Click **Retry deployment** on the latest deployment
+4. OR push a new commit to trigger a new build
+
+## ✅ Verify After Deployment
+
+After the deployment completes, test:
+- `https://atishaykasliwal.com/` → Should work ✅
+- `https://atishaykasliwal.com/art/` → Should work ✅
+- `https://atishaykasliwal.com/highlights/` → Should work ✅
+
+## 🔍 Check Build Logs
+
+If it still doesn't work:
+1. Go to **Deployments** tab
+2. Click on the latest deployment
+3. Check the **Build logs**
+4. Look for errors or warnings
+
+## 📝 What Should Happen
+
+Cloudflare should:
+1. Run `npm install`
+2. Run `npm run build`
+3. Find files in `out/` directory
+4. Deploy all files including `out/highlights/index.html`
+
+## ⚠️ Common Mistakes
+
+❌ **Wrong output directory:**
+- `build/` (React default) - WRONG
+- `out/` (Next.js static export) - CORRECT
+
+❌ **Wrong build command:**
+- `react-scripts build` - WRONG
+- `npm run build` - CORRECT
+
+✅ **Correct settings:**
+- Build command: `npm run build`
+- Output directory: `out`
+- Root directory: `/` (or empty)
