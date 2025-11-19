@@ -4,6 +4,12 @@ export default function Document() {
   return (
     <Html lang="en" translate="no" className="notranslate">
       <Head>
+        {/* CSS files from public folder */}
+        <link rel="stylesheet" href="/app.css" />
+        <link rel="stylesheet" href="/index.css" />
+        <link rel="stylesheet" href="/projects.css" />
+        <link rel="stylesheet" href="/highlight-detail.css" />
+        <link rel="stylesheet" href="/story-timeline.css" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{

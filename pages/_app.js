@@ -1,11 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import '../src/index.css';
-import '../src/App.css';
-import '../components/Projects.css';
-import '../components/HighlightDetail.css';
-import '../components/StoryTimeline.css';
+// CSS moved to public folder for direct serving - loaded via _document.js
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
