@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import './HighlightDetail.css';
 
 // Import project data
 import { projectsData } from './Projects';
@@ -14,8 +15,8 @@ const highlightUUIDs = {
 };
 
 export default function HighlightDetail() {
-  const router = useRouter();
-  const { uuid } = router.query;
+  const { uuid } = useParams();
+  const navigate = useNavigate();
   const projectId = highlightUUIDs[uuid];
   const project = projectsData.find(p => p.id === projectId);
   
@@ -432,20 +433,20 @@ export default function HighlightDetail() {
     return (
       <div className="highlight-detail-page">
         <div className="header" translate="no">
-          <Link href="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
             Atishay Kasliwal
           </Link>
           <nav className="nav">
-            <Link href="/highlights">HIGHLIGHTS</Link>
+            <Link to="/highlights">HIGHLIGHTS</Link>
             <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-            <Link href="/art">ART</Link>
+            <Link to="/art">ART</Link>
           </nav>
         </div>
         <div className="highlight-not-found">
           <h1>Highlight Not Found</h1>
           <p>The highlight you're looking for doesn't exist.</p>
-          <Link href="/highlights">Back to Highlights</Link>
+          <Link to="/highlights">Back to Highlights</Link>
         </div>
       </div>
     );
@@ -575,9 +576,16 @@ export default function HighlightDetail() {
 
   return (
     <div className="highlight-detail-page" translate="no">
+      <Helmet>
+        <title>{project.title} | Atishay Kasliwal</title>
+        <meta name="description" content={project.description} />
+        <meta property="og:title" content={`${project.title} | Atishay Kasliwal`} />
+        <meta property="og:description" content={project.description} />
+        <meta property="og:type" content="article" />
+      </Helmet>
 
       <div className="header" translate="no">
-        <Link href="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
+        <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
           Atishay Kasliwal
         </Link>
         <button 
@@ -589,10 +597,10 @@ export default function HighlightDetail() {
           {isMobileMenuOpen ? '✕' : '☰'}
         </button>
         <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-          <Link href="/highlights">HIGHLIGHTS</Link>
+          <Link to="/highlights">HIGHLIGHTS</Link>
           <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-          <Link href="/art">ART</Link>
+          <Link to="/art">ART</Link>
         </nav>
       </div>
 
@@ -604,7 +612,7 @@ export default function HighlightDetail() {
               e.preventDefault();
               // Navigate without scrolling to top
               const currentScroll = window.scrollY;
-              router.push('/highlights');
+              navigate('/highlights', { replace: false });
               // Restore scroll position after navigation
               setTimeout(() => {
                 window.scrollTo(0, currentScroll);

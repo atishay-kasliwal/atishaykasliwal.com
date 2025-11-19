@@ -1,7 +1,7 @@
 import React from 'react';
+import './StoryTimeline.css';
 
-// Image moved to public folder - use direct path
-const img1 = '/Symbiosis-Indore-Auditorium-Front-View.jpg';
+import img1 from './assets/Symbiosis-Indore-Auditorium-Front-View.jpg';
 
 const stories = [
   {

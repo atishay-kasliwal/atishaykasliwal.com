@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-// Images moved to public folder - use direct paths
-const wakeforeststudent = '/WakeForsetstudent.JPG';
-const conference = '/confremce.JPG';
-const MRIimage = '/atrium health.jpg';
-const wakeatishay = '/wakwforest.jpg';
-const braint1 = '/T1.png';
-const Gemma = '/Gemma.png';
-const hosp = '/2016-azure-sql-integrations-1.jpeg';
-const Moviedata = '/bigdata.jpg';
+import { Link } from 'react-router-dom';
+import './Projects.css';
+import { Helmet } from 'react-helmet';
+import wakeforeststudent from './assets/WakeForsetstudent.JPG';
+import conference from './assets/confremce.JPG';
+import MRIimage from './assets/atrium health.jpg';
+import wakeatishay from './assets/wakwforest.jpg';
+import braint1 from './assets/T1.png';
+import Gemma from './assets/Gemma.png';
+import hosp from './assets/2016-azure-sql-integrations-1.jpeg';
+import Moviedata from './assets/bigdata.jpg';
 // Banner block content - customize these arrays for different banner content
 // Each item can be:
 //   - A string: displays as text (e.g., 'MACHINE LEARNING')
@@ -51,7 +52,7 @@ export const projectsData = [
     title: 'Healthcare AI Research',
     description: 'Machine learning research and healthcare data analytics at Atrium Health Wake Forest',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
-    link: '/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    link: '/Highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
     uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
     category: 'Research',
     size: 'tall',
@@ -172,7 +173,7 @@ export const projectsData = [
     title: 'Gemma NLP Research',
     description: 'Advanced NLP research using Google\'s Gemma models for language understanding and text analysis',
     image: Gemma,
-    link: '/highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde',
+    link: '/Highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde',
     uuid: 'a1b2c3d4-e5f6-4789-a012-3456789abcde',
     category: 'Research & NLP',
     size: 'medium',
@@ -184,7 +185,7 @@ export const projectsData = [
     title: 'Movie Data Analytics',
     description: 'Data-driven analytics platform for movie insights, sentiment analysis, and audience preferences',
     image: Moviedata,
-    link: '/highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef',
+    link: '/Highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef',
     uuid: 'b2c3d4e5-f6a7-4890-b123-456789abcdef',
     category: 'Data Analytics',
     size: 'medium',
@@ -196,7 +197,7 @@ export const projectsData = [
     title: 'Hospitality AI Solutions',
     description: 'AI-powered solutions for the hospitality industry, focusing on customer experience and operational efficiency',
     image: hosp,
-    link: '/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    link: '/Highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
     uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
     category: 'AI & Hospitality',
     size: 'medium',
@@ -255,9 +256,34 @@ export default function Projects() {
 
   return (
     <div className="projects-page" translate="no">
+      <Helmet>
+        <html lang="en" translate="no" />
+        <title>Highlights | Atishay Kasliwal</title>
+        <meta name="description" content="Portfolio of highlights by Atishay Kasliwal - AI/ML, Data Science, Software Engineering, and Full-Stack Development" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
+      </Helmet>
       <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
-        {/* Header removed - using Header from _app.js instead */}
+        <div className="header" translate="no">
+          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            Atishay Kasliwal
+          </Link>
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            translate="no"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            <Link to="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
+            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+            <Link to="/art" translate="no">ART</Link>
+          </nav>
+        </div>
 
         <div className="projects-container" translate="no">
               <div className="projects-banner-container" translate="no">
@@ -375,7 +401,7 @@ export default function Projects() {
                           {project.rightText?.buttonText && (
                             project.uuid ? (
                               <Link 
-                                href={project.link} 
+                                to={project.link} 
                                 className="project-text-button"
                                 translate="no"
                               >
@@ -424,7 +450,7 @@ export default function Projects() {
                           <p className="project-card-description" translate="no">{project.description}</p>
                           {project.uuid ? (
                             <Link 
-                              href={project.link} 
+                              to={project.link} 
                               className="project-card-link"
                               translate="no"
                             >
