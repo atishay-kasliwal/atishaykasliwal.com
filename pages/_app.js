@@ -44,7 +44,9 @@ export default function App({ Component, pageProps }) {
         <meta name="google-translate-customization" content="no" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
+      <Header />
       <Component {...pageProps} />
+      <Footer />
     </>
   );
 }
