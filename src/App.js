@@ -450,6 +450,11 @@ function HomePage() {
           <ImageCarousel />
         </div>
         
+        {/* Final Product Images Section */}
+        <div id="final-product-section" translate="no">
+          <FinalProductGrid />
+        </div>
+        
         {/* Contact Section */}
         <div id="contact-section" style={{
           padding: '4rem 2rem',
@@ -769,47 +774,45 @@ function ArtPage() {
 function SkillsSection() {
   const skillsData = {
     featured: [
-      { name: 'Astro', icon: 'A' },
+      { name: 'Python', icon: 'Py' },
       { name: 'CSS', icon: '3' },
       { name: 'HTML', icon: '5' },
       { name: 'JavaScript', icon: 'JS' },
-      { name: 'Nuxt', icon: '▲' },
+      { name: 'Next.Js', icon: '▲' },
       { name: 'PHP', icon: 'php' },
-      { name: 'Svelte', icon: 'S' },
-      { name: 'Tailwind CSS', icon: 'T' },
-      { name: 'Vue', icon: 'V' }
+      { name: 'AWS', icon: 'AWS' },
+      { name: 'GCP', icon: 'GCP' },
+      { name: 'Corda', icon: 'R3' }
     ],
     languages: [
-      { name: 'CSS', icon: '3' },
-      { name: 'HTML', icon: '5' },
-      { name: 'JavaScript', icon: 'JS' },
-      { name: 'PHP', icon: 'php' },
-      { name: 'TypeScript', icon: 'TS' },
       { name: 'Python', icon: 'Py' },
+      { name: 'JavaScript', icon: 'JS' },
+      { name: 'TypeScript', icon: 'TS' },
       { name: 'Java', icon: 'J' },
       { name: 'SQL', icon: 'SQL' },
-      { name: 'Go', icon: 'Go' }
+      { name: 'HTML', icon: '5' },
+      { name: 'CSS', icon: '3' },
+      { name: 'R', icon: 'R' },
+
     ],
     frontend: [
-      { name: 'Astro', icon: 'A' },
-      { name: 'Google Maps', icon: 'M' },
-      { name: 'Nuxt', icon: '▲' },
       { name: 'React', icon: 'R' },
-      { name: 'SASS', icon: 'S' },
-      { name: 'Svelte', icon: 'S' },
-      { name: 'SvelteKit', icon: 'SK' },
+      { name: 'Next.js', icon: 'N' },
+      { name: 'JavaScript', icon: 'JS' },
+      { name: 'TypeScript', icon: 'TS' },
+      { name: 'HTML5', icon: '5' },
+      { name: 'CSS3', icon: '3' },
       { name: 'Tailwind CSS', icon: 'T' },
-      { name: 'Vue', icon: 'V' }
+      { name: 'Redux', icon: 'R' },
+  
     ],
     backend: [
-      { name: 'Appwrite', icon: 'C' },
-      { name: 'Express', icon: 'ex' },
-      { name: 'Fastify', icon: 'F' },
-      { name: 'Lucia', icon: 'L' },
       { name: 'Node.js', icon: 'N' },
-      { name: 'Prisma', icon: '▲' },
+      { name: 'Express', icon: 'E' },
+      { name: 'REST APIs', icon: 'R' },
+      { name: 'GraphQL', icon: 'G' },
       { name: 'MongoDB', icon: 'M' },
-      { name: 'PostgreSQL', icon: 'Pg' }
+      { name: 'PostgreSQL', icon: 'Pg' },
     ]
   };
 
@@ -1189,6 +1192,90 @@ function ImageCarousel() {
         </button>
       </div>
 
+    </div>
+  );
+}
+
+// Final Product Grid Component
+function FinalProductGrid() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const images = [
+    '/final-product/new_york_pplapel_pin-removebg-preview.png',
+    '/final-product/Chicago_lapel_opin-removebg-preview.png',
+    '/final-product/Chicago_lapepl_pion-removebg-preview.png',
+    '/final-product/fomc_market_predictions_1min.png',
+    '/final-product/lirr.png',
+    '/final-product/mlirr.png',
+    '/final-product/WS.png',
+    '/final-product/SBY.png',
+    '/final-product/WF.png',
+    '/final-product/ny1.png'
+  ];
+
+  // Determine grid columns based on screen size
+  const getGridColumns = () => {
+    if (windowWidth <= 768) {
+      return 5; // Mobile: 5 columns (2 rows)
+    } else if (windowWidth <= 1024) {
+      return 5; // Tablet: 5 columns (2 rows)
+    } else {
+      return 10; // Desktop: 10 columns (1 row)
+    }
+  };
+
+  return (
+    <div className="story-timeline" style={{
+      background: 'transparent',
+      borderRadius: '16px',
+      padding: windowWidth <= 768 ? '2rem 1rem' : '3rem 2rem'
+    }} translate="no">
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${getGridColumns()}, 1fr)`,
+        gap: windowWidth <= 768 ? '1rem' : windowWidth <= 1024 ? '1.5rem' : '2rem',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }} translate="no">
+        {images.map((src, idx) => (
+          <div
+            key={idx}
+            style={{
+              width: '100%',
+              aspectRatio: '1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'transparent',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              padding: windowWidth <= 768 ? '0.5rem' : '1rem'
+            }}
+            translate="no"
+          >
+            <img
+              src={src}
+              alt={`Project ${idx + 1}`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+              }}
+              translate="no"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
