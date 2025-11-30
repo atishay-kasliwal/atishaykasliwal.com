@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cp build/index.html build/404.html && cp _redirects build/ && cp public/_headers build/ 2>/dev/null || true",
+    "build": "react-scripts build && cp build/index.html build/404.html && cp public/_redirects build/ 2>/dev/null || cp _redirects build/ 2>/dev/null || true && cp public/_headers build/ 2>/dev/null || true",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
