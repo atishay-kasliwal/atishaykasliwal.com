@@ -684,6 +684,12 @@ function ArtPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const images = [
+    'https://i.pinimg.com/736x/bd/87/b4/bd87b4569684fe1a7819c96a9ab0e843.jpg', //Stranger Things
+    'https://i.pinimg.com/736x/a9/0c/64/a90c643c914751ab8143afd6fc845f07.jpg', //New York
+    'https://i.pinimg.com/736x/61/a8/52/61a852ecc3adb00d35c71476fd6977a6.jpg', // Boston 2
+    'https://i.pinimg.com/736x/5b/e2/1b/5be21bebd4edafca1843cc30b77b9314.jpg', //Red Light
+    'https://i.pinimg.com/736x/34/08/30/3408302ead9068d3f32d0ca667b4a762.jpg', //FAll
+    'https://i.pinimg.com/736x/bc/1f/05/bc1f05cda34faa0100ae7a0e8508d6b8.jpg', //Boston
     'https://i.pinimg.com/736x/b1/62/ce/b162ce51da3005c3e6f70dfe5fd3a88a.jpg', //701 Wke forest University
     'https://i.pinimg.com/736x/c7/de/6a/c7de6a1b54676e8a9070fbaa9601fc9e.jpg', //702 Blue Cloud Wke forest University
     'https://i.pinimg.com/736x/c7/7e/a5/c77ea537089d45b70afe9be7216ba432.jpg', //703 Wke forest University cloud out of the blue
