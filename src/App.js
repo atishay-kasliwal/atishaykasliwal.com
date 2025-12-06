@@ -45,6 +45,8 @@ const suggestionChips = [
 ];
 
 function PopupChatBot() {
+  const location = useLocation();
+  const isArtPage = location.pathname.startsWith('/art');
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState([]);
@@ -402,10 +404,9 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
 
   return (
     <>
-      {/* Floating Chat Button */}
       <div className="chat-popup-button-wrapper">
         <button
-          className="chat-popup-button"
+          className={`chat-popup-button ${isArtPage ? 'chat-popup-button-art' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
