@@ -1783,6 +1783,16 @@ body {
   padding: 0;
 }
 
+/* Art page variant – dark icon/border for light background */
+.chat-popup-button.chat-popup-button-art {
+  color: #000;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.chat-popup-button.chat-popup-button-art:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .chat-bot-avatar {
   width: 100%;
   height: 100%;
