@@ -6,21 +6,21 @@ html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
 }
 body, #root, .App {
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   margin: 0;
   padding: 0;
   font-family: 'Montserrat', sans-serif;
   background: #181818;
   font-size: 0.7695rem;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
-  translate: no;
 }
 
 /* Prevent Google Translate globally */
@@ -337,7 +337,7 @@ body {
 
 @media (max-width: 480px) {
   body, #root, .App {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
   }
   
   .art-grid {
@@ -874,7 +874,7 @@ body {
 
 .landing-left-text {
   flex: 1 1 0;
-  min-width: 340px;
+  min-width: 0;
   max-width: 690px;
   display: flex;
   flex-direction: column;
@@ -933,10 +933,12 @@ body {
   border-radius: 0;
   padding: 0;
   margin-bottom: 0;
-  width: 170px;
-  height: 170px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Remove background and border from landing-right-images container */
@@ -1825,12 +1827,50 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.25);
   animation: tooltipBounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   pointer-events: none;
-  max-width: 380px;
-  min-width: 320px;
+  max-width: min(380px, calc(100vw - 2rem));
+  min-width: min(320px, calc(100vw - 2rem));
   white-space: normal;
   text-align: left;
   line-height: 1.5;
   z-index: 1001;
+}
+
+/* ------------------------------------------------------------
+   Mobile friendliness hardening (landing page + overflow fixes)
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+  /* Prevent accidental horizontal scroll from vw-based layouts */
+  html, body, #root, .App {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+}
+
+@media (max-width: 700px) {
+  /* Make the logo grid responsive instead of disappearing */
+  .landing-grid-3x3 {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)) !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1rem auto 0 auto !important;
+    padding: 0 1rem !important;
+  }
+
+  .landing-right-images {
+    padding-top: 0 !important;
+  }
+
+  .landing-right-images img,
+  .landing-grid-3x3 img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: contain !important;
+  }
 }
 
 .chat-tooltip-text {
