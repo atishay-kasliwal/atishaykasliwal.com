@@ -899,7 +899,11 @@ function HomePage() {
             width: '100%', 
             maxWidth: '1540px', 
             margin: '0 auto',
-            padding: windowWidth <= 768 ? '1rem 2rem 0.2rem 2rem' : '1.2rem 2.5rem 0.3rem 2.5rem'
+            padding: windowWidth <= 480
+              ? '1rem 1rem 0.2rem 1rem'
+              : windowWidth <= 768
+                ? '1rem 1.5rem 0.2rem 1.5rem'
+                : '1.2rem 2.5rem 0.3rem 2.5rem'
           }}>
             {/* Testimonials Container */}
             <div style={{ 
@@ -940,7 +944,16 @@ function HomePage() {
                   <div>
                     <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.5rem' }}>
                       <span>{t.name.split('⭐⭐⭐⭐⭐')[0].trim()}</span>
-                      <span style={{ color: '#ffd700', fontSize: '1.2em', marginLeft: '2.0rem' }}>⭐⭐⭐⭐⭐</span>
+                      <span
+                        style={{
+                          color: '#ffd700',
+                          fontSize: '1.1em',
+                          marginLeft: windowWidth <= 480 ? '0.5rem' : '2rem',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        ⭐⭐⭐⭐⭐
+                      </span>
                     </div>
                     <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
                   </div>
@@ -1000,8 +1013,8 @@ function HomePage() {
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            maxWidth: '80vw',
-            width: '80vw',
+            maxWidth: '1100px',
+            width: '100%',
             margin: '0 auto',
             gap: '2rem',
             alignItems: 'center'
