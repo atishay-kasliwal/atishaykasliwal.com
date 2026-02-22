@@ -180,24 +180,63 @@
   touch-action: manipulation; /* Improves touch responsiveness */
 }
 
-/* Default: spans 2 columns (1/3 of width) */
-.project-card-grid {
+/* Grid item is the card wrapper (Link/div), so span must be on the wrapper */
+.projects-grid > .project-card-outer-link.span-2,
+.projects-grid > .project-card-outer.span-2 {
   grid-column: span 2;
 }
 
-/* Medium width: spans 3 columns (1/2 of width - 50%) */
-.project-card-grid.span-3 {
+.projects-grid > .project-card-outer-link.span-3,
+.projects-grid > .project-card-outer.span-3 {
   grid-column: span 3;
 }
 
-/* Double width: spans 4 columns (2/3 of width) */
-.project-card-grid.span-4 {
+.projects-grid > .project-card-outer-link.span-4,
+.projects-grid > .project-card-outer.span-4 {
   grid-column: span 4;
 }
 
-/* Triple width: spans 6 columns (full width) */
-.project-card-grid.span-6 {
+.projects-grid > .project-card-outer-link.span-6,
+.projects-grid > .project-card-outer.span-6 {
   grid-column: span 6;
+}
+
+/* Whole-card link for overlay cards (Gemma, Movie, Hospitality) */
+.project-card-outer-link {
+  cursor: pointer;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+.project-card-outer-link:focus,
+.project-card-outer-link:focus-visible,
+.project-card-outer-link:active {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+.project-card-outer-link .project-card-grid {
+  outline: none;
+}
+
+/* Prevent black selection boxes on dark card text - use visible highlight */
+.project-card-overlay-content .project-card-number,
+.project-card-overlay-content .project-card-title,
+.project-card-overlay-content .project-card-description {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.project-card-overlay-content .project-card-number::selection,
+.project-card-overlay-content .project-card-title::selection,
+.project-card-overlay-content .project-card-description::selection {
+  background: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+.project-card-overlay-content .project-card-number::-moz-selection,
+.project-card-overlay-content .project-card-title::-moz-selection,
+.project-card-overlay-content .project-card-description::-moz-selection {
+  background: rgba(255, 255, 255, 0.35);
+  color: #fff;
 }
 
 .project-card-grid:hover {
@@ -314,7 +353,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-end;
   gap: 1.5rem;
 }
@@ -598,6 +637,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  isolation: isolate; /* avoid paint/stacking glitches */
+  -webkit-font-smoothing: antialiased;
 }
 
 .project-card-overlay-content .project-card-number {
@@ -821,16 +862,19 @@
     gap: 1.5rem;
   }
   
-  /* On tablet, adjust spans */
-  .project-card-grid.span-3 {
+  /* On tablet, adjust spans (wrapper is the grid item) */
+  .projects-grid > .project-card-outer-link.span-3,
+  .projects-grid > .project-card-outer.span-3 {
     grid-column: span 2;
   }
   
-  .project-card-grid.span-4 {
+  .projects-grid > .project-card-outer-link.span-4,
+  .projects-grid > .project-card-outer.span-4 {
     grid-column: span 4;
   }
   
-  .project-card-grid {
+  .projects-grid > .project-card-outer-link.span-2,
+  .projects-grid > .project-card-outer.span-2 {
     grid-column: span 2;
   }
   
@@ -880,16 +924,19 @@
     gap: 1.25rem;
   }
   
-  /* On mobile, all cards span full width */
-  .project-card-grid {
+  /* On mobile, all cards span full width (wrapper is the grid item) */
+  .projects-grid > .project-card-outer-link,
+  .projects-grid > .project-card-outer {
     grid-column: span 2;
   }
   
-  .project-card-grid.span-3 {
+  .projects-grid > .project-card-outer-link.span-3,
+  .projects-grid > .project-card-outer.span-3 {
     grid-column: span 2;
   }
   
-  .project-card-grid.span-4 {
+  .projects-grid > .project-card-outer-link.span-4,
+  .projects-grid > .project-card-outer.span-4 {
     grid-column: span 2;
   }
   
@@ -1029,16 +1076,19 @@
     gap: 1rem;
   }
   
-  /* On small mobile, all cards are full width */
-  .project-card-grid {
+  /* On small mobile, all cards are full width (wrapper is the grid item) */
+  .projects-grid > .project-card-outer-link,
+  .projects-grid > .project-card-outer {
     grid-column: span 1;
   }
   
-  .project-card-grid.span-3 {
+  .projects-grid > .project-card-outer-link.span-3,
+  .projects-grid > .project-card-outer.span-3 {
     grid-column: span 1;
   }
   
-  .project-card-grid.span-4 {
+  .projects-grid > .project-card-outer-link.span-4,
+  .projects-grid > .project-card-outer.span-4 {
     grid-column: span 1;
   }
 

@@ -1,137 +1,298 @@
 .highlight-detail-page {
   min-height: 100vh;
-  background: #0a0a0a;
+  background: transparent;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
-  /* Prevent unwanted scrolling on page load */
   overflow-x: hidden;
-  /* Ensure page starts at top */
   scroll-behavior: auto;
-  /* Prevent layout shift by ensuring page has height immediately */
+}
+
+.highlight-blog {
+  width: 100%;
+  padding: 3rem 1.5rem 4rem 1.5rem;
+}
+
+.highlight-blog-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.highlight-blog-back {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  margin-bottom: 2rem;
+}
+
+.highlight-blog-back:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.highlight-blog-meta {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-/* Ensure header takes up space immediately to prevent layout shift */
-.highlight-detail-page .header {
-  flex-shrink: 0;
-  min-height: 60px; /* Ensure header has minimum height */
+.highlight-blog-dot {
+  opacity: 0.65;
 }
 
-/* Ensure document sections have no background */
-.highlight-document-section {
-  background: transparent !important;
+.highlight-blog-title {
+  font-family: ui-serif, Georgia, 'Times New Roman', Times, serif;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 4.6vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 1.25rem auto 1.2rem auto;
+  color: #fff;
 }
 
-/* Remove background from document container and iframe */
+.highlight-blog-subtitle {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 1.6rem auto;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.highlight-blog-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 2.4rem;
+}
+
+.highlight-blog-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.highlight-blog-badge-link {
+  text-decoration: none;
+}
+
+.highlight-blog-badge-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.highlight-blog-badge-muted {
+  opacity: 0.8;
+}
+
+.highlight-blog-hero {
+  margin: 0 auto 2.6rem auto;
+  max-width: 980px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.highlight-blog-hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.highlight-article {
+  max-width: 860px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.05rem;
+  line-height: 1.95;
+}
+
+.highlight-lead {
+  font-family: ui-serif, Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.12rem;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 2rem 0;
+}
+
+.highlight-section-number {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 2.4rem 0 1rem 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.82rem;
+}
+
+.highlight-section-num {
+  font-family: ui-serif, Georgia, 'Times New Roman', Times, serif;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.highlight-section-rule {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.highlight-section-label {
+  white-space: nowrap;
+}
+
+.highlight-section-number-pdf {
+  margin-top: 3rem;
+  grid-template-columns: 1fr auto;
+  gap: 0.9rem;
+}
+
+.highlight-h2 {
+  font-family: ui-serif, Georgia, 'Times New Roman', Times, serif;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.6rem 0;
+  font-size: 1.65rem;
+}
+
+.highlight-p {
+  margin: 0 0 1.2rem 0;
+}
+
+.highlight-bullets {
+  margin: 0.3rem 0 1.6rem 1.25rem;
+  padding: 0;
+}
+
+.highlight-bullets li {
+  margin: 0.55rem 0;
+}
+
+.highlight-quote {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.4rem 0 2rem 0;
+  padding: 0.9rem 1rem;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.highlight-quote-pill {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.highlight-quote-text {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* PDF section at end */
+.highlight-report {
+  margin: 3rem auto 0 auto;
+  max-width: 980px;
+}
+
+.highlight-report-title {
+  font-family: ui-serif, Georgia, 'Times New Roman', Times, serif;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.9rem;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+/* PPT "Give it a try" section (Gemma only) */
+.highlight-ppt {
+  margin-top: 2.5rem;
+}
+
+.highlight-ppt-frame {
+  margin-top: 1rem;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.highlight-ppt-frame .document-embed-presentation {
+  max-width: 100%;
+  width: 100%;
+  height: 480px;
+  aspect-ratio: 16 / 9;
+}
+
+.highlight-ppt-loading {
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 1rem;
+}
+
+.highlight-report-frame {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.highlight-report-loading {
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Keep existing iframe embed behavior, but match light theme */
 .document-embed-container,
 .document-iframe {
   background: transparent !important;
-}
-
-.highlight-detail-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  flex: 1;
-  /* Ensure container has minimum height to prevent layout shift */
-  min-height: 400px;
-  /* Ensure content is rendered and takes space */
-  display: block;
-}
-
-.highlight-detail-header {
-  margin-bottom: 3rem;
-  padding-top: 2rem;
-  /* Ensure header takes up space immediately - make it taller */
-  min-height: 300px;
-  display: block;
-  /* Ensure header content is visible and takes space */
-  position: relative;
-  z-index: 1;
-}
-
-.back-link {
-  display: inline-block;
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  margin-bottom: 2rem;
-  transition: color 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.back-link:hover {
-  color: #e0e0e0;
-}
-
-.highlight-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 0 0 1rem 0;
-  line-height: 1.2;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.highlight-category {
-  font-size: 1rem;
-  color: #e0e0e0;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: 0 0 1.5rem 0;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.highlight-description {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #e0e0e0;
-  margin: 0;
-  max-width: 800px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-/* Top document section (replaces hero image) */
-.highlight-top-document {
-  margin: 0;
-  padding: 0;
-}
-
-.highlight-content {
-  margin-top: 4rem;
-}
-
-.highlight-section {
-  margin-bottom: 3rem;
-}
-
-.highlight-section h2 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.highlight-section p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #e0e0e0;
-  margin: 0 0 1.5rem 0;
-  font-family: 'Montserrat', sans-serif;
-}
-
-/* Document Embed Section - No spacing, perfect fit */
-.highlight-document-section {
-  margin: 0;
-  padding: 0;
-  border: none;
-  width: 100%;
-  box-sizing: border-box;
-  background: transparent !important;
-}
-
-.highlight-document-section h2 {
-  display: none; /* Hide heading to eliminate spacing */
 }
 
 .document-embed-container {
@@ -159,18 +320,17 @@
   height: 1123px; /* A4 height at 96 DPI (297mm) - one page viewport */
   /* A4 aspect ratio maintained: 210mm x 297mm */
   /* Add subtle shadow to mimic paper */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 /* Presentation containers - Google Slides native size (16:9 aspect ratio) */
 .document-embed-presentation {
-  max-width: 100%;
+  /* Presentations are rendered as PDF for scroll mode */
+  max-width: 794px; /* A4 width at 96 DPI (210mm) */
   width: 100%;
-  height: 600px; /* Standard presentation height */
-  /* Google Slides default is 16:9, so we maintain that aspect ratio */
-  aspect-ratio: 16 / 9;
-  /* No shadow for presentations - cleaner look */
-  box-shadow: none;
+  height: 1123px; /* A4 height at 96 DPI (297mm) */
+  aspect-ratio: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .document-iframe {
@@ -276,22 +436,16 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .highlight-detail-container {
-    padding: 1rem;
+  .highlight-blog {
+    padding: 2rem 1rem 3rem 1rem;
   }
 
-  .highlight-title {
-    font-size: 2rem;
+  .highlight-blog-back {
+    margin-bottom: 1.25rem;
   }
 
-  .highlight-description {
+  .highlight-blog-subtitle {
     font-size: 1rem;
-  }
-
-  .highlight-document-section {
-    width: 100%;
-    margin: 0;
-    padding: 0;
   }
 
   /* PDF containers - maintain A4 on tablet */
@@ -305,25 +459,15 @@
   /* Presentation containers - maintain 16:9 on tablet */
   .document-embed-presentation {
     width: 100%;
-    height: calc(100vw * 0.5625); /* 16:9 aspect ratio (9/16 = 0.5625) */
-    max-height: 600px;
-    aspect-ratio: 16 / 9;
-  }
-
-  .highlight-section h2 {
-    font-size: 1.5rem;
+    height: calc(min(100vw, 794px) * 1.414); /* Maintain A4 aspect ratio */
+    max-height: 1123px;
+    aspect-ratio: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .highlight-title {
-    font-size: 1.75rem;
-  }
-
-  .highlight-document-section {
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  .highlight-blog-title {
+    font-size: 2rem;
   }
 
   /* PDF containers - maintain A4 proportions on mobile */
@@ -336,9 +480,9 @@
   /* Presentation containers - maintain 16:9 on mobile */
   .document-embed-presentation {
     width: 100%;
-    height: calc(100vw * 0.5625); /* 16:9 aspect ratio */
-    max-height: 400px; /* Reasonable max height for mobile */
-    aspect-ratio: 16 / 9;
+    height: calc(100vw * 1.414); /* Maintain A4 aspect ratio */
+    max-height: 800px; /* Reasonable max height for mobile */
+    aspect-ratio: auto;
   }
   
   .highlight-document-section {
