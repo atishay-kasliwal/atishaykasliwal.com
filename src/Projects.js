@@ -287,7 +287,7 @@ export default function Projects() {
           </button>
           <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
             <Link to="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
-            <a href="/Atishay%20Kasliwal.pdf" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
             <Link to="/art" translate="no">ART</Link>
           </nav>

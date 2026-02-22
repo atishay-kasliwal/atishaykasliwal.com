@@ -745,7 +745,7 @@ function HomePage() {
           </button>
           <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             <Link to="/highlights">HIGHLIGHTS</Link>
-            <a href="/Atishay%20Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
+            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
           </nav>
@@ -807,7 +807,7 @@ function HomePage() {
               Hello, I am <strong>Atishay Kasliwal</strong>, a Software Engineer with over <strong>5 years</strong> of professional experience, currently pursuing a Master's in Data Science from <strong>Stony Brook University</strong>.
             </h1>
             <div className="button-group-theme" style={{ justifyContent: 'flex-start' }}>
-              <a href="/Atishay%20Kasliwal.pdf" className="btn-theme btn-primary-action btn-lg" target="_blank" rel="noopener noreferrer">
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="btn-theme btn-primary-action btn-lg" target="_blank" rel="noopener noreferrer">
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
                   <svg width="18" height="18" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#000"/></svg>
                   Resume (PDF)
@@ -1249,7 +1249,7 @@ function ArtPage() {
         </button>
         <nav className={`nav black ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
           <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
-          <a href="/Atishay%20Kasliwal.pdf" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+          <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
           <Link to="/art" translate="no">ART</Link>
         </nav>

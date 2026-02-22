@@ -319,7 +319,7 @@ export default function HighlightDetail() {
             </Link>
             <nav className="nav">
               <Link to="/highlights">HIGHLIGHTS</Link>
-              <a href="/Atishay%20Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
               <Link to="/art">ART</Link>
             </nav>
@@ -496,7 +496,7 @@ export default function HighlightDetail() {
           </button>
           <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             <Link to="/highlights">HIGHLIGHTS</Link>
-            <a href="/Atishay%20Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
+            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
           </nav>
