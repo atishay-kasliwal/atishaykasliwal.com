@@ -27,7 +27,7 @@ import { loadAboutMeData, extractRelevantContext, loadQAExamples, findSimilarQAE
 
 const experienceEducation = [
   '- Artificial Intelligence Engineer  <strong>Wake Forest CAIR</strong> (2025)',
-  '- Software Engineer, Research <strong>Stony Brook University</strong> (2024–2025)',
+  '- Software Engineer, Research <strong>Stony Brook University</strong> (2024–Present)',
   '- Senior Software Engineer <strong>Bounteous</strong> (2021–2024)',
   '- Software Developer <strong>Shriffle</strong> (2020–2021)',
   '- Artificial Intelligence Project Development <strong>Verzeo Learning</strong> (2020)',
