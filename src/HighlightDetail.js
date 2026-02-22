@@ -5,20 +5,48 @@ import './HighlightDetail.css';
 
 // Import project data
 import { projectsData } from './Projects';
+import { getProjectArticleByUuid } from './project list';
 
-// UUIDs for each highlight - Map UUID to project ID
-const highlightUUIDs = {
-  'a1b2c3d4-e5f6-4789-a012-3456789abcde': 13, // Gemma NLP Research
-  'b2c3d4e5-f6a7-4890-b123-456789abcdef': 14, // Movie Data Analytics
-  'c3d4e5f6-a7b8-4901-c234-56789abcdef0': 15, // Hospitality AI
-  'd4e5f6a7-b8c9-4012-d345-6789abcdef01': 1   // Healthcare AI Research
+const slugify = (value) =>
+  String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+
+const getArticleMeta = (projectUuid) => {
+  // Demo metadata (can be replaced with real dates later)
+  switch (projectUuid) {
+    case 'a1b2c3d4-e5f6-4789-a012-3456789abcde':
+      return { date: '14 May 2025', readingTime: '6 min read' };
+    case 'b2c3d4e5-f6a7-4890-b123-456789abcdef':
+      return { date: '02 Apr 2025', readingTime: '7 min read' };
+    case 'c3d4e5f6-a7b8-4901-c234-56789abcdef0':
+      return { date: '19 Mar 2025', readingTime: '5 min read' };
+    case 'd4e5f6a7-b8c9-4012-d345-6789abcdef01':
+      return { date: '11 Feb 2025', readingTime: '8 min read' };
+    default:
+      return { date: '2025', readingTime: '5 min read' };
+  }
 };
 
 export default function HighlightDetail() {
-  const { uuid } = useParams();
+  const { id, uuid } = useParams();
   const navigate = useNavigate();
-  const projectId = highlightUUIDs[uuid];
-  const project = projectsData.find(p => p.id === projectId);
+  const identifier = id || uuid;
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    String(identifier || '')
+  );
+
+  const project = isUuid
+    ? projectsData.find((p) => p.uuid === identifier)
+    : projectsData.find((p) => slugify(p.title) === String(identifier || '').toLowerCase());
+
+  const projectUuid = project?.uuid;
+  const articleFromFile = getProjectArticleByUuid(projectUuid);
+  const articleMeta = articleFromFile
+    ? { date: articleFromFile.date, readingTime: articleFromFile.readingTime }
+    : getArticleMeta(projectUuid);
   
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -37,7 +65,7 @@ export default function HighlightDetail() {
     if (document.body) {
       document.body.scrollTop = 0;
     }
-  }, [uuid]);
+  }, [identifier]);
 
   // Scroll to top AFTER content renders - use useLayoutEffect to run synchronously after DOM updates
   useLayoutEffect(() => {
@@ -83,15 +111,13 @@ export default function HighlightDetail() {
     return () => {
       timeouts.forEach(timeout => clearTimeout(timeout));
     };
-  }, [uuid]);
+  }, [identifier]);
   
-  // Additional scroll handling after paint
+  // Scroll to top once when project changes; enable iframes after short delay (no scroll blocking)
   useEffect(() => {
-    let scrollPreventionActive = true;
-    
-    // Function to scroll to top
     const scrollToTop = () => {
       window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       if (document.documentElement) {
         document.documentElement.scrollTop = 0;
         document.documentElement.scrollLeft = 0;
@@ -101,163 +127,16 @@ export default function HighlightDetail() {
         document.body.scrollLeft = 0;
       }
     };
-    
-    // Check if content is rendered and has height
-    const waitForContentAndScroll = () => {
-      const header = document.querySelector('.highlight-detail-header');
-      const container = document.querySelector('.highlight-detail-container');
-      
-      // If content is rendered (has height), scroll to top
-      if (header && container && (header.offsetHeight > 0 || container.offsetHeight > 0)) {
-        scrollToTop();
-        return true;
-      }
-      return false;
-    };
-    
-    // Wait for next paint cycle to ensure content is rendered
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToTop();
-        waitForContentAndScroll();
-        
-        // Multiple attempts to ensure content is loaded
-        let attempts = 0;
-        const checkContent = setInterval(() => {
-          attempts++;
-          if (waitForContentAndScroll() || attempts > 30) {
-            clearInterval(checkContent);
-          }
-        }, 16); // Check every frame (60fps)
-        
-        setTimeout(() => clearInterval(checkContent), 1000);
-      });
-    });
-    
-    // Prevent focus from causing scroll during page load
-    const preventFocusScroll = (e) => {
-      if (!scrollPreventionActive) return;
-      
-      // Prevent any element from scrolling into view during initial load
-      if (e.target && typeof e.target.scrollIntoView === 'function') {
-        // Temporarily disable scrollIntoView
-        const originalScrollIntoView = e.target.scrollIntoView;
-        e.target.scrollIntoView = function() {
-          // Only allow if we're past the initial load period
-          if (!scrollPreventionActive) {
-            originalScrollIntoView.apply(this, arguments);
-          }
-        };
-      }
-      
-      // If focus is on an element that might cause scroll, scroll to top instead
-      if (e.target && (e.target.tagName === 'IFRAME' || e.target.closest('.document-embed-container'))) {
-        scrollToTop();
-      }
-    };
-    
-    // Prevent scroll events during initial load that would scroll away from top
-    const preventScroll = (e) => {
-      if (!scrollPreventionActive) return;
-      
-      // During the first 2 seconds after page load, prevent scrolling away from top
-      if (window.scrollY > 50 || window.pageYOffset > 50) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        scrollToTop();
-        return false;
-      }
-    };
-    
-    // Add event listeners after a brief delay to allow initial scroll-to-top
-    // Don't block scroll events immediately - let content render first
-    const addScrollPrevention = setTimeout(() => {
-      window.addEventListener('scroll', preventScroll, { passive: false, capture: true });
-      document.addEventListener('focusin', preventFocusScroll, { capture: true });
-    }, 100);
-    
-    // Scroll multiple times - wait for content to render first
-    const timeouts = [];
-    
-    // Scroll multiple times after content renders
-    // Delay iframes significantly to ensure scroll-to-top happens first AND user sees the top
-    // Only enable iframes after we've confirmed content is rendered AND scrolled to top
-    const enableIframesTimeout = setTimeout(() => {
-      // Double-check we're at the top before enabling iframes
-      if (window.scrollY <= 10 && window.pageYOffset <= 10) {
-        setShouldLoadIframes(true);
-      } else {
-        // If not at top, scroll again and wait more
-        scrollToTop();
-        setTimeout(() => {
-          if (window.scrollY <= 10) {
-            setShouldLoadIframes(true);
-          } else {
-            // Force scroll and enable anyway after delay
-            scrollToTop();
-            setTimeout(() => setShouldLoadIframes(true), 100);
-          }
-        }, 100);
-      }
-    }, 500); // Wait 500ms before loading iframes - gives time for scroll to complete
-    
-    // Scroll at various intervals after initial render - more aggressive
-    [50, 75, 100, 125, 150, 175, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1200, 1500].forEach(delay => {
-      timeouts.push(setTimeout(scrollToTop, delay));
-    });
-    
-    // Also scroll after page is fully loaded
-    if (document.readyState === 'complete') {
-      scrollToTop();
-    } else {
-      const handleLoad = () => {
-        scrollToTop();
-        waitForContentAndScroll();
-      };
-      window.addEventListener('load', handleLoad, { once: true });
-      document.addEventListener('DOMContentLoaded', handleLoad, { once: true });
-    }
-    
-    // Monitor for any scroll away from top during initial load and force back to top
-    // More aggressive monitoring
-    const scrollMonitor = setInterval(() => {
-      if (scrollPreventionActive) {
-        const currentScroll = window.scrollY || window.pageYOffset || 0;
-        if (currentScroll > 10) {
-          // Immediately scroll back to top if we've scrolled away
-          scrollToTop();
-          // Also prevent the scroll event that caused this
-          window.scrollTo(0, 0);
-          if (document.documentElement) {
-            document.documentElement.scrollTop = 0;
-          }
-          if (document.body) {
-            document.body.scrollTop = 0;
-          }
-        }
-      }
-    }, 25); // Check very frequently (every 25ms)
-    
-    // Disable scroll prevention after 2 seconds
-    const cleanupTimeout = setTimeout(() => {
-      scrollPreventionActive = false;
-      window.removeEventListener('scroll', preventScroll, { capture: true });
-      document.removeEventListener('focusin', preventFocusScroll, { capture: true });
-      clearInterval(scrollMonitor);
-    }, 2000);
-    
+
+    scrollToTop();
+    const t = setTimeout(scrollToTop, 80);
+    const enableIframesTimeout = setTimeout(() => setShouldLoadIframes(true), 400);
+
     return () => {
-      scrollPreventionActive = false;
-      timeouts.forEach(timeout => clearTimeout(timeout));
-      window.removeEventListener('load', scrollToTop);
-      window.removeEventListener('scroll', preventScroll, { capture: true });
-      document.removeEventListener('focusin', preventFocusScroll, { capture: true });
-      clearInterval(scrollMonitor);
-      clearTimeout(cleanupTimeout);
+      clearTimeout(t);
       clearTimeout(enableIframesTimeout);
-      clearTimeout(addScrollPrevention);
     };
-  }, [uuid]);
+  }, [identifier]);
 
   // Prevent scroll to top when interacting with iframe navigation
   // Delay this to allow initial scroll-to-top to complete first
@@ -427,26 +306,29 @@ export default function HighlightDetail() {
         delete window._iframeScrollCleanup;
       }
     };
-  }, [uuid]);
+  }, [identifier]);
 
   if (!project) {
     return (
       <div className="highlight-detail-page">
-        <div className="header" translate="no">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
-            Atishay Kasliwal
-          </Link>
-          <nav className="nav">
-            <Link to="/highlights">HIGHLIGHTS</Link>
-            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-            <Link to="/art">ART</Link>
-          </nav>
-        </div>
-        <div className="highlight-not-found">
-          <h1>Highlight Not Found</h1>
-          <p>The highlight you're looking for doesn't exist.</p>
-          <Link to="/highlights">Back to Highlights</Link>
+        <div className="bg-art" translate="no" />
+        <div className="page-content" translate="no">
+          <div className="header" translate="no">
+            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
+              Atishay Kasliwal
+            </Link>
+            <nav className="nav">
+              <Link to="/highlights">HIGHLIGHTS</Link>
+              <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+              <Link to="/art">ART</Link>
+            </nav>
+          </div>
+          <div className="highlight-not-found">
+            <h1>Highlight Not Found</h1>
+            <p>The highlight you're looking for doesn't exist.</p>
+            <Link to="/highlights">Back to Highlights</Link>
+          </div>
         </div>
       </div>
     );
@@ -508,10 +390,23 @@ export default function HighlightDetail() {
     return documentMap[uuid] || null;
   };
 
-  const documentInfo = getDocumentInfo(uuid);
+  const documentInfo = getDocumentInfo(projectUuid);
   const topDoc = documentInfo?.topDoc;
   const bottomDoc = documentInfo?.bottomDoc;
-  
+
+  const getPresentationEmbedUrl = (docInfo) => {
+    if (!docInfo?.path?.includes('docs.google.com/presentation')) return null;
+    const fileIdMatch = docInfo.path.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (!fileIdMatch) return null;
+    return `https://docs.google.com/presentation/d/${fileIdMatch[1]}/embed?start=false&loop=false&delayms=3000`;
+  };
+
+  const presentationSrc =
+    articleFromFile?.presentationLink
+      ? getPresentationEmbedUrl({ path: articleFromFile.presentationLink })
+      : (topDoc ? getPresentationEmbedUrl(topDoc) : null);
+  const showPresentationAfterDemo = Boolean(articleFromFile?.showPresentationAfterDemo && presentationSrc);
+
   // Get document viewer URL - supports local files, Google Drive, Google Slides, and Google Docs
   const getDocumentViewerUrl = (docInfo) => {
     const { path, type, source } = docInfo;
@@ -535,16 +430,17 @@ export default function HighlightDetail() {
       const fileIdMatch = path.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (fileIdMatch) {
         const fileId = fileIdMatch[1];
-        // Use Google Slides embed URL with navigation controls
-        // Remove rm=minimal to show navigation buttons, but keep start=false to prevent auto-play
-        return `https://docs.google.com/presentation/d/${fileId}/embed?start=false&loop=false&delayms=3000`;
+        // Scrollable mode: render Slides as an exported PDF (vertical scroll).
+        // This avoids the "slide-by-slide" arrows UI in the embed viewer.
+        return `https://docs.google.com/presentation/d/${fileId}/export/pdf`;
       }
       // If already in preview/embed format, convert to embed format
       if (path.includes('/preview') || path.includes('/embed')) {
-        // Replace /preview with /embed if needed
-        const embedPath = path.replace('/preview', '/embed').split('?')[0];
-        // Remove rm=minimal to show navigation controls
-        return `${embedPath}?start=false&loop=false&delayms=3000`;
+        const fileIdMatch2 = path.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (fileIdMatch2) {
+          const fileId = fileIdMatch2[1];
+          return `https://docs.google.com/presentation/d/${fileId}/export/pdf`;
+        }
       }
     }
     
@@ -584,131 +480,146 @@ export default function HighlightDetail() {
         <meta property="og:type" content="article" />
       </Helmet>
 
-      <div className="header" translate="no">
-        <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
-          Atishay Kasliwal
-        </Link>
-        <button 
-          className="mobile-menu-toggle" 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-          translate="no"
-        >
-          {isMobileMenuOpen ? '✕' : '☰'}
-        </button>
-        <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-          <Link to="/highlights">HIGHLIGHTS</Link>
-          <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
-          <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-          <Link to="/art">ART</Link>
-        </nav>
-      </div>
-
-      <div className="highlight-detail-container">
-        <div className="highlight-detail-header">
+      <div className="bg-art" translate="no" />
+      <div className="page-content" translate="no">
+        <div className="header" translate="no">
+          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
+            Atishay Kasliwal
+          </Link>
           <button 
-            className="back-link"
-            onClick={(e) => {
-              e.preventDefault();
-              // Navigate without scrolling to top
-              const currentScroll = window.scrollY;
-              navigate('/highlights', { replace: false });
-              // Restore scroll position after navigation
-              setTimeout(() => {
-                window.scrollTo(0, currentScroll);
-              }, 0);
-            }}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              cursor: 'pointer',
-              font: 'inherit',
-              color: 'inherit',
-              padding: 0,
-              textDecoration: 'none'
-            }}
+            className="mobile-menu-toggle" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            translate="no"
           >
-            ← Back to Highlights
+            {isMobileMenuOpen ? '✕' : '☰'}
           </button>
-          <h1 className="highlight-title">{project.title}</h1>
-          <p className="highlight-category">{project.category}</p>
-          <p className="highlight-description">{project.description}</p>
+          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/highlights">HIGHLIGHTS</Link>
+            <a href="/Atishay_Kasliwal.pdf" target="_blank" rel="noopener noreferrer">RESUME</a>
+            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+            <Link to="/art">ART</Link>
+          </nav>
         </div>
 
-        {/* Top Document Section - Replaces hero image */}
-        {topDoc && shouldLoadIframes && (
-          <div className="highlight-document-section highlight-top-document">
-            <h2>Project Presentation</h2>
-            <div className="document-embed-container document-embed-presentation">
-              <iframe
-                src={getDocumentViewerUrl(topDoc)}
-                title={`${project.title} Presentation`}
-                className="document-iframe"
-                allowFullScreen
-              />
-            </div>
+        <main className="highlight-blog" translate="no">
+          <div className="highlight-blog-inner" translate="no">
+            <button
+              className="highlight-blog-back"
+              onClick={(e) => {
+                e.preventDefault();
+                const currentScroll = window.scrollY;
+                navigate('/highlights', { replace: false });
+                setTimeout(() => window.scrollTo(0, currentScroll), 0);
+              }}
+            >
+              ← Back to Highlights
+            </button>
+
+          <div className="highlight-blog-meta" translate="no">
+            <span className="highlight-blog-date" translate="no">{articleMeta.date}</span>
+            <span className="highlight-blog-dot" aria-hidden="true">•</span>
+            <span className="highlight-blog-read" translate="no">{articleMeta.readingTime}</span>
           </div>
-        )}
-        {topDoc && !shouldLoadIframes && (
-          <div className="highlight-document-section highlight-top-document" style={{ minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666' }}>
-            <p>Loading presentation...</p>
+
+          <h1 className="highlight-blog-title" translate="no">{project.title}</h1>
+          <p className="highlight-blog-subtitle" translate="no">{project.description}</p>
+
+          <div className="highlight-blog-badges" translate="no">
+            <span className="highlight-blog-badge">{project.category}</span>
+            <a className="highlight-blog-badge highlight-blog-badge-link" href="#report">PDF at end</a>
+            <span className="highlight-blog-badge highlight-blog-badge-muted">Demo text (placeholder)</span>
           </div>
-        )}
 
-        {/* Content Section - Unique for each project */}
-        <div className="highlight-content">
-          {uuid === 'a1b2c3d4-e5f6-4789-a012-3456789abcde' && (
-            <div className="highlight-section">
-              <h2>Gemma NLP Research</h2>
-              <p>This project explores advanced natural language processing techniques using the Gemma model for text understanding and generation.</p>
-              {/* Add more unique content here */}
-            </div>
+          {/* Hero image */}
+          {project.image && (
+            <figure className="highlight-blog-hero" translate="no">
+              <img src={project.image} alt={project.title} className="highlight-blog-hero-img" translate="no" />
+            </figure>
           )}
 
-          {uuid === 'b2c3d4e5-f6a7-4890-b123-456789abcdef' && (
-            <div className="highlight-section">
-              <h2>Movie Data Analytics</h2>
-              <p>Comprehensive analysis of movie datasets to extract insights and patterns in the entertainment industry.</p>
-              {/* Add more unique content here */}
-            </div>
-          )}
+          <article className="highlight-article" translate="no">
+            <p className="highlight-lead" translate="no">
+              {articleFromFile?.lead ||
+                'This page is styled like a blog article. Edit the content in src/project list/*.js — the full PDF report is kept at the end.'}
+            </p>
 
-          {uuid === 'c3d4e5f6-a7b8-4901-c234-56789abcdef0' && (
-            <div className="highlight-section">
-              <h2>Hospitality AI Solutions</h2>
-              <p>AI-powered solutions for the hospitality industry, focusing on customer experience and operational efficiency.</p>
-              {/* Add more unique content here */}
-            </div>
-          )}
-
-          {uuid === 'd4e5f6a7-b8c9-4012-d345-6789abcdef01' && (
-            <div className="highlight-section">
-              <h2>Healthcare AI Research</h2>
-              <p>Machine learning research and healthcare data analytics at Atrium Health Wake Forest.</p>
-              {/* Add more unique content here */}
-            </div>
-          )}
-
-                {/* Bottom Embedded Document Section - Common for all */}
-                {bottomDoc && shouldLoadIframes && (
-                  <div className="highlight-document-section">
-                    <h2>Project Report</h2>
-                    <div className="document-embed-container document-embed-pdf">
-                      <iframe
-                        src={getDocumentViewerUrl(bottomDoc)}
-                        title={`${project.title} Report`}
-                        className="document-iframe"
-                        allowFullScreen
-                      />
-                    </div>
+            {(articleFromFile?.sections || []).map((s, sectionIndex) => (
+              <React.Fragment key={`${s.number}-${s.label}`}>
+                <section translate="no">
+                  <h2 className="highlight-h2" translate="no">{s.heading}</h2>
+                {(s.paragraphs || []).map((p) => (
+                  <p key={p} className="highlight-p" translate="no">{p}</p>
+                ))}
+                {Array.isArray(s.bullets) && s.bullets.length > 0 && (
+                  <ul className="highlight-bullets" translate="no">
+                    {s.bullets.map((b) => (
+                      <li key={`${b.bold}-${b.text}`}>
+                        <strong>{b.bold}</strong>: {b.text}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {s.quote && (
+                  <div className="highlight-quote" translate="no">
+                    <div className="highlight-quote-pill" translate="no">{s.quote.pill}</div>
+                    <div className="highlight-quote-text" translate="no">“{s.quote.text}”</div>
                   </div>
                 )}
-                {bottomDoc && !shouldLoadIframes && (
-                  <div className="highlight-document-section" style={{ minHeight: '1123px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666' }}>
-                    <p>Loading report...</p>
-                  </div>
+                </section>
+
+                {sectionIndex === 0 && showPresentationAfterDemo && (
+                  <section className="highlight-ppt" translate="no">
+                    <h2 className="highlight-h2" translate="no">Give it a try</h2>
+                    <p className="highlight-p" translate="no">Presentation (slide-by-slide).</p>
+                    {shouldLoadIframes ? (
+                      <div className="highlight-ppt-frame" translate="no">
+                        <div className="document-embed-container document-embed-presentation">
+                          <iframe
+                            src={presentationSrc}
+                            title={`${project.title} — Presentation`}
+                            className="document-iframe"
+                            allowFullScreen
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="highlight-ppt-loading" translate="no">Loading presentation…</div>
+                    )}
+                  </section>
                 )}
-        </div>
+              </React.Fragment>
+            ))}
+          </article>
+
+          {/* PDF at the end */}
+          <section className="highlight-report" id="report" translate="no">
+            <div className="highlight-section-number highlight-section-number-pdf" translate="no">
+              <span className="highlight-section-rule" aria-hidden="true" />
+              <span className="highlight-section-label" translate="no">PDF</span>
+            </div>
+
+            {bottomDoc && shouldLoadIframes && (
+              <div className="highlight-report-frame" translate="no">
+                <div className="document-embed-container document-embed-pdf">
+                  <iframe
+                    src={getDocumentViewerUrl(bottomDoc)}
+                    title={`${project.title} Report`}
+                    className="document-iframe"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            )}
+
+            {bottomDoc && !shouldLoadIframes && (
+              <div className="highlight-report-loading" translate="no">
+                Loading report…
+              </div>
+            )}
+          </section>
+          </div>
+        </main>
       </div>
     </div>
   );
