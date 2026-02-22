@@ -33,6 +33,13 @@ const bannerBlocksTop = [
   // { image: 'https://your-image-url.com/image.jpg', alt: 'Description' },
 ];
 
+const slugify = (value) =>
+  String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+
 // Bottom banner is currently commented out - uncomment if needed
 // const bannerBlocksBottom = [
 //   'Software Developer',
@@ -52,7 +59,7 @@ export const projectsData = [
     title: 'Healthcare AI Research',
     description: 'Machine learning research and healthcare data analytics at Atrium Health Wake Forest',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
-    link: '/Highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    link: `/highlights/${slugify('Healthcare AI Research')}`,
     uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
     category: 'Research',
     size: 'tall',
@@ -69,7 +76,8 @@ export const projectsData = [
     title: 'Data Analytics Platform',
     description: 'Data modeling and business intelligence solutions for enterprise clients',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&h=600&auto=format&fit=crop',
-    link: 'https://www.linkedin.com/in/atishay-kasliwal/',
+    link: `/highlights/${slugify('Healthcare AI Research')}`,
+    uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
     category: 'Data Science',
     size: 'wide',
     span: 4, // Row 1: Double width (spans 2 columns)
@@ -83,7 +91,7 @@ export const projectsData = [
     },
     rightText: {
       subtitle: "Let's Build Something Meaningful Together",
-      buttonText: 'LinkedIn'
+      buttonText: 'Project page'
     },
     carouselImages: [
       wakeforeststudent,
@@ -171,9 +179,9 @@ export const projectsData = [
   {
     id: 13,
     title: 'Gemma NLP Research',
-    description: 'Advanced NLP research using Google\'s Gemma models for language understanding and text analysis',
+    description: 'Advanced NLP research using Google\'s Gemma 3 models for language understanding and text analysis',
     image: Gemma,
-    link: '/Highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde',
+    link: `/highlights/${slugify('Gemma NLP Research')}`,
     uuid: 'a1b2c3d4-e5f6-4789-a012-3456789abcde',
     category: 'Research & NLP',
     size: 'medium',
@@ -185,7 +193,7 @@ export const projectsData = [
     title: 'Movie Data Analytics',
     description: 'Data-driven analytics platform for movie insights, sentiment analysis, and audience preferences',
     image: Moviedata,
-    link: '/Highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef',
+    link: `/highlights/${slugify('Movie Data Analytics')}`,
     uuid: 'b2c3d4e5-f6a7-4890-b123-456789abcdef',
     category: 'Data Analytics',
     size: 'medium',
@@ -197,7 +205,7 @@ export const projectsData = [
     title: 'Hospitality AI Solutions',
     description: 'AI-powered solutions for the hospitality industry, focusing on customer experience and operational efficiency',
     image: hosp,
-    link: '/Highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    link: `/highlights/${slugify('Hospitality AI Solutions')}`,
     uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
     category: 'AI & Hospitality',
     size: 'medium',
@@ -357,12 +365,18 @@ export default function Projects() {
                 // Recalculate index after filtering for proper numbering
                 const filteredProjects = projectsData.filter(p => ![5, 11, 12].includes(p.id));
                 const displayIndex = filteredProjects.findIndex(p => p.id === project.id);
+                const isClickableOverlayCard = project.textOverlay && project.link && String(project.link).startsWith('/');
+                const CardWrapper = isClickableOverlayCard ? Link : 'div';
+                const spanClass = project.span === 3 ? 'span-3' : project.span === 4 ? 'span-4' : project.span === 6 ? 'span-6' : 'span-2';
+                const cardWrapperProps = isClickableOverlayCard
+                  ? { to: project.link, className: `project-card-outer-link ${spanClass}`, style: { textDecoration: 'none', color: 'inherit' } }
+                  : { className: `project-card-outer ${spanClass}` };
                 return (
-              <div 
-                key={project.id} 
-                className={`project-card-grid project-card-${project.size || 'medium'} ${project.span === 3 ? 'span-3' : project.span === 4 ? 'span-4' : project.span === 6 ? 'span-6' : ''} ${project.textOverlay ? 'text-overlay' : ''} notranslate`}
-                translate="no"
-              >
+              <CardWrapper key={project.id} {...cardWrapperProps} translate="no">
+                <div 
+                  className={`project-card-grid project-card-${project.size || 'medium'} ${project.textOverlay ? 'text-overlay' : ''} notranslate`}
+                  translate="no"
+                >
                 <div 
                   className={`project-card-image ${project.overlayLayout === 'split' ? 'overlay-split' : ''} ${project.layout === 'text-carousel' ? 'text-carousel-layout' : ''} ${project.layout === 'two-squares' ? 'two-squares-layout' : ''}`}
                   style={project.imageHeight ? { height: project.imageHeight } : {}}
@@ -531,7 +545,8 @@ export default function Projects() {
                     )}
                   </div>
                 )}
-              </div>
+                </div>
+              </CardWrapper>
                 );
               })}
           </div>
