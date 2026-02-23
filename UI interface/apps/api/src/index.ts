@@ -89,6 +89,26 @@ app.get("/api/dashboard/summary", async (c) => {
     "SELECT COUNT(*)::text AS count FROM pending_items WHERE user_id = $1 AND is_done = FALSE",
     [userId],
   );
+  const [jobsThisMonth] = await query<{ count: string }>(
+    env,
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved >= DATE_TRUNC('month', CURRENT_DATE)",
+    [userId],
+  );
+  const [jobsThisWeek] = await query<{ count: string }>(
+    env,
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved >= DATE_TRUNC('week', CURRENT_DATE)",
+    [userId],
+  );
+  const [jobsToday] = await query<{ count: string }>(
+    env,
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved::date = CURRENT_DATE",
+    [userId],
+  );
+  const [jobsWithReferral] = await query<{ count: string }>(
+    env,
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND TRIM(COALESCE(referral_status, '')) = 'Yes'",
+    [userId],
+  );
 
   const dailyTrend = await query<{ day: string; total: number }>(
     env,
@@ -191,6 +211,10 @@ app.get("/api/dashboard/summary", async (c) => {
       jobs: Number(jobCount?.count ?? 0),
       referrals: Number(referralCount?.count ?? 0),
       pending: Number(pendingCount?.count ?? 0),
+      jobsThisMonth: Number(jobsThisMonth?.count ?? 0),
+      jobsThisWeek: Number(jobsThisWeek?.count ?? 0),
+      jobsToday: Number(jobsToday?.count ?? 0),
+      jobsWithReferral: Number(jobsWithReferral?.count ?? 0),
     },
     dailyTrend,
     referralTrend,
@@ -486,6 +510,34 @@ app.get("/api/pending", async (c) => {
     [userId],
   );
   return c.json({ data: rows });
+});
+
+const pendingPostInput = z.object({
+  company: z.string().min(1),
+  position_name: z.string().optional(),
+  pending_date: z.string().optional(),
+  comment: z.string().optional(),
+  link: z.union([z.string().url(), z.literal("")]).optional(),
+});
+app.post("/api/pending", async (c) => {
+  const userId = c.get("authUser").id;
+  const parsed = pendingPostInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const [row] = await query(
+    c.env,
+    `INSERT INTO pending_items (user_id, source, company, position_name, pending_date, comment, link)
+     VALUES ($1, 'manual', $2, $3, $4::date, $5, $6) RETURNING *`,
+    [
+      userId,
+      p.company.trim(),
+      p.position_name?.trim() || null,
+      p.pending_date || null,
+      p.comment?.trim() || null,
+      p.link?.trim() || null,
+    ],
+  );
+  return c.json(row, 201);
 });
 
 const pendingPatchInput = z.object({ is_done: z.literal(true) });

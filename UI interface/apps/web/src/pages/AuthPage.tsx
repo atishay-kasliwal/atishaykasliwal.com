@@ -47,8 +47,15 @@ export default function AuthPage({ onAuthenticated }: AuthPageProps) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Login to dashboard</h1>
-        <p>Only owner access is enabled for now.</p>
+        <div className="auth-card-accent" aria-hidden />
+        <div className="auth-card-icon" aria-hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <h1 className="auth-card-title">Welcome back</h1>
+        <p className="auth-card-subtitle">Owner access only. Sign in to continue.</p>
         <form className="auth-form" onSubmit={onSubmit}>
           <label className="auth-label" htmlFor="email">
             Email
@@ -74,9 +81,15 @@ export default function AuthPage({ onAuthenticated }: AuthPageProps) {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter owner password"
           />
-          {error ? <div className="error">{error}</div> : null}
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? "Please wait..." : "Login"}
+          {error ? <div className="auth-error">{error}</div> : null}
+          <button type="submit" className="auth-submit" disabled={isLoading}>
+            {isLoading ? (
+              <span className="auth-submit-loading">
+                <span className="auth-spinner" aria-hidden /> Signing in…
+              </span>
+            ) : (
+              "Sign in"
+            )}
           </button>
         </form>
       </div>
