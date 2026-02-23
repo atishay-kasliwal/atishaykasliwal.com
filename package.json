@@ -19,7 +19,8 @@
   "scripts": {
     "start": "react-scripts start",
     "dev:dashboard": "cd \"UI interface/apps/web\" && npm run dev",
-    "build": "node scripts/copy-dashboard-routes.cjs && react-scripts build && cp build/index.html build/404.html && (cp public/_redirects build/_redirects 2>/dev/null || cp _redirects build/_redirects 2>/dev/null || true) && cp public/_headers build/_headers 2>/dev/null || true",
+    "build:dashboard": "node scripts/build-and-copy-dashboard.cjs",
+    "build": "npm run build:dashboard && node scripts/copy-dashboard-routes.cjs && react-scripts build && cp build/index.html build/404.html && (cp public/_redirects build/_redirects 2>/dev/null || cp _redirects build/_redirects 2>/dev/null || true) && cp public/_headers build/_headers 2>/dev/null || true",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
