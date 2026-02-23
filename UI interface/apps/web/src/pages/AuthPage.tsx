@@ -8,24 +8,37 @@ type AuthPageProps = {
 
 const OWNER_EMAIL = "katishay@gmail.com";
 
-function generateSparkline(seedKey: string, points = 32) {
+type SparkPoint = {
+  value: number;
+  date: string; // YYYY-MM-DD
+};
+
+function generateSparkline(seedKey: string, days = 60): SparkPoint[] {
   const today = new Date();
-  const base = Number(
-    `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
-  );
+  today.setHours(0, 0, 0, 0);
+  const base = Number(`${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`);
+
   let seed = base || 1;
   for (let i = 0; i < seedKey.length; i += 1) {
     seed = (seed * 31 + seedKey.charCodeAt(i)) & 0x7fffffff;
   }
-  const values: number[] = [];
+
+  const startMs = today.getTime() - (days - 1) * 24 * 60 * 60 * 1000;
+  const points: SparkPoint[] = [];
   let x = seed || 1;
-  for (let i = 0; i < points; i += 1) {
+
+  for (let i = 0; i < days; i += 1) {
+    const current = new Date(startMs + i * 24 * 60 * 60 * 1000);
     x = (1103515245 * x + 12345) & 0x7fffffff;
     const t = x / 0x7fffffff;
-    const v = 0.25 + t * 0.6; // keep between 0.25 and 0.85
-    values.push(v);
+    const value = 0.25 + t * 0.6; // keep between 0.25 and 0.85
+    points.push({
+      value,
+      date: current.toISOString().slice(0, 10),
+    });
   }
-  return values;
+
+  return points;
 }
 
 type HeroMetricCardProps = {
@@ -36,19 +49,45 @@ type HeroMetricCardProps = {
   seedKey: string;
 };
 
+function formatShortDateLabel(isoDate: string): string {
+  const d = new Date(isoDate);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
 function HeroMetricCard({ title, subtitle, primary, change, seedKey }: HeroMetricCardProps) {
-  const points = useMemo(() => generateSparkline(seedKey), [seedKey]);
+  const series = useMemo(() => generateSparkline(seedKey, 60), [seedKey]);
   const pathD = useMemo(() => {
-    if (!points.length) return "";
-    const lastIndex = points.length - 1 || 1;
-    return points
-      .map((v, idx) => {
-        const x = (idx / lastIndex) * 100;
-        const y = 35 - v * 22;
+    if (!series.length) return "";
+    const lastIndex = series.length - 1 || 1;
+    return series
+      .map(({ value }, idx) => {
+        const x = lastIndex === 0 ? 0 : (idx / lastIndex) * 100;
+        const y = 35 - value * 22;
         return `${idx === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`;
       })
       .join(" ");
-  }, [points]);
+  }, [series]);
+
+  const dateTicks = useMemo(() => {
+    if (!series.length) return [];
+    const lastIndex = series.length - 1 || 1;
+    const indices = Array.from(
+      new Set([
+        0,
+        Math.floor(series.length / 2),
+        series.length - 1,
+      ]),
+    ).filter((i) => i >= 0 && i < series.length);
+    return indices.map((idx) => {
+      const point = series[idx];
+      const x = lastIndex === 0 ? 0 : (idx / lastIndex) * 100;
+      return {
+        x,
+        label: formatShortDateLabel(point.date),
+      };
+    });
+  }, [series]);
 
   const lineId = `auth-hero-line-${seedKey}`;
   const fillId = `auth-hero-fill-${seedKey}`;
@@ -95,6 +134,35 @@ function HeroMetricCard({ title, subtitle, primary, change, seedKey }: HeroMetri
               strokeWidth={1.5}
               strokeLinecap="round"
             />
+            {series.map(({ value }, idx) => {
+              const lastIndex = series.length - 1 || 1;
+              const x = lastIndex === 0 ? 0 : (idx / lastIndex) * 100;
+              const y = 35 - value * 22;
+              // show fewer dots to avoid clutter: every 5th point and the last one
+              if (idx % 5 !== 0 && idx !== series.length - 1) return null;
+              return (
+                <circle
+                  key={idx}
+                  cx={x}
+                  cy={y}
+                  r={0.8}
+                  fill="#e0f2fe"
+                  opacity={0.8}
+                />
+              );
+            })}
+            {dateTicks.map((tick, idx) => (
+              <text
+                key={idx}
+                x={tick.x}
+                y={38.5}
+                textAnchor="middle"
+                fontSize={3}
+                fill="rgba(148, 163, 184, 0.9)"
+              >
+                {tick.label}
+              </text>
+            ))}
           </>
         ) : null}
       </svg>
