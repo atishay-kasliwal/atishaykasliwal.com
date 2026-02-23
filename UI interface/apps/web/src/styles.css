@@ -71,7 +71,7 @@ body {
 }
 
 .dashboard-site-header .logo strong {
-  font-weight: 400;
+  font-weight: 400 !important;
 }
 
 .dashboard-site-header .logo:hover {
@@ -883,10 +883,10 @@ tr:hover td {
   min-height: calc(100vh - 72px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) 420px;
-  column-gap: 0.75rem;
+  column-gap: 0.4rem;
   row-gap: 1rem;
   align-items: center;
-  padding: 2.25rem 2rem 3rem;
+  padding: 2.25rem 1.5rem 3rem;
   max-width: 1320px;
   width: 100%;
   margin: 0 auto;
@@ -1016,7 +1016,6 @@ tr:hover td {
 
 .auth-card-wrap .auth-card {
   max-width: 380px;
-}
 }
 
 .auth-card {

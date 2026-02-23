@@ -255,8 +255,10 @@
     <script>
       (function() {
         var l = window.location;
-        if (l.search && l.search.indexOf('?/') === 1) {
-          var decoded = l.search.slice(2).split('&').map(function(s) { return s.replace(/~and~/g, '&'); }).join('?');
+        // When the 404 page redirects to "/?/<path>", restore the original path
+        // (standard SPA routing workaround for hosts without rewrites).
+        if (l.search && l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function(s) { return s.replace(/~and~/g, '&'); }).join('?');
           window.history.replaceState(null, null, decoded + l.hash);
         }
       })();
