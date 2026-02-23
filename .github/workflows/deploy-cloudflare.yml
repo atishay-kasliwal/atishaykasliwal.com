@@ -32,6 +32,8 @@ jobs:
       
       - name: Build
         run: npm run build
+        env:
+          VITE_API_URL: https://job-tracker-api.katishay.workers.dev
       
       - name: Deploy to Cloudflare Pages
         run: npx wrangler@latest pages deploy ./build --project-name=atishay-kasliwal-github-io

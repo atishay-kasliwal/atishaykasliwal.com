@@ -748,7 +748,7 @@ function HomePage() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <Link to="/dashboard/">DASHBOARD</Link>
+            <a href="/dashboard/index.html" translate="no">DASHBOARD</a>
           </nav>
         </div>
         
@@ -1253,7 +1253,7 @@ function ArtPage() {
           <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
           <Link to="/art" translate="no">ART</Link>
-          <Link to="/dashboard/" translate="no">DASHBOARD</Link>
+          <a href="/dashboard/index.html" translate="no">DASHBOARD</a>
         </nav>
       </div>
       <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -1270,28 +1270,13 @@ function ArtPage() {
 
 function DashboardShellPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [iframeFailed, setIframeFailed] = useState(false);
-  const loadTimeoutRef = useRef(null);
-  // Always load the dashboard app entry. Using pathname (e.g. /dashboard/jobs) here can 404 and serve the main app again, causing nested iframes and "refused to connect" until dashboard/jobs/index.html etc. are deployed.
-  const iframeSrc = "/dashboard/index.html";
-
+  // Redirect to the dashboard app as full page so we never show a broken iframe.
+  // User sees login if not logged in, or dashboard if logged in.
   useEffect(() => {
-    loadTimeoutRef.current = setTimeout(() => setIframeFailed(true), 5000);
-    return () => {
-      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
-    };
-  }, []);
-
-  const handleIframeLoad = () => {
-    if (loadTimeoutRef.current) {
-      clearTimeout(loadTimeoutRef.current);
-      loadTimeoutRef.current = null;
+    if (!window.location.pathname.endsWith('index.html')) {
+      window.location.replace('/dashboard/index.html');
     }
-    setIframeFailed(false);
-  };
-  const handleIframeError = () => {
-    setIframeFailed(true);
-  };
+  }, []);
 
   return (
     <>
@@ -1327,27 +1312,12 @@ function DashboardShellPage() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
             <Link to="/art" translate="no">ART</Link>
-            <Link to="/dashboard/" translate="no">DASHBOARD</Link>
+            <a href="/dashboard/index.html" translate="no">DASHBOARD</a>
           </nav>
         </div>
 
         <section className="dashboard-embed-wrap" translate="no">
-          {iframeFailed ? (
-            <div className="dashboard-embed-fallback">
-              <p className="dashboard-embed-fallback-text">Dashboard couldn’t load in the frame.</p>
-              <a href="/dashboard/index.html" className="dashboard-embed-fallback-link" target="_top" rel="noopener noreferrer">
-                Open dashboard in full page
-              </a>
-            </div>
-          ) : (
-            <iframe
-              title="Job Dashboard"
-              src={iframeSrc}
-              className="dashboard-embed-frame"
-              onLoad={handleIframeLoad}
-              onError={handleIframeError}
-            />
-          )}
+          <p className="dashboard-embed-fallback-text" style={{ margin: '2rem auto' }}>Opening dashboard…</p>
         </section>
       </div>
     </>
