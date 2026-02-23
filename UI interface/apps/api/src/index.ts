@@ -237,7 +237,7 @@ app.get("/api/jobs", async (c) => {
 
   const rows = await query(
     c.env,
-    `${baseSql}${orderLimitOffset}`,
+    `${baseSql}${whereClause}${orderLimitOffset}`,
     [userId, limit, offset],
   );
   return c.json({ page, limit, data: rows });

@@ -1,6 +1,6 @@
 # Database migrations
 
-Migrations are in `db/migrations/` and run in filename order.
+Migrations are in `db/migrations/` and run in filename order. Only `*.sql` files are run; `*.sql.off` is skipped. `002_app_user_template.sql.off` is an optional template for a dedicated DB role (Neon often disallows CREATE ROLE, so it is disabled by default).
 
 **Run migrations** (from repo root, with your Neon DB URL):
 

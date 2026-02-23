@@ -8,7 +8,7 @@ type LayoutProps = {
 export default function Layout({ userEmail, onLogout }: LayoutProps) {
   return (
     <div className="page">
-      <header className="hero">
+      <div className="hero">
         <h1>Job Tracker</h1>
         <p>Applications, referrals & notes — atishaykasliwal.com</p>
         <div className="auth-user-row">
@@ -17,7 +17,7 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
             Logout
           </button>
         </div>
-      </header>
+      </div>
       <nav className="app-nav">
         <NavLink to="/" end className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
           Dashboard
