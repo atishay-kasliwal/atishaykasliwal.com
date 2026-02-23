@@ -5,6 +5,7 @@ import {
   createReferral,
   createPending,
 } from "../lib/api";
+import { getLocalISODate } from "../lib/formatDate";
 
 type LayoutProps = {
   userEmail: string;
@@ -18,13 +19,13 @@ const emptyJobForm = {
   job_link: "",
   referral_status: "",
   notes: "",
-  date_saved: new Date().toISOString().slice(0, 10),
+  date_saved: getLocalISODate(),
 };
 
 const emptyPendingForm = {
   company: "",
   position_name: "",
-  pending_date: new Date().toISOString().slice(0, 10),
+  pending_date: getLocalISODate(),
   comment: "",
   link: "",
 };
@@ -52,12 +53,12 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
         await createReferral({
           company: form.company.trim(),
           request_log: form.role.trim(),
-          request_date: form.date_saved || new Date().toISOString().slice(0, 10),
+          request_date: form.date_saved || getLocalISODate(),
           request_link: form.job_link.trim() || undefined,
           referral_received: form.referral_status,
           comment: form.notes.trim() || undefined,
         });
-        setForm({ ...emptyJobForm, date_saved: new Date().toISOString().slice(0, 10) });
+        setForm({ ...emptyJobForm, date_saved: getLocalISODate() });
         setShowQuickAdd(false);
         window.dispatchEvent(new CustomEvent("dashboard-refresh"));
       } catch (err) {
@@ -73,12 +74,12 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
       setModalError("");
       await createJob({
         ...form,
-        date_saved: form.date_saved || new Date().toISOString().slice(0, 10),
+        date_saved: form.date_saved || getLocalISODate(),
         job_link: form.job_link.trim() || undefined,
         referral_status: form.referral_status.trim() || undefined,
         notes: form.notes.trim() || undefined,
       });
-      setForm(emptyJobForm);
+      setForm({ ...emptyJobForm, date_saved: getLocalISODate() });
       setShowQuickAdd(false);
       window.dispatchEvent(new CustomEvent("dashboard-refresh"));
     } catch (err) {
@@ -103,7 +104,7 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
       });
       setPendingForm({
         ...emptyPendingForm,
-        pending_date: new Date().toISOString().slice(0, 10),
+        pending_date: getLocalISODate(),
       });
       setShowPendingTask(false);
       window.dispatchEvent(new CustomEvent("dashboard-refresh"));
