@@ -1,0 +1,13 @@
+name = "job-tracker-api"
+main = "src/index.ts"
+compatibility_date = "2025-02-22"
+
+[vars]
+APP_ENV = "development"
+
+# Set with:
+# wrangler secret put NEON_DATABASE_URL
+# wrangler secret put API_SHARED_TOKEN
+# wrangler secret put OWNER_DASHBOARD_PASSWORD
+# Optional:
+# wrangler secret put OWNER_EMAIL

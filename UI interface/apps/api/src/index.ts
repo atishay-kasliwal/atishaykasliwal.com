@@ -1,0 +1,512 @@
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { z } from "zod";
+import {
+  authMiddleware,
+  createSession,
+  ensureOwnerUser,
+  getOwnerEmail,
+  normalizeEmail,
+  revokeSession,
+} from "./auth";
+import { query } from "./db";
+import type { AuthUser, Bindings } from "./types";
+
+const app = new Hono<{ Bindings: Bindings; Variables: { authUser: AuthUser } }>();
+app.use(
+  "*",
+  cors({
+    origin: "*",
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  }),
+);
+
+app.get("/", (c) => c.json({ name: "job-tracker-api", docs: "Use /api/* endpoints. GET /health for health check." }));
+app.get("/health", (c) => c.json({ ok: true, env: c.env.APP_ENV ?? "unknown" }));
+app.patch("/health", (c) => c.json({ ok: true, method: "PATCH" }));
+
+app.get("/auth-check", (c) => {
+  const bearer = c.req.header("authorization")?.replace(/^Bearer\s+/i, "").trim();
+  return c.json({ authorizationHeaderPresent: Boolean(bearer) });
+});
+
+const loginInput = z.object({
+  email: z.string().email(),
+  password: z.string().min(1).max(128),
+});
+
+app.post("/auth/signup", async (c) => c.json({ error: "Signup is disabled for this dashboard." }, 403));
+
+app.post("/auth/login", async (c) => {
+  const parsed = loginInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+
+  const email = normalizeEmail(parsed.data.email);
+  const ownerEmail = getOwnerEmail(c.env);
+  const ownerPassword = c.env.OWNER_DASHBOARD_PASSWORD?.trim();
+
+  if (email !== ownerEmail) {
+    return c.json({ error: "Only owner access is enabled." }, 403);
+  }
+  if (!ownerPassword) {
+    return c.json(
+      { error: "Owner password is not configured yet. Set OWNER_DASHBOARD_PASSWORD on the API and redeploy." },
+      403,
+    );
+  }
+  if (parsed.data.password !== ownerPassword) {
+    return c.json({ error: "Invalid email or password." }, 401);
+  }
+
+  const owner = await ensureOwnerUser(c.env);
+  const token = await createSession(c.env, owner.id);
+  return c.json({ token, user: owner });
+});
+
+app.use("/api/*", authMiddleware);
+
+app.get("/api/auth/me", (c) => {
+  return c.json({ user: c.get("authUser") });
+});
+
+app.post("/api/auth/logout", async (c) => {
+  const rawBearer = c.req.header("authorization")?.replace(/^Bearer\s+/i, "");
+  const bearer = rawBearer ? rawBearer.trim() : "";
+  if (bearer) {
+    await revokeSession(c.env, bearer);
+  }
+  return c.json({ ok: true });
+});
+
+app.get("/api/dashboard/summary", async (c) => {
+  const env = c.env;
+  const userId = c.get("authUser").id;
+  const [jobCount] = await query<{ count: string }>(env, "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1", [userId]);
+  const [referralCount] = await query<{ count: string }>(env, "SELECT COUNT(*)::text AS count FROM referrals WHERE user_id = $1", [userId]);
+  const [pendingCount] = await query<{ count: string }>(
+    env,
+    "SELECT COUNT(*)::text AS count FROM pending_items WHERE user_id = $1 AND is_done = FALSE",
+    [userId],
+  );
+
+  const dailyTrend = await query<{ day: string; total: number }>(
+    env,
+    `
+    SELECT d.day::text AS day, COALESCE(j.cnt, 0)::int AS total
+    FROM (
+      SELECT generate_series(
+        DATE_TRUNC('year', CURRENT_DATE)::date,
+        CURRENT_DATE::date,
+        '1 day'::interval
+      )::date AS day
+    ) d
+    LEFT JOIN (
+      SELECT DATE(date_saved) AS day, COUNT(*)::int AS cnt
+      FROM jobs
+      WHERE user_id = $1 AND date_saved IS NOT NULL
+      GROUP BY DATE(date_saved)
+    ) j ON j.day = d.day
+    ORDER BY d.day ASC
+    `,
+    [userId],
+  );
+
+  const referralTrendRaw = await query<{ referral_status: string; total: number }>(
+    env,
+    `
+    SELECT TRIM(COALESCE(referral_status, '')) AS referral_status, COUNT(*)::int AS total
+    FROM jobs
+    WHERE user_id = $1
+    GROUP BY TRIM(COALESCE(referral_status, ''))
+    `,
+    [userId],
+  );
+  const referralOrder = ["Yes", "No", "Pending"];
+  const referralTrend = referralOrder
+    .map((status) => {
+      const row = referralTrendRaw.find((r) => r.referral_status === status);
+      return { referral_status: status, total: row ? row.total : 0 };
+    })
+    .concat(
+      referralTrendRaw
+        .filter((r) => !referralOrder.includes(r.referral_status) && r.referral_status !== "")
+        .map((r) => ({ referral_status: r.referral_status, total: r.total })),
+    );
+
+  const weeklyTrend = await query<{ week: string; total: number }>(
+    env,
+    `
+    SELECT DATE_TRUNC('week', date_saved)::date::text AS week, COUNT(*)::int AS total
+    FROM jobs
+    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (CURRENT_DATE - INTERVAL '84 days')
+    GROUP BY DATE_TRUNC('week', date_saved)
+    ORDER BY week ASC
+    LIMIT 12
+    `,
+    [userId],
+  );
+
+  const responseStatusTrend = await query<{ response_status: string; total: number }>(
+    env,
+    `
+    SELECT COALESCE(NULLIF(TRIM(response_status), ''), '—') AS response_status, COUNT(*)::int AS total
+    FROM jobs
+    WHERE user_id = $1
+    GROUP BY COALESCE(NULLIF(TRIM(response_status), ''), '—')
+    ORDER BY total DESC
+    LIMIT 8
+    `,
+    [userId],
+  );
+
+  const oaStatusTrend = await query<{ oa_status: string; total: number }>(
+    env,
+    `
+    SELECT COALESCE(NULLIF(TRIM(oa_status), ''), '—') AS oa_status, COUNT(*)::int AS total
+    FROM jobs
+    WHERE user_id = $1
+    GROUP BY COALESCE(NULLIF(TRIM(oa_status), ''), '—')
+    ORDER BY total DESC
+    LIMIT 8
+    `,
+    [userId],
+  );
+
+  const monthlyTrend = await query<{ month: string; total: number }>(
+    env,
+    `
+    SELECT TO_CHAR(DATE_TRUNC('month', date_saved), 'YYYY-MM') AS month, COUNT(*)::int AS total
+    FROM jobs
+    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (CURRENT_DATE - INTERVAL '12 months')
+    GROUP BY DATE_TRUNC('month', date_saved)
+    ORDER BY month ASC
+    LIMIT 12
+    `,
+    [userId],
+  );
+
+  return c.json({
+    kpis: {
+      jobs: Number(jobCount?.count ?? 0),
+      referrals: Number(referralCount?.count ?? 0),
+      pending: Number(pendingCount?.count ?? 0),
+    },
+    dailyTrend,
+    referralTrend,
+    weeklyTrend,
+    responseStatusTrend,
+    oaStatusTrend,
+    monthlyTrend,
+  });
+});
+
+const JOBS_SORT_COLUMNS = ["date_saved", "company", "role", "referral_status", "job_link"] as const;
+type JobsSortColumn = (typeof JOBS_SORT_COLUMNS)[number];
+function isJobsSortColumn(s: string): s is JobsSortColumn {
+  return (JOBS_SORT_COLUMNS as readonly string[]).includes(s);
+}
+
+app.get("/api/jobs", async (c) => {
+  const userId = c.get("authUser").id;
+  const page = Number(c.req.query("page") ?? 1);
+  const limit = Math.min(Number(c.req.query("limit") ?? 25), 100);
+  const company = c.req.query("company");
+  const sortRaw = c.req.query("sort") ?? "date_saved";
+  const orderRaw = String(c.req.query("order") ?? "desc").toLowerCase();
+  const sort = isJobsSortColumn(sortRaw) ? sortRaw : "date_saved";
+  const order: "ASC" | "DESC" = orderRaw === "asc" ? "ASC" : "DESC";
+  const offset = (page - 1) * limit;
+
+  const orderBy = `${sort} ${order} NULLS LAST, date_saved DESC NULLS LAST, company ASC NULLS LAST, id DESC`;
+  const baseSql = `
+    SELECT *
+    FROM jobs
+  `;
+  const whereClause = company ? " WHERE user_id = $1 AND company ILIKE $2" : " WHERE user_id = $1";
+  const orderLimitOffset = ` ORDER BY ${orderBy} LIMIT $${company ? "3" : "2"} OFFSET $${company ? "4" : "3"}`;
+
+  if (company) {
+    const rows = await query(
+      c.env,
+      `${baseSql}${whereClause}${orderLimitOffset}`,
+      [userId, `%${company}%`, limit, offset],
+    );
+    return c.json({ page, limit, data: rows });
+  }
+
+  const rows = await query(
+    c.env,
+    `${baseSql}${orderLimitOffset}`,
+    [userId, limit, offset],
+  );
+  return c.json({ page, limit, data: rows });
+});
+
+const jobInput = z.object({
+  role: z.string().min(1),
+  company: z.string().min(1),
+  location_raw: z.string().optional(),
+  job_link: z.string().url().optional(),
+  oa_status: z.string().optional(),
+  referral_status: z.string().optional(),
+  response_status: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+app.post("/api/jobs", async (c) => {
+  const userId = c.get("authUser").id;
+  const parsed = jobInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const [row] = await query(
+    c.env,
+    `
+    INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, oa_status, referral_status, response_status, notes, date_saved)
+    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+    RETURNING *
+    `,
+    [
+      userId,
+      p.role,
+      p.company,
+      p.location_raw ?? null,
+      p.job_link ?? null,
+      p.oa_status ?? null,
+      p.referral_status ?? null,
+      p.response_status ?? null,
+      p.notes ?? null,
+    ],
+  );
+  return c.json(row, 201);
+});
+
+const jobUpdateInput = z.object({
+  role: z.string().min(1).optional(),
+  company: z.string().min(1).optional(),
+  location_raw: z.string().optional(),
+  job_link: z.string().url().optional().nullable(),
+  oa_status: z.string().optional().nullable(),
+  referral_status: z.string().optional().nullable(),
+  response_status: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+});
+
+app.patch("/api/jobs/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const parsed = jobUpdateInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const [row] = await query(
+    c.env,
+    `
+    UPDATE jobs SET
+      role = COALESCE($1, role),
+      company = COALESCE($2, company),
+      location_raw = COALESCE($3, location_raw),
+      job_link = COALESCE($4, job_link),
+      oa_status = COALESCE($5, oa_status),
+      referral_status = COALESCE($6, referral_status),
+      response_status = COALESCE($7, response_status),
+      notes = COALESCE($8, notes),
+      updated_at = NOW()
+    WHERE id = $9 AND user_id = $10
+    RETURNING *
+    `,
+    [
+      p.role ?? null,
+      p.company ?? null,
+      p.location_raw ?? null,
+      p.job_link ?? null,
+      p.oa_status ?? null,
+      p.referral_status ?? null,
+      p.response_status ?? null,
+      p.notes ?? null,
+      id,
+      userId,
+    ],
+  );
+  if (!row) return c.json({ error: "Not found" }, 404);
+  return c.json(row);
+});
+
+const referralInput = z.object({
+  company: z.string().min(1),
+  request_log: z.string().optional(),
+  request_date: z.string().optional(),
+  request_link: z.string().url().optional(),
+  referral_received: z.string().optional(),
+  referred_by_name: z.string().optional(),
+  comment: z.string().optional(),
+});
+
+app.get("/api/referrals", async (c) => {
+  const userId = c.get("authUser").id;
+  const page = Number(c.req.query("page") ?? 1);
+  const limit = Math.min(Number(c.req.query("limit") ?? 25), 100);
+  const offset = (page - 1) * limit;
+  const filterOpen = c.req.query("filter") === "open";
+  const sql = filterOpen
+    ? "SELECT * FROM referrals WHERE user_id = $1 AND COALESCE(TRIM(referral_received), '') IN ('Requested', 'Pending') ORDER BY request_date DESC NULLS LAST, id DESC LIMIT $2 OFFSET $3"
+    : "SELECT * FROM referrals WHERE user_id = $1 ORDER BY request_date DESC NULLS LAST, id DESC LIMIT $2 OFFSET $3";
+  const rows = await query(c.env, sql, [userId, limit, offset]);
+  return c.json({ page, limit, data: rows });
+});
+
+app.post("/api/referrals", async (c) => {
+  const userId = c.get("authUser").id;
+  const parsed = referralInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const [row] = await query(
+    c.env,
+    `
+    INSERT INTO referrals (user_id, source, company, request_log, request_date, request_link, referral_received, referred_by_name, comment)
+    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8)
+    RETURNING *
+    `,
+    [
+      userId,
+      p.company,
+      p.request_log ?? null,
+      p.request_date ?? null,
+      p.request_link ?? null,
+      p.referral_received ?? null,
+      p.referred_by_name ?? null,
+      p.comment ?? null,
+    ],
+  );
+  return c.json(row, 201);
+});
+
+app.get("/api/referrals/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const [row] = await query(c.env, "SELECT * FROM referrals WHERE id = $1 AND user_id = $2 LIMIT 1", [id, userId]);
+  if (!row) return c.json({ error: "Referral not found" }, 404);
+  return c.json(row);
+});
+
+const referralUpdateInput = z.object({
+  company: z.string().min(1).optional(),
+  request_log: z.string().optional(),
+  request_date: z.string().optional(),
+  request_link: z.string().url().optional().nullable(),
+  referral_received: z.string().optional().nullable(),
+  referred_by_name: z.string().optional().nullable(),
+  comment: z.string().optional(),
+});
+
+app.patch("/api/referrals/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const parsed = referralUpdateInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const updates: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  if (p.company !== undefined) {
+    updates.push(`company = $${i++}`);
+    values.push(p.company);
+  }
+  if (p.request_log !== undefined) {
+    updates.push(`request_log = $${i++}`);
+    values.push(p.request_log);
+  }
+  if (p.request_date !== undefined) {
+    updates.push(`request_date = $${i++}`);
+    values.push(p.request_date);
+  }
+  if (p.request_link !== undefined) {
+    updates.push(`request_link = $${i++}`);
+    values.push(p.request_link);
+  }
+  if (p.referral_received !== undefined) {
+    updates.push(`referral_received = $${i++}`);
+    values.push(p.referral_received);
+  }
+  if (p.referred_by_name !== undefined) {
+    updates.push(`referred_by_name = $${i++}`);
+    values.push(p.referred_by_name);
+  }
+  if (p.comment !== undefined) {
+    updates.push(`comment = $${i++}`);
+    values.push(p.comment);
+  }
+  if (updates.length === 0) return c.json({ error: "No fields to update" }, 400);
+  values.push(id);
+  values.push(userId);
+  const [row] = await query(
+    c.env,
+    `UPDATE referrals SET ${updates.join(", ")}, updated_at = NOW() WHERE id = $${i} AND user_id = $${i + 1} RETURNING *`,
+    values,
+  );
+  if (!row) return c.json({ error: "Referral not found" }, 404);
+  return c.json(row);
+});
+
+app.get("/api/notes", async (c) => {
+  const userId = c.get("authUser").id;
+  const page = Number(c.req.query("page") ?? 1);
+  const limit = Math.min(Number(c.req.query("limit") ?? 25), 100);
+  const offset = (page - 1) * limit;
+  const rows = await query(
+    c.env,
+    "SELECT * FROM daily_notes WHERE user_id = $1 ORDER BY id DESC LIMIT $2 OFFSET $3",
+    [userId, limit, offset],
+  );
+  return c.json({ page, limit, data: rows });
+});
+
+const noteInput = z.object({
+  note_date: z.string().optional(),
+  comments: z.string().min(1),
+});
+
+app.post("/api/notes", async (c) => {
+  const userId = c.get("authUser").id;
+  const parsed = noteInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const [row] = await query(
+    c.env,
+    "INSERT INTO daily_notes (user_id, source, note_date, comments) VALUES ($1, 'manual', $2, $3) RETURNING *",
+    [userId, p.note_date ?? null, p.comments],
+  );
+  return c.json(row, 201);
+});
+
+app.get("/api/pending", async (c) => {
+  const userId = c.get("authUser").id;
+  const rows = await query(
+    c.env,
+    "SELECT * FROM pending_items WHERE user_id = $1 AND is_done = FALSE ORDER BY pending_date DESC NULLS LAST, id DESC LIMIT 200",
+    [userId],
+  );
+  return c.json({ data: rows });
+});
+
+const pendingPatchInput = z.object({ is_done: z.literal(true) });
+
+app.patch("/api/pending/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const parsed = pendingPatchInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const [row] = await query(
+    c.env,
+    "UPDATE pending_items SET is_done = TRUE, updated_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING *",
+    [id, userId],
+  );
+  if (!row) return c.json({ error: "Not found" }, 404);
+  return c.json(row);
+});
+
+app.onError((err, c) => {
+  const message = err instanceof Error ? err.message : "Internal Server Error";
+  return c.json({ error: message }, 500);
+});
+
+export default app;
