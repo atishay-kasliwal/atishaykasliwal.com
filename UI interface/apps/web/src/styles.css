@@ -555,6 +555,12 @@ body {
   text-align: center;
 }
 
+/* Remove light/white bar hover overlay from Recharts */
+.recharts-bar-rectangle .recharts-active-bar,
+.recharts-bar .recharts-active-bar {
+  fill-opacity: 1 !important;
+}
+
 .card {
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);

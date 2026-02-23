@@ -280,7 +280,7 @@ export default function DashboardPage() {
                 allowDecimals={false}
                 width={32}
               />
-              <Tooltip content={(props) => <DailyTrendTooltip {...props} todayLabel={todayLabel} />} />
+              <Tooltip content={(props) => <DailyTrendTooltip {...props} todayLabel={todayLabel} />} cursor={{ fill: "transparent" }} />
               {showTodayLine ? (
                 <ReferenceLine x={todayLabel} stroke="#f472b6" strokeWidth={1.5} strokeDasharray="4 4" label={{ value: "Today", fill: CHART_COLORS.axis, fontSize: 10 }} />
               ) : null}
@@ -333,6 +333,7 @@ export default function DashboardPage() {
                 <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
                 <Tooltip
                   contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
+                  cursor={{ fill: "transparent" }}
                   labelFormatter={formatWeek}
                   formatter={(value: number) => [`${value}`, "Applications"]}
                 />
@@ -359,6 +360,7 @@ export default function DashboardPage() {
                 <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
                 <Tooltip
                   contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
+                  cursor={{ fill: "transparent" }}
                   labelFormatter={formatMonth}
                   formatter={(value: number) => [`${value}`, "Applications"]}
                 />
@@ -390,6 +392,7 @@ export default function DashboardPage() {
                   border: `1px solid ${CHART_COLORS.tooltipBorder}`,
                   borderRadius: 8,
                 }}
+                cursor={{ fill: "transparent" }}
                 formatter={(value: number) => [`${value} jobs`, "Count"]}
               />
               <Bar dataKey="total" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }}>
@@ -411,6 +414,7 @@ export default function DashboardPage() {
                 <YAxis type="category" dataKey="response_status" stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} width={80} />
                 <Tooltip
                   contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
+                  cursor={{ fill: "transparent" }}
                   formatter={(value: number) => [`${value}`, "Jobs"]}
                 />
                 <Bar dataKey="total" fill="#a78bfa" radius={[0, 4, 4, 0]} label={{ position: "right", fill: CHART_COLORS.axis, fontSize: 10 }} />
@@ -435,6 +439,7 @@ export default function DashboardPage() {
                 <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
                 <Tooltip
                   contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
+                  cursor={{ fill: "transparent" }}
                   formatter={(value: number) => [`${value}`, "Jobs"]}
                 />
                 <Bar dataKey="total" fill="#34d399" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }} />

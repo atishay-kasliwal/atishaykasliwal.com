@@ -276,6 +276,7 @@ const jobInput = z.object({
   referral_status: z.string().optional(),
   response_status: z.string().optional(),
   notes: z.string().optional(),
+  date_saved: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
 });
 
 app.post("/api/jobs", async (c) => {
@@ -287,7 +288,7 @@ app.post("/api/jobs", async (c) => {
     c.env,
     `
     INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, oa_status, referral_status, response_status, notes, date_saved)
-    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, $9, COALESCE($10::date, NOW()))
     RETURNING *
     `,
     [
@@ -300,6 +301,7 @@ app.post("/api/jobs", async (c) => {
       p.referral_status ?? null,
       p.response_status ?? null,
       p.notes ?? null,
+      p.date_saved ?? null,
     ],
   );
   return c.json(row, 201);
