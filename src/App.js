@@ -1270,8 +1270,28 @@ function ArtPage() {
 
 function DashboardShellPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [iframeFailed, setIframeFailed] = useState(false);
+  const loadTimeoutRef = useRef(null);
   // Always load the dashboard app entry. Using pathname (e.g. /dashboard/jobs) here can 404 and serve the main app again, causing nested iframes and "refused to connect" until dashboard/jobs/index.html etc. are deployed.
   const iframeSrc = "/dashboard/index.html";
+
+  useEffect(() => {
+    loadTimeoutRef.current = setTimeout(() => setIframeFailed(true), 5000);
+    return () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+    };
+  }, []);
+
+  const handleIframeLoad = () => {
+    if (loadTimeoutRef.current) {
+      clearTimeout(loadTimeoutRef.current);
+      loadTimeoutRef.current = null;
+    }
+    setIframeFailed(false);
+  };
+  const handleIframeError = () => {
+    setIframeFailed(true);
+  };
 
   return (
     <>
@@ -1312,11 +1332,22 @@ function DashboardShellPage() {
         </div>
 
         <section className="dashboard-embed-wrap" translate="no">
-          <iframe
-            title="Job Dashboard"
-            src={iframeSrc}
-            className="dashboard-embed-frame"
-          />
+          {iframeFailed ? (
+            <div className="dashboard-embed-fallback">
+              <p className="dashboard-embed-fallback-text">Dashboard couldn’t load in the frame.</p>
+              <a href="/dashboard/index.html" className="dashboard-embed-fallback-link" target="_top" rel="noopener noreferrer">
+                Open dashboard in full page
+              </a>
+            </div>
+          ) : (
+            <iframe
+              title="Job Dashboard"
+              src={iframeSrc}
+              className="dashboard-embed-frame"
+              onLoad={handleIframeLoad}
+              onError={handleIframeError}
+            />
+          )}
         </section>
       </div>
     </>
