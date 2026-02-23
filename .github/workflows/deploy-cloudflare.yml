@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Install dashboard dependencies
+        run: cd "UI interface/apps/web" && npm install
+      
       - name: Build
         run: npm run build
       
