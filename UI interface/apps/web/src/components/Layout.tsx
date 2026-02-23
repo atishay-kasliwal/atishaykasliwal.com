@@ -18,6 +18,7 @@ const emptyJobForm = {
   job_link: "",
   referral_status: "",
   notes: "",
+  date_saved: new Date().toISOString().slice(0, 10),
 };
 
 const emptyPendingForm = {
@@ -51,12 +52,12 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
         await createReferral({
           company: form.company.trim(),
           request_log: form.role.trim(),
-          request_date: new Date().toISOString().slice(0, 10),
+          request_date: form.date_saved || new Date().toISOString().slice(0, 10),
           request_link: form.job_link.trim() || undefined,
           referral_received: form.referral_status,
           comment: form.notes.trim() || undefined,
         });
-        setForm(emptyJobForm);
+        setForm({ ...emptyJobForm, date_saved: new Date().toISOString().slice(0, 10) });
         setShowQuickAdd(false);
         window.dispatchEvent(new CustomEvent("dashboard-refresh"));
       } catch (err) {
@@ -72,6 +73,7 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
       setModalError("");
       await createJob({
         ...form,
+        date_saved: form.date_saved || new Date().toISOString().slice(0, 10),
         job_link: form.job_link.trim() || undefined,
         referral_status: form.referral_status.trim() || undefined,
         notes: form.notes.trim() || undefined,
@@ -162,6 +164,14 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
                 value={form.company}
                 onChange={(e) => setForm((p) => ({ ...p, company: e.target.value }))}
               />
+              <div className="form-row">
+                <label className="form-label">Date</label>
+                <input
+                  type="date"
+                  value={form.date_saved}
+                  onChange={(e) => setForm((p) => ({ ...p, date_saved: e.target.value }))}
+                />
+              </div>
               <input
                 placeholder="Location"
                 value={form.location_raw}
