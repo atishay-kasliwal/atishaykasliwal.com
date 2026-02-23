@@ -288,7 +288,7 @@ app.post("/api/jobs", async (c) => {
     c.env,
     `
     INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, oa_status, referral_status, response_status, notes, date_saved)
-    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, $9, COALESCE($10::date, NOW()))
+    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, $9, (COALESCE($10::date, CURRENT_DATE))::timestamp)
     RETURNING *
     `,
     [
@@ -316,6 +316,7 @@ const jobUpdateInput = z.object({
   referral_status: z.string().optional().nullable(),
   response_status: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
+  date_saved: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
 });
 
 app.patch("/api/jobs/:id", async (c) => {
@@ -336,8 +337,9 @@ app.patch("/api/jobs/:id", async (c) => {
       referral_status = COALESCE($6, referral_status),
       response_status = COALESCE($7, response_status),
       notes = COALESCE($8, notes),
+      date_saved = COALESCE($9::date, date_saved),
       updated_at = NOW()
-    WHERE id = $9 AND user_id = $10
+    WHERE id = $10 AND user_id = $11
     RETURNING *
     `,
     [
@@ -349,6 +351,7 @@ app.patch("/api/jobs/:id", async (c) => {
       p.referral_status ?? null,
       p.response_status ?? null,
       p.notes ?? null,
+      p.date_saved ?? null,
       id,
       userId,
     ],
