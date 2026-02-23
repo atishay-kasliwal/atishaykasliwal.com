@@ -748,6 +748,7 @@ function HomePage() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
+            <Link to="/dashboard">DASHBOARD</Link>
           </nav>
         </div>
         
@@ -1252,6 +1253,7 @@ function ArtPage() {
           <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
           <Link to="/art" translate="no">ART</Link>
+          <Link to="/dashboard" translate="no">DASHBOARD</Link>
         </nav>
       </div>
       <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -1263,6 +1265,59 @@ function ArtPage() {
         ))}
       </div>
     </div>
+  );
+}
+
+function DashboardShellPage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <>
+      <Helmet>
+        <html lang="en" translate="no" />
+        <title>Dashboard | Atishay Kasliwal</title>
+        <link rel="canonical" href="https://atishaykasliwal.com/dashboard" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
+      </Helmet>
+      <div className="bg-art" translate="no" />
+      <div className="page-content dashboard-shell" translate="no">
+        <div className="header" translate="no">
+          <Link
+            to="/"
+            className="logo libertinus-mono"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            onClick={() => setIsMobileMenuOpen(false)}
+            translate="no"
+          >
+            <strong>Atishay Kasliwal</strong>
+          </Link>
+          <button
+            className="mobile-menu-toggle"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            translate="no"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
+            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+            <Link to="/art" translate="no">ART</Link>
+            <Link to="/dashboard" translate="no">DASHBOARD</Link>
+          </nav>
+        </div>
+
+        <section className="dashboard-embed-wrap" translate="no">
+          <iframe
+            title="Job Dashboard"
+            src="/dashboard/index.html"
+            className="dashboard-embed-frame"
+          />
+        </section>
+      </div>
+    </>
   );
 }
 
@@ -1841,6 +1896,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/art" element={<ArtPage />} />
+        <Route path="/dashboard" element={<DashboardShellPage />} />
+        <Route path="/dashbaord" element={<DashboardShellPage />} />
         <Route path="/highlights" element={<Projects />} />
         {/* Blog-style highlight endpoint (project-name slug OR uuid) */}
         <Route path="/highlights/:id" element={<HighlightDetail />} />
