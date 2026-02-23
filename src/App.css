@@ -2204,6 +2204,36 @@ body {
   background: transparent;
 }
 
+.dashboard-embed-fallback {
+  width: 100%;
+  min-height: calc(100vh - 260px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.dashboard-embed-fallback-text {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+}
+
+.dashboard-embed-fallback-link {
+  color: #e4a853;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.dashboard-embed-fallback-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .dashboard-embed-wrap {
     padding: 0 1rem 1rem;
@@ -2211,6 +2241,10 @@ body {
   }
 
   .dashboard-embed-frame {
+    min-height: calc(100vh - 220px);
+  }
+
+  .dashboard-embed-fallback {
     min-height: calc(100vh - 220px);
   }
 }
