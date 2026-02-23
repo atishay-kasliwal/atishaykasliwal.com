@@ -5,7 +5,7 @@ const SITE_LINKS = [
   { href: "/Atishay-Kasliwal-Resume.pdf?v=2", label: "RESUME" },
   { href: "https://www.linkedin.com/in/atishay-kasliwal/", label: "LINKEDIN" },
   { href: "/art", label: "ART" },
-  { href: "/dashboard/", label: "DASHBOARD" },
+  { href: "/dashboard/", label: "LOGIN" },
 ];
 
 type SiteShellProps = {
