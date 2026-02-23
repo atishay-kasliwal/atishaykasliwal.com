@@ -23,16 +23,154 @@ body {
   margin: 0;
   min-height: 100vh;
   background: var(--bg-base);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(228, 168, 83, 0.08), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(120, 119, 198, 0.06), transparent),
-    radial-gradient(ellipse 50% 30% at 0% 50%, rgba(228, 168, 83, 0.04), transparent);
+}
+
+/* Same background as atishaykasliwal.com (.bg-art) */
+.dashboard-bg-art {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at top, #1f2937 0%, #020617 55%, #000000 100%);
+}
+
+.dashboard-page-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Site header matching atishaykasliwal.com */
+.dashboard-site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.2rem 2rem 0 2rem;
+  background: transparent;
+  font-size: 0.7695rem;
+  color: #fff;
+}
+
+.dashboard-site-header .logo {
+  font-family: "Montserrat", "Arial", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  opacity: 0.9;
+  color: #fff;
+  text-decoration: none;
+}
+
+.dashboard-site-header .logo:hover {
+  color: #fff;
+  opacity: 1;
+}
+
+.dashboard-site-nav {
+  display: flex;
+  gap: 2.2rem;
+  font-family: "Montserrat", "Arial", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  margin-top: 0.2rem;
+}
+
+.dashboard-site-nav a {
+  color: #fff;
+  opacity: 0.85;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.dashboard-site-nav a:hover {
+  opacity: 1;
+}
+
+.dashboard-mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .dashboard-site-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+  }
+  .dashboard-mobile-menu-toggle {
+    display: flex;
+    z-index: 1001;
+  }
+  .dashboard-site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.98);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 5rem 2rem 2rem;
+    gap: 2rem;
+    font-size: 1.2rem;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+  }
+  .dashboard-site-nav.open {
+    transform: translateX(0);
+  }
+  .dashboard-site-nav a {
+    padding: 1rem 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-site-header {
+    padding: 0.75rem 1rem 0.5rem 1rem;
+  }
+  .dashboard-site-nav {
+    padding: 4.5rem 1.5rem 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+  .dashboard-site-nav a {
+    font-size: 1rem;
+    padding: 0.875rem 0;
+  }
+  .dashboard-site-header .logo {
+    font-size: 1.1rem;
+  }
 }
 
 .page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 28px 24px 48px;
+  padding: 1rem 24px 48px;
 }
 
 .hero {

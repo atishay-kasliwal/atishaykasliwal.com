@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Layout from "./components/Layout";
+import SiteShell from "./components/SiteShell";
 import DashboardPage from "./pages/DashboardPage";
 import JobsPage from "./pages/JobsPage";
 import ReferralsPage from "./pages/ReferralsPage";
@@ -60,37 +61,43 @@ export default function App() {
 
   if (checkingSession) {
     return (
-      <div className="spinner-wrap">
-        <div className="spinner" />
-      </div>
+      <BrowserRouter basename="/dashboard">
+        <SiteShell>
+          <div className="spinner-wrap">
+            <div className="spinner" />
+          </div>
+        </SiteShell>
+      </BrowserRouter>
     );
   }
 
   return (
     <BrowserRouter basename="/dashboard">
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            session ? (
-              <Navigate to="/" replace />
-            ) : (
-              <AuthPage onAuthenticated={handleAuthenticated} />
-            )
-          }
-        />
-        <Route
-          path="/"
-          element={session ? <Layout userEmail={session.user.email} onLogout={handleLogout} /> : <Navigate to="/login" replace />}
-        >
-          <Route index element={<DashboardPage />} />
-          <Route path="jobs" element={<JobsPage />} />
-          <Route path="referrals" element={<ReferralsPage />} />
-          <Route path="notes" element={<NotesPage />} />
-          <Route path="pending" element={<PendingPage />} />
-        </Route>
-        <Route path="*" element={<Navigate to={session ? "/" : "/login"} replace />} />
-      </Routes>
+      <SiteShell>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              session ? (
+                <Navigate to="/" replace />
+              ) : (
+                <AuthPage onAuthenticated={handleAuthenticated} />
+              )
+            }
+          />
+          <Route
+            path="/"
+            element={session ? <Layout userEmail={session.user.email} onLogout={handleLogout} /> : <Navigate to="/login" replace />}
+          >
+            <Route index element={<DashboardPage />} />
+            <Route path="jobs" element={<JobsPage />} />
+            <Route path="referrals" element={<ReferralsPage />} />
+            <Route path="notes" element={<NotesPage />} />
+            <Route path="pending" element={<PendingPage />} />
+          </Route>
+          <Route path="*" element={<Navigate to={session ? "/" : "/login"} replace />} />
+        </Routes>
+      </SiteShell>
     </BrowserRouter>
   );
 }

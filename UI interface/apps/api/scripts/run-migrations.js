@@ -1,6 +1,7 @@
 /**
  * Run SQL migrations from db/migrations against NEON_DATABASE_URL.
  * Usage (from repo root): NEON_DATABASE_URL='postgresql://...' node apps/api/scripts/run-migrations.js
+ * Splits on ";" but respects dollar-quoted strings ($$ ... $$) so CREATE FUNCTION / DO blocks stay intact.
  */
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
@@ -10,6 +11,63 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "../../..");
 const migrationsDir = path.join(repoRoot, "db", "migrations");
+
+function splitSqlStatements(body) {
+  const statements = [];
+  let current = "";
+  let i = 0;
+  let inDollarQuote = false;
+  while (i < body.length) {
+    if (inDollarQuote) {
+      if (body.slice(i, i + 2) === "$$") {
+        current += "$$";
+        i += 2;
+        inDollarQuote = false;
+      } else {
+        current += body[i];
+        i++;
+      }
+    } else {
+      if (body.slice(i, i + 2) === "--") {
+        while (i < body.length && body[i] !== "\n") current += body[i++];
+        continue;
+      }
+      if (body.slice(i, i + 2) === "$$") {
+        current += "$$";
+        i += 2;
+        inDollarQuote = true;
+      } else if (body[i] === ";") {
+        let stmt = current.trim();
+        // Strip leading comment/blank lines so "-- comment\n\nCREATE TABLE ..." is kept
+        while (stmt.length > 0) {
+          const firstLine = (stmt.split("\n")[0] || "").trim();
+          if (firstLine.length === 0 || firstLine.startsWith("--")) {
+            const idx = stmt.indexOf("\n");
+            if (idx === -1) break;
+            stmt = stmt.slice(idx + 1).trim();
+          } else break;
+        }
+        if (stmt.length > 0) statements.push(stmt);
+        current = "";
+        i++;
+      } else {
+        current += body[i];
+        i++;
+      }
+    }
+  }
+  let stmt = current.trim();
+  while (stmt.length > 0) {
+    const firstLine = (stmt.split("\n")[0] || "").trim();
+    if (firstLine.length === 0 || firstLine.startsWith("--")) {
+      const idx = stmt.indexOf("\n");
+      if (idx === -1) break;
+      stmt = stmt.slice(idx + 1).trim();
+    } else break;
+  }
+  if (stmt.length > 0) statements.push(stmt);
+  return statements;
+}
 
 const url = process.env.NEON_DATABASE_URL;
 if (!url) {
@@ -28,10 +86,7 @@ if (files.length === 0) {
 for (const file of files) {
   const filePath = path.join(migrationsDir, file);
   const body = fs.readFileSync(filePath, "utf8");
-  const statements = body
-    .split(";")
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith("--"));
+  const statements = splitSqlStatements(body);
   console.log(`Running ${file} (${statements.length} statement(s))...`);
   for (const statement of statements) {
     if (statement) await sql.query(statement + ";", []);

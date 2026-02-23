@@ -1270,6 +1270,8 @@ function ArtPage() {
 
 function DashboardShellPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // Always load the dashboard app entry. Using pathname (e.g. /dashboard/jobs) here can 404 and serve the main app again, causing nested iframes and "refused to connect" until dashboard/jobs/index.html etc. are deployed.
+  const iframeSrc = "/dashboard/index.html";
 
   return (
     <>
@@ -1312,7 +1314,7 @@ function DashboardShellPage() {
         <section className="dashboard-embed-wrap" translate="no">
           <iframe
             title="Job Dashboard"
-            src="/dashboard/index.html"
+            src={iframeSrc}
             className="dashboard-embed-frame"
           />
         </section>
@@ -1896,7 +1898,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/art" element={<ArtPage />} />
-        <Route path="/dashboard" element={<DashboardShellPage />} />
+        <Route path="/dashboard/*" element={<DashboardShellPage />} />
         <Route path="/dashbaord" element={<DashboardShellPage />} />
         <Route path="/highlights" element={<Projects />} />
         {/* Blog-style highlight endpoint (project-name slug OR uuid) */}
