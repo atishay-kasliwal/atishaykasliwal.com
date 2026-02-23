@@ -879,7 +879,7 @@ tr:hover td {
   min-height: calc(100vh - 72px);
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
   padding: 2.25rem 2rem 3rem;
 }
@@ -900,7 +900,7 @@ tr:hover td {
   margin: 0;
   font-family: "Outfit", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 2.2rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.03em;
   color: var(--text-primary);
 }
