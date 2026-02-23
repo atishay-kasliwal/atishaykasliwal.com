@@ -52,6 +52,7 @@ export default function JobsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [editing, setEditing] = useState<Record<string, unknown> | null>(null);
   const [editForm, setEditForm] = useState({
+    date_saved: "",
     role: "",
     company: "",
     location_raw: "",
@@ -104,7 +105,14 @@ export default function JobsPage() {
 
   function openEdit(job: Record<string, unknown>) {
     setEditing(job);
+    const rawDate = String(job.date_saved ?? "");
+    const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(rawDate)
+      ? rawDate
+      : rawDate && rawDate.length >= 10
+        ? rawDate.slice(0, 10)
+        : "";
     setEditForm({
+      date_saved: dateOnly,
       role: String(job.role ?? ""),
       company: String(job.company ?? ""),
       location_raw: String(job.location_raw ?? ""),
@@ -121,6 +129,7 @@ export default function JobsPage() {
     try {
       setIsSaving(true);
       await updateJob(editing.id, {
+        date_saved: editForm.date_saved || undefined,
         role: editForm.role.trim() || undefined,
         company: editForm.company.trim() || undefined,
         location_raw: editForm.location_raw.trim() || undefined,
@@ -251,6 +260,14 @@ export default function JobsPage() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>Edit Job</h3>
             <form className="form" onSubmit={onSaveEdit}>
+              <div className="form-row">
+                <label className="form-label">Date</label>
+                <input
+                  type="date"
+                  value={editForm.date_saved}
+                  onChange={(e) => setEditForm((p) => ({ ...p, date_saved: e.target.value }))}
+                />
+              </div>
               <input
                 placeholder="Position *"
                 value={editForm.role}
