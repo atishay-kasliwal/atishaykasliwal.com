@@ -1,22 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { formatTableDate } from "../lib/formatDate";
 import { createJob, getReferrals, updateReferral } from "../lib/api";
 
 const LIMIT = 25;
 const REFERRAL_SHEET_STATUSES = ["Requested", "Pending"] as const;
 const JOB_STATUSES = ["Yes", "No", "Applied without referral"] as const;
 const ALL_STATUS_OPTIONS = [...REFERRAL_SHEET_STATUSES, ...JOB_STATUSES] as const;
-
-function formatDate(value: unknown): string {
-  if (value == null || value === "") return "—";
-  try {
-    const d = new Date(String(value));
-    return isNaN(d.getTime()) ? String(value) : d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-  } catch {
-    return String(value);
-  }
-}
 
 export default function ReferralsPage() {
   const [data, setData] = useState<Array<Record<string, unknown>>>([]);
@@ -98,9 +88,6 @@ export default function ReferralsPage() {
 
       <div className="card">
         <h2>Referrals</h2>
-        <p className="chart-subtitle" style={{ marginBottom: 12 }}>
-          Only <strong>Requested</strong> and <strong>Pending</strong> appear here. Change status to <strong>Yes</strong>, <strong>No</strong>, or <strong>Applied without referral</strong> to create a job — it will then show on the <Link to="/jobs" className="table-link">Jobs</Link> page.
-        </p>
         {isLoading ? (
           <Spinner />
         ) : data.length === 0 ? (
@@ -111,9 +98,9 @@ export default function ReferralsPage() {
               <table>
                 <thead>
                   <tr>
-                    <th>Company</th>
-                    <th>Role</th>
                     <th>Date</th>
+                    <th>Company</th>
+                    <th>Position</th>
                     <th>Status</th>
                     <th>Referred by</th>
                     <th>Link</th>
@@ -122,10 +109,10 @@ export default function ReferralsPage() {
                 </thead>
                 <tbody>
                   {data.map((r) => (
-                    <tr key={String(r.id)}>
+                    <tr key={String(r.id)} className="tr-hover">
+                      <td>{formatTableDate(r.request_date)}</td>
                       <td>{String(r.company ?? "—")}</td>
                       <td>{String(r.request_log ?? "—")}</td>
-                      <td>{formatDate(r.request_date)}</td>
                       <td>{String(r.referral_received ?? "—")}</td>
                       <td>{String(r.referred_by_name ?? "—")}</td>
                       <td>

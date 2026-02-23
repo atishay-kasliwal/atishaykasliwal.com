@@ -748,7 +748,7 @@ function HomePage() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <Link to="/dashboard">DASHBOARD</Link>
+            <Link to="/dashboard/">DASHBOARD</Link>
           </nav>
         </div>
         
@@ -1253,7 +1253,7 @@ function ArtPage() {
           <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
           <Link to="/art" translate="no">ART</Link>
-          <Link to="/dashboard" translate="no">DASHBOARD</Link>
+          <Link to="/dashboard/" translate="no">DASHBOARD</Link>
         </nav>
       </div>
       <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -1327,7 +1327,7 @@ function DashboardShellPage() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
             <Link to="/art" translate="no">ART</Link>
-            <Link to="/dashboard" translate="no">DASHBOARD</Link>
+            <Link to="/dashboard/" translate="no">DASHBOARD</Link>
           </nav>
         </div>
 

@@ -322,7 +322,7 @@ export default function HighlightDetail() {
               <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
               <Link to="/art">ART</Link>
-              <Link to="/dashboard">DASHBOARD</Link>
+              <Link to="/dashboard/">DASHBOARD</Link>
             </nav>
           </div>
           <div className="highlight-not-found">
@@ -500,7 +500,7 @@ export default function HighlightDetail() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <Link to="/dashboard">DASHBOARD</Link>
+            <Link to="/dashboard/">DASHBOARD</Link>
           </nav>
         </div>
 
