@@ -290,6 +290,7 @@ export default function Projects() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
             <Link to="/art" translate="no">ART</Link>
+            <Link to="/dashboard" translate="no">DASHBOARD</Link>
           </nav>
         </div>
 

@@ -25,7 +25,7 @@ body {
   background: var(--bg-base);
 }
 
-/* Same background as atishaykasliwal.com (.bg-art) - on own layer for smooth scrolling */
+/* Same background as atishaykasliwal.com (.bg-art) - on own layer for smooth scrolling; 80% transparent */
 .dashboard-bg-art {
   position: fixed;
   top: 0;
@@ -35,7 +35,7 @@ body {
   z-index: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at 50% 0%, #1f2937 0%, #020617 50%, #000 100%);
+  background: radial-gradient(circle at 50% 0%, rgba(31, 41, 55, 0.2) 0%, rgba(2, 6, 23, 0.2) 50%, rgba(0, 0, 0, 0.2) 100%);
   transform: translateZ(0);
   backface-visibility: hidden;
   pointer-events: none;
