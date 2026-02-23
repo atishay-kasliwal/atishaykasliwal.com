@@ -878,10 +878,10 @@ tr:hover td {
 .auth-page {
   min-height: calc(100vh - 72px);
   display: grid;
-  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+  gap: 2rem;
   align-items: center;
-  padding: 2.5rem 2.5rem 3rem;
+  padding: 2.25rem 2rem 3rem;
 }
 
 .auth-hero {
@@ -920,8 +920,8 @@ tr:hover td {
 
 .auth-hero-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  row-gap: 1.35rem;
 }
 
 .auth-hero-card {
