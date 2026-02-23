@@ -57,10 +57,39 @@ const MONTH_COLORS = [
 ];
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+function parseIsoDay(day: string): { y: number; m: number; d: number } | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+  if (!m) return null;
+  const y = Number(m[1]);
+  const month = Number(m[2]);
+  const d = Number(m[3]);
+  if (!y || month < 1 || month > 12 || d < 1 || d > 31) return null;
+  return { y, m: month, d };
+}
+
+function utcDateFromIsoDay(day: string): Date | null {
+  const p = parseIsoDay(day);
+  if (!p) return null;
+  return new Date(Date.UTC(p.y, p.m - 1, p.d));
+}
+
+function isoDayAddDays(day: string, deltaDays: number): string {
+  const d = utcDateFromIsoDay(day);
+  if (!d) return day;
+  d.setUTCDate(d.getUTCDate() + deltaDays);
+  return d.toISOString().slice(0, 10);
+}
+
 function formatDay(day: string) {
   try {
-    const d = new Date(day);
-    return isNaN(d.getTime()) ? day : d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "2-digit" });
+    const d = utcDateFromIsoDay(day);
+    if (!d || isNaN(d.getTime())) return day;
+    return new Intl.DateTimeFormat(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "2-digit",
+      timeZone: "UTC",
+    }).format(d);
   } catch {
     return day;
   }
@@ -68,11 +97,9 @@ function formatDay(day: string) {
 
 function formatDayShort(day: string) {
   try {
-    const d = new Date(day);
-    if (isNaN(d.getTime())) return day;
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const dayNum = String(d.getDate()).padStart(2, "0");
-    return `${m}/${dayNum}`;
+    const p = parseIsoDay(day);
+    if (!p) return day;
+    return `${String(p.m).padStart(2, "0")}/${String(p.d).padStart(2, "0")}`;
   } catch {
     return day;
   }
@@ -80,8 +107,9 @@ function formatDayShort(day: string) {
 
 function formatWeek(week: string) {
   try {
-    const d = new Date(week);
-    return isNaN(d.getTime()) ? week : d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    const d = utcDateFromIsoDay(week);
+    if (!d || isNaN(d.getTime())) return week;
+    return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" }).format(d);
   } catch {
     return week;
   }
@@ -158,38 +186,37 @@ export default function DashboardPage() {
   const trendData = useMemo(() => {
     const raw = summary.dailyTrend ?? [];
     return raw.map((row) => {
-      const d = new Date(row.day);
-      const month = isNaN(d.getTime()) ? 0 : d.getMonth();
-      const dayOfMonth = isNaN(d.getTime()) ? 0 : d.getDate();
-      const label = `${MONTH_NAMES[month]} ${dayOfMonth}`;
-      return { ...row, label, month, dayOfMonth };
+      const p = parseIsoDay(row.day);
+      const monthIndex = p ? p.m - 1 : 0;
+      const dayOfMonth = p ? p.d : 0;
+      const label = `${MONTH_NAMES[monthIndex] ?? MONTH_NAMES[0]} ${dayOfMonth || 0}`;
+      return { ...row, label, month: monthIndex, dayOfMonth };
     });
   }, [summary.dailyTrend]);
 
   /** KPIs derived from the same job/trend data used for the charts */
   const derivedKpis = useMemo(() => {
-    const now = new Date();
-    const todayIso = now.toISOString().slice(0, 10); // YYYY-MM-DD
-    const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`; // YYYY-MM
-
     const daily = summary.dailyTrend ?? [];
     const monthly = summary.monthlyTrend ?? [];
     const referral = summary.referralTrend ?? [];
 
-    const jobsToday = daily.find((r) => r.day === todayIso)?.total ?? 0;
+    // Use the same "today" as the daily trend series (DB CURRENT_DATE).
+    const seriesTodayIso = daily.length ? String(daily[daily.length - 1].day) : "";
+    const todayParts = seriesTodayIso ? parseIsoDay(seriesTodayIso) : null;
+    const monthKey = todayParts
+      ? `${todayParts.y}-${String(todayParts.m).padStart(2, "0")}`
+      : "";
+
+    const jobsToday = seriesTodayIso ? daily.find((r) => r.day === seriesTodayIso)?.total ?? 0 : 0;
     const jobsThisMonth = monthly.find((r) => r.month === monthKey)?.total ?? 0;
     const jobsWithReferral = referral.find((r) => r.referral_status === "Yes")?.total ?? 0;
 
     // This week = sum of daily trend for last 7 days (same data as daily chart, no timezone/week-boundary issues)
     const jobsThisWeek = (() => {
-      const start = new Date(now);
-      start.setUTCDate(now.getUTCDate() - 6);
-      start.setUTCHours(0, 0, 0, 0);
-      const end = new Date(now);
-      end.setUTCHours(23, 59, 59, 999);
+      if (!seriesTodayIso) return 0;
       let sum = 0;
-      for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
-        const dayIso = d.toISOString().slice(0, 10);
+      for (let i = 6; i >= 0; i -= 1) {
+        const dayIso = isoDayAddDays(seriesTodayIso, -i);
         sum += daily.find((r) => r.day === dayIso)?.total ?? 0;
       }
       return sum;
@@ -206,9 +233,12 @@ export default function DashboardPage() {
   }, [summary.dailyTrend, summary.monthlyTrend, summary.referralTrend, summary.kpis.jobs, summary.kpis.pending]);
 
   const todayLabel = useMemo(() => {
-    const now = new Date();
-    return `${MONTH_NAMES[now.getMonth()]} ${now.getDate()}`;
-  }, []);
+    const daily = summary.dailyTrend ?? [];
+    const seriesTodayIso = daily.length ? String(daily[daily.length - 1].day) : "";
+    const p = seriesTodayIso ? parseIsoDay(seriesTodayIso) : null;
+    if (!p) return "";
+    return `${MONTH_NAMES[p.m - 1]} ${p.d}`;
+  }, [summary.dailyTrend]);
 
   const dailyTrendTicks = useMemo(() => {
     const labels = new Set<string>();
@@ -222,7 +252,7 @@ export default function DashboardPage() {
       .filter((l, i, arr) => arr.indexOf(l) === i);
   }, [trendData, todayLabel]);
 
-  const showTodayLine = trendData.some((row) => row.label === todayLabel);
+  const showTodayLine = Boolean(todayLabel) && trendData.some((row) => row.label === todayLabel);
 
   if (isLoading) {
     return (
