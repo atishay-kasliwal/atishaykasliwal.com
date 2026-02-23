@@ -1,0 +1,96 @@
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Layout from "./components/Layout";
+import DashboardPage from "./pages/DashboardPage";
+import JobsPage from "./pages/JobsPage";
+import ReferralsPage from "./pages/ReferralsPage";
+import NotesPage from "./pages/NotesPage";
+import PendingPage from "./pages/PendingPage";
+import AuthPage from "./pages/AuthPage";
+import {
+  clearStoredSession,
+  getMe,
+  getStoredSession,
+  logout,
+  setRuntimeAuthToken,
+  setStoredSession,
+  type AuthSession,
+} from "./lib/api";
+
+export default function App() {
+  const [session, setSession] = useState<AuthSession | null>(() => getStoredSession());
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  useEffect(() => {
+    const existing = getStoredSession();
+    if (!existing?.token) {
+      setSession(null);
+      setCheckingSession(false);
+      return;
+    }
+    setRuntimeAuthToken(existing.token);
+    getMe()
+      .then(({ user }) => {
+        const normalized: AuthSession = { token: existing.token, user };
+        setStoredSession(normalized);
+        setSession(normalized);
+      })
+      .catch(() => {
+        clearStoredSession();
+        setSession(null);
+      })
+      .finally(() => setCheckingSession(false));
+  }, []);
+
+  async function handleLogout() {
+    try {
+      await logout();
+    } catch {
+      // Best-effort logout.
+    } finally {
+      clearStoredSession();
+      setSession(null);
+    }
+  }
+
+  function handleAuthenticated(nextSession: AuthSession) {
+    setStoredSession(nextSession);
+    setSession(nextSession);
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="spinner-wrap">
+        <div className="spinner" />
+      </div>
+    );
+  }
+
+  return (
+    <BrowserRouter basename="/dashboard">
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            session ? (
+              <Navigate to="/" replace />
+            ) : (
+              <AuthPage onAuthenticated={handleAuthenticated} />
+            )
+          }
+        />
+        <Route
+          path="/"
+          element={session ? <Layout userEmail={session.user.email} onLogout={handleLogout} /> : <Navigate to="/login" replace />}
+        >
+          <Route index element={<DashboardPage />} />
+          <Route path="jobs" element={<JobsPage />} />
+          <Route path="referrals" element={<ReferralsPage />} />
+          <Route path="notes" element={<NotesPage />} />
+          <Route path="pending" element={<PendingPage />} />
+        </Route>
+        <Route path="*" element={<Navigate to={session ? "/" : "/login"} replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
