@@ -106,6 +106,10 @@ export type DashboardSummary = {
     jobs: number;
     referrals: number;
     pending: number;
+    jobsThisMonth: number;
+    jobsThisWeek: number;
+    jobsToday: number;
+    jobsWithReferral: number;
   };
   dailyTrend: Array<{ day: string; total: number }>;
   referralTrend: Array<{ referral_status: string; total: number }>;
@@ -164,6 +168,19 @@ export function getNotes(params: GetListParams = {}) {
 
 export function getPending() {
   return request<{ data: Array<Record<string, unknown>> }>("/api/pending");
+}
+
+export function createPending(payload: {
+  company: string;
+  position_name?: string;
+  pending_date?: string;
+  comment?: string;
+  link?: string;
+}) {
+  return request<Record<string, unknown>>("/api/pending", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 }
 
 export function createJob(payload: Record<string, unknown>) {

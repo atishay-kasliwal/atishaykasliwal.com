@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { formatTableDate } from "../lib/formatDate";
 import { getJobs, updateJob } from "../lib/api";
 
 const LIMIT = 25;
@@ -12,7 +13,7 @@ type SortOrder = "asc" | "desc";
 const SORT_CONFIG: { key: SortField; label: string }[] = [
   { key: "date_saved", label: "Date" },
   { key: "company", label: "Company" },
-  { key: "role", label: "Role" },
+  { key: "role", label: "Position" },
   { key: "referral_status", label: "Referral" },
   { key: "job_link", label: "Link" },
 ];
@@ -150,15 +151,20 @@ export default function JobsPage() {
       {error ? <div className="error">{error}</div> : null}
 
       <div className="card">
-        <h2>Jobs</h2>
-        <form className="form" onSubmit={onSearch} style={{ marginBottom: 16 }}>
-          <input
-            placeholder="Search by company"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-          <button type="submit">Search</button>
-        </form>
+        <div className="jobs-header">
+          <h2>Jobs</h2>
+          <form className="jobs-search-row" onSubmit={onSearch}>
+            <input
+              className="jobs-search-input"
+              type="search"
+              placeholder="Search by company"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              aria-label="Search by company"
+            />
+            <button type="submit" className="jobs-search-btn">Search</button>
+          </form>
+        </div>
 
         {isLoading ? (
           <Spinner />
@@ -196,11 +202,9 @@ export default function JobsPage() {
                 </thead>
                 <tbody>
                   {sortedData.map((j) => (
-                    <tr key={String(j.id)}>
+                    <tr key={String(j.id)} className="tr-hover">
                       <td>
-                        {j.date_saved
-                          ? new Date(String(j.date_saved)).toLocaleDateString()
-                          : "-"}
+                        {formatTableDate(j.date_saved)}
                       </td>
                       <td>{String(j.company ?? "-")}</td>
                       <td>{String(j.role ?? "-")}</td>
@@ -248,7 +252,7 @@ export default function JobsPage() {
             <h3>Edit Job</h3>
             <form className="form" onSubmit={onSaveEdit}>
               <input
-                placeholder="Role *"
+                placeholder="Position *"
                 value={editForm.role}
                 onChange={(e) => setEditForm((p) => ({ ...p, role: e.target.value }))}
               />

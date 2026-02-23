@@ -5,7 +5,6 @@ import SiteShell from "./components/SiteShell";
 import DashboardPage from "./pages/DashboardPage";
 import JobsPage from "./pages/JobsPage";
 import ReferralsPage from "./pages/ReferralsPage";
-import NotesPage from "./pages/NotesPage";
 import PendingPage from "./pages/PendingPage";
 import AuthPage from "./pages/AuthPage";
 import {
@@ -92,7 +91,6 @@ export default function App() {
             <Route index element={<DashboardPage />} />
             <Route path="jobs" element={<JobsPage />} />
             <Route path="referrals" element={<ReferralsPage />} />
-            <Route path="notes" element={<NotesPage />} />
             <Route path="pending" element={<PendingPage />} />
           </Route>
           <Route path="*" element={<Navigate to={session ? "/" : "/login"} replace />} />

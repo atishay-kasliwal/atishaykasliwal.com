@@ -134,6 +134,7 @@ body {
   opacity: 0.85;
   text-decoration: none;
   transition: opacity 0.2s;
+  font-weight: 500;
 }
 
 .nav a:hover, .nav.black a:hover, .nav .active, .nav.black .active {
@@ -2190,9 +2191,9 @@ body {
 
 .dashboard-embed-wrap {
   width: 100%;
-  max-width: 1240px;
+  max-width: 80%;
   margin: 1rem auto 0;
-  padding: 0 1.5rem 1rem;
+  padding: 0 2.5rem .5rem 2.5rem;
   flex: 1;
 }
 

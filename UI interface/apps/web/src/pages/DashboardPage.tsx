@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   Area,
   Bar,
@@ -18,14 +17,20 @@ import {
 import KpiCard from "../components/KpiCard";
 import Spinner from "../components/Spinner";
 import {
-  createJob,
-  createReferral,
   getDashboardSummary,
   type DashboardSummary,
 } from "../lib/api";
 
 const defaultSummary: DashboardSummary = {
-  kpis: { jobs: 0, referrals: 0, pending: 0 },
+  kpis: {
+    jobs: 0,
+    referrals: 0,
+    pending: 0,
+    jobsThisMonth: 0,
+    jobsThisWeek: 0,
+    jobsToday: 0,
+    jobsWithReferral: 0,
+  },
   dailyTrend: [],
   referralTrend: [],
   weeklyTrend: [],
@@ -35,10 +40,10 @@ const defaultSummary: DashboardSummary = {
 };
 
 const CHART_COLORS = {
-  trendLine: "#2dd4bf",
-  trendGradientTop: "rgba(45, 212, 191, 0.55)",
-  trendGradientBottom: "rgba(45, 212, 191, 0)",
-  bar: ["#22d3ee", "#e4a853", "#a78bfa", "#34d399", "#f472b6", "#94a3b8"],
+  trendLine: "#38bdf8",
+  trendGradientTop: "rgba(56, 189, 248, 0.55)",
+  trendGradientBottom: "rgba(56, 189, 248, 0)",
+  bar: ["#22d3ee", "#38bdf8", "#a78bfa", "#34d399", "#f472b6", "#94a3b8"],
   grid: "rgba(255,255,255,0.06)",
   tooltipBg: "#18181b",
   tooltipBorder: "rgba(255,255,255,0.08)",
@@ -126,17 +131,7 @@ function DailyTrendTooltip({
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary>(defaultSummary);
   const [error, setError] = useState<string>("");
-  const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [form, setForm] = useState({
-    role: "",
-    company: "",
-    location_raw: "",
-    job_link: "",
-    referral_status: "",
-    notes: "",
-  });
-  const [showQuickAdd, setShowQuickAdd] = useState(false);
 
   async function loadSummary() {
     try {
@@ -154,48 +149,11 @@ export default function DashboardPage() {
     loadSummary();
   }, []);
 
-  async function onCreateJob(e: React.FormEvent) {
-    e.preventDefault();
-    if (!form.company.trim()) return;
-    if (form.referral_status === "Requested" || form.referral_status === "Pending") {
-      if (!form.role.trim()) return;
-      try {
-        setIsSaving(true);
-        await createReferral({
-          company: form.company.trim(),
-          request_log: form.role.trim(),
-          request_date: new Date().toISOString().slice(0, 10),
-          request_link: form.job_link.trim() || undefined,
-          referral_received: form.referral_status,
-          comment: form.notes.trim() || undefined,
-        });
-        setForm({ role: "", company: "", location_raw: "", job_link: "", referral_status: "", notes: "" });
-        setShowQuickAdd(false);
-        await loadSummary();
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setIsSaving(false);
-      }
-      return;
-    }
-    if (!form.role.trim()) return;
-    try {
-      setIsSaving(true);
-      await createJob({
-        ...form,
-        job_link: form.job_link.trim() || undefined,
-        referral_status: form.referral_status.trim() || undefined,
-      });
-      setForm({ role: "", company: "", location_raw: "", job_link: "", referral_status: "", notes: "" });
-      setShowQuickAdd(false);
-      await loadSummary();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsSaving(false);
-    }
-  }
+  useEffect(() => {
+    const onRefresh = () => loadSummary();
+    window.addEventListener("dashboard-refresh", onRefresh);
+    return () => window.removeEventListener("dashboard-refresh", onRefresh);
+  }, []);
 
   const trendData = useMemo(() => {
     const raw = summary.dailyTrend ?? [];
@@ -207,6 +165,45 @@ export default function DashboardPage() {
       return { ...row, label, month, dayOfMonth };
     });
   }, [summary.dailyTrend]);
+
+  /** KPIs derived from the same job/trend data used for the charts */
+  const derivedKpis = useMemo(() => {
+    const now = new Date();
+    const todayIso = now.toISOString().slice(0, 10); // YYYY-MM-DD
+    const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`; // YYYY-MM
+
+    const daily = summary.dailyTrend ?? [];
+    const monthly = summary.monthlyTrend ?? [];
+    const referral = summary.referralTrend ?? [];
+
+    const jobsToday = daily.find((r) => r.day === todayIso)?.total ?? 0;
+    const jobsThisMonth = monthly.find((r) => r.month === monthKey)?.total ?? 0;
+    const jobsWithReferral = referral.find((r) => r.referral_status === "Yes")?.total ?? 0;
+
+    // This week = sum of daily trend for last 7 days (same data as daily chart, no timezone/week-boundary issues)
+    const jobsThisWeek = (() => {
+      const start = new Date(now);
+      start.setUTCDate(now.getUTCDate() - 6);
+      start.setUTCHours(0, 0, 0, 0);
+      const end = new Date(now);
+      end.setUTCHours(23, 59, 59, 999);
+      let sum = 0;
+      for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+        const dayIso = d.toISOString().slice(0, 10);
+        sum += daily.find((r) => r.day === dayIso)?.total ?? 0;
+      }
+      return sum;
+    })();
+
+    return {
+      jobs: summary.kpis.jobs ?? 0,
+      jobsToday,
+      jobsThisWeek,
+      jobsThisMonth,
+      jobsWithReferral,
+      pending: summary.kpis.pending ?? 0,
+    };
+  }, [summary.dailyTrend, summary.monthlyTrend, summary.referralTrend, summary.kpis.jobs, summary.kpis.pending]);
 
   const todayLabel = useMemo(() => {
     const now = new Date();
@@ -250,26 +247,16 @@ export default function DashboardPage() {
       ) : null}
 
       <section className="kpi-grid">
-        <KpiCard label="Total Jobs" value={summary.kpis.jobs} />
-        <KpiCard label="Referral Entries" value={summary.kpis.referrals} />
-        <KpiCard label="Pending Items" value={summary.kpis.pending} />
+        <KpiCard label="Applications till now" value={derivedKpis.jobs} />
+        <KpiCard label="Applications this month" value={derivedKpis.jobsThisMonth} />
+        <KpiCard label="Applications this week" value={derivedKpis.jobsThisWeek} />
+        <KpiCard label="Applications today" value={derivedKpis.jobsToday} />
+        <KpiCard label="Total applications with referral" value={derivedKpis.jobsWithReferral} />
+        <KpiCard label="Total OA pending" value={derivedKpis.pending} />
       </section>
 
       <section className="chart-grid chart-grid-trend">
         <div className="card card-chart-trend">
-          <div className="chart-header-row">
-            <div>
-              <h2>Daily Application Trend</h2>
-              <p className="chart-subtitle">From Jan 1 this year — x-axis: calendar day (Jan 1–31, Feb 1–28, …). Bar color = month (see legend below).</p>
-            </div>
-            <button
-              type="button"
-              className="quick-add-btn"
-              onClick={() => setShowQuickAdd(true)}
-            >
-              Quick Add Job
-            </button>
-          </div>
           <ResponsiveContainer width="100%" height={520}>
             <ComposedChart data={trendData} margin={{ top: 20, right: 20, left: 12, bottom: 20 }}>
               <defs>
@@ -375,7 +362,7 @@ export default function DashboardPage() {
                   labelFormatter={formatMonth}
                   formatter={(value: number) => [`${value}`, "Applications"]}
                 />
-                <Bar dataKey="total" fill="#e4a853" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }} />
+                <Bar dataKey="total" fill="#38bdf8" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -458,79 +445,6 @@ export default function DashboardPage() {
           )}
         </div>
       </section>
-
-      {showQuickAdd && (
-        <div className="modal-overlay" onClick={() => !isSaving && setShowQuickAdd(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Quick Add Job</h3>
-            <form className="form" onSubmit={onCreateJob}>
-              <input
-                placeholder="Role *"
-                value={form.role}
-                onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
-              />
-              <input
-                placeholder="Company *"
-                value={form.company}
-                onChange={(e) => setForm((p) => ({ ...p, company: e.target.value }))}
-              />
-              <input
-                placeholder="Location"
-                value={form.location_raw}
-                onChange={(e) => setForm((p) => ({ ...p, location_raw: e.target.value }))}
-              />
-              <input
-                placeholder="Job link (URL)"
-                type="url"
-                value={form.job_link}
-                onChange={(e) => setForm((p) => ({ ...p, job_link: e.target.value }))}
-              />
-              <div className="form-row">
-                <label className="form-label">Referral</label>
-                <select
-                  value={form.referral_status}
-                  onChange={(e) => setForm((p) => ({ ...p, referral_status: e.target.value }))}
-                  className="form-select"
-                >
-                  <option value="">—</option>
-                  <option value="Requested">Requested</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Applied without referral">Applied without referral</option>
-                </select>
-              </div>
-              {(form.referral_status === "Requested" || form.referral_status === "Pending") && (
-                <p className="referral-hint">
-                  This will add an entry on the <Link to="/referrals" className="table-link">Referrals</Link> page. Change its status there to create a job.
-                </p>
-              )}
-              {form.referral_status === "Yes" && (
-                <p className="referral-hint">
-                  Add a referral for this company on the <Link to="/referrals" className="table-link">Referrals</Link> page to keep track.
-                </p>
-              )}
-              <textarea
-                placeholder="Notes"
-                rows={3}
-                value={form.notes}
-                onChange={(e) => setForm((p) => ({ ...p, notes: e.target.value }))}
-              />
-              <div className="modal-actions">
-                <button type="button" className="action-btn" onClick={() => !isSaving && setShowQuickAdd(false)} disabled={isSaving}>
-                  Cancel
-                </button>
-                <button type="submit" disabled={isSaving || !form.company.trim() || !form.role.trim()}>
-                  {isSaving ? "Saving..." : "Add Job"}
-                </button>
-              </div>
-            </form>
-            <p style={{ marginTop: 12, fontSize: "0.85rem", color: "var(--text-muted)" }}>
-              View and search all jobs on the <Link to="/jobs" className="table-link">Jobs</Link> page.
-            </p>
-          </div>
-        </div>
-      )}
     </>
   );
 }
