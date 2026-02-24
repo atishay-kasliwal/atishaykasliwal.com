@@ -82,6 +82,7 @@ app.post("/api/auth/logout", async (c) => {
 app.get("/api/dashboard/summary", async (c) => {
   const env = c.env;
   const userId = c.get("authUser").id;
+  const days = Math.max(7, Math.min(60, Number(c.req.query("days") ?? 30)));
   const [jobCount] = await query<{ count: string }>(env, "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1", [userId]);
   const [referralCount] = await query<{ count: string }>(env, "SELECT COUNT(*)::text AS count FROM referrals WHERE user_id = $1", [userId]);
   const [pendingCount] = await query<{ count: string }>(
@@ -110,13 +111,19 @@ app.get("/api/dashboard/summary", async (c) => {
     [userId],
   );
 
+  const [rejectedCount] = await query<{ count: string }>(
+    env,
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND application_status = 'Rejected'",
+    [userId],
+  );
+
   const dailyTrend = await query<{ day: string; total: number }>(
     env,
     `
     SELECT d.day::text AS day, COALESCE(j.cnt, 0)::int AS total
     FROM (
       SELECT generate_series(
-        DATE_TRUNC('year', CURRENT_DATE)::date,
+        (CURRENT_DATE - INTERVAL '${days} days')::date,
         CURRENT_DATE::date,
         '1 day'::interval
       )::date AS day
@@ -211,6 +218,7 @@ app.get("/api/dashboard/summary", async (c) => {
       jobs: Number(jobCount?.count ?? 0),
       referrals: Number(referralCount?.count ?? 0),
       pending: Number(pendingCount?.count ?? 0),
+      rejected: Number(rejectedCount?.count ?? 0),
       jobsThisMonth: Number(jobsThisMonth?.count ?? 0),
       jobsThisWeek: Number(jobsThisWeek?.count ?? 0),
       jobsToday: Number(jobsToday?.count ?? 0),
@@ -236,6 +244,7 @@ app.get("/api/jobs", async (c) => {
   const page = Number(c.req.query("page") ?? 1);
   const limit = Math.min(Number(c.req.query("limit") ?? 25), 100);
   const company = c.req.query("company");
+  const statusFilter = String(c.req.query("status") ?? ""); // expected: "active" | "rejected" | "all"(empty means active)
   const sortRaw = c.req.query("sort") ?? "date_saved";
   const orderRaw = String(c.req.query("order") ?? "desc").toLowerCase();
   const sort = isJobsSortColumn(sortRaw) ? sortRaw : "date_saved";
@@ -247,23 +256,29 @@ app.get("/api/jobs", async (c) => {
     SELECT *
     FROM jobs
   `;
-  const whereClause = company ? " WHERE user_id = $1 AND company ILIKE $2" : " WHERE user_id = $1";
-  const orderLimitOffset = ` ORDER BY ${orderBy} LIMIT $${company ? "3" : "2"} OFFSET $${company ? "4" : "3"}`;
 
+  // Build where clause dynamically to handle company and status filters
+  const whereParts: string[] = ["user_id = $1"];
+  const params: unknown[] = [userId];
+  let paramIdx = 2;
   if (company) {
-    const rows = await query(
-      c.env,
-      `${baseSql}${whereClause}${orderLimitOffset}`,
-      [userId, `%${company}%`, limit, offset],
-    );
-    return c.json({ page, limit, data: rows });
+    whereParts.push(`company ILIKE $${paramIdx}`);
+    params.push(`%${company}%`);
+    paramIdx += 1;
+  }
+  // statusFilter semantics: 'rejected' => only Rejected, 'active' or empty => exclude Rejected, 'all' => no filter
+  if (!statusFilter || statusFilter === "active") {
+    whereParts.push(`COALESCE(application_status, 'Applied') != 'Rejected'`);
+  } else if (statusFilter === "rejected") {
+    whereParts.push(`application_status = 'Rejected'`);
   }
 
-  const rows = await query(
-    c.env,
-    `${baseSql}${whereClause}${orderLimitOffset}`,
-    [userId, limit, offset],
-  );
+  const whereClause = ` WHERE ${whereParts.join(" AND ")}`;
+  // add limit/offset params
+  params.push(limit, offset);
+  const orderLimitOffset = ` ORDER BY ${orderBy} LIMIT $${params.length - 1} OFFSET $${params.length}`;
+
+  const rows = await query(c.env, `${baseSql}${whereClause}${orderLimitOffset}`, params as unknown[]);
   return c.json({ page, limit, data: rows });
 });
 
@@ -275,6 +290,7 @@ const jobInput = z.object({
   oa_status: z.string().optional(),
   referral_status: z.string().optional(),
   response_status: z.string().optional(),
+  application_status: z.string().optional(),
   notes: z.string().optional(),
   date_saved: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
 });
@@ -287,8 +303,8 @@ app.post("/api/jobs", async (c) => {
   const [row] = await query(
     c.env,
     `
-    INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, oa_status, referral_status, response_status, notes, date_saved)
-    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, $9, (COALESCE($10::date, CURRENT_DATE))::timestamp)
+    INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, oa_status, referral_status, response_status, application_status, notes, date_saved)
+    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, COALESCE($9, 'Applied'), $10, (COALESCE($11::date, CURRENT_DATE))::timestamp)
     RETURNING *
     `,
     [
@@ -300,6 +316,7 @@ app.post("/api/jobs", async (c) => {
       p.oa_status ?? null,
       p.referral_status ?? null,
       p.response_status ?? null,
+      p.application_status ?? null,
       p.notes ?? null,
       p.date_saved ?? null,
     ],
@@ -315,6 +332,7 @@ const jobUpdateInput = z.object({
   oa_status: z.string().optional().nullable(),
   referral_status: z.string().optional().nullable(),
   response_status: z.string().optional().nullable(),
+  application_status: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   date_saved: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
 });
@@ -336,10 +354,11 @@ app.patch("/api/jobs/:id", async (c) => {
       oa_status = COALESCE($5, oa_status),
       referral_status = COALESCE($6, referral_status),
       response_status = COALESCE($7, response_status),
-      notes = COALESCE($8, notes),
-      date_saved = COALESCE($9::date, date_saved),
+      application_status = COALESCE($8, application_status),
+      notes = COALESCE($9, notes),
+      date_saved = COALESCE($10::date, date_saved),
       updated_at = NOW()
-    WHERE id = $10 AND user_id = $11
+    WHERE id = $11 AND user_id = $12
     RETURNING *
     `,
     [
@@ -350,6 +369,7 @@ app.patch("/api/jobs/:id", async (c) => {
       p.oa_status ?? null,
       p.referral_status ?? null,
       p.response_status ?? null,
+      p.application_status ?? null,
       p.notes ?? null,
       p.date_saved ?? null,
       id,
@@ -509,11 +529,21 @@ app.post("/api/notes", async (c) => {
 
 app.get("/api/pending", async (c) => {
   const userId = c.get("authUser").id;
-  const rows = await query(
-    c.env,
-    "SELECT * FROM pending_items WHERE user_id = $1 AND is_done = FALSE ORDER BY pending_date DESC NULLS LAST, id DESC LIMIT 200",
-    [userId],
-  );
+  const showArchive = c.req.query("archive") === "true";
+  let rows;
+  if (showArchive) {
+    rows = await query(
+      c.env,
+      "SELECT * FROM pending_items WHERE user_id = $1 AND is_done = TRUE ORDER BY updated_at DESC NULLS LAST, id DESC LIMIT 200",
+      [userId],
+    );
+  } else {
+    rows = await query(
+      c.env,
+      "SELECT * FROM pending_items WHERE user_id = $1 AND is_done = FALSE ORDER BY pending_date DESC NULLS LAST, id DESC LIMIT 200",
+      [userId],
+    );
+  }
   return c.json({ data: rows });
 });
 
@@ -545,17 +575,55 @@ app.post("/api/pending", async (c) => {
   return c.json(row, 201);
 });
 
-const pendingPatchInput = z.object({ is_done: z.literal(true) });
+const pendingEditInput = z.object({
+  company: z.string().min(1).optional(),
+  position_name: z.string().optional(),
+  pending_date: z.string().optional(),
+  comment: z.string().optional(),
+  link: z.union([z.string().url(), z.literal("")]).optional(),
+  is_done: z.boolean().optional(),
+});
 
 app.patch("/api/pending/:id", async (c) => {
   const userId = c.get("authUser").id;
   const id = c.req.param("id");
-  const parsed = pendingPatchInput.safeParse(await c.req.json());
+  const parsed = pendingEditInput.safeParse(await c.req.json());
   if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const updates: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  if (p.company !== undefined) {
+    updates.push(`company = $${i++}`);
+    values.push(p.company);
+  }
+  if (p.position_name !== undefined) {
+    updates.push(`position_name = $${i++}`);
+    values.push(p.position_name);
+  }
+  if (p.pending_date !== undefined) {
+    updates.push(`pending_date = $${i++}`);
+    values.push(p.pending_date);
+  }
+  if (p.comment !== undefined) {
+    updates.push(`comment = $${i++}`);
+    values.push(p.comment);
+  }
+  if (p.link !== undefined) {
+    updates.push(`link = $${i++}`);
+    values.push(p.link);
+  }
+  if (p.is_done !== undefined) {
+    updates.push(`is_done = $${i++}`);
+    values.push(p.is_done);
+  }
+  if (updates.length === 0) return c.json({ error: "No fields to update" }, 400);
+  values.push(id);
+  values.push(userId);
   const [row] = await query(
     c.env,
-    "UPDATE pending_items SET is_done = TRUE, updated_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING *",
-    [id, userId],
+    `UPDATE pending_items SET ${updates.join(", ")}, updated_at = NOW() WHERE id = $${i} AND user_id = $${i + 1} RETURNING *`,
+    values,
   );
   if (!row) return c.json({ error: "Not found" }, 404);
   return c.json(row);

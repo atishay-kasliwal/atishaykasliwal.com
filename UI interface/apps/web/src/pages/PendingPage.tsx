@@ -4,7 +4,40 @@ import { formatTableDate } from "../lib/formatDate";
 import { createPending, getPending, getDashboardSummary, markPendingDone } from "../lib/api";
 
 export default function PendingPage() {
-  const [data, setData] = useState<Array<Record<string, unknown>>>([]);
+    const [editId, setEditId] = useState<number | string | null>(null);
+    const [editForm, setEditForm] = useState<any | null>(null);
+    const [editLoading, setEditLoading] = useState(false);
+
+    function startEdit(item: any) {
+      setEditId(item.id);
+      setEditForm({
+        company: item.company ?? "",
+        position_name: item.position_name ?? "",
+        pending_date: item.pending_date ? String(item.pending_date).slice(0, 10) : "",
+        comment: item.comment ?? "",
+        link: item.link ?? "",
+      });
+    }
+
+    function cancelEdit() {
+      setEditId(null);
+      setEditForm(null);
+    }
+
+    async function saveEdit(id: number | string) {
+      setEditLoading(true);
+      try {
+        await editPending(id, editForm);
+        await load();
+        cancelEdit();
+      } catch (e) {
+        setError((e as Error).message);
+      } finally {
+        setEditLoading(false);
+      }
+    }
+  const [pendingData, setPendingData] = useState<Array<Record<string, unknown>>>([]);
+  const [archiveData, setArchiveData] = useState<Array<Record<string, unknown>>>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [markingId, setMarkingId] = useState<number | string | null>(null);
@@ -22,11 +55,16 @@ export default function PendingPage() {
     try {
       setError("");
       setIsLoading(true);
-      const res = await getPending();
-      setData(res.data ?? []);
+      const [pendingRes, archiveRes] = await Promise.all([
+        getPending(),
+        getPending(true),
+      ]);
+      setPendingData(pendingRes.data ?? []);
+      setArchiveData(archiveRes.data ?? []);
     } catch (e) {
       setError((e as Error).message);
-      setData([]);
+      setPendingData([]);
+      setArchiveData([]);
     } finally {
       setIsLoading(false);
     }
@@ -91,8 +129,86 @@ export default function PendingPage() {
         <h2>Pending Items</h2>
         {isLoading ? (
           <Spinner />
-        ) : data.length === 0 ? (
+        ) : pendingData.length === 0 ? (
           <div className="empty-state">No pending items. All clear.</div>
+        ) : (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Company</th>
+                  <th>Position</th>
+                  <th>Comment</th>
+                  <th>Link</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingData.map((p) => (
+                  <tr key={String(p.id)} className="tr-hover">
+                    {editId === p.id ? (
+                      <>
+                        <td><input type="date" value={editForm.pending_date} onChange={e => setEditForm((f: any) => ({ ...f, pending_date: e.target.value }))} /></td>
+                        <td><input value={editForm.company} onChange={e => setEditForm((f: any) => ({ ...f, company: e.target.value }))} /></td>
+                        <td><input value={editForm.position_name} onChange={e => setEditForm((f: any) => ({ ...f, position_name: e.target.value }))} /></td>
+                        <td><input value={editForm.comment} onChange={e => setEditForm((f: any) => ({ ...f, comment: e.target.value }))} /></td>
+                        <td><input value={editForm.link} onChange={e => setEditForm((f: any) => ({ ...f, link: e.target.value }))} /></td>
+                        <td colSpan={2}>
+                          <button className="action-btn" disabled={editLoading} onClick={() => saveEdit(p.id)}>Save</button>
+                          <button className="action-btn" disabled={editLoading} onClick={cancelEdit}>Cancel</button>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td>{formatTableDate(p.pending_date)}</td>
+                        <td>{String(p.company ?? "-")}</td>
+                        <td>{String(p.position_name ?? "-")}</td>
+                        <td>{String(p.comment ?? "-")}</td>
+                        <td>
+                          {p.link ? (
+                            <a
+                              href={String(p.link)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-link"
+                            >
+                              Open
+                            </a>
+                          ) : (
+                            "-"
+                          )}
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            className="action-btn"
+                            disabled={markingId === p.id}
+                            onClick={() => onMarkDone(p.id as number)}
+                          >
+                            {markingId === p.id ? "..." : "Mark done"}
+                          </button>
+                        </td>
+                        <td>
+                          <button className="action-btn" onClick={() => startEdit(p)}>Edit</button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="card" style={{ marginTop: 32 }}>
+        <h2>Archive</h2>
+        {isLoading ? (
+          <Spinner />
+        ) : archiveData.length === 0 ? (
+          <div className="empty-state">No archived items.</div>
         ) : (
           <div className="table-wrap">
             <table>
@@ -107,41 +223,50 @@ export default function PendingPage() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((p) => (
-                  <tr key={String(p.id)} className="tr-hover">
-                    <td>{formatTableDate(p.pending_date)}</td>
-                    <td>{String(p.company ?? "-")}</td>
-                    <td>{String(p.position_name ?? "-")}</td>
-                    <td>{String(p.comment ?? "-")}</td>
-                    <td>
-                      {p.link ? (
-                        <a
-                          href={String(p.link)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="table-link"
-                        >
-                          Open
-                        </a>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="action-btn"
-                        disabled={markingId === p.id}
-                        onClick={() => onMarkDone(p.id as number)}
-                      >
-                        {markingId === p.id ? "..." : "Mark done"}
-                      </button>
-                    </td>
+                {archiveData.map((p) => (
+                  <tr key={String(p.id)} className="tr-hover archived">
+                    {editId === p.id ? (
+                      <>
+                        <td><input type="date" value={editForm.pending_date} onChange={e => setEditForm((f: any) => ({ ...f, pending_date: e.target.value }))} /></td>
+                        <td><input value={editForm.company} onChange={e => setEditForm((f: any) => ({ ...f, company: e.target.value }))} /></td>
+                        <td><input value={editForm.position_name} onChange={e => setEditForm((f: any) => ({ ...f, position_name: e.target.value }))} /></td>
+                        <td><input value={editForm.comment} onChange={e => setEditForm((f: any) => ({ ...f, comment: e.target.value }))} /></td>
+                        <td><input value={editForm.link} onChange={e => setEditForm((f: any) => ({ ...f, link: e.target.value }))} /></td>
+                        <td>
+                          <button className="action-btn" disabled={editLoading} onClick={() => saveEdit(p.id)}>Save</button>
+                          <button className="action-btn" disabled={editLoading} onClick={cancelEdit}>Cancel</button>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td>{formatTableDate(p.pending_date)}</td>
+                        <td>{String(p.company ?? "-")}</td>
+                        <td>{String(p.position_name ?? "-")}</td>
+                        <td>{String(p.comment ?? "-")}</td>
+                        <td>
+                          {p.link ? (
+                            <a
+                              href={String(p.link)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-link"
+                            >
+                              Open
+                            </a>
+                          ) : (
+                            "-"
+                          )}
+                        </td>
+                        <td>
+                          <button className="action-btn" onClick={() => startEdit(p)}>Edit</button>
+                        </td>
+                      </>
+                    )}
                   </tr>
                 ))}
               </tbody>
-          </table>
-        </div>
+            </table>
+          </div>
         )}
       </div>
 
