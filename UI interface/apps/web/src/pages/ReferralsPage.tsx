@@ -103,6 +103,7 @@ export default function ReferralsPage() {
                     <th>Position</th>
                     <th>Status</th>
                     <th>Referred by</th>
+                    <th>Notes</th>
                     <th>Link</th>
                     <th></th>
                   </tr>
@@ -115,6 +116,7 @@ export default function ReferralsPage() {
                       <td>{String(r.request_log ?? "—")}</td>
                       <td>{String(r.referral_received ?? "—")}</td>
                       <td>{String(r.referred_by_name ?? "—")}</td>
+                      <td>{String(r.comment ?? "—")}</td>
                       <td>
                         {r.request_link ? (
                           <a href={String(r.request_link)} target="_blank" rel="noopener noreferrer" className="table-link">

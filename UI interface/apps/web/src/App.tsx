@@ -90,6 +90,7 @@ export default function App() {
           >
             <Route index element={<DashboardPage />} />
             <Route path="jobs" element={<JobsPage />} />
+            <Route path="archive" element={<JobsPage statusFilter="rejected" />} />
             <Route path="referrals" element={<ReferralsPage />} />
             <Route path="pending" element={<PendingPage />} />
           </Route>
