@@ -124,10 +124,13 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
             Dashboard
           </NavLink>
           <NavLink to="/jobs" className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
-            Jobs
+            Active Jobs
           </NavLink>
           <NavLink to="/referrals" className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
             Referrals
+          </NavLink>
+          <NavLink to="/archive" className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
+            Archive
           </NavLink>
           <NavLink to="/pending" className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
             Pending

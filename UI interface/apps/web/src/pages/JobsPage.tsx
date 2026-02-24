@@ -41,7 +41,7 @@ function compareJobs(
   return order === "asc" ? cmp : -cmp;
 }
 
-export default function JobsPage() {
+export default function JobsPage({ statusFilter }: { statusFilter?: string } = {}) {
   const [data, setData] = useState<Array<Record<string, unknown>>>([]);
   const [page, setPage] = useState(1);
   const [company, setCompany] = useState("");
@@ -59,6 +59,7 @@ export default function JobsPage() {
     job_link: "",
     referral_status: "",
     response_status: "",
+    application_status: "",
     notes: "",
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -73,6 +74,7 @@ export default function JobsPage() {
         company: company || undefined,
         sort: sortBy,
         order: sortOrder,
+        status: statusFilter ?? "active",
       });
       setData(res.data ?? []);
     } catch (e) {
@@ -119,6 +121,7 @@ export default function JobsPage() {
       job_link: String(job.job_link ?? ""),
       referral_status: String(job.referral_status ?? ""),
       response_status: String(job.response_status ?? ""),
+      application_status: String(job.application_status ?? "Applied"),
       notes: String(job.notes ?? ""),
     });
   }
@@ -136,6 +139,7 @@ export default function JobsPage() {
         job_link: editForm.job_link.trim() || undefined,
         referral_status: editForm.referral_status.trim() || undefined,
         response_status: editForm.response_status.trim() || undefined,
+        application_status: editForm.application_status.trim() || undefined,
         notes: editForm.notes.trim() || undefined,
       });
       setEditing(null);
@@ -206,6 +210,7 @@ export default function JobsPage() {
                         </button>
                       </th>
                     ))}
+                    <th>Application Status</th>
                     <th aria-label="Actions"></th>
                   </tr>
                 </thead>
@@ -218,6 +223,7 @@ export default function JobsPage() {
                       <td>{String(j.company ?? "-")}</td>
                       <td>{String(j.role ?? "-")}</td>
                       <td>{String(j.referral_status ?? "-")}</td>
+                      <td>{String(j.application_status ?? "Applied")}</td>
                       <td>
                         {j.job_link ? (
                           <a
@@ -298,6 +304,18 @@ export default function JobsPage() {
                   {REFERRAL_OPTIONS.map((opt) => (
                     <option key={opt || "empty"} value={opt}>{opt || "—"}</option>
                   ))}
+                </select>
+              </div>
+              <div className="form-row">
+                <label className="form-label">Application Status</label>
+                <select
+                  value={editForm.application_status}
+                  onChange={(e) => setEditForm((p) => ({ ...p, application_status: e.target.value }))}
+                  className="form-select"
+                >
+                  <option value="Applied">Applied</option>
+                  <option value="Under consideration">Under consideration</option>
+                  <option value="Rejected">Rejected</option>
                 </select>
               </div>
               {editForm.referral_status === "Yes" && (

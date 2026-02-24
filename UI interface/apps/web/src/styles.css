@@ -1,3 +1,43 @@
+.dashboard-filter-card {
+  margin-top: 12px;
+  margin-bottom: 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  /* Match KPI card padding */
+  padding: 12px;
+}
+.dashboard-filter-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.dashboard-filter-btns {
+  display: flex;
+  gap: 8px;
+}
+.dashboard-filter-btn {
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  color: var(--text-primary);
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.dashboard-filter-btn--active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
 /* Portfolio-style theme aligned with atishaykasliwal.com */
 :root {
   font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
@@ -382,7 +422,7 @@ body {
 .kpi-grid {
   margin-top: 16px;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 8px;
 }
 
@@ -428,6 +468,10 @@ body {
   opacity: 0.9;
 }
 
+.kpi-card--red::before {
+  background: linear-gradient(90deg, #ef4444, rgba(239, 68, 68, 0.35));
+}
+
 .kpi-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
@@ -458,8 +502,66 @@ body {
   gap: 18px;
 }
 
+/* 80/20 split specifically for the main trend chart + pending list */
+.chart-grid-trend {
+  grid-template-columns: 4fr 1fr;
+}
+
 .chart-grid-trend .card-chart-trend {
-  grid-column: 1 / -1;
+  grid-column: 1 / 2;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pending-list-card {
+  height: 600px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pending-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pending-item {
+  border: 1px solid var(--bg-card-border);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(255,255,255,0.02);
+}
+
+.pending-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.pending-pos { font-size: 0.95rem; color: var(--text-muted); margin-top: 6px; }
+.pending-meta { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; }
+.pending-comment { margin-top: 8px; color: var(--text-primary); }
+
+.small-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 780px) {
+  .chart-grid-trend { grid-template-columns: 1fr; }
+  .chart-grid-trend .card-chart-trend { grid-column: 1 / -1; }
+  .pending-list-card { height: auto; }
 }
 
 .chart-header-row {

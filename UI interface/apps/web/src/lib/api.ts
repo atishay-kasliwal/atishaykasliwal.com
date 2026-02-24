@@ -106,6 +106,7 @@ export type DashboardSummary = {
     jobs: number;
     referrals: number;
     pending: number;
+    rejected?: number;
     jobsThisMonth: number;
     jobsThisWeek: number;
     jobsToday: number;
@@ -119,8 +120,9 @@ export type DashboardSummary = {
   monthlyTrend: Array<{ month: string; total: number }>;
 };
 
-export function getDashboardSummary() {
-  return request<DashboardSummary>("/api/dashboard/summary");
+export function getDashboardSummary(days?: number) {
+  const q = days ? `?days=${days}` : "";
+  return request<DashboardSummary>(`/api/dashboard/summary${q}`);
 }
 
 export type GetJobsParams = {
@@ -129,6 +131,7 @@ export type GetJobsParams = {
   company?: string;
   sort?: "date_saved" | "company" | "role" | "referral_status" | "job_link";
   order?: "asc" | "desc";
+  status?: string; // 'active' | 'rejected' | 'all'
 };
 
 export function getJobs(params: GetJobsParams = {}) {
@@ -139,6 +142,7 @@ export function getJobs(params: GetJobsParams = {}) {
   if (company?.trim()) search.set("company", company.trim());
   search.set("sort", sort);
   search.set("order", order);
+  if ((params as any).status) search.set("status", String((params as any).status));
   return request<{ page: number; limit: number; data: Array<Record<string, unknown>> }>(
     `/api/jobs?${search.toString()}`,
     { cache: "no-store" }
@@ -166,8 +170,26 @@ export function getNotes(params: GetListParams = {}) {
   );
 }
 
-export function getPending() {
-  return request<{ data: Array<Record<string, unknown>> }>("/api/pending");
+export function getPending(archive = false) {
+  const q = archive ? "?archive=true" : "";
+  return request<{ data: Array<Record<string, unknown>> }>(`/api/pending${q}`);
+}
+
+export function editPending(
+  id: number | string,
+  payload: {
+    company?: string;
+    position_name?: string;
+    pending_date?: string;
+    comment?: string;
+    link?: string;
+    is_done?: boolean;
+  }
+) {
+  return request<{ data: Record<string, unknown> }>(
+    `/api/pending/${id}`,
+    { method: "PATCH", body: JSON.stringify(payload) }
+  );
 }
 
 export function createPending(payload: {

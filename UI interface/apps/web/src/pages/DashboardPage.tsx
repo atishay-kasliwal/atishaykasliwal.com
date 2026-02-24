@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import KpiCard from "../components/KpiCard";
 import Spinner from "../components/Spinner";
+import PendingList from "../components/PendingList";
 import {
   getDashboardSummary,
   type DashboardSummary,
@@ -26,6 +27,7 @@ const defaultSummary: DashboardSummary = {
     jobs: 0,
     referrals: 0,
     pending: 0,
+    rejected: 0,
     jobsThisMonth: 0,
     jobsThisWeek: 0,
     jobsToday: 0,
@@ -160,11 +162,12 @@ export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary>(defaultSummary);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [days, setDays] = useState(30); // default 30 days
 
   async function loadSummary() {
     try {
       setError("");
-      const sum = await getDashboardSummary();
+      const sum = await getDashboardSummary(days);
       setSummary(sum);
     } catch (e) {
       setError((e as Error).message);
@@ -175,13 +178,13 @@ export default function DashboardPage() {
 
   useEffect(() => {
     loadSummary();
-  }, []);
+  }, [days]);
 
   useEffect(() => {
     const onRefresh = () => loadSummary();
     window.addEventListener("dashboard-refresh", onRefresh);
     return () => window.removeEventListener("dashboard-refresh", onRefresh);
-  }, []);
+  }, [days]);
 
   const trendData = useMemo(() => {
     const raw = summary.dailyTrend ?? [];
@@ -229,8 +232,9 @@ export default function DashboardPage() {
       jobsThisMonth,
       jobsWithReferral,
       pending: summary.kpis.pending ?? 0,
+      rejected: summary.kpis.rejected ?? 0,
     };
-  }, [summary.dailyTrend, summary.monthlyTrend, summary.referralTrend, summary.kpis.jobs, summary.kpis.pending]);
+  }, [summary.dailyTrend, summary.monthlyTrend, summary.referralTrend, summary.kpis.jobs, summary.kpis.pending, summary.kpis.rejected]);
 
   const todayLabel = useMemo(() => {
     const daily = summary.dailyTrend ?? [];
@@ -283,12 +287,27 @@ export default function DashboardPage() {
         <KpiCard label="Applications today" value={derivedKpis.jobsToday} />
         <KpiCard label="Total applications with referral" value={derivedKpis.jobsWithReferral} />
         <KpiCard label="Total OA pending" value={derivedKpis.pending} />
+        <KpiCard label="Total rejects" value={derivedKpis.rejected} accent="red" />
       </section>
+      <div className="dashboard-filter-card">
+        <div className="dashboard-filter-label">Show last:</div>
+        <div className="dashboard-filter-btns">
+          {[60, 30, 15, 10, 7].map((d) => (
+            <button
+              key={d}
+              className={days === d ? "dashboard-filter-btn dashboard-filter-btn--active" : "dashboard-filter-btn"}
+              onClick={() => setDays(d)}
+            >
+              {d} days
+            </button>
+          ))}
+        </div>
+      </div>
 
       <section className="chart-grid chart-grid-trend">
         <div className="card card-chart-trend">
-          <ResponsiveContainer width="100%" height={520}>
-            <ComposedChart data={trendData} margin={{ top: 20, right: 20, left: 12, bottom: 20 }}>
+          <ResponsiveContainer width="100%" height={600}>
+            <ComposedChart data={trendData} margin={{ top: 24, right: 20, left: 12, bottom: 24 }}>
               <defs>
                 <linearGradient id="trendAreaGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor={CHART_COLORS.trendLine} stopOpacity={0.5} />
@@ -343,6 +362,12 @@ export default function DashboardPage() {
               </span>
             ))}
           </div>
+        </div>
+
+        <div className="card pending-list-card">
+          <h2>Pending</h2>
+          <p className="chart-subtitle">Outstanding items</p>
+          <PendingList />
         </div>
       </section>
 
