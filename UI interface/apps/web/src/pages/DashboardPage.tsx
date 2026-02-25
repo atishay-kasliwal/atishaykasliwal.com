@@ -315,7 +315,7 @@ export default function DashboardPage() {
         <KpiCard label="Applications this week" value={derivedKpis.jobsThisWeek} />
         <KpiCard label="Applications today" value={derivedKpis.jobsToday} />
         <KpiCard label="Total applications with referral" value={derivedKpis.jobsWithReferral} />
-        <KpiCard label="Total OA pending" value={derivedKpis.pending} />
+        <KpiCard label="Total pending tasks" value={derivedKpis.pending} />
         <KpiCard label="Total rejects" value={derivedKpis.rejected} accent="red" />
       </section>
       <div className="dashboard-filter-card">
