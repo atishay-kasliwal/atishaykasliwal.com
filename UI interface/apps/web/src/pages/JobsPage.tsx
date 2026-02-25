@@ -612,7 +612,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                           <button type="button" className="action-btn" onClick={() => openEdit(j)}>
                             Edit
                           </button>
-                          {statusFilter === "rejected" && (
+                          
                             <button
                               type="button"
                               className="action-btn"
@@ -622,7 +622,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                             >
                               {deletingId === j.id ? "…" : "🗑️"}
                             </button>
-                          )}
+                          
                         </div>
                       </td>
                     </tr>
