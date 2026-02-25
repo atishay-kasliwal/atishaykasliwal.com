@@ -17,6 +17,9 @@ import {
 import KpiCard from "../components/KpiCard";
 import Spinner from "../components/Spinner";
 import PendingList from "../components/PendingList";
+import PendingPreview from "../components/PendingPreview";
+import ReferralsPreview from "../components/ReferralsPreview";
+import NotesPreview from "../components/NotesPreview";
 import {
   getDashboardSummary,
   type DashboardSummary,
@@ -354,20 +357,31 @@ export default function DashboardPage() {
               />
             </ComposedChart>
           </ResponsiveContainer>
-          <div className="chart-legend">
-            {MONTH_NAMES.map((name, i) => (
-              <span key={name} className="chart-legend-item">
-                <span className="chart-legend-swatch" style={{ background: MONTH_COLORS[i] }} />
-                {name}
-              </span>
-            ))}
-          </div>
         </div>
+      </section>
 
+      {/* Bottom row: Pending / Referrals / Notes */}
+      <section className="chart-grid chart-grid-three dashboard-bottom-panels">
         <div className="card pending-list-card">
           <h2>Pending</h2>
           <p className="chart-subtitle">Outstanding items</p>
-          <PendingList />
+          <div className="dashboard-panel-body">
+            <PendingPreview />
+          </div>
+        </div>
+        <div className="card">
+          <h2>Referrals</h2>
+          <p className="chart-subtitle">Open referral requests</p>
+          <div className="dashboard-panel-body">
+            <ReferralsPreview />
+          </div>
+        </div>
+        <div className="card">
+          <h2>Notes</h2>
+          <p className="chart-subtitle">Recent notes</p>
+          <div className="dashboard-panel-body">
+            <NotesPreview />
+          </div>
         </div>
       </section>
 
