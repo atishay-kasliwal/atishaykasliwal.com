@@ -269,3 +269,21 @@ export function markPendingDone(id: number | string) {
     body: JSON.stringify({ is_done: true }),
   });
 }
+
+export type JobsTrendData = Array<{ day: string; applied: number; rejected: number }>;
+
+export function getJobsTrend(days?: number) {
+  const search = new URLSearchParams();
+  if (days) search.set("days", String(days));
+  search.set("anchorDay", getLocalISODate());
+  return request<{ data: JobsTrendData }>(`/api/jobs/trend?${search.toString()}`);
+}
+
+export type ReferralsTrendData = Array<{ day: string; requested: number; received: number }>;
+
+export function getReferralsTrend(days?: number) {
+  const search = new URLSearchParams();
+  if (days) search.set("days", String(days));
+  search.set("anchorDay", getLocalISODate());
+  return request<{ data: ReferralsTrendData }>(`/api/referrals/trend?${search.toString()}`);
+}
