@@ -236,6 +236,55 @@ app.get("/api/dashboard/summary", async (c) => {
   });
 });
 
+app.get("/api/jobs/trend", async (c) => {
+  const env = c.env;
+  const userId = c.get("authUser").id;
+  const days = Math.max(7, Math.min(60, Number(c.req.query("days") ?? 30)));
+  const rawAnchor = c.req.query("anchorDay");
+  const anchorDayValid = rawAnchor && /^\d{4}-\d{2}-\d{2}$/.test(rawAnchor);
+  const anchorDay = anchorDayValid ? rawAnchor : null;
+  const anchorDateSql = anchorDay ? `$2::date` : `CURRENT_DATE`;
+  const params = anchorDay ? [userId, anchorDay] : [userId];
+
+  // Get daily applied and rejected counts for the last N days
+  const trendData = await query<{ day: string; applied: number; rejected: number }>(
+    env,
+    `
+    SELECT 
+      d.day::text AS day,
+      COALESCE(applied.cnt, 0)::int AS applied,
+      COALESCE(rejected.cnt, 0)::int AS rejected
+    FROM (
+      SELECT generate_series(
+        (${anchorDateSql} - (${days}::text || ' days')::interval)::date,
+        ${anchorDateSql}::date,
+        '1 day'::interval
+      )::date AS day
+    ) d
+    LEFT JOIN (
+      SELECT DATE(date_saved) AS day, COUNT(*)::int AS cnt
+      FROM jobs
+      WHERE user_id = $1 
+        AND date_saved IS NOT NULL
+        AND (application_status IS NULL OR application_status != 'Rejected')
+      GROUP BY DATE(date_saved)
+    ) applied ON applied.day = d.day
+    LEFT JOIN (
+      SELECT DATE(COALESCE(archive_date, date_saved)) AS day, COUNT(*)::int AS cnt
+      FROM jobs
+      WHERE user_id = $1 
+        AND application_status = 'Rejected'
+        AND (archive_date IS NOT NULL OR date_saved IS NOT NULL)
+      GROUP BY DATE(COALESCE(archive_date, date_saved))
+    ) rejected ON rejected.day = d.day
+    ORDER BY d.day ASC
+    `,
+    params,
+  );
+
+  return c.json({ data: trendData });
+});
+
 const JOBS_SORT_COLUMNS = ["date_saved", "company", "role", "referral_status", "job_link"] as const;
 type JobsSortColumn = (typeof JOBS_SORT_COLUMNS)[number];
 function isJobsSortColumn(s: string): s is JobsSortColumn {
@@ -446,6 +495,55 @@ app.post("/api/referrals", async (c) => {
     ],
   );
   return c.json(row, 201);
+});
+
+app.get("/api/referrals/trend", async (c) => {
+  const env = c.env;
+  const userId = c.get("authUser").id;
+  const days = Math.max(7, Math.min(60, Number(c.req.query("days") ?? 30)));
+  const rawAnchor = c.req.query("anchorDay");
+  const anchorDayValid = rawAnchor && /^\d{4}-\d{2}-\d{2}$/.test(rawAnchor);
+  const anchorDay = anchorDayValid ? rawAnchor : null;
+  const anchorDateSql = anchorDay ? `$2::date` : `CURRENT_DATE`;
+  const params = anchorDay ? [userId, anchorDay] : [userId];
+
+  // Daily counts of Requested (from referrals table) vs Referral received (from jobs table with referral_status='Yes')
+  const trendData = await query<{ day: string; requested: number; received: number }>(
+    env,
+    `
+    SELECT
+      d.day::text AS day,
+      COALESCE(req.cnt, 0)::int AS requested,
+      COALESCE(rec.cnt, 0)::int AS received
+    FROM (
+      SELECT generate_series(
+        (${anchorDateSql} - (${days}::text || ' days')::interval)::date,
+        ${anchorDateSql}::date,
+        '1 day'::interval
+      )::date AS day
+    ) d
+    LEFT JOIN (
+      SELECT DATE(request_date) AS day, COUNT(*)::int AS cnt
+      FROM referrals
+      WHERE user_id = $1
+        AND request_date IS NOT NULL
+        AND (TRIM(COALESCE(referral_received, '')) = 'Requested' OR TRIM(COALESCE(referral_received, '')) = '' OR referral_received IS NULL)
+      GROUP BY DATE(request_date)
+    ) req ON req.day = d.day
+    LEFT JOIN (
+      SELECT DATE(date_saved) AS day, COUNT(*)::int AS cnt
+      FROM jobs
+      WHERE user_id = $1
+        AND date_saved IS NOT NULL
+        AND TRIM(COALESCE(referral_status, '')) = 'Yes'
+      GROUP BY DATE(date_saved)
+    ) rec ON rec.day = d.day
+    ORDER BY d.day ASC
+    `,
+    params,
+  );
+
+  return c.json({ data: trendData });
 });
 
 app.get("/api/referrals/:id", async (c) => {

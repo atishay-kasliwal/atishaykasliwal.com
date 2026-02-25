@@ -1,12 +1,60 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import Spinner from "../components/Spinner";
 import { formatTableDate } from "../lib/formatDate";
-import { createJob, deleteReferral, getReferrals, updateReferral } from "../lib/api";
+import {
+  createJob,
+  deleteReferral,
+  getReferrals,
+  getReferralsTrend,
+  updateReferral,
+  type ReferralsTrendData,
+} from "../lib/api";
 
 const LIMIT = 25;
 const REFERRAL_SHEET_STATUSES = ["Requested", "Pending"] as const;
 const JOB_STATUSES = ["Yes", "No", "Applied without referral"] as const;
 const ALL_STATUS_OPTIONS = [...REFERRAL_SHEET_STATUSES, ...JOB_STATUSES] as const;
+
+const CHART_COLORS = {
+  requestedLine: "#60a5fa", // bluish line for Requested
+  receivedBar: "#f59e0b", // amber bar for Referral received
+  grid: "rgba(255,255,255,0.12)",
+  tooltipBg: "#18181b",
+  tooltipBorder: "rgba(255,255,255,0.12)",
+  axis: "#71717a",
+  text: "#e4e4e7",
+  textSecondary: "#a1a1aa",
+};
+
+function parseIsoDay(day: string): { y: number; m: number; d: number } | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+  if (!m) return null;
+  const y = Number(m[1]);
+  const month = Number(m[2]);
+  const d = Number(m[3]);
+  if (!y || month < 1 || month > 12 || d < 1 || d > 31) return null;
+  return { y, m: month, d };
+}
+
+function formatDayShort(day: string) {
+  try {
+    const p = parseIsoDay(day);
+    if (!p) return day;
+    return `${String(p.m).padStart(2, "0")}/${String(p.d).padStart(2, "0")}`;
+  } catch {
+    return day;
+  }
+}
 
 export default function ReferralsPage() {
   const [data, setData] = useState<Array<Record<string, unknown>>>([]);
@@ -18,6 +66,8 @@ export default function ReferralsPage() {
   const [editing, setEditing] = useState<Record<string, unknown> | null>(null);
   const [editStatus, setEditStatus] = useState("");
   const [editReferredByName, setEditReferredByName] = useState("");
+  const [trendData, setTrendData] = useState<ReferralsTrendData>([]);
+  const [isLoadingTrend, setIsLoadingTrend] = useState(true);
 
   const load = useCallback(async () => {
     try {
@@ -33,9 +83,36 @@ export default function ReferralsPage() {
     }
   }, [page]);
 
+  const loadTrend = useCallback(async () => {
+    try {
+      setIsLoadingTrend(true);
+      const res = await getReferralsTrend(30);
+      setTrendData(res.data ?? []);
+    } catch (e) {
+      console.error("Failed to load referrals trend:", e);
+      setTrendData([]);
+    } finally {
+      setIsLoadingTrend(false);
+    }
+  }, []);
+
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    loadTrend();
+  }, [loadTrend]);
+
+  const chartData = useMemo(
+    () =>
+      trendData.map((row) => ({
+        ...row,
+        dayLabel: formatDayShort(row.day),
+        referralReceived: row.received,
+      })),
+    [trendData],
+  );
 
   function openEdit(r: Record<string, unknown>) {
     setEditing(r);
@@ -108,6 +185,97 @@ export default function ReferralsPage() {
   return (
     <>
       {error ? <div className="error">{error}</div> : null}
+
+      {/* Referrals trend: Requested (line) vs Referral received (bars) */}
+      <div className="card card-chart-trend" style={{ padding: "24px", marginBottom: "24px" }}>
+        <div style={{ marginBottom: 20 }}>
+          <h2 style={{ margin: "0 0 8px 0", fontSize: "1.5rem", fontWeight: 600, color: CHART_COLORS.text }}>
+            Referrals Momentum
+          </h2>
+          <p style={{ margin: 0, fontSize: "0.875rem", color: CHART_COLORS.textSecondary }}>
+            Last 30 days • Requested vs Referral received
+          </p>
+        </div>
+        {isLoadingTrend ? (
+          <div style={{ padding: "60px", textAlign: "center" }}>
+            <Spinner />
+          </div>
+        ) : !chartData.length ? (
+          <div className="chart-empty">No referral activity in the last 30 days.</div>
+        ) : (
+          <ResponsiveContainer width="100%" height={360}>
+            <ComposedChart data={chartData} margin={{ top: 20, right: 24, left: 8, bottom: 24 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} horizontal vertical={false} />
+              <XAxis
+                dataKey="dayLabel"
+                stroke={CHART_COLORS.axis}
+                tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                axisLine={{ stroke: CHART_COLORS.axis, strokeWidth: 1 }}
+                tickLine={false}
+                height={32}
+                interval="preserveStartEnd"
+              />
+              <YAxis
+                stroke={CHART_COLORS.axis}
+                tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                axisLine={false}
+                tickLine={false}
+                allowDecimals={false}
+                width={40}
+                label={{
+                  value: "Count",
+                  angle: -90,
+                  position: "insideLeft",
+                  fill: CHART_COLORS.textSecondary,
+                  fontSize: 11,
+                  style: { textAnchor: "middle" },
+                }}
+              />
+              <Tooltip
+                contentStyle={{
+                  background: CHART_COLORS.tooltipBg,
+                  border: `1px solid ${CHART_COLORS.tooltipBorder}`,
+                  borderRadius: 6,
+                  padding: "10px 14px",
+                }}
+                cursor={{ fill: "rgba(96, 165, 250, 0.08)" }}
+                formatter={(value: number, name: string) => {
+                  if (name === "referralReceived") return [`${value}`, "Referral received"];
+                  if (name === "requested") return [`${value}`, "Requested"];
+                  return [value, name];
+                }}
+                labelFormatter={(label) => `Date: ${label}`}
+                labelStyle={{ color: CHART_COLORS.text, fontSize: 11, fontWeight: 500, marginBottom: 6 }}
+                itemStyle={{ fontSize: 13, fontWeight: 600 }}
+              />
+              {/* Bars: Referral received (status Yes) */}
+              <Bar
+                dataKey="referralReceived"
+                fill={CHART_COLORS.receivedBar}
+                radius={[4, 4, 0, 0]}
+                minPointSize={2}
+                label={{
+                  position: "top",
+                  fill: CHART_COLORS.textSecondary,
+                  fontSize: 9,
+                  fontWeight: 400,
+                  formatter: (value: number) => (value > 0 ? String(value) : ""),
+                }}
+              />
+              {/* Line: Requested referrals */}
+              <Line
+                type="monotone"
+                dataKey="requested"
+                stroke={CHART_COLORS.requestedLine}
+                strokeWidth={2}
+                dot={{ r: 3, fill: CHART_COLORS.requestedLine, strokeWidth: 0, opacity: 0.85 }}
+                activeDot={{ r: 5, fill: CHART_COLORS.requestedLine, strokeWidth: 2, stroke: CHART_COLORS.tooltipBg }}
+                connectNulls={false}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        )}
+      </div>
 
       <div className="card">
         <h2>Referrals</h2>

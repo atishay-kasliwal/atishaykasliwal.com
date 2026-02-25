@@ -8,11 +8,13 @@ import {
   ComposedChart,
   Line,
   LineChart,
+  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
+  LabelList,
 } from "recharts";
 import KpiCard from "../components/KpiCard";
 import Spinner from "../components/Spinner";
@@ -44,21 +46,31 @@ const defaultSummary: DashboardSummary = {
   monthlyTrend: [],
 };
 
+// Executive-level chart design: muted bluish colors, clean typography, minimal noise
 const CHART_COLORS = {
-  trendLine: "#38bdf8",
-  trendGradientTop: "rgba(56, 189, 248, 0.55)",
-  trendGradientBottom: "rgba(56, 189, 248, 0)",
-  bar: ["#22d3ee", "#38bdf8", "#a78bfa", "#34d399", "#f472b6", "#94a3b8"],
-  grid: "rgba(255,255,255,0.06)",
+  // Main trend chart
+  trendLine: "#60a5fa", // muted blue
+  trendGradientTop: "rgba(96, 165, 250, 0.15)",
+  trendGradientBottom: "rgba(96, 165, 250, 0)",
+  // Different colors for different chart types
+  weeklyBar: "#60a5fa", // muted blue for weekly
+  monthlyBar: "#3b82f6", // darker blue for monthly
+  referralBar: ["#60a5fa", "#818cf8", "#a78bfa"], // blue, indigo, purple
+  responseBar: "#818cf8", // indigo for response status
+  oaBar: "#a78bfa", // purple for OA status
+  bar: ["#60a5fa", "#3b82f6", "#818cf8", "#a78bfa", "#c084fc", "#94a3b8"], // bluish palette
+  grid: "rgba(255,255,255,0.12)", // 12% opacity horizontal gridlines
   tooltipBg: "#18181b",
-  tooltipBorder: "rgba(255,255,255,0.08)",
-  axis: "#a1a1aa",
+  tooltipBorder: "rgba(255,255,255,0.12)",
+  axis: "#71717a", // subtle axis color
+  text: "#e4e4e7", // primary text
+  textSecondary: "#a1a1aa", // secondary text (tick labels)
 };
 
-/** 12 distinct colors for Jan–Dec (easy to tell apart) */
+/** 12 distinct muted bluish colors for Jan–Dec */
 const MONTH_COLORS = [
-  "#67e8f9", "#22d3ee", "#2dd4bf", "#34d399", "#4ade80", "#a3e635",
-  "#84cc16", "#65a30d", "#16a34a", "#059669", "#0d9488", "#14b8a6",
+  "#60a5fa", "#3b82f6", "#818cf8", "#a78bfa", "#c084fc", "#94a3b8",
+  "#60a5fa", "#3b82f6", "#818cf8", "#a78bfa", "#c084fc", "#94a3b8",
 ];
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -151,12 +163,12 @@ function DailyTrendTooltip({
       style={{
         background: CHART_COLORS.tooltipBg,
         border: `1px solid ${CHART_COLORS.tooltipBorder}`,
-        borderRadius: 8,
-        padding: "8px 12px",
+        borderRadius: 6,
+        padding: "10px 14px",
       }}
     >
-      <p style={{ margin: "0 0 4px 0", fontWeight: 600 }}>{title}</p>
-      <p style={{ margin: 0, color: CHART_COLORS.axis }}>Applications: {p.total}</p>
+      <p style={{ margin: "0 0 6px 0", fontWeight: 500, fontSize: 11, color: CHART_COLORS.text }}>{title}</p>
+      <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: CHART_COLORS.trendLine }}>Applications: {p.total}</p>
     </div>
   );
 }
@@ -261,6 +273,20 @@ export default function DashboardPage() {
 
   const showTodayLine = Boolean(todayLabel) && trendData.some((row) => row.label === todayLabel);
 
+  const weeklyMaxPoint = useMemo(() => {
+    const arr = summary.weeklyTrend ?? [];
+    if (!arr.length) return null;
+    return arr.reduce(
+      (max, pt) => ((pt.total ?? 0) > (max.total ?? 0) ? pt : max),
+      arr[0] as { week: string; total: number },
+    );
+  }, [summary.weeklyTrend]);
+
+  const latestMonthIndex = useMemo(() => {
+    const arr = summary.monthlyTrend ?? [];
+    return arr.length ? arr.length - 1 : -1;
+  }, [summary.monthlyTrend]);
+
   if (isLoading) {
     return (
       <div className="card">
@@ -310,7 +336,7 @@ export default function DashboardPage() {
       <section className="chart-grid chart-grid-trend">
         <div className="card card-chart-trend">
           <ResponsiveContainer width="100%" height={600}>
-            <ComposedChart data={trendData} margin={{ top: 24, right: 20, left: 12, bottom: 24 }}>
+            <ComposedChart data={trendData} margin={{ top: 20, right: 24, left: 8, bottom: 32 }}>
               <defs>
                 <linearGradient id="trendAreaGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor={CHART_COLORS.trendLine} stopOpacity={0.5} />
@@ -321,20 +347,45 @@ export default function DashboardPage() {
               <XAxis
                 dataKey="label"
                 stroke={CHART_COLORS.axis}
-                tick={{ fill: CHART_COLORS.axis, fontSize: 10 }}
+                tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                axisLine={{ stroke: CHART_COLORS.axis, strokeWidth: 1 }}
+                tickLine={false}
                 ticks={dailyTrendTicks.length > 0 ? dailyTrendTicks : undefined}
                 interval={0}
-                height={24}
+                height={32}
               />
               <YAxis
                 stroke={CHART_COLORS.axis}
-                tick={{ fill: CHART_COLORS.axis, fontSize: 11 }}
+                tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                axisLine={false}
+                tickLine={false}
                 allowDecimals={false}
-                width={32}
+                width={40}
               />
-              <Tooltip content={(props) => <DailyTrendTooltip {...props} todayLabel={todayLabel} />} cursor={{ fill: "transparent" }} />
+              <Tooltip
+                content={(props) => {
+                  if (!props.active || !props.payload?.length) return null;
+                  const data = props.payload[0].payload;
+                  const dateStr = data.day ? formatDay(data.day) : props.label || "";
+                  const title = data.label === todayLabel ? `Today — ${dateStr}` : dateStr;
+                  return (
+                    <div
+                      style={{
+                        background: CHART_COLORS.tooltipBg,
+                        border: `1px solid ${CHART_COLORS.tooltipBorder}`,
+                        borderRadius: 6,
+                        padding: "10px 14px",
+                      }}
+                    >
+                      <p style={{ margin: "0 0 6px 0", fontWeight: 500, fontSize: 11, color: CHART_COLORS.text }}>{title}</p>
+                      <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: CHART_COLORS.trendLine }}>Applications: {data.total}</p>
+                    </div>
+                  );
+                }}
+                cursor={{ fill: "rgba(96, 165, 250, 0.08)" }}
+              />
               {showTodayLine ? (
-                <ReferenceLine x={todayLabel} stroke="#f472b6" strokeWidth={1.5} strokeDasharray="4 4" label={{ value: "Today", fill: CHART_COLORS.axis, fontSize: 10 }} />
+                <ReferenceLine x={todayLabel} stroke={CHART_COLORS.textSecondary} strokeWidth={1.5} strokeDasharray="4 4" label={{ value: "Today", fill: CHART_COLORS.textSecondary, fontSize: 10 }} />
               ) : null}
               <Area
                 type="monotone"
@@ -342,7 +393,7 @@ export default function DashboardPage() {
                 stroke="none"
                 fill="url(#trendAreaGradient)"
               />
-              <Bar dataKey="total" fillOpacity={0.6} radius={[3, 3, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }}>
+              <Bar dataKey="total" fillOpacity={0.7} radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.textSecondary, fontSize: 9, fontWeight: 400 }}>
                 {trendData.map((row, i) => (
                   <Cell key={row.day ?? i} fill={MONTH_COLORS[row.month]} />
                 ))}
@@ -351,9 +402,9 @@ export default function DashboardPage() {
                 type="monotone"
                 dataKey="total"
                 stroke={CHART_COLORS.trendLine}
-                strokeWidth={2.5}
+                strokeWidth={2}
                 dot={false}
-                activeDot={{ r: 6, fill: CHART_COLORS.trendLine, stroke: "#0a0a0c", strokeWidth: 2 }}
+                activeDot={{ r: 5, fill: CHART_COLORS.trendLine, stroke: CHART_COLORS.tooltipBg, strokeWidth: 2 }}
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -391,23 +442,72 @@ export default function DashboardPage() {
           <p className="chart-subtitle">Last 12 weeks</p>
           {(summary.weeklyTrend?.length ?? 0) > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={summary.weeklyTrend} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
+              <LineChart data={summary.weeklyTrend} margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
+                <defs>
+                  <linearGradient id="weeklyArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={CHART_COLORS.weeklyBar} stopOpacity={0.15} />
+                    <stop offset="100%" stopColor={CHART_COLORS.weeklyBar} stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} vertical={false} />
                 <XAxis
                   dataKey="week"
                   stroke={CHART_COLORS.axis}
-                  tick={{ fill: CHART_COLORS.axis, fontSize: 10 }}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={{ stroke: CHART_COLORS.axis, strokeWidth: 1 }}
+                  tickLine={false}
                   tickFormatter={formatWeek}
                 />
-                <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
+                <YAxis
+                  stroke={CHART_COLORS.axis}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                  width={40}
+                />
                 <Tooltip
-                  contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
-                  cursor={{ fill: "transparent" }}
+                  contentStyle={{
+                    background: CHART_COLORS.tooltipBg,
+                    border: `1px solid ${CHART_COLORS.tooltipBorder}`,
+                    borderRadius: 6,
+                    padding: "10px 14px",
+                  }}
+                  cursor={{ fill: "rgba(96, 165, 250, 0.08)" }}
+                  labelStyle={{ color: CHART_COLORS.text, fontSize: 11, fontWeight: 500, marginBottom: 6 }}
+                  itemStyle={{ fontSize: 13, fontWeight: 600, color: CHART_COLORS.weeklyBar }}
                   labelFormatter={formatWeek}
                   formatter={(value: number) => [`${value}`, "Applications"]}
                 />
-                <Bar dataKey="total" fill={CHART_COLORS.trendLine} radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }} />
-              </BarChart>
+                {/* Subtle area fill */}
+                <Area type="monotone" dataKey="total" stroke="none" fill="url(#weeklyArea)" />
+                {/* Smooth trend line */}
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke={CHART_COLORS.weeklyBar}
+                  strokeWidth={2.5}
+                  dot={{ r: 3, strokeWidth: 0 }}
+                  activeDot={{ r: 5, strokeWidth: 2, stroke: CHART_COLORS.tooltipBg, fill: CHART_COLORS.weeklyBar }}
+                />
+                {/* Single annotation for highest week */}
+                {weeklyMaxPoint && (
+                  <ReferenceDot
+                    x={weeklyMaxPoint.week}
+                    y={weeklyMaxPoint.total}
+                    r={4}
+                    fill={CHART_COLORS.weeklyBar}
+                    stroke={CHART_COLORS.tooltipBg}
+                    strokeWidth={2}
+                    label={{
+                      position: "top",
+                      value: weeklyMaxPoint.total,
+                      fill: CHART_COLORS.textSecondary,
+                      fontSize: 10,
+                    }}
+                  />
+                )}
+              </LineChart>
             </ResponsiveContainer>
           ) : (
             <div className="chart-empty">No applications in the last 12 weeks</div>
@@ -418,22 +518,78 @@ export default function DashboardPage() {
           <p className="chart-subtitle">Last 12 months</p>
           {(summary.monthlyTrend?.length ?? 0) > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={summary.monthlyTrend} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
+              <BarChart data={summary.monthlyTrend} margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} vertical={false} />
                 <XAxis
                   dataKey="month"
                   stroke={CHART_COLORS.axis}
-                  tick={{ fill: CHART_COLORS.axis, fontSize: 10 }}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={{ stroke: CHART_COLORS.axis, strokeWidth: 1 }}
+                  tickLine={false}
                   tickFormatter={formatMonth}
                 />
-                <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
+                <YAxis
+                  stroke={CHART_COLORS.axis}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                  width={40}
+                />
                 <Tooltip
-                  contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
-                  cursor={{ fill: "transparent" }}
+                  contentStyle={{
+                    background: CHART_COLORS.tooltipBg,
+                    border: `1px solid ${CHART_COLORS.tooltipBorder}`,
+                    borderRadius: 6,
+                    padding: "10px 14px",
+                  }}
+                  cursor={{ fill: "rgba(59, 130, 246, 0.08)" }}
+                  labelStyle={{ color: CHART_COLORS.text, fontSize: 11, fontWeight: 500, marginBottom: 6 }}
+                  itemStyle={{ fontSize: 13, fontWeight: 600, color: CHART_COLORS.monthlyBar }}
                   labelFormatter={formatMonth}
                   formatter={(value: number) => [`${value}`, "Applications"]}
                 />
-                <Bar dataKey="total" fill="#38bdf8" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }} />
+                {/* Lollipop stems */}
+                <Bar dataKey="total" fill={CHART_COLORS.monthlyBar} barSize={4} radius={[2, 2, 0, 0]}>
+                  {/* Label only the most recent month */}
+                  <LabelList
+                    dataKey="total"
+                    content={(props: any) => {
+                      const { x, y, value, index } = props;
+                      if (latestMonthIndex === -1 || index !== latestMonthIndex) return null;
+                      return (
+                        <text
+                          x={x}
+                          y={y}
+                          dy={-6}
+                          fill={CHART_COLORS.textSecondary}
+                          fontSize={10}
+                          textAnchor="middle"
+                        >
+                          {value}
+                        </text>
+                      );
+                    }}
+                  />
+                </Bar>
+                {/* Lollipop heads */}
+                <Line
+                  type="linear"
+                  dataKey="total"
+                  stroke="transparent"
+                  dot={{
+                    r: 5,
+                    fill: CHART_COLORS.monthlyBar,
+                    stroke: CHART_COLORS.tooltipBg,
+                    strokeWidth: 2,
+                  }}
+                  activeDot={{
+                    r: 6,
+                    fill: CHART_COLORS.monthlyBar,
+                    stroke: CHART_COLORS.tooltipBg,
+                    strokeWidth: 2,
+                  }}
+                />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -447,26 +603,38 @@ export default function DashboardPage() {
           <h2>Referral (from job added)</h2>
           <p className="chart-subtitle">Yes / No / Pending</p>
           <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={summary.referralTrend} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+            <BarChart data={summary.referralTrend} margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} vertical={false} />
               <XAxis
                 dataKey="referral_status"
                 stroke={CHART_COLORS.axis}
-                tick={{ fill: CHART_COLORS.axis, fontSize: 10 }}
+                tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                axisLine={{ stroke: CHART_COLORS.axis, strokeWidth: 1 }}
+                tickLine={false}
               />
-              <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
+              <YAxis
+                stroke={CHART_COLORS.axis}
+                tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                axisLine={false}
+                tickLine={false}
+                allowDecimals={false}
+                width={40}
+              />
               <Tooltip
                 contentStyle={{
                   background: CHART_COLORS.tooltipBg,
                   border: `1px solid ${CHART_COLORS.tooltipBorder}`,
-                  borderRadius: 8,
+                  borderRadius: 6,
+                  padding: "10px 14px",
                 }}
-                cursor={{ fill: "transparent" }}
-                formatter={(value: number) => [`${value} jobs`, "Count"]}
+                cursor={{ fill: "rgba(110, 231, 183, 0.08)" }}
+                labelStyle={{ color: CHART_COLORS.text, fontSize: 11, fontWeight: 500, marginBottom: 6 }}
+                itemStyle={{ fontSize: 13, fontWeight: 600 }}
+                formatter={(value: number) => [`${value}`, "Jobs"]}
               />
-              <Bar dataKey="total" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }}>
+              <Bar dataKey="total" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.textSecondary, fontSize: 9, fontWeight: 400 }}>
                 {summary.referralTrend.map((_, i) => (
-                  <Cell key={i} fill={CHART_COLORS.bar[i % CHART_COLORS.bar.length]} />
+                  <Cell key={i} fill={CHART_COLORS.referralBar[i % CHART_COLORS.referralBar.length]} />
                 ))}
               </Bar>
             </BarChart>
@@ -477,16 +645,38 @@ export default function DashboardPage() {
           <p className="chart-subtitle">By outcome</p>
           {(summary.responseStatusTrend?.length ?? 0) > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={summary.responseStatusTrend} layout="vertical" margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+              <BarChart data={summary.responseStatusTrend} layout="vertical" margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} horizontal={false} />
-                <XAxis type="number" stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} />
-                <YAxis type="category" dataKey="response_status" stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} width={80} />
+                <XAxis
+                  type="number"
+                  stroke={CHART_COLORS.axis}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="response_status"
+                  stroke={CHART_COLORS.axis}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={80}
+                />
                 <Tooltip
-                  contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
-                  cursor={{ fill: "transparent" }}
+                  contentStyle={{
+                    background: CHART_COLORS.tooltipBg,
+                    border: `1px solid ${CHART_COLORS.tooltipBorder}`,
+                    borderRadius: 6,
+                    padding: "10px 14px",
+                  }}
+                  cursor={{ fill: "rgba(96, 165, 250, 0.08)" }}
+                  labelStyle={{ color: CHART_COLORS.text, fontSize: 11, fontWeight: 500, marginBottom: 6 }}
+                  itemStyle={{ fontSize: 13, fontWeight: 600 }}
                   formatter={(value: number) => [`${value}`, "Jobs"]}
                 />
-                <Bar dataKey="total" fill="#a78bfa" radius={[0, 4, 4, 0]} label={{ position: "right", fill: CHART_COLORS.axis, fontSize: 10 }} />
+                <Bar dataKey="total" fill={CHART_COLORS.responseBar} radius={[0, 4, 4, 0]} label={{ position: "right", fill: CHART_COLORS.textSecondary, fontSize: 9, fontWeight: 400 }} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -498,20 +688,36 @@ export default function DashboardPage() {
           <p className="chart-subtitle">Online assessment</p>
           {(summary.oaStatusTrend?.length ?? 0) > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={summary.oaStatusTrend} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
+              <BarChart data={summary.oaStatusTrend} margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} vertical={false} />
                 <XAxis
                   dataKey="oa_status"
                   stroke={CHART_COLORS.axis}
-                  tick={{ fill: CHART_COLORS.axis, fontSize: 10 }}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={{ stroke: CHART_COLORS.axis, strokeWidth: 1 }}
+                  tickLine={false}
                 />
-                <YAxis stroke={CHART_COLORS.axis} tick={{ fill: CHART_COLORS.axis, fontSize: 10 }} allowDecimals={false} width={28} />
+                <YAxis
+                  stroke={CHART_COLORS.axis}
+                  tick={{ fill: CHART_COLORS.textSecondary, fontSize: 10, fontWeight: 400 }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                  width={40}
+                />
                 <Tooltip
-                  contentStyle={{ background: CHART_COLORS.tooltipBg, border: `1px solid ${CHART_COLORS.tooltipBorder}`, borderRadius: 8 }}
-                  cursor={{ fill: "transparent" }}
+                  contentStyle={{
+                    background: CHART_COLORS.tooltipBg,
+                    border: `1px solid ${CHART_COLORS.tooltipBorder}`,
+                    borderRadius: 6,
+                    padding: "10px 14px",
+                  }}
+                  cursor={{ fill: "rgba(96, 165, 250, 0.08)" }}
+                  labelStyle={{ color: CHART_COLORS.text, fontSize: 11, fontWeight: 500, marginBottom: 6 }}
+                  itemStyle={{ fontSize: 13, fontWeight: 600 }}
                   formatter={(value: number) => [`${value}`, "Jobs"]}
                 />
-                <Bar dataKey="total" fill="#34d399" radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.axis, fontSize: 10 }} />
+                <Bar dataKey="total" fill={CHART_COLORS.oaBar} radius={[4, 4, 0, 0]} label={{ position: "top", fill: CHART_COLORS.textSecondary, fontSize: 9, fontWeight: 400 }} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
