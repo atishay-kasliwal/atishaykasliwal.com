@@ -83,6 +83,9 @@ app.get("/api/dashboard/summary", async (c) => {
   const env = c.env;
   const userId = c.get("authUser").id;
   const days = Math.max(7, Math.min(60, Number(c.req.query("days") ?? 30)));
+  const rawAnchor = c.req.query("anchorDay");
+  const anchorDayValid = rawAnchor && /^\d{4}-\d{2}-\d{2}$/.test(rawAnchor);
+  const anchorDay = anchorDayValid ? rawAnchor : null;
   const [jobCount] = await query<{ count: string }>(env, "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1", [userId]);
   const [referralCount] = await query<{ count: string }>(env, "SELECT COUNT(*)::text AS count FROM referrals WHERE user_id = $1", [userId]);
   const [pendingCount] = await query<{ count: string }>(
@@ -92,18 +95,18 @@ app.get("/api/dashboard/summary", async (c) => {
   );
   const [jobsThisMonth] = await query<{ count: string }>(
     env,
-    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved >= DATE_TRUNC('month', CURRENT_DATE)",
-    [userId],
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved >= DATE_TRUNC('month', COALESCE($2::date, CURRENT_DATE))",
+    [userId, anchorDay],
   );
   const [jobsThisWeek] = await query<{ count: string }>(
     env,
-    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved >= DATE_TRUNC('week', CURRENT_DATE)",
-    [userId],
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved >= DATE_TRUNC('week', COALESCE($2::date, CURRENT_DATE))",
+    [userId, anchorDay],
   );
   const [jobsToday] = await query<{ count: string }>(
     env,
-    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved::date = CURRENT_DATE",
-    [userId],
+    "SELECT COUNT(*)::text AS count FROM jobs WHERE user_id = $1 AND date_saved::date = COALESCE($2::date, CURRENT_DATE)",
+    [userId, anchorDay],
   );
   const [jobsWithReferral] = await query<{ count: string }>(
     env,
@@ -123,8 +126,8 @@ app.get("/api/dashboard/summary", async (c) => {
     SELECT d.day::text AS day, COALESCE(j.cnt, 0)::int AS total
     FROM (
       SELECT generate_series(
-        (CURRENT_DATE - INTERVAL '${days} days')::date,
-        CURRENT_DATE::date,
+        (COALESCE($2::date, CURRENT_DATE) - (${days}::text || ' days')::interval)::date,
+        COALESCE($2::date, CURRENT_DATE)::date,
         '1 day'::interval
       )::date AS day
     ) d
@@ -136,7 +139,7 @@ app.get("/api/dashboard/summary", async (c) => {
     ) j ON j.day = d.day
     ORDER BY d.day ASC
     `,
-    [userId],
+    [userId, anchorDay],
   );
 
   const referralTrendRaw = await query<{ referral_status: string; total: number }>(
@@ -166,12 +169,12 @@ app.get("/api/dashboard/summary", async (c) => {
     `
     SELECT DATE_TRUNC('week', date_saved)::date::text AS week, COUNT(*)::int AS total
     FROM jobs
-    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (CURRENT_DATE - INTERVAL '84 days')
+    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (COALESCE($2::date, CURRENT_DATE) - INTERVAL '84 days')
     GROUP BY DATE_TRUNC('week', date_saved)
     ORDER BY week ASC
     LIMIT 12
     `,
-    [userId],
+    [userId, anchorDay],
   );
 
   const responseStatusTrend = await query<{ response_status: string; total: number }>(
@@ -205,12 +208,12 @@ app.get("/api/dashboard/summary", async (c) => {
     `
     SELECT TO_CHAR(DATE_TRUNC('month', date_saved), 'YYYY-MM') AS month, COUNT(*)::int AS total
     FROM jobs
-    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (CURRENT_DATE - INTERVAL '12 months')
+    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (COALESCE($2::date, CURRENT_DATE) - INTERVAL '12 months')
     GROUP BY DATE_TRUNC('month', date_saved)
     ORDER BY month ASC
     LIMIT 12
     `,
-    [userId],
+    [userId, anchorDay],
   );
 
   return c.json({
@@ -529,10 +532,17 @@ app.get("/api/notes", async (c) => {
   const page = Number(c.req.query("page") ?? 1);
   const limit = Math.min(Number(c.req.query("limit") ?? 25), 100);
   const offset = (page - 1) * limit;
+  const showArchive = c.req.query("archive") === "true";
   const rows = await query(
     c.env,
-    "SELECT * FROM daily_notes WHERE user_id = $1 ORDER BY id DESC LIMIT $2 OFFSET $3",
-    [userId, limit, offset],
+    `
+    SELECT *
+    FROM daily_notes
+    WHERE user_id = $1 AND is_done = $2
+    ORDER BY id DESC
+    LIMIT $3 OFFSET $4
+    `,
+    [userId, showArchive, limit, offset],
   );
   return c.json({ page, limit, data: rows });
 });
@@ -549,10 +559,61 @@ app.post("/api/notes", async (c) => {
   const p = parsed.data;
   const [row] = await query(
     c.env,
-    "INSERT INTO daily_notes (user_id, source, note_date, comments) VALUES ($1, 'manual', $2, $3) RETURNING *",
+    "INSERT INTO daily_notes (user_id, source, note_date, comments, is_done) VALUES ($1, 'manual', $2, $3, FALSE) RETURNING *",
     [userId, p.note_date ?? null, p.comments],
   );
   return c.json(row, 201);
+});
+
+const noteEditInput = z.object({
+  note_date: z.string().optional(),
+  comments: z.string().optional(),
+  is_done: z.boolean().optional(),
+});
+
+app.patch("/api/notes/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const parsed = noteEditInput.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: parsed.error.flatten() }, 400);
+  const p = parsed.data;
+  const updates: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  if (p.note_date !== undefined) {
+    updates.push(`note_date = $${i++}`);
+    values.push(p.note_date);
+  }
+  if (p.comments !== undefined) {
+    updates.push(`comments = $${i++}`);
+    values.push(p.comments);
+  }
+  if (p.is_done !== undefined) {
+    updates.push(`is_done = $${i++}`);
+    values.push(p.is_done);
+  }
+  if (updates.length === 0) return c.json({ error: "No fields to update" }, 400);
+  values.push(id);
+  values.push(userId);
+  const [row] = await query(
+    c.env,
+    `UPDATE daily_notes SET ${updates.join(", ")}, updated_at = NOW() WHERE id = $${i} AND user_id = $${i + 1} RETURNING *`,
+    values,
+  );
+  if (!row) return c.json({ error: "Not found" }, 404);
+  return c.json(row);
+});
+
+app.delete("/api/notes/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const rows = await query(
+    c.env,
+    "DELETE FROM daily_notes WHERE id = $1 AND user_id = $2 RETURNING id",
+    [id, userId],
+  );
+  if (!rows.length) return c.json({ error: "Not found" }, 404);
+  return c.json({ ok: true });
 });
 
 app.get("/api/pending", async (c) => {

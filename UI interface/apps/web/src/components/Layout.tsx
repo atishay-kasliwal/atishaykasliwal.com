@@ -4,6 +4,7 @@ import {
   createJob,
   createReferral,
   createPending,
+  createNote,
 } from "../lib/api";
 import { getLocalISODate } from "../lib/formatDate";
 
@@ -30,17 +31,32 @@ const emptyPendingForm = {
   link: "",
 };
 
+function getLocalISODatePlusDays(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return getLocalISODate(d);
+}
+
+const emptyNoteForm = {
+  title: "",
+  currentDate: getLocalISODate(),
+  lastDate: getLocalISODatePlusDays(7),
+  note: "",
+};
+
 export default function Layout({ userEmail, onLogout }: LayoutProps) {
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [showPendingTask, setShowPendingTask] = useState(false);
+  const [showNoteModal, setShowNoteModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [modalError, setModalError] = useState("");
   const [form, setForm] = useState(emptyJobForm);
   const [pendingForm, setPendingForm] = useState(emptyPendingForm);
+  const [noteForm, setNoteForm] = useState(emptyNoteForm);
 
   useEffect(() => {
-    if (!showQuickAdd && !showPendingTask) setModalError("");
-  }, [showQuickAdd, showPendingTask]);
+    if (!showQuickAdd && !showPendingTask && !showNoteModal) setModalError("");
+  }, [showQuickAdd, showPendingTask, showNoteModal]);
 
   async function onCreateJob(e: React.FormEvent) {
     e.preventDefault();
@@ -116,6 +132,41 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
     }
   }
 
+  async function onCreateNote(e: React.FormEvent) {
+    e.preventDefault();
+    if (!noteForm.title.trim() && !noteForm.note.trim()) return;
+    try {
+      setIsSaving(true);
+      setModalError("");
+      const lines: string[] = [];
+      if (noteForm.title.trim()) {
+        lines.push(noteForm.title.trim());
+      }
+      if (noteForm.lastDate.trim()) {
+        lines.push(`Last date: ${noteForm.lastDate.trim()}`);
+      }
+      if (noteForm.note.trim()) {
+        lines.push("");
+        lines.push(noteForm.note.trim());
+      }
+      await createNote({
+        note_date: noteForm.currentDate || getLocalISODate(),
+        comments: lines.join("\n"),
+      });
+      setNoteForm({
+        ...emptyNoteForm,
+        currentDate: getLocalISODate(),
+        lastDate: getLocalISODatePlusDays(7),
+      });
+      setShowNoteModal(false);
+      window.dispatchEvent(new CustomEvent("dashboard-refresh"));
+    } catch (err) {
+      setModalError((err as Error).message);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   return (
     <div className="page">
       <nav className="app-nav">
@@ -135,6 +186,9 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
           <NavLink to="/pending" className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
             Pending
           </NavLink>
+          <NavLink to="/notes" className={({ isActive }) => (isActive ? "app-nav-link active" : "app-nav-link")}>
+            Notes
+          </NavLink>
         </div>
         <div className="app-nav-actions">
           <button type="button" className="quick-add-btn" onClick={() => setShowQuickAdd(true)}>
@@ -142,6 +196,9 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
           </button>
           <button type="button" className="quick-add-btn pending-task-btn" onClick={() => setShowPendingTask(true)}>
             Add Task
+          </button>
+          <button type="button" className="quick-add-btn pending-task-btn" onClick={() => setShowNoteModal(true)}>
+            Add Note
           </button>
           <button type="button" className="quick-add-btn logout-btn" onClick={onLogout} title="Logout" aria-label="Logout">
             <span className="logout-emoji">⏻</span>
@@ -278,6 +335,59 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
             </form>
             <p style={{ marginTop: 12, fontSize: "0.85rem", color: "var(--text-muted)" }}>
               View all on the <Link to="/pending" className="table-link">Pending</Link> tab.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {showNoteModal && (
+        <div className="modal-overlay" onClick={() => !isSaving && setShowNoteModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Add Note</h3>
+            {modalError ? <div className="auth-error">{modalError}</div> : null}
+            <form className="form" onSubmit={onCreateNote}>
+              <input
+                placeholder="Title *"
+                value={noteForm.title}
+                onChange={(e) => setNoteForm((p) => ({ ...p, title: e.target.value }))}
+              />
+              <div className="form-row">
+                <label className="form-label">Current date</label>
+                <input
+                  type="date"
+                  value={noteForm.currentDate}
+                  onChange={(e) => setNoteForm((p) => ({ ...p, currentDate: e.target.value }))}
+                />
+              </div>
+              <div className="form-row">
+                <label className="form-label">Last date</label>
+                <input
+                  type="date"
+                  value={noteForm.lastDate}
+                  onChange={(e) => setNoteForm((p) => ({ ...p, lastDate: e.target.value }))}
+                />
+              </div>
+              <textarea
+                placeholder="Note"
+                rows={4}
+                value={noteForm.note}
+                onChange={(e) => setNoteForm((p) => ({ ...p, note: e.target.value }))}
+              />
+              <div className="modal-actions">
+                <button type="button" className="action-btn" onClick={() => !isSaving && setShowNoteModal(false)} disabled={isSaving}>
+                  Cancel
+                </button>
+                <button type="submit" disabled={isSaving || !noteForm.title.trim()}>
+                  {isSaving ? "Saving..." : "Add Note"}
+                </button>
+              </div>
+            </form>
+            <p style={{ marginTop: 12, fontSize: "0.85rem", color: "var(--text-muted)" }}>
+              View and manage all notes on the{" "}
+              <Link to="/notes" className="table-link">
+                Notes
+              </Link>{" "}
+              tab.
             </p>
           </div>
         </div>
