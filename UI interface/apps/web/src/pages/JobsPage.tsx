@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { formatTableDate } from "../lib/formatDate";
-import { getJobs, updateJob } from "../lib/api";
+import { deleteJob, getJobs, updateJob } from "../lib/api";
 
 const LIMIT = 25;
 const REFERRAL_OPTIONS = ["", "Yes", "No", "Pending", "Applied without referral"];
@@ -10,7 +10,7 @@ const REFERRAL_OPTIONS = ["", "Yes", "No", "Pending", "Applied without referral"
 type SortField = "date_saved" | "company" | "role" | "referral_status" | "job_link";
 type SortOrder = "asc" | "desc";
 
-const SORT_CONFIG: { key: SortField; label: string }[] = [
+const BASE_SORT_CONFIG: { key: SortField; label: string }[] = [
   { key: "date_saved", label: "Date" },
   { key: "company", label: "Company" },
   { key: "role", label: "Position" },
@@ -22,10 +22,20 @@ function compareJobs(
   a: Record<string, unknown>,
   b: Record<string, unknown>,
   field: SortField,
-  order: SortOrder
+  order: SortOrder,
+  useArchiveDate: boolean,
 ): number {
-  const av = a[field];
-  const bv = b[field];
+  const avRaw = a[field];
+  const bvRaw = b[field];
+  const av =
+    field === "date_saved" && useArchiveDate
+      ? // prefer archive_date when present for archive view
+        ((a as any).archive_date ?? avRaw)
+      : avRaw;
+  const bv =
+    field === "date_saved" && useArchiveDate
+      ? ((b as any).archive_date ?? bvRaw)
+      : bvRaw;
   const empty = (v: unknown) => v == null || v === "";
   if (empty(av) && empty(bv)) return 0;
   if (empty(av)) return order === "asc" ? 1 : -1;
@@ -63,6 +73,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
     notes: "",
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -83,7 +94,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
     } finally {
       setIsLoading(false);
     }
-  }, [page, company, sortBy, sortOrder]);
+  }, [page, company, sortBy, sortOrder, statusFilter]);
 
   useEffect(() => {
     load();
@@ -153,11 +164,41 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
 
   const sortedData = useMemo(() => {
     if (!data.length) return data;
-    return [...data].sort((a, b) => compareJobs(a, b, sortBy, sortOrder));
-  }, [data, sortBy, sortOrder]);
+    const useArchiveDate = statusFilter === "rejected";
+    return [...data].sort((a, b) => compareJobs(a, b, sortBy, sortOrder, useArchiveDate));
+  }, [data, sortBy, sortOrder, statusFilter]);
 
   const hasNext = data.length === LIMIT;
   const hasPrev = page > 1;
+
+  const sortConfig = useMemo(() => {
+    const dateLabel = statusFilter === "rejected" ? "Archive date" : "Date";
+    return BASE_SORT_CONFIG.map((cfg) =>
+      cfg.key === "date_saved" ? { ...cfg, label: dateLabel } : cfg,
+    );
+  }, [statusFilter]);
+
+  async function onDelete(job: Record<string, unknown>) {
+    const id = job.id as number | string | undefined;
+    if (id === undefined || id === null) return;
+    const company = String(job.company ?? "").trim();
+    const role = String(job.role ?? "").trim();
+    const label = [company, role].filter(Boolean).join(" — ");
+    const confirmed = window.confirm(
+      `Delete this job${label ? ` (${label})` : ""}? This action cannot be undone.`,
+    );
+    if (!confirmed) return;
+    try {
+      setError("");
+      setDeletingId(id);
+      await deleteJob(id);
+      await load();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   return (
     <>
@@ -191,7 +232,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
               <table>
                 <thead>
                   <tr>
-                    {SORT_CONFIG.map(({ key, label }) => (
+                    {sortConfig.map(({ key, label }) => (
                       <th key={key}>
                         <button
                           type="button"
@@ -218,7 +259,11 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                   {sortedData.map((j) => (
                     <tr key={String(j.id)} className="tr-hover">
                       <td>
-                        {formatTableDate(j.date_saved)}
+                        {formatTableDate(
+                          statusFilter === "rejected"
+                            ? ((j as any).archive_date ?? j.date_saved)
+                            : j.date_saved,
+                        )}
                       </td>
                       <td>{String(j.company ?? "-")}</td>
                       <td>{String(j.role ?? "-")}</td>
@@ -239,9 +284,22 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                         )}
                       </td>
                       <td>
-                        <button type="button" className="action-btn" onClick={() => openEdit(j)}>
-                          Edit
-                        </button>
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                          <button type="button" className="action-btn" onClick={() => openEdit(j)}>
+                            Edit
+                          </button>
+                          {statusFilter === "rejected" && (
+                            <button
+                              type="button"
+                              className="action-btn"
+                              onClick={() => onDelete(j)}
+                              disabled={deletingId === j.id}
+                              aria-label="Delete job"
+                            >
+                              {deletingId === j.id ? "…" : "🗑️"}
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

@@ -216,6 +216,12 @@ export function updateJob(id: number | string, payload: Record<string, unknown>)
   });
 }
 
+export function deleteJob(id: number | string) {
+  return request<{ ok: boolean }>(`/api/jobs/${id}`, {
+    method: "DELETE",
+  });
+}
+
 export function createReferral(payload: Record<string, unknown>) {
   return request("/api/referrals", { method: "POST", body: JSON.stringify(payload) });
 }
@@ -224,6 +230,12 @@ export function updateReferral(id: number | string, payload: Record<string, unkn
   return request<Record<string, unknown>>(`/api/referrals/${id}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
+  });
+}
+
+export function deleteReferral(id: number | string) {
+  return request<{ ok: boolean }>(`/api/referrals/${id}`, {
+    method: "DELETE",
   });
 }
 
