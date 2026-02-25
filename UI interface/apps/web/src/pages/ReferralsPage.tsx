@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { formatTableDate } from "../lib/formatDate";
-import { createJob, getReferrals, updateReferral } from "../lib/api";
+import { createJob, deleteReferral, getReferrals, updateReferral } from "../lib/api";
 
 const LIMIT = 25;
 const REFERRAL_SHEET_STATUSES = ["Requested", "Pending"] as const;
@@ -14,6 +14,7 @@ export default function ReferralsPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | string | null>(null);
   const [editing, setEditing] = useState<Record<string, unknown> | null>(null);
   const [editStatus, setEditStatus] = useState("");
   const [editReferredByName, setEditReferredByName] = useState("");
@@ -82,6 +83,28 @@ export default function ReferralsPage() {
   const hasPrev = page > 1;
   const movesToJobs = JOB_STATUSES.includes(editStatus as (typeof JOB_STATUSES)[number]);
 
+  async function onDelete(row: Record<string, unknown>) {
+    const id = row.id as number | string | undefined;
+    if (id === undefined || id === null) return;
+    const company = String(row.company ?? "").trim();
+    const position = String(row.request_log ?? "").trim();
+    const label = [company, position].filter(Boolean).join(" — ");
+    const confirmed = window.confirm(
+      `Delete this referral${label ? ` (${label})` : ""}? This action cannot be undone.`,
+    );
+    if (!confirmed) return;
+    try {
+      setError("");
+      setDeletingId(id);
+      await deleteReferral(id);
+      await load();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   return (
     <>
       {error ? <div className="error">{error}</div> : null}
@@ -98,20 +121,20 @@ export default function ReferralsPage() {
               <table>
                 <thead>
                   <tr>
-                    <th>Date</th>
+                    <th>Referral date</th>
                     <th>Company</th>
                     <th>Position</th>
                     <th>Status</th>
                     <th>Referred by</th>
                     <th>Notes</th>
                     <th>Link</th>
-                    <th></th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.map((r) => (
                     <tr key={String(r.id)} className="tr-hover">
-                      <td>{formatTableDate(r.request_date)}</td>
+                      <td>{formatTableDate((r as any).updated_date || r.request_date)}</td>
                       <td>{String(r.company ?? "—")}</td>
                       <td>{String(r.request_log ?? "—")}</td>
                       <td>{String(r.referral_received ?? "—")}</td>
@@ -127,9 +150,20 @@ export default function ReferralsPage() {
                         )}
                       </td>
                       <td>
-                        <button type="button" className="action-btn" onClick={() => openEdit(r)}>
-                          Edit
-                        </button>
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                          <button type="button" className="action-btn" onClick={() => openEdit(r)}>
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="action-btn"
+                            onClick={() => onDelete(r)}
+                            disabled={deletingId === r.id}
+                            aria-label="Delete referral"
+                          >
+                            {deletingId === r.id ? "…" : "🗑️"}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

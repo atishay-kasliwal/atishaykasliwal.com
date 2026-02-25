@@ -357,6 +357,10 @@ app.patch("/api/jobs/:id", async (c) => {
       application_status = COALESCE($8, application_status),
       notes = COALESCE($9, notes),
       date_saved = COALESCE($10::date, date_saved),
+      archive_date = CASE
+        WHEN $8 = 'Rejected' THEN COALESCE(archive_date, CURRENT_DATE)
+        ELSE archive_date
+      END,
       updated_at = NOW()
     WHERE id = $11 AND user_id = $12
     RETURNING *
@@ -378,6 +382,18 @@ app.patch("/api/jobs/:id", async (c) => {
   );
   if (!row) return c.json({ error: "Not found" }, 404);
   return c.json(row);
+});
+
+app.delete("/api/jobs/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const rows = await query(
+    c.env,
+    "DELETE FROM jobs WHERE id = $1 AND user_id = $2 RETURNING id",
+    [id, userId],
+  );
+  if (!rows.length) return c.json({ error: "Not found" }, 404);
+  return c.json({ ok: true });
 });
 
 const referralInput = z.object({
@@ -411,8 +427,8 @@ app.post("/api/referrals", async (c) => {
   const [row] = await query(
     c.env,
     `
-    INSERT INTO referrals (user_id, source, company, request_log, request_date, request_link, referral_received, referred_by_name, comment)
-    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO referrals (user_id, source, company, request_log, request_date, updated_date, request_link, referral_received, referred_by_name, comment)
+    VALUES ($1, 'manual', $2, $3, $4, $5::date, COALESCE($5::date, CURRENT_DATE), $6, $7, $8, $9)
     RETURNING *
     `,
     [
@@ -489,11 +505,23 @@ app.patch("/api/referrals/:id", async (c) => {
   values.push(userId);
   const [row] = await query(
     c.env,
-    `UPDATE referrals SET ${updates.join(", ")}, updated_at = NOW() WHERE id = $${i} AND user_id = $${i + 1} RETURNING *`,
+    `UPDATE referrals SET ${updates.join(", ")}, updated_date = CURRENT_DATE, updated_at = NOW() WHERE id = $${i} AND user_id = $${i + 1} RETURNING *`,
     values,
   );
   if (!row) return c.json({ error: "Referral not found" }, 404);
   return c.json(row);
+});
+
+app.delete("/api/referrals/:id", async (c) => {
+  const userId = c.get("authUser").id;
+  const id = c.req.param("id");
+  const rows = await query(
+    c.env,
+    "DELETE FROM referrals WHERE id = $1 AND user_id = $2 RETURNING id",
+    [id, userId],
+  );
+  if (!rows.length) return c.json({ error: "Referral not found" }, 404);
+  return c.json({ ok: true });
 });
 
 app.get("/api/notes", async (c) => {
