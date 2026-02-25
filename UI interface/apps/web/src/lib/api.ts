@@ -2,6 +2,8 @@ const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8787";
 const API_TOKEN = import.meta.env.VITE_API_TOKEN || "";
 const DASHBOARD_SESSION_KEY = "dashboard_auth_session";
 
+import { getLocalISODate } from "./formatDate";
+
 export type AuthUser = {
   id: number;
   email: string;
@@ -121,8 +123,12 @@ export type DashboardSummary = {
 };
 
 export function getDashboardSummary(days?: number) {
-  const q = days ? `?days=${days}` : "";
-  return request<DashboardSummary>(`/api/dashboard/summary${q}`);
+  const search = new URLSearchParams();
+  if (days) search.set("days", String(days));
+  // Anchor "today" to the user's local timezone so charts/KPIs use local days.
+  search.set("anchorDay", getLocalISODate());
+  const q = search.toString();
+  return request<DashboardSummary>(`/api/dashboard/summary${q ? `?${q}` : ""}`);
 }
 
 export type GetJobsParams = {
@@ -162,9 +168,10 @@ export function getReferrals(params: GetReferralsParams = {}) {
   );
 }
 
-export function getNotes(params: GetListParams = {}) {
-  const { page = 1, limit = 25 } = params;
+export function getNotes(params: GetListParams & { archive?: boolean } = {}) {
+  const { page = 1, limit = 25, archive } = params as GetListParams & { archive?: boolean };
   const search = new URLSearchParams({ page: String(page), limit: String(Math.min(limit, 100)) });
+  if (archive) search.set("archive", "true");
   return request<{ page: number; limit: number; data: Array<Record<string, unknown>> }>(
     `/api/notes?${search.toString()}`
   );
@@ -241,6 +248,19 @@ export function deleteReferral(id: number | string) {
 
 export function createNote(payload: Record<string, unknown>) {
   return request("/api/notes", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export function updateNote(id: number | string, payload: Record<string, unknown>) {
+  return request<Record<string, unknown>>(`/api/notes/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteNote(id: number | string) {
+  return request<{ ok: boolean }>(`/api/notes/${id}`, {
+    method: "DELETE",
+  });
 }
 
 export function markPendingDone(id: number | string) {

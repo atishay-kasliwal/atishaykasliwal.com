@@ -502,9 +502,8 @@ body {
   gap: 18px;
 }
 
-/* 80/20 split specifically for the main trend chart + pending list */
 .chart-grid-trend {
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 1fr;
 }
 
 .chart-grid-trend .card-chart-trend {
@@ -515,8 +514,6 @@ body {
 }
 
 .pending-list-card {
-  height: 600px;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -618,6 +615,24 @@ body {
 
 .chart-grid-three {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Dashboard bottom panels (Pending / Referrals / Notes) */
+.dashboard-bottom-panels {
+  align-items: stretch;
+  margin-top: 16px;
+}
+
+.dashboard-bottom-panels .card {
+  display: flex;
+  flex-direction: column;
+  height: 600px; /* ~20% shorter than the 600px main chart */
+}
+
+.dashboard-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .chart-subtitle {
