@@ -14,11 +14,11 @@ type LayoutProps = {
 };
 
 const emptyJobForm = {
-  role: "",
+  role: "Software Engineer",
   company: "",
-  location_raw: "",
+  location_raw: "United States of America",
   job_link: "",
-  referral_status: "",
+  referral_status: "No",
   notes: "",
   date_saved: getLocalISODate(),
 };
