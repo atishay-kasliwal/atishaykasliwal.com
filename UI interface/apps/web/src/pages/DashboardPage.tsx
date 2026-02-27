@@ -419,43 +419,31 @@ export default function DashboardPage() {
               </Bar>
               <Line
               type="monotone"
-              dataKey="total"
+              dataKey="high"
+              stroke="#22c55e"
               strokeWidth={2.5}
               dot={false}
-              activeDot={false}
-              shape={(props: any) => {
-                const { points } = props;
+              isAnimationActive={false}
+            />
             
-                if (!points || points.length < 2) return null;
+            <Line
+              type="monotone"
+              dataKey="mid"
+              stroke="#facc15"
+              strokeWidth={2.5}
+              dot={false}
+              isAnimationActive={false}
+            />
             
-                return (
-                  <>
-                    {points.map((point: any, index: number) => {
-                      if (index === 0) return null;
+            <Line
+              type="monotone"
+              dataKey="low"
+              stroke="#ef4444"
+              strokeWidth={2.5}
+              dot={false}
+              isAnimationActive={false}
+            />
             
-                      const prev = points[index - 1];
-                      const value = point.payload.total ?? 0;
-            
-                      let color = "#ef4444"; // < 15 → red
-                      if (value > 20) color = "#22c55e"; // > 20 → green
-                      else if (value >= 15) color = "#facc15"; // 15–20 → yellow
-            
-                      return (
-                        <line
-                          key={index}
-                          x1={prev.x}
-                          y1={prev.y}
-                          x2={point.x}
-                          y2={point.y}
-                          stroke={color}
-                          strokeWidth={2.5}
-                        />
-                      );
-                    })}
-                  </>
-                );
-              }}
-              />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
