@@ -407,7 +407,8 @@ const weeklyInsights = useMemo(() => {
       </div>
 
       <section className="chart-grid chart-grid-trend">
-        <div className="card card-chart-trend">
+        <div className="card card-chart-trend"
+        style={{ paddingBottom: 24 }}>
           <ResponsiveContainer width="100%" height={600}>
             <ComposedChart data={trendData} margin={{ top: 20, right: 24, left: 8, bottom: 32 }}>
               <defs>
@@ -482,6 +483,7 @@ const weeklyInsights = useMemo(() => {
 
             </ComposedChart>
           </ResponsiveContainer>
+          <div style={{ marginTop: 18 }}>
           {weeklyInsights && (
   <div
     style={{
@@ -507,6 +509,7 @@ const weeklyInsights = useMemo(() => {
     )}
   </div>
 )}
+        </div>
         </div>
         
       </section>
