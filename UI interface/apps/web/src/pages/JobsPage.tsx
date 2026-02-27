@@ -660,6 +660,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                         ) : null}
                       </button>
                     </th>
+                    <th>Keyword Match</th>
                     <th>
                       <button
                         type="button"
