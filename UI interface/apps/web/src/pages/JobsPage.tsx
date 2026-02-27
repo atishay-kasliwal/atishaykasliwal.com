@@ -113,6 +113,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
     company: "",
     location_raw: "",
     job_link: "",
+    keyword_matching: "Medium",
     referral_status: "",
     response_status: "",
     application_status: "",
@@ -202,6 +203,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
       company: String(job.company ?? ""),
       location_raw: String(job.location_raw ?? ""),
       job_link: String(job.job_link ?? ""),
+      keyword_matching: String((job as any).keyword_matching ?? "Medium"),
       referral_status: String(job.referral_status ?? ""),
       response_status: String(job.response_status ?? ""),
       application_status: String(job.application_status ?? "Applied"),
@@ -220,6 +222,7 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
         company: editForm.company.trim() || undefined,
         location_raw: editForm.location_raw.trim() || undefined,
         job_link: editForm.job_link.trim() || undefined,
+        keyword_matching: editForm.keyword_matching || undefined,
         referral_status: editForm.referral_status.trim() || undefined,
         response_status: editForm.response_status.trim() || undefined,
         application_status: editForm.application_status.trim() || undefined,
@@ -300,6 +303,13 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
     if (value === "under consideration") return { label: "Under review", cls: "status-chip status-chip--review" };
     if (value === "open") return { label: "Open", cls: "status-chip status-chip--open" };
     return { label: raw || "Applied", cls: "status-chip status-chip--applied" };
+  }
+
+  function getKeywordMeta(raw: string) {
+    const value = String(raw || "Medium").trim();
+    if (value === "Strong") return { label: "Strong", cls: "status-chip status-chip--keyword-strong" };
+    if (value === "Week") return { label: "Week", cls: "status-chip status-chip--keyword-week" };
+    return { label: "Medium", cls: "status-chip status-chip--keyword-medium" };
   }
 
   function capitalizeFirst(value: string) {
@@ -580,6 +590,9 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                 <thead>
                   <tr>
                     <th>
+                      Keyword Match
+                    </th>
+                    <th>
                       <button
                         type="button"
                         className="th-sort"
@@ -695,6 +708,11 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                       </td>
                       <td>{String(j.referral_status ?? "-")}</td>
                       <td>
+                        <span className={getKeywordMeta(String((j as any).keyword_matching ?? "Medium")).cls}>
+                          {getKeywordMeta(String((j as any).keyword_matching ?? "Medium")).label}
+                        </span>
+                      </td>
+                      <td>
                         {j.job_link ? (
                           <a
                             href={String(j.job_link)}
@@ -780,6 +798,25 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                 value={editForm.job_link}
                 onChange={(e) => setEditForm((p) => ({ ...p, job_link: e.target.value }))}
               />
+              <div className="form-row">
+                <label className="form-label">Keyword Matching</label>
+                <select
+                  value={editForm.keyword_matching}
+                  onChange={(e) => setEditForm((p) => ({ ...p, keyword_matching: e.target.value }))}
+                  className="form-select"
+                >
+                  <option value="Strong">Strong</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Week">Week</option>
+                </select>
+                <p className="form-helper">
+                  {editForm.keyword_matching === "Strong"
+                    ? "Almost every technical keyword matched"
+                    : editForm.keyword_matching === "Medium"
+                      ? "Few Keywords are not Present"
+                      : "Few Keywords Matched"}
+                </p>
+              </div>
               <div className="form-row">
                 <label className="form-label">Referral</label>
                 <select

@@ -425,6 +425,7 @@ const jobInput = z.object({
   company: z.string().min(1),
   location_raw: z.string().optional(),
   job_link: z.string().url().optional(),
+  keyword_matching: z.enum(["Strong", "Medium", "Week"]).optional(),
   oa_status: z.string().optional(),
   referral_status: z.string().optional(),
   response_status: z.string().optional(),
@@ -441,8 +442,8 @@ app.post("/api/jobs", async (c) => {
   const [row] = await query(
     c.env,
     `
-    INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, oa_status, referral_status, response_status, application_status, notes, date_saved)
-    VALUES ($1, 'manual', $2, $3, $4, $5, $6, $7, $8, COALESCE($9, 'Applied'), $10, (COALESCE($11::date, CURRENT_DATE))::timestamp)
+    INSERT INTO jobs (user_id, source, role, company, location_raw, job_link, keyword_matching, oa_status, referral_status, response_status, application_status, notes, date_saved)
+    VALUES ($1, 'manual', $2, $3, $4, $5, COALESCE($6, 'Medium'), $7, $8, $9, COALESCE($10, 'Applied'), $11, (COALESCE($12::date, CURRENT_DATE))::timestamp)
     RETURNING *
     `,
     [
@@ -451,6 +452,7 @@ app.post("/api/jobs", async (c) => {
       p.company,
       p.location_raw ?? null,
       p.job_link ?? null,
+      p.keyword_matching ?? null,
       p.oa_status ?? null,
       p.referral_status ?? null,
       p.response_status ?? null,
@@ -467,6 +469,7 @@ const jobUpdateInput = z.object({
   company: z.string().min(1).optional(),
   location_raw: z.string().optional(),
   job_link: z.string().url().optional().nullable(),
+  keyword_matching: z.enum(["Strong", "Medium", "Week"]).optional().nullable(),
   oa_status: z.string().optional().nullable(),
   referral_status: z.string().optional().nullable(),
   response_status: z.string().optional().nullable(),
@@ -489,18 +492,19 @@ app.patch("/api/jobs/:id", async (c) => {
       company = COALESCE($2, company),
       location_raw = COALESCE($3, location_raw),
       job_link = COALESCE($4, job_link),
-      oa_status = COALESCE($5, oa_status),
-      referral_status = COALESCE($6, referral_status),
-      response_status = COALESCE($7, response_status),
-      application_status = COALESCE($8, application_status),
-      notes = COALESCE($9, notes),
-      date_saved = COALESCE($10::date, date_saved),
+      keyword_matching = COALESCE($5, keyword_matching),
+      oa_status = COALESCE($6, oa_status),
+      referral_status = COALESCE($7, referral_status),
+      response_status = COALESCE($8, response_status),
+      application_status = COALESCE($9, application_status),
+      notes = COALESCE($10, notes),
+      date_saved = COALESCE($11::date, date_saved),
       archive_date = CASE
-        WHEN $8 = 'Rejected' THEN COALESCE(archive_date, CURRENT_DATE)
+        WHEN $9 = 'Rejected' THEN COALESCE(archive_date, CURRENT_DATE)
         ELSE archive_date
       END,
       updated_at = NOW()
-    WHERE id = $11 AND user_id = $12
+    WHERE id = $12 AND user_id = $13
     RETURNING *
     `,
     [
@@ -508,6 +512,7 @@ app.patch("/api/jobs/:id", async (c) => {
       p.company ?? null,
       p.location_raw ?? null,
       p.job_link ?? null,
+      p.keyword_matching ?? null,
       p.oa_status ?? null,
       p.referral_status ?? null,
       p.response_status ?? null,
