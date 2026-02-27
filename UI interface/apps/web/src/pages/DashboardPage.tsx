@@ -306,99 +306,59 @@ export default function DashboardPage() {
     return arr.length ? arr.length - 1 : -1;
   }, [summary.monthlyTrend]);
   
-  // ⬇️ ADD WEEKLY INTELLIGENCE LOGIC HERE
-  const weeklyInsights = useMemo(() => {
-    const daily = summary.dailyTrend ?? [];
-    if (daily.length < 7) return null;
-  
-    const todayIso = daily[daily.length - 1].day;
-  
-    // -------- This Week + Last Week Totals --------
-    let thisWeek = 0;
-    let lastWeek = 0;
-  
-    for (let i = 0; i < 7; i++) {
-      const iso = isoDayAddDays(todayIso, -i);
-      thisWeek += daily.find(d => d.day === iso)?.total ?? 0;
-    }
-  
-    for (let i = 7; i < 14; i++) {
-      const iso = isoDayAddDays(todayIso, -i);
-      lastWeek += daily.find(d => d.day === iso)?.total ?? 0;
-    }
-  
-    const diff = thisWeek - lastWeek;
-    const status =
-      diff > 0 ? "ahead" :
-      diff < 0 ? "behind" :
-      "equal";
-  
-    // -------- Weekly Peak --------
-    const weekData = [];
-    for (let i = 0; i < 7; i++) {
-      const iso = isoDayAddDays(todayIso, -i);
-      const row = daily.find(d => d.day === iso);
-      if (row) weekData.push(row);
-    }
-  
-    const peak = weekData.length
-      ? weekData.reduce((max, d) => d.total > max.total ? d : max)
-      : null;
-  
-    const peakWeekday = peak
-      ? utcDateFromIsoDay(peak.day)?.toLocaleDateString(undefined, {
-          weekday: "long",
-          timeZone: "UTC",
-        })
-      : null;
-  
-    // -------- Reject Count --------
-    const rejectedRow = summary.responseStatusTrend?.find(
-      r => r.response_status?.toLowerCase() === "rejected"
-    );
-  
-    const weeklyRejects = rejectedRow?.total ?? 0;
-  
-    // -------- Referral Count --------
-    const referralRow = summary.referralTrend?.find(
-      r => r.referral_status?.toLowerCase() === "yes"
-    );
-  
-    const weeklyReferrals = referralRow?.total ?? 0;
-  
-    // -------- Suggestion Engine --------
-    let suggestion = "";
-  
-    if (status === "behind") {
-      suggestion = "Increase daily application volume slightly to regain momentum.";
-    } else if (status === "ahead") {
-      suggestion = "Maintain this pace to build strong weekly momentum.";
-    } else if (weeklyRejects > 15) {
-      suggestion = "High rejection volume detected. Consider refining resume targeting.";
-    } else if (weeklyReferrals < 5) {
-      suggestion = "Increase referral outreach to improve response probability.";
-    } else {
-      suggestion = "Performance is stable. Focus on quality applications.";
-    }
-  
-    return {
-      thisWeek,
-      lastWeek,
-      diff,
-      status,
-      peakValue: peak?.total ?? 0,
-      peakWeekday,
-      weeklyRejects,
-      weeklyReferrals,
-      suggestion,
-    };
-  }, [
-    summary.dailyTrend,
-    summary.responseStatusTrend,
-    summary.referralTrend,
-  ]);
+  // ⬇️ WEEKLY INTELLIGENCE LOGIC
+const weeklyInsights = useMemo(() => {
+  const daily = summary.dailyTrend ?? [];
+  if (daily.length < 7) return null;
 
-  const { thisWeek, lastWeek, diff, status, peakValue, peakWeekday, weeklyRejects, weeklyReferrals, suggestion } = weeklyInsights || {};
+  const todayIso = daily[daily.length - 1].day;
+
+  // -------- This Week + Last Week Totals --------
+  let thisWeek = 0;
+  let lastWeek = 0;
+
+  for (let i = 0; i < 7; i++) {
+    const iso = isoDayAddDays(todayIso, -i);
+    thisWeek += daily.find(d => d.day === iso)?.total ?? 0;
+  }
+
+  for (let i = 7; i < 14; i++) {
+    const iso = isoDayAddDays(todayIso, -i);
+    lastWeek += daily.find(d => d.day === iso)?.total ?? 0;
+  }
+
+  const diff = thisWeek - lastWeek;
+
+  const status =
+    diff > 0 ? "ahead" :
+    diff < 0 ? "behind" :
+    "equal";
+
+  // -------- Weekly Peak --------
+  const weekRows = [];
+  for (let i = 0; i < 7; i++) {
+    const iso = isoDayAddDays(todayIso, -i);
+    const row = daily.find(d => d.day === iso);
+    if (row) weekRows.push(row);
+  }
+
+  const peak = weekRows.length
+    ? weekRows.reduce((max, d) => d.total > max.total ? d : max)
+    : null;
+
+  const peakLabel = peak
+    ? formatDay(peak.day)
+    : null;
+
+  return {
+    diff,
+    status,
+    peakValue: peak?.total ?? 0,
+    peakLabel,
+  };
+}, [summary.dailyTrend]);
+
+  const { diff, status, peakValue } = weeklyInsights || {};
 
   if (isLoading) {
     return (
@@ -522,39 +482,33 @@ export default function DashboardPage() {
 
             </ComposedChart>
           </ResponsiveContainer>
-        </div>
-        <div className="card" style={{ marginTop: 16 }}>
-  <h3>Weekly Intelligence</h3>
-  <p className="chart-subtitle">Auto-generated performance insights</p>
+          {weeklyInsights && (
+  <div
+    style={{
+      marginTop: 18,
+      paddingTop: 14,
+      borderTop: `1px solid ${CHART_COLORS.grid}`,
+      fontSize: "0.85rem",
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 14,
+    }}
+  >
+    <span style={{ color: CHART_COLORS.trendLine }}>
+      {weeklyInsights.status === "equal"
+        ? "Same pace as last week"
+        : `You are ${Math.abs(weeklyInsights.diff)} applications ${weeklyInsights.status} vs last week`}
+    </span>
 
-  <div style={{ marginTop: 12, lineHeight: 1.8 }}>
-    {weeklyInsights && (
-      <>
-        <div>
-          {status === "equal"
-            ? "You are at the same pace as last week."
-            : `You are ${Math.abs(diff ?? 0)} applications ${status} compared to last week.`}
-        </div>
-
-        <div>
-          This week {peakWeekday} was your peak with {peakValue} applications.
-        </div>
-
-        <div>
-          This week your reject count was {weeklyRejects}.
-        </div>
-
-        <div>
-          This week you applied to {weeklyReferrals} applications with referral.
-        </div>
-
-        <div style={{ marginTop: 8, fontWeight: 600 }}>
-          Suggestion: {suggestion}
-        </div>
-      </>
+    {weeklyInsights.peakLabel && (
+      <span style={{ color: "#6ee7b7" }}>
+        • Peak: {weeklyInsights.peakValue} applications on {weeklyInsights.peakLabel}
+      </span>
     )}
   </div>
-</div>
+)}
+        </div>
+        
       </section>
 
       {/* Bottom row: Pending / Referrals / Notes */}
