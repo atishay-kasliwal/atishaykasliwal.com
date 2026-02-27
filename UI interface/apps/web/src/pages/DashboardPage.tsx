@@ -417,33 +417,15 @@ export default function DashboardPage() {
                   <Cell key={row.day ?? i} fill={MONTH_COLORS[row.month]} />
                 ))}
               </Bar>
+              
               <Line
               type="monotone"
-              dataKey="high"
-              stroke="#22c55e"
+              dataKey="total"
+              stroke={CHART_COLORS.trendLine}
               strokeWidth={2.5}
               dot={false}
-              isAnimationActive={false}
             />
-            
-            <Line
-              type="monotone"
-              dataKey="mid"
-              stroke="#facc15"
-              strokeWidth={2.5}
-              dot={false}
-              isAnimationActive={false}
-            />
-            
-            <Line
-              type="monotone"
-              dataKey="low"
-              stroke="#ef4444"
-              strokeWidth={2.5}
-              dot={false}
-              isAnimationActive={false}
-            />
-            
+
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -621,11 +603,23 @@ export default function DashboardPage() {
                     stroke: CHART_COLORS.tooltipBg,
                     strokeWidth: 2,
                   }}
-                  activeDot={{
-                    r: 6,
-                    fill: CHART_COLORS.monthlyBar,
-                    stroke: CHART_COLORS.tooltipBg,
-                    strokeWidth: 2,
+                  activeDot={(props: any) => {
+                    const value = props?.payload?.total ?? 0;
+                  
+                    let color = "#ef4444";
+                    if (value > 20) color = "#22c55e";
+                    else if (value >= 15) color = "#facc15";
+                  
+                    return (
+                      <circle
+                        cx={props.cx}
+                        cy={props.cy}
+                        r={5}
+                        fill={color}
+                        stroke={CHART_COLORS.tooltipBg}
+                        strokeWidth={2}
+                      />
+                    );
                   }}
                 />
               </BarChart>
