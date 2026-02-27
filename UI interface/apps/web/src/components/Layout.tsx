@@ -18,6 +18,7 @@ const emptyJobForm = {
   company: "",
   location_raw: "United States of America",
   job_link: "",
+  keyword_matching: "Medium",
   referral_status: "No",
   notes: "",
   date_saved: getLocalISODate(),
@@ -211,80 +212,104 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
 
       {showQuickAdd && (
         <div className="modal-overlay" onClick={() => !isSaving && setShowQuickAdd(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Add Job</h3>
+          <div className="modal modal--quickadd" onClick={(e) => e.stopPropagation()}>
+            <h3>New Application</h3>
             {modalError ? <div className="auth-error">{modalError}</div> : null}
-            <form className="form" onSubmit={onCreateJob}>
-              <input
-                placeholder="Position *"
-                value={form.role}
-                onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
-              />
-              <input
-                placeholder="Company *"
-                value={form.company}
-                onChange={(e) => setForm((p) => ({ ...p, company: e.target.value }))}
-              />
-              <div className="form-row">
-                <label className="form-label">Date</label>
+            <form className="form form--quickadd" onSubmit={onCreateJob}>
+              <div className="qa-left">
                 <input
-                  type="date"
-                  value={form.date_saved}
-                  onChange={(e) => setForm((p) => ({ ...p, date_saved: e.target.value }))}
+                  placeholder="Position *"
+                  value={form.role}
+                  onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
+                  autoFocus
+                />
+                <div className="form-row">
+                  <label className="form-label">Date</label>
+                  <input
+                    type="date"
+                    value={form.date_saved}
+                    onChange={(e) => setForm((p) => ({ ...p, date_saved: e.target.value }))}
+                  />
+                </div>
+                <input
+                  placeholder="Location"
+                  value={form.location_raw}
+                  onChange={(e) => setForm((p) => ({ ...p, location_raw: e.target.value }))}
+                />
+                <div className="form-row">
+                  <label className="form-label">Referral</label>
+                  <select
+                    value={form.referral_status}
+                    onChange={(e) => setForm((p) => ({ ...p, referral_status: e.target.value }))}
+                    className="form-select"
+                  >
+                    <option value="">—</option>
+                    <option value="Requested">Requested</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Applied without referral">Applied without referral</option>
+                  </select>
+                </div>
+                {(form.referral_status === "Requested" || form.referral_status === "Pending") && (
+                  <p className="referral-hint">
+                    This will add an entry on the <Link to="/referrals" className="table-link">Referrals</Link> page. Change its status there to create a job.
+                  </p>
+                )}
+                {form.referral_status === "Yes" && (
+                  <p className="referral-hint">
+                    Add a referral for this company on the <Link to="/referrals" className="table-link">Referrals</Link> page to keep track.
+                  </p>
+                )}
+                <textarea
+                  placeholder="Notes"
+                  rows={2}
+                  value={form.notes}
+                  onChange={(e) => setForm((p) => ({ ...p, notes: e.target.value }))}
                 />
               </div>
-              <input
-                placeholder="Location"
-                value={form.location_raw}
-                onChange={(e) => setForm((p) => ({ ...p, location_raw: e.target.value }))}
-              />
-              <input
-                placeholder="Job link (URL)"
-                type="url"
-                value={form.job_link}
-                onChange={(e) => setForm((p) => ({ ...p, job_link: e.target.value }))}
-              />
-              <div className="form-row">
-                <label className="form-label">Referral</label>
-                <select
-                  value={form.referral_status}
-                  onChange={(e) => setForm((p) => ({ ...p, referral_status: e.target.value }))}
-                  className="form-select"
-                >
-                  <option value="">—</option>
-                  <option value="Requested">Requested</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Applied without referral">Applied without referral</option>
-                </select>
+              <div className="qa-right">
+                <input
+                  placeholder="Company *"
+                  value={form.company}
+                  onChange={(e) => setForm((p) => ({ ...p, company: e.target.value }))}
+                />
+                <input
+                  placeholder="Job link (URL)"
+                  type="url"
+                  value={form.job_link}
+                  onChange={(e) => setForm((p) => ({ ...p, job_link: e.target.value }))}
+                />
+                <div className="form-row">
+                  <label className="form-label">Keyword Matching</label>
+                  <select
+                    value={form.keyword_matching}
+                    onChange={(e) => setForm((p) => ({ ...p, keyword_matching: e.target.value }))}
+                    className="form-select"
+                  >
+                    <option value="Strong">Strong</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Week">Week</option>
+                  </select>
+                  <p className="form-helper">
+                    {form.keyword_matching === "Strong"
+                      ? "Almost every technical keyword matched"
+                      : form.keyword_matching === "Medium"
+                        ? "Few Keywords are not Present"
+                        : "Few Keywords Matched"}
+                  </p>
+                </div>
               </div>
-              {(form.referral_status === "Requested" || form.referral_status === "Pending") && (
-                <p className="referral-hint">
-                  This will add an entry on the <Link to="/referrals" className="table-link">Referrals</Link> page. Change its status there to create a job.
-                </p>
-              )}
-              {form.referral_status === "Yes" && (
-                <p className="referral-hint">
-                  Add a referral for this company on the <Link to="/referrals" className="table-link">Referrals</Link> page to keep track.
-                </p>
-              )}
-              <textarea
-                placeholder="Notes"
-                rows={3}
-                value={form.notes}
-                onChange={(e) => setForm((p) => ({ ...p, notes: e.target.value }))}
-              />
               <div className="modal-actions">
                 <button type="button" className="action-btn" onClick={() => !isSaving && setShowQuickAdd(false)} disabled={isSaving}>
                   Cancel
                 </button>
                 <button type="submit" disabled={isSaving || !form.company.trim() || !form.role.trim()}>
-                  {isSaving ? "Saving..." : "Add Job"}
+                  {isSaving ? "Saving..." : "Create Application"}
                 </button>
               </div>
             </form>
-            <p style={{ marginTop: 12, fontSize: "0.85rem", color: "var(--text-muted)" }}>
+            <p className="modal-footnote">
               View and search all jobs on the <Link to="/jobs" className="table-link">Jobs</Link> page.
             </p>
           </div>
