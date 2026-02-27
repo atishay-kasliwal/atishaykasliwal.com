@@ -72,6 +72,13 @@ const MONTH_COLORS = [
   "#60a5fa", "#3b82f6", "#818cf8", "#a78bfa", "#c084fc", "#94a3b8",
   "#60a5fa", "#3b82f6", "#818cf8", "#a78bfa", "#c084fc", "#94a3b8",
 ];
+
+const TREND_COLORS = {
+  high: "#22c55e",   // green
+  mid: "#facc15",    // yellow
+  low: "#ef4444",    // red
+};
+
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function parseIsoDay(day: string): { y: number; m: number; d: number } | null {
@@ -203,12 +210,24 @@ export default function DashboardPage() {
 
   const trendData = useMemo(() => {
     const raw = summary.dailyTrend ?? [];
+  
     return raw.map((row) => {
       const p = parseIsoDay(row.day);
       const monthIndex = p ? p.m - 1 : 0;
       const dayOfMonth = p ? p.d : 0;
       const label = `${MONTH_NAMES[monthIndex] ?? MONTH_NAMES[0]} ${dayOfMonth || 0}`;
-      return { ...row, label, month: monthIndex, dayOfMonth };
+  
+      const value = row.total ?? 0;
+  
+      return {
+        ...row,
+        label,
+        month: monthIndex,
+        dayOfMonth,
+        high: value > 20 ? value : null,
+        mid: value >= 15 && value <= 20 ? value : null,
+        low: value < 15 ? value : null,
+      };
     });
   }, [summary.dailyTrend]);
 
@@ -399,12 +418,31 @@ export default function DashboardPage() {
                 ))}
               </Bar>
               <Line
+                
                 type="monotone"
-                dataKey="total"
-                stroke={CHART_COLORS.trendLine}
-                strokeWidth={2}
+                dataKey="high"
+                stroke="#22c55e"
+                strokeWidth={2.5}
                 dot={false}
-                activeDot={{ r: 5, fill: CHART_COLORS.trendLine, stroke: CHART_COLORS.tooltipBg, strokeWidth: 2 }}
+                connectNulls
+              />
+              
+              <Line
+                type="monotone"
+                dataKey="mid"
+                stroke="#facc15"
+                strokeWidth={2.5}
+                dot={false}
+                connectNulls
+              />
+              
+              <Line
+                type="monotone"
+                dataKey="low"
+                stroke="#ef4444"
+                strokeWidth={2.5}
+                dot={false}
+                connectNulls
               />
             </ComposedChart>
           </ResponsiveContainer>
