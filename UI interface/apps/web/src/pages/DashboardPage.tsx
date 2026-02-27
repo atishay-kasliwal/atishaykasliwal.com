@@ -418,31 +418,43 @@ export default function DashboardPage() {
                 ))}
               </Bar>
               <Line
-                
-                type="monotone"
-                dataKey="high"
-                stroke="#22c55e"
-                strokeWidth={2.5}
-                dot={false}
-                connectNulls
-              />
-              
-              <Line
-                type="monotone"
-                dataKey="mid"
-                stroke="#facc15"
-                strokeWidth={2.5}
-                dot={false}
-                connectNulls
-              />
-              
-              <Line
-                type="monotone"
-                dataKey="low"
-                stroke="#ef4444"
-                strokeWidth={2.5}
-                dot={false}
-                connectNulls
+              type="monotone"
+              dataKey="total"
+              strokeWidth={2.5}
+              dot={false}
+              activeDot={false}
+              shape={(props: any) => {
+                const { points } = props;
+            
+                if (!points || points.length < 2) return null;
+            
+                return (
+                  <>
+                    {points.map((point: any, index: number) => {
+                      if (index === 0) return null;
+            
+                      const prev = points[index - 1];
+                      const value = point.payload.total ?? 0;
+            
+                      let color = "#ef4444"; // < 15 → red
+                      if (value > 20) color = "#22c55e"; // > 20 → green
+                      else if (value >= 15) color = "#facc15"; // 15–20 → yellow
+            
+                      return (
+                        <line
+                          key={index}
+                          x1={prev.x}
+                          y1={prev.y}
+                          x2={point.x}
+                          y2={point.y}
+                          stroke={color}
+                          strokeWidth={2.5}
+                        />
+                      );
+                    })}
+                  </>
+                );
+              }}
               />
             </ComposedChart>
           </ResponsiveContainer>
