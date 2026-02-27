@@ -38,6 +38,12 @@ export default function NotesPage() {
     load();
   }, []);
 
+  useEffect(() => {
+    const onRefresh = () => load();
+    window.addEventListener("dashboard-refresh", onRefresh);
+    return () => window.removeEventListener("dashboard-refresh", onRefresh);
+  }, []);
+
   function startEdit(note: Record<string, any>) {
     setEditId(note.id);
     setEditForm({
@@ -144,22 +150,24 @@ export default function NotesPage() {
                               />
                             </td>
                             <td>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={cancelEdit}
-                                disabled={isSaving}
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => saveEdit(n.id)}
-                                disabled={isSaving}
-                              >
-                                {isSaving ? "Saving..." : "Save"}
-                              </button>
+                              <div className="row-actions row-actions--notes">
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={cancelEdit}
+                                  disabled={isSaving}
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => saveEdit(n.id)}
+                                  disabled={isSaving}
+                                >
+                                  {isSaving ? "Saving..." : "Save"}
+                                </button>
+                              </div>
                             </td>
                           </>
                         ) : (
@@ -168,27 +176,29 @@ export default function NotesPage() {
                             <td>{title || "-"}</td>
                             <td>{noteBody || "-"}</td>
                             <td>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => startEdit(n)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => markDone(n.id)}
-                              >
-                                Archive
-                              </button>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => handleDelete(n.id)}
-                              >
-                                Delete
-                              </button>
+                              <div className="row-actions row-actions--notes">
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => startEdit(n)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => markDone(n.id)}
+                                >
+                                  Archive
+                                </button>
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => handleDelete(n.id)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </>
                         )}
@@ -248,22 +258,24 @@ export default function NotesPage() {
                               />
                             </td>
                             <td>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={cancelEdit}
-                                disabled={isSaving}
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => saveEdit(n.id)}
-                                disabled={isSaving}
-                              >
-                                {isSaving ? "Saving..." : "Save"}
-                              </button>
+                              <div className="row-actions row-actions--notes">
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={cancelEdit}
+                                  disabled={isSaving}
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => saveEdit(n.id)}
+                                  disabled={isSaving}
+                                >
+                                  {isSaving ? "Saving..." : "Save"}
+                                </button>
+                              </div>
                             </td>
                           </>
                         ) : (
@@ -272,20 +284,22 @@ export default function NotesPage() {
                             <td>{title || "-"}</td>
                             <td>{noteBody || "-"}</td>
                             <td>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => startEdit(n)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                type="button"
-                                className="action-btn"
-                                onClick={() => handleDelete(n.id)}
-                              >
-                                Delete
-                              </button>
+                              <div className="row-actions row-actions--notes">
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => startEdit(n)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="action-btn"
+                                  onClick={() => handleDelete(n.id)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </>
                         )}

@@ -80,6 +80,12 @@ export default function PendingPage() {
     return () => window.removeEventListener("pending-refresh", onRefresh);
   }, []);
 
+  useEffect(() => {
+    const onRefresh = () => load();
+    window.addEventListener("dashboard-refresh", onRefresh);
+    return () => window.removeEventListener("dashboard-refresh", onRefresh);
+  }, []);
+
   async function onMarkDone(id: number | string) {
     try {
       setMarkingId(id);

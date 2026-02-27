@@ -115,6 +115,9 @@ export type DashboardSummary = {
     jobsWithReferral: number;
   };
   dailyTrend: Array<{ day: string; total: number }>;
+  referralDailyTrend?: Array<{ day: string; total: number }>;
+  rejectedDailyTrend?: Array<{ day: string; total: number }>;
+  pendingDailyTrend?: Array<{ day: string; total: number }>;
   referralTrend: Array<{ referral_status: string; total: number }>;
   weeklyTrend: Array<{ week: string; total: number }>;
   responseStatusTrend: Array<{ response_status: string; total: number }>;
