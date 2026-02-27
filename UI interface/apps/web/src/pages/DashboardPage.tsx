@@ -400,6 +400,7 @@ export default function DashboardPage() {
       year,
       month,
       todayIso: lastIso,
+      todayDay: lastDate.getUTCDate(),
       cells,
     };
   }, [summary.dailyTrend]);
@@ -911,10 +912,19 @@ export default function DashboardPage() {
           <div className="heatmap-grid">
             {monthHeatmap?.cells.map((cell, idx) => {
               if (!cell.dayNum) return <div key={`empty-${idx}`} className="heatmap-cell heatmap-empty" />;
+              if (cell.dayNum > monthHeatmap.todayDay) {
+                return (
+                  <div key={cell.day} className="heatmap-cell heatmap-future" title={`${cell.day}: future`}>
+                    <span>{cell.dayNum}</span>
+                  </div>
+                );
+              }
+              // Fixed 5-shade scale:
+              // 0 -> bright red, 1-12 -> amber, 13-24 -> yellow, 25-35 -> mint, >35 -> bright green
               let level = 0;
-              if (cell.value >= 20) level = 4;
-              else if (cell.value >= 10) level = 3;
-              else if (cell.value >= 5) level = 2;
+              if (cell.value > 35) level = 4;
+              else if (cell.value >= 25) level = 3;
+              else if (cell.value >= 13) level = 2;
               else if (cell.value >= 1) level = 1;
               const isToday = monthHeatmap.todayIso === cell.day;
               return (
