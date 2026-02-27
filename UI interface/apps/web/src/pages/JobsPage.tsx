@@ -590,9 +590,6 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                 <thead>
                   <tr>
                     <th>
-                      Keyword Match
-                    </th>
-                    <th>
                       <button
                         type="button"
                         className="th-sort"
