@@ -190,15 +190,15 @@ export default function Layout({ userEmail, onLogout }: LayoutProps) {
             Notes
           </NavLink>
         </div>
-        <div className="app-nav-actions">
-          <button type="button" className="quick-add-btn" onClick={() => setShowQuickAdd(true)}>
-            + Add Job
+        <div className="app-nav-actions app-nav-actions--segmented">
+          <button type="button" className="quick-add-btn app-btn" onClick={() => setShowQuickAdd(true)}>
+            New Application
           </button>
-          <button type="button" className="quick-add-btn pending-task-btn" onClick={() => setShowPendingTask(true)}>
-            Add Task
+          <button type="button" className="quick-add-btn pending-task-btn mid-btn" onClick={() => setShowPendingTask(true)}>
+            Create Task
           </button>
-          <button type="button" className="quick-add-btn pending-task-btn" onClick={() => setShowNoteModal(true)}>
-            Add Note
+          <button type="button" className="quick-add-btn pending-task-btn note-btn mid-btn" onClick={() => setShowNoteModal(true)}>
+            Log Note
           </button>
           <button type="button" className="quick-add-btn logout-btn" onClick={onLogout} title="Logout" aria-label="Logout">
             <span className="logout-emoji">⏻</span>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPending, markPendingDone } from "../lib/api";
+import { formatTableDate } from "../lib/formatDate";
 import Spinner from "./Spinner";
 
 export default function PendingPreview() {
@@ -49,29 +50,34 @@ export default function PendingPreview() {
           No pending items. All clear.
         </div>
       ) : (
-        <ul className="pending-list">
-          {pendingItems.map((it: any) => (
-            <li key={it.id} className="pending-item">
-              <div className="pending-item-head">
-                <strong>{it.company || "(no company)"}</strong>
-                <button className="small-ghost" onClick={() => handleDone(it.id)}>
-                  Done
-                </button>
-              </div>
-              {it.position_name ? (
-                <div className="pending-pos">{it.position_name}</div>
-              ) : null}
-              {it.pending_date ? (
-                <div className="pending-meta">{String(it.pending_date)}</div>
-              ) : null}
-              {it.comment ? (
-                <div className="pending-comment">{it.comment}</div>
-              ) : null}
-            </li>
-          ))}
-        </ul>
+        <>
+          <div className="panel-count">{pendingItems.length} item{pendingItems.length !== 1 ? "s" : ""}</div>
+          <div className="panel-scroll">
+            <ul className="pending-list">
+              {pendingItems.map((it: any) => (
+                <li key={it.id} className="pending-item">
+                  <div className="pending-item-head">
+                    <div className="title-row">
+                      <strong>{it.company || "(no company)"}</strong>
+                      <span className="status-chip status-chip--pending">Pending</span>
+                    </div>
+                    <button className="small-ghost" onClick={() => handleDone(it.id)}>
+                      Done
+                    </button>
+                  </div>
+                  <div className="pending-meta-row">
+                    {it.position_name ? <span>{it.position_name}</span> : null}
+                    {it.pending_date ? <span>· {formatTableDate(it.pending_date)}</span> : null}
+                  </div>
+                  {it.comment ? (
+                    <div className="pending-comment clamp-2">{it.comment}</div>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
       )}
     </div>
   );
 }
-

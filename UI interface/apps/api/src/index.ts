@@ -142,6 +142,78 @@ app.get("/api/dashboard/summary", async (c) => {
     [userId, anchorDay],
   );
 
+  const referralDailyTrend = await query<{ day: string; total: number }>(
+    env,
+    `
+    SELECT d.day::text AS day, COALESCE(r.cnt, 0)::int AS total
+    FROM (
+      SELECT generate_series(
+        (COALESCE($2::date, CURRENT_DATE) - (${days}::text || ' days')::interval)::date,
+        COALESCE($2::date, CURRENT_DATE)::date,
+        '1 day'::interval
+      )::date AS day
+    ) d
+    LEFT JOIN (
+      SELECT DATE(date_saved) AS day, COUNT(*)::int AS cnt
+      FROM jobs
+      WHERE user_id = $1
+        AND date_saved IS NOT NULL
+        AND TRIM(COALESCE(referral_status, '')) = 'Yes'
+      GROUP BY DATE(date_saved)
+    ) r ON r.day = d.day
+    ORDER BY d.day ASC
+    `,
+    [userId, anchorDay],
+  );
+
+  const rejectedDailyTrend = await query<{ day: string; total: number }>(
+    env,
+    `
+    SELECT d.day::text AS day, COALESCE(r.cnt, 0)::int AS total
+    FROM (
+      SELECT generate_series(
+        (COALESCE($2::date, CURRENT_DATE) - (${days}::text || ' days')::interval)::date,
+        COALESCE($2::date, CURRENT_DATE)::date,
+        '1 day'::interval
+      )::date AS day
+    ) d
+    LEFT JOIN (
+      SELECT DATE(COALESCE(archive_date, date_saved)) AS day, COUNT(*)::int AS cnt
+      FROM jobs
+      WHERE user_id = $1
+        AND application_status = 'Rejected'
+        AND (archive_date IS NOT NULL OR date_saved IS NOT NULL)
+      GROUP BY DATE(COALESCE(archive_date, date_saved))
+    ) r ON r.day = d.day
+    ORDER BY d.day ASC
+    `,
+    [userId, anchorDay],
+  );
+
+  const pendingDailyTrend = await query<{ day: string; total: number }>(
+    env,
+    `
+    SELECT d.day::text AS day, COALESCE(p.cnt, 0)::int AS total
+    FROM (
+      SELECT generate_series(
+        (COALESCE($2::date, CURRENT_DATE) - (${days}::text || ' days')::interval)::date,
+        COALESCE($2::date, CURRENT_DATE)::date,
+        '1 day'::interval
+      )::date AS day
+    ) d
+    LEFT JOIN (
+      SELECT DATE(pending_date) AS day, COUNT(*)::int AS cnt
+      FROM pending_items
+      WHERE user_id = $1
+        AND pending_date IS NOT NULL
+        AND is_done = FALSE
+      GROUP BY DATE(pending_date)
+    ) p ON p.day = d.day
+    ORDER BY d.day ASC
+    `,
+    [userId, anchorDay],
+  );
+
   const referralTrendRaw = await query<{ referral_status: string; total: number }>(
     env,
     `
@@ -167,12 +239,23 @@ app.get("/api/dashboard/summary", async (c) => {
   const weeklyTrend = await query<{ week: string; total: number }>(
     env,
     `
-    SELECT DATE_TRUNC('week', date_saved)::date::text AS week, COUNT(*)::int AS total
-    FROM jobs
-    WHERE user_id = $1 AND date_saved IS NOT NULL AND date_saved >= (COALESCE($2::date, CURRENT_DATE) - INTERVAL '84 days')
-    GROUP BY DATE_TRUNC('week', date_saved)
-    ORDER BY week ASC
-    LIMIT 12
+    WITH weeks AS (
+      SELECT generate_series(
+        DATE_TRUNC('week', COALESCE($2::date, CURRENT_DATE))::date - INTERVAL '11 weeks',
+        DATE_TRUNC('week', COALESCE($2::date, CURRENT_DATE))::date,
+        '1 week'::interval
+      )::date AS week_start
+    ),
+    counts AS (
+      SELECT DATE_TRUNC('week', date_saved)::date AS week_start, COUNT(*)::int AS total
+      FROM jobs
+      WHERE user_id = $1 AND date_saved IS NOT NULL
+      GROUP BY DATE_TRUNC('week', date_saved)
+    )
+    SELECT w.week_start::text AS week, COALESCE(c.total, 0)::int AS total
+    FROM weeks w
+    LEFT JOIN counts c ON c.week_start = w.week_start
+    ORDER BY w.week_start ASC
     `,
     [userId, anchorDay],
   );
@@ -228,6 +311,9 @@ app.get("/api/dashboard/summary", async (c) => {
       jobsWithReferral: Number(jobsWithReferral?.count ?? 0),
     },
     dailyTrend,
+    referralDailyTrend,
+    rejectedDailyTrend,
+    pendingDailyTrend,
     referralTrend,
     weeklyTrend,
     responseStatusTrend,

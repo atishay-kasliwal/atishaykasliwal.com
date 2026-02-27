@@ -37,30 +37,34 @@ export default function NotesPreview() {
       {rows.length === 0 ? (
         <div className="chart-empty">No notes yet.</div>
       ) : (
-        <ul className="pending-list">
-          {rows.map((n) => {
-            const comments = String(n.comments ?? "");
-            const [firstLine, ...rest] = comments.split("\n");
-            const subtitle = rest.join(" ").slice(0, 140);
-            return (
-              <li key={String(n.id)} className="pending-item">
-                <div className="pending-item-head">
-                  <strong>{firstLine || "(Untitled note)"}</strong>
-                  {n.note_date ? (
-                    <span className="pending-meta">
-                      {String(n.note_date)}
-                    </span>
-                  ) : null}
-                </div>
-                {subtitle ? (
-                  <div className="pending-comment">{subtitle}</div>
-                ) : null}
-              </li>
-            );
-          })}
-        </ul>
+        <>
+          <div className="panel-count">{rows.length} recent</div>
+          <div className="panel-scroll">
+            <ul className="pending-list">
+              {rows.map((n) => {
+                const comments = String(n.comments ?? "");
+                const [firstLine, ...rest] = comments.split("\n");
+                const subtitle = rest.join(" ").slice(0, 220);
+                return (
+                  <li key={String(n.id)} className="pending-item">
+                    <div className="pending-item-head">
+                      <div className="title-row">
+                        <strong>{firstLine || "(Untitled note)"}</strong>
+                        {n.note_date ? (
+                          <span className="pending-meta">{String(n.note_date)}</span>
+                        ) : null}
+                      </div>
+                    </div>
+                    {subtitle ? (
+                      <div className="pending-comment clamp-2">{subtitle}</div>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </>
       )}
     </div>
   );
 }
-

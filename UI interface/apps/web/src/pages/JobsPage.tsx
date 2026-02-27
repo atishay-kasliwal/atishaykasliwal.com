@@ -163,6 +163,15 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
     loadTrend();
   }, [loadTrend]);
 
+  useEffect(() => {
+    const onRefresh = () => {
+      load();
+      loadTrend();
+    };
+    window.addEventListener("dashboard-refresh", onRefresh);
+    return () => window.removeEventListener("dashboard-refresh", onRefresh);
+  }, [load, loadTrend]);
+
   function onSearch(e: React.FormEvent) {
     e.preventDefault();
     setCompany(searchInput.trim());
@@ -283,6 +292,20 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
     } finally {
       setDeletingId(null);
     }
+  }
+
+  function getStatusMeta(raw: string) {
+    const value = String(raw || "").trim().toLowerCase();
+    if (value === "rejected") return { label: "Rejected", cls: "status-chip status-chip--rejected" };
+    if (value === "under consideration") return { label: "Under review", cls: "status-chip status-chip--review" };
+    if (value === "open") return { label: "Open", cls: "status-chip status-chip--open" };
+    return { label: raw || "Applied", cls: "status-chip status-chip--applied" };
+  }
+
+  function capitalizeFirst(value: string) {
+    if (!value) return value;
+    const normalized = value.toLowerCase();
+    return normalized.charAt(0).toUpperCase() + normalized.slice(1);
   }
 
   return (
@@ -556,32 +579,105 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
               <table>
                 <thead>
                   <tr>
-                    {sortConfig.map(({ key, label }) => (
-                      <th key={key}>
+                    <th>
+                      <button
+                        type="button"
+                        className="th-sort"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleSort("date_saved");
+                        }}
+                        title={sortBy === "date_saved" ? `${sortOrder === "asc" ? "A→Z" : "Z→A"} (click to reverse)` : "Sort by Date"}
+                      >
+                        {sortConfig.find((c) => c.key === "date_saved")?.label ?? "Date"}
+                        {sortBy === "date_saved" ? (
+                          <span className="th-sort-icon" aria-hidden>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        ) : null}
+                      </button>
+                    </th>
+                    <th>
+                      <div className="th-stack">
                         <button
                           type="button"
                           className="th-sort"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleSort(key);
+                            handleSort("company");
                           }}
-                          title={sortBy === key ? `${sortOrder === "asc" ? "A→Z" : "Z→A"} (click to reverse)` : `Sort by ${label}`}
+                          title="Sort by Company"
                         >
-                          {label}
-                          {sortBy === key ? (
+                          Company
+                          {sortBy === "company" ? (
                             <span className="th-sort-icon" aria-hidden>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
                           ) : null}
                         </button>
-                      </th>
-                    ))}
+                        <button
+                          type="button"
+                          className="th-sort th-sort-sub"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSort("role");
+                          }}
+                          title="Sort by Position"
+                        >
+                          Position
+                          {sortBy === "role" ? (
+                            <span className="th-sort-icon" aria-hidden>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                          ) : null}
+                        </button>
+                      </div>
+                    </th>
+                    <th>
+                      <button
+                        type="button"
+                        className="th-sort"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleSort("referral_status");
+                        }}
+                        title="Sort by Referral"
+                      >
+                        Referral
+                        {sortBy === "referral_status" ? (
+                          <span className="th-sort-icon" aria-hidden>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        ) : null}
+                      </button>
+                    </th>
+                    <th>
+                      <button
+                        type="button"
+                        className="th-sort"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleSort("job_link");
+                        }}
+                        title="Sort by Link"
+                      >
+                        Link
+                        {sortBy === "job_link" ? (
+                          <span className="th-sort-icon" aria-hidden>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        ) : null}
+                      </button>
+                    </th>
                     <th>Application Status</th>
-                    <th aria-label="Actions"></th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {sortedData.map((j) => (
-                    <tr key={String(j.id)} className="tr-hover">
+                    <tr
+                      key={String(j.id)}
+                      className={`tr-hover ${String(j.referral_status ?? "") === "Yes" ? "data-referral" : ""} ${
+                        String(j.application_status ?? "") === "Rejected" ? "data-rejected" : ""
+                      } ${String(j.referral_status ?? "") === "Pending" ? "data-pending" : ""} ${
+                        String(j.referral_status ?? "") === "No" ? "data-no" : ""
+                      }`}
+                    >
                       <td>
                         {formatTableDate(
                           statusFilter === "rejected"
@@ -589,10 +685,15 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                             : j.date_saved,
                         )}
                       </td>
-                      <td>{String(j.company ?? "-")}</td>
-                      <td>{String(j.role ?? "-")}</td>
+                      <td>
+                        <div className="job-main">
+                        <div className="job-company">{capitalizeFirst(String(j.company ?? "-"))}</div>
+                          <div className="job-role" title={String(j.role ?? "-")}>
+                            {String(j.role ?? "-")}
+                          </div>
+                        </div>
+                      </td>
                       <td>{String(j.referral_status ?? "-")}</td>
-                      <td>{String(j.application_status ?? "Applied")}</td>
                       <td>
                         {j.job_link ? (
                           <a
@@ -608,21 +709,24 @@ export default function JobsPage({ statusFilter }: { statusFilter?: string } = {
                         )}
                       </td>
                       <td>
-                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                        <span className={getStatusMeta(String(j.application_status ?? "Applied")).cls}>
+                          {getStatusMeta(String(j.application_status ?? "Applied")).label}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="row-actions">
                           <button type="button" className="action-btn" onClick={() => openEdit(j)}>
                             Edit
                           </button>
-                          
-                            <button
-                              type="button"
-                              className="action-btn"
-                              onClick={() => onDelete(j)}
-                              disabled={deletingId === j.id}
-                              aria-label="Delete job"
-                            >
-                              {deletingId === j.id ? "…" : "🗑️"}
-                            </button>
-                          
+                          <button
+                            type="button"
+                            className="action-btn"
+                            onClick={() => onDelete(j)}
+                            disabled={deletingId === j.id}
+                            aria-label="Delete job"
+                          >
+                            {deletingId === j.id ? "…" : "🗑️"}
+                          </button>
                         </div>
                       </td>
                     </tr>

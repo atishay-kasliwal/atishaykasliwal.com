@@ -104,6 +104,15 @@ export default function ReferralsPage() {
     loadTrend();
   }, [loadTrend]);
 
+  useEffect(() => {
+    const onRefresh = () => {
+      load();
+      loadTrend();
+    };
+    window.addEventListener("dashboard-refresh", onRefresh);
+    return () => window.removeEventListener("dashboard-refresh", onRefresh);
+  }, [load, loadTrend]);
+
   const chartData = useMemo(
     () =>
       trendData.map((row) => ({
