@@ -73,11 +73,6 @@ const MONTH_COLORS = [
   "#60a5fa", "#3b82f6", "#818cf8", "#a78bfa", "#c084fc", "#94a3b8",
 ];
 
-const TREND_COLORS = {
-  high: "#22c55e",   // green
-  mid: "#facc15",    // yellow
-  low: "#ef4444",    // red
-};
 
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -147,37 +142,6 @@ function formatMonth(month: string) {
   } catch {
     return month;
   }
-}
-
-function DailyTrendTooltip({
-  active,
-  payload,
-  label: _label,
-  todayLabel,
-}: {
-  active?: boolean;
-  payload?: Array<{ payload: { day: string; total: number; label: string } }>;
-  label?: string;
-  todayLabel: string;
-}) {
-  if (!active || !payload?.length) return null;
-  const p = payload[0].payload;
-  const dateStr = p.day ? formatDay(p.day) : "";
-  const title = p.label === todayLabel ? `Today — ${dateStr}` : dateStr;
-  return (
-    <div
-      className="recharts-default-tooltip"
-      style={{
-        background: CHART_COLORS.tooltipBg,
-        border: `1px solid ${CHART_COLORS.tooltipBorder}`,
-        borderRadius: 6,
-        padding: "10px 14px",
-      }}
-    >
-      <p style={{ margin: "0 0 6px 0", fontWeight: 500, fontSize: 11, color: CHART_COLORS.text }}>{title}</p>
-      <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: CHART_COLORS.trendLine }}>Applications: {p.total}</p>
-    </div>
-  );
 }
 
 export default function DashboardPage() {
@@ -306,59 +270,6 @@ export default function DashboardPage() {
     return arr.length ? arr.length - 1 : -1;
   }, [summary.monthlyTrend]);
   
-  // ⬇️ WEEKLY INTELLIGENCE LOGIC
-const weeklyInsights = useMemo(() => {
-  const daily = summary.dailyTrend ?? [];
-  if (daily.length < 7) return null;
-
-  const todayIso = daily[daily.length - 1].day;
-
-  // -------- This Week + Last Week Totals --------
-  let thisWeek = 0;
-  let lastWeek = 0;
-
-  for (let i = 0; i < 7; i++) {
-    const iso = isoDayAddDays(todayIso, -i);
-    thisWeek += daily.find(d => d.day === iso)?.total ?? 0;
-  }
-
-  for (let i = 7; i < 14; i++) {
-    const iso = isoDayAddDays(todayIso, -i);
-    lastWeek += daily.find(d => d.day === iso)?.total ?? 0;
-  }
-
-  const diff = thisWeek - lastWeek;
-
-  const status =
-    diff > 0 ? "ahead" :
-    diff < 0 ? "behind" :
-    "equal";
-
-  // -------- Weekly Peak --------
-  const weekRows = [];
-  for (let i = 0; i < 7; i++) {
-    const iso = isoDayAddDays(todayIso, -i);
-    const row = daily.find(d => d.day === iso);
-    if (row) weekRows.push(row);
-  }
-
-  const peak = weekRows.length
-    ? weekRows.reduce((max, d) => d.total > max.total ? d : max)
-    : null;
-
-  const peakLabel = peak
-    ? formatDay(peak.day)
-    : null;
-
-  return {
-    diff,
-    status,
-    peakValue: peak?.total ?? 0,
-    peakLabel,
-  };
-}, [summary.dailyTrend]);
-
-  const { diff, status, peakValue } = weeklyInsights || {};
 
   if (isLoading) {
     return (
@@ -483,33 +394,6 @@ const weeklyInsights = useMemo(() => {
 
             </ComposedChart>
           </ResponsiveContainer>
-          <div style={{ marginTop: 18 }}>
-          {weeklyInsights && (
-  <div
-    style={{
-      marginTop: 18,
-      paddingTop: 14,
-      borderTop: `1px solid ${CHART_COLORS.grid}`,
-      fontSize: "0.85rem",
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 14,
-    }}
-  >
-    <span style={{ color: CHART_COLORS.trendLine }}>
-      {weeklyInsights.status === "equal"
-        ? "Same pace as last week"
-        : `You are ${Math.abs(weeklyInsights.diff)} applications ${weeklyInsights.status} vs last week`}
-    </span>
-
-    {weeklyInsights.peakLabel && (
-      <span style={{ color: "#6ee7b7" }}>
-        • Peak: {weeklyInsights.peakValue} applications on {weeklyInsights.peakLabel}
-      </span>
-    )}
-  </div>
-)}
-        </div>
         </div>
         
       </section>
