@@ -517,7 +517,7 @@ function HomePage() {
   const landingImages = [img1, img2,  img3, img4, img6, img5, img8, img7, img9];
   // Show all images
   const gridImages = landingImages;
-  
+
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -735,8 +735,8 @@ function HomePage() {
           <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
             <strong>Atishay Kasliwal</strong>
           </Link>
-          <button 
-            className="mobile-menu-toggle" 
+          <button
+            className="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
             translate="no"
@@ -748,10 +748,9 @@ function HomePage() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <a href="/dashboard/index.html" translate="no">LOGIN</a>
           </nav>
         </div>
-        
+
         {/* Highlights Banner - Mobile Only */}
         <div className="landing-highlights-banner mobile-only" translate="no">
           <div className="landing-banner-container" translate="no">
@@ -1173,7 +1172,7 @@ function HomePage() {
 function ArtPage() {
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   const images = [
     'https://i.pinimg.com/736x/bd/87/b4/bd87b4569684fe1a7819c96a9ab0e843.jpg', //Stranger Things
     'https://i.pinimg.com/736x/a9/0c/64/a90c643c914751ab8143afd6fc845f07.jpg', //New York
@@ -1240,8 +1239,8 @@ function ArtPage() {
         <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
           Atishay Kasliwal
         </Link>
-        <button 
-          className="mobile-menu-toggle black" 
+        <button
+          className="mobile-menu-toggle black"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
           translate="no"
@@ -1253,7 +1252,6 @@ function ArtPage() {
           <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
           <Link to="/art" translate="no">ART</Link>
-          <a href="/dashboard/index.html" translate="no">LOGIN</a>
         </nav>
       </div>
       <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -1265,62 +1263,6 @@ function ArtPage() {
         ))}
       </div>
     </div>
-  );
-}
-
-function DashboardShellPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // Redirect to the dashboard app as full page so we never show a broken iframe.
-  // User sees login if not logged in, or dashboard if logged in.
-  useEffect(() => {
-    if (!window.location.pathname.endsWith('index.html')) {
-      window.location.replace('/dashboard/index.html');
-    }
-  }, []);
-
-  return (
-    <>
-      <Helmet>
-        <html lang="en" translate="no" />
-        <title>Dashboard | Atishay Kasliwal</title>
-        <link rel="canonical" href="https://atishaykasliwal.com/dashboard" />
-        <meta name="google" content="notranslate" />
-        <meta name="google-translate-customization" content="no" />
-      </Helmet>
-      <div className="bg-art" translate="no" />
-      <div className="page-content dashboard-shell" translate="no">
-        <div className="header" translate="no">
-          <Link
-            to="/"
-            className="logo libertinus-mono"
-            style={{ textDecoration: 'none', color: 'inherit' }}
-            onClick={() => setIsMobileMenuOpen(false)}
-            translate="no"
-          >
-            <strong>Atishay Kasliwal</strong>
-          </Link>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            translate="no"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
-            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
-            <Link to="/art" translate="no">ART</Link>
-            <a href="/dashboard/index.html" translate="no">LOGIN</a>
-          </nav>
-        </div>
-
-        <section className="dashboard-embed-wrap" translate="no">
-          <p className="dashboard-embed-fallback-text" style={{ margin: '2rem auto' }}>Opening dashboard…</p>
-        </section>
-      </div>
-    </>
   );
 }
 
@@ -1899,8 +1841,6 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/art" element={<ArtPage />} />
-        <Route path="/dashboard/*" element={<DashboardShellPage />} />
-        <Route path="/dashbaord" element={<DashboardShellPage />} />
         <Route path="/highlights" element={<Projects />} />
         {/* Blog-style highlight endpoint (project-name slug OR uuid) */}
         <Route path="/highlights/:id" element={<HighlightDetail />} />

@@ -47,10 +47,10 @@ export default function HighlightDetail() {
   const articleMeta = articleFromFile
     ? { date: articleFromFile.date, readingTime: articleFromFile.readingTime }
     : getArticleMeta(projectUuid);
-  
+
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // State to control iframe loading - delay iframe loading until after scroll-to-top
   const [shouldLoadIframes, setShouldLoadIframes] = useState(false);
 
@@ -314,15 +314,22 @@ export default function HighlightDetail() {
         <div className="bg-art" translate="no" />
         <div className="page-content" translate="no">
           <div className="header" translate="no">
-            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
               Atishay Kasliwal
             </Link>
-            <nav className="nav">
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+              translate="no"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
               <Link to="/highlights">HIGHLIGHTS</Link>
               <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
               <Link to="/art">ART</Link>
-              <a href="/dashboard/index.html">LOGIN</a>
             </nav>
           </div>
           <div className="highlight-not-found">
@@ -487,8 +494,8 @@ export default function HighlightDetail() {
           <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
             Atishay Kasliwal
           </Link>
-          <button 
-            className="mobile-menu-toggle" 
+          <button
+            className="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
             translate="no"
@@ -500,7 +507,6 @@ export default function HighlightDetail() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
             <Link to="/art">ART</Link>
-            <a href="/dashboard/index.html">LOGIN</a>
           </nav>
         </div>
 
@@ -626,4 +632,3 @@ export default function HighlightDetail() {
     </div>
   );
 }
-
