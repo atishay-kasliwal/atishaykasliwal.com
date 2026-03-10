@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Projects.css';
 import { Helmet } from 'react-helmet';
@@ -249,18 +249,6 @@ export default function Projects() {
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
-    if (!window.dataLayer) {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){ window.dataLayer.push(arguments); }
-      gtag('js', new Date());
-          gtag('config', gaId, { page_path: '/highlights' });
-        } else {
-          window.dataLayer.push({ event: 'page_view', page_path: '/highlights' });
-        }
-  }, []);
-
 
   return (
     <div className="projects-page" translate="no">
@@ -274,23 +262,25 @@ export default function Projects() {
       <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
         <div className="header" translate="no">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            Atishay Kasliwal
-          </Link>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            translate="no"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            <Link to="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
-            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
-            <Link to="/art" translate="no">ART</Link>
-          </nav>
+          <div className="header-inner">
+            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+              Atishay Kasliwal
+            </Link>
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+              translate="no"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+              <Link to="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+              <Link to="/art" translate="no">ART</Link>
+            </nav>
+          </div>
         </div>
 
         <div className="projects-container" translate="no">
@@ -375,6 +365,7 @@ export default function Projects() {
               <CardWrapper key={project.id} {...cardWrapperProps} translate="no">
                 <div 
                   className={`project-card-grid project-card-${project.size || 'medium'} ${project.textOverlay ? 'text-overlay' : ''} notranslate`}
+                  data-feature-name={project.title}
                   translate="no"
                 >
                 <div 
