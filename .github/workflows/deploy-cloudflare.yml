@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Install dashboard dependencies
-        run: cd "UI interface/apps/web" && npm install
-      
       - name: Build
         run: npm run build
         env:
@@ -40,4 +37,3 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
