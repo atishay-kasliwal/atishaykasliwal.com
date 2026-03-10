@@ -314,23 +314,25 @@ export default function HighlightDetail() {
         <div className="bg-art" translate="no" />
         <div className="page-content" translate="no">
           <div className="header" translate="no">
-            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
-              Atishay Kasliwal
-            </Link>
-            <button
-              className="mobile-menu-toggle"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              translate="no"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-              <Link to="/highlights">HIGHLIGHTS</Link>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-              <Link to="/art">ART</Link>
-            </nav>
+            <div className="header-inner">
+              <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
+                Atishay Kasliwal
+              </Link>
+              <button
+                className="mobile-menu-toggle"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle menu"
+                translate="no"
+              >
+                {isMobileMenuOpen ? '✕' : '☰'}
+              </button>
+              <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+                <Link to="/highlights">HIGHLIGHTS</Link>
+                <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
+                <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+                <Link to="/art">ART</Link>
+              </nav>
+            </div>
           </div>
           <div className="highlight-not-found">
             <h1>Highlight Not Found</h1>
@@ -491,23 +493,25 @@ export default function HighlightDetail() {
       <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
         <div className="header" translate="no">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
-            Atishay Kasliwal
-          </Link>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            translate="no"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            <Link to="/highlights">HIGHLIGHTS</Link>
-            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-            <Link to="/art">ART</Link>
-          </nav>
+          <div className="header-inner">
+            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
+              Atishay Kasliwal
+            </Link>
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+              translate="no"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+              <Link to="/highlights">HIGHLIGHTS</Link>
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+              <Link to="/art">ART</Link>
+            </nav>
+          </div>
         </div>
 
         <main className="highlight-blog" translate="no">

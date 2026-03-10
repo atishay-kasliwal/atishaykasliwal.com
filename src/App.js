@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { Helmet } from 'react-helmet';
 import emailjs from '@emailjs/browser';
 import './App.css';
+import { initAnalytics } from './lib/analytics';
 
 import img1 from './assets/FidelityLogo.png';
 import img8 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
@@ -732,126 +733,118 @@ function HomePage() {
       <div className="page-content" translate="no">
         {/* Header */}
         <div className="header" translate="no">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
-            <strong>Atishay Kasliwal</strong>
-          </Link>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            translate="no"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            <Link to="/highlights">HIGHLIGHTS</Link>
-            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
-            <Link to="/art">ART</Link>
-          </nav>
+          <div className="header-inner">
+            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)}>
+              <strong>Atishay Kasliwal</strong>
+            </Link>
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+              translate="no"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+              <Link to="/" className="nav-home-link">AK</Link>
+              <Link to="/highlights">HIGHLIGHTS</Link>
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer">RESUME</a>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+              <Link to="/art">ART</Link>
+            </nav>
+          </div>
         </div>
 
-        {/* Highlights Banner - Mobile Only */}
-        <div className="landing-highlights-banner mobile-only" translate="no">
-          <div className="landing-banner-container" translate="no">
-            <div className="landing-running-banner landing-banner-row-top" translate="no">
-              <div className="landing-banner-content" translate="no">
-                {[...Array(2)].map((_, repeatIndex) => (
-                  [
-                    { image: '/fidelity-logo.png', alt: 'Fidelity Investments' },
-                    { image: '/accolite-logo.png', alt: 'Accolite Digital' },
-                    { image: '/sbu-logo.png', alt: 'Stony Brook University' },
-                    { image: '/suas-logo.png', alt: 'Symbiosis University of Applied Sciences' },
-                    { image: '/atrium-logo.png', alt: 'Atrium Health Wake Forest Baptist' },
-                    { image: '/wfu-logo.png', alt: 'Wake Forest University' },
-                    { image: '/bt-group-logo.png', alt: 'BT Group' },
-                    { image: '/bounteous-logo.png', alt: 'Bounteous' },
-                    { image: '/banner-logo.png', alt: 'Logo' },
-                    { image: '/t-mobile-logo.png', alt: 'T-Mobile' }
-                  ].map((block, index) => {
-                    const isImage = typeof block === 'object' && block.image;
-                    const blockKey = `landing-banner-${repeatIndex}-${index}`;
-                    const isAccolite = isImage && block.image === '/accolite-logo.png';
-                    const isBannerLogo = isImage && block.image === '/banner-logo.png';
-                    const isBounteous = isImage && block.image === '/bounteous-logo.png';
-                    const isBTGroup = isImage && block.image === '/bt-group-logo.png';
-                    const isAtrium = isImage && block.image === '/atrium-logo.png';
-                    
-                    return (
-                      <div 
-                        key={blockKey} 
-                        className={`landing-banner-block ${isImage ? 'landing-banner-image' : 'landing-banner-text'}`}
-                        translate="no"
-                        style={isImage ? {
-                          '--block-index': index,
-                          backgroundImage: `url(${block.image})`,
-                          backgroundSize: isAccolite ? '101%' : (isBannerLogo ? '71%' : (isBounteous ? '101%' : (isBTGroup ? '101%' : (isAtrium ? '52%' : 'contain')))),
-                          backgroundPosition: 'center',
-                          backgroundRepeat: 'no-repeat'
-                        } : { '--block-index': index }}
-                      >
-                        {!isImage && block}
-                      </div>
-                    );
-                  })
-                ))}
+        <div className="landing-hero-stack" translate="no">
+          {/* Two-column Main Content */}
+          <div className="landing-two-col" data-analytics-section="hero" translate="no">
+            <div className="landing-left-text" translate="no">
+              <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff', fontSize: 'clamp(0.5rem, 4vw, 1.5rem)', fontWeight: 'inherit', lineHeight: '1.5' }} translate="no">
+                Hello, I am <strong>Atishay Kasliwal</strong>, a Software Engineer with over <strong>5 years</strong> of professional experience, currently pursuing a Master's in Data Science from <strong>Stony Brook University</strong>.
+              </h1>
+              <div className="button-group-theme" style={{ justifyContent: 'flex-start' }}>
+                <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="btn-theme btn-primary-action btn-lg" target="_blank" rel="noopener noreferrer">
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#000"/></svg>
+                    <span className="btn-label">
+                      Resume <span className="btn-label-detail">(PDF)</span>
+                    </span>
+                  </span>
+                </a>
+                <a
+                  href="mailto:katishay@gmail.com"
+                  className="btn-theme btn-secondary btn-lg"
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M2 4l8 7 8-7" stroke="currentColor" strokeWidth="2"/></svg>
+                    Contact
+                  </span>
+                </a>
+                <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="LinkedIn">
+                  <svg width="21" height="21" fill="none" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z" fill="currentColor"/></svg>
+                </a>
+                <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="GitHub">
+                  <svg width="21" height="21" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
+                </a>
+              </div>
+              <div className="exp-edu-list" style={{ textAlign: 'left', width: '100%', fontSize: '1.33em' }} translate="no">
+                {experienceEducation.map((line, idx) => {
+                  // Render as HTML for bold tags (already formatted with <strong> tags)
+                  if (idx === 7) {
+                    return <div key={idx} style={{ minHeight: '1.5rem' }}>&nbsp;</div>;
+                  } else {
+                    return <div key={idx} style={{ minHeight: '1.5rem' }} dangerouslySetInnerHTML={{ __html: line }} />;
+                  }
+                })}
+              </div>
+            </div>
+            <div className="landing-right-images" translate="no">
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }} translate="no">
+                <div className="landing-grid-3x3" translate="no">
+                  {gridImages.map((src, idx) => (
+                    <img key={idx} src={src} alt={`Landing ${idx + 1}`} width="200" height="200" translate="no" />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Two-column Main Content */}
-        <div className="landing-two-col" translate="no">
-          <div className="landing-left-text" style={{ marginTop: '2.5rem' }} translate="no">
-            <h1 style={{ minHeight: '3rem', textAlign: 'left', color: '#fff', fontSize: 'clamp(0.5rem, 4vw, 1.5rem)', fontWeight: 'inherit', lineHeight: '1.5' }} translate="no">
-              Hello, I am <strong>Atishay Kasliwal</strong>, a Software Engineer with over <strong>5 years</strong> of professional experience, currently pursuing a Master's in Data Science from <strong>Stony Brook University</strong>.
-            </h1>
-            <div className="button-group-theme" style={{ justifyContent: 'flex-start' }}>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="btn-theme btn-primary-action btn-lg" target="_blank" rel="noopener noreferrer">
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
-                  <svg width="18" height="18" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#000"/></svg>
-                  Resume (PDF)
-                </span>
-              </a>
-              <a
-                href="mailto:katishay@gmail.com"
-                className="btn-theme btn-secondary btn-lg"
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
-                  <svg width="18" height="18" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M2 4l8 7 8-7" stroke="currentColor" strokeWidth="2"/></svg>
-                  Contact
-                </span>
-              </a>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="LinkedIn">
-                <svg width="21" height="21" fill="none" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z" fill="currentColor"/></svg>
-              </a>
-              <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="GitHub">
-                <svg width="21" height="21" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
-              </a>
-            </div>
-            <div className="exp-edu-list" style={{ textAlign: 'left', marginTop: '2rem', width: '100%', fontSize: '1.33em' }} translate="no">
-              {experienceEducation.map((line, idx) => {
-                // Render as HTML for bold tags (already formatted with <strong> tags)
-                if (idx === 7) {
-                  return <div key={idx} style={{ minHeight: '1.5rem' }}>&nbsp;</div>;
-                } else {
-                  return <div key={idx} style={{ minHeight: '1.5rem' }} dangerouslySetInnerHTML={{ __html: line }} />;
-                }
-              })}
-            </div>
-          </div>
-          <div className="landing-right-images" translate="no">
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }} translate="no">
-              <div className="landing-grid-3x3" translate="no">
-                {gridImages.map((src, idx) => (
-                  <img key={idx} src={src} alt={`Landing ${idx + 1}`} width="200" height="200" translate="no" />
-                ))}
+
+          <section className="featured-hero" data-analytics-section="cta" translate="no">
+            <div className="featured-hero__label" translate="no">Currently Developing</div>
+            <div className="featured-hero__media">
+              <div className="featured-hero__media-inner">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="featured-hero__video"
+                  aria-label="Atriveo demo video"
+                >
+                  <source src="/featured-project.mp4" type="video/mp4" />
+                </video>
               </div>
             </div>
-          </div>
+            <div className="featured-hero__text" translate="no">
+              <div className="featured-hero__text-left">
+                Creating a platform to help track, manage, and optimize job applications using AI.
+              </div>
+              <div className="featured-hero__text-right">
+                <a
+                  href="https://www.atriveo.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="featured-hero__cta-primary"
+                  data-cta-position="product_demo"
+                >
+                  View Product
+                </a>
+              </div>
+            </div>
+          </section>
         </div>
         {/* Testimonials Grid */}
-        <div id="testimonials-section" style={{ width: '100%', display: 'block', marginTop: '1rem', marginBottom: '0' }} translate="no">
+        <div id="testimonials-section" data-analytics-section="testimonials" style={{ width: '100%', display: 'block' }} translate="no">
           <div style={{ 
             width: '100%', 
             maxWidth: '1540px', 
@@ -930,23 +923,23 @@ function HomePage() {
           </div>
         </div>
         
-        <div id="journey-section" translate="no">
+        <div id="journey-section" data-analytics-section="features" translate="no">
           <StoryTimeline />
         </div>
-        <div id="skills-section" translate="no">
+        <div id="skills-section" data-analytics-section="skills" translate="no">
           <SkillsSection />
         </div>
-        <div id="perspective-section" translate="no">
+        <div id="perspective-section" data-analytics-section="blog" translate="no">
           <ImageCarousel />
         </div>
         
         {/* Final Product Images Section */}
-        <div id="final-product-section" translate="no">
+        <div id="final-product-section" data-analytics-section="gallery" translate="no">
           <FinalProductGrid />
         </div>
         
         {/* Contact Section */}
-        <div id="contact-section" style={{
+        <div id="contact-section" data-analytics-section="cta_contact" style={{
           padding: '4rem 2rem',
           background: 'transparent',
           color: '#fff',
@@ -1236,23 +1229,26 @@ function ArtPage() {
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
       <div className="art-header" translate="no">
-        <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-          Atishay Kasliwal
-        </Link>
-        <button
-          className="mobile-menu-toggle black"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-          translate="no"
-        >
-          {isMobileMenuOpen ? '✕' : '☰'}
-        </button>
-        <nav className={`nav black ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-          <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
-          <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
-          <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
-          <Link to="/art" translate="no">ART</Link>
-        </nav>
+        <div className="header-inner">
+          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            Atishay Kasliwal
+          </Link>
+          <button
+            className="mobile-menu-toggle black"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+            translate="no"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <nav className={`nav black ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            <Link to="/" className="nav-home-link" translate="no">AK</Link>
+            <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
+            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+            <Link to="/art" translate="no">ART</Link>
+          </nav>
+        </div>
       </div>
       <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
       <div className="art-grid-fixed" style={{ minHeight: '90vh' }} translate="no">
@@ -1438,16 +1434,6 @@ function ImageCarousel() {
       setCurrentSet(0);
     }
   }, [windowWidth, getImagesPerSet, imagesPerSet]);
-
-  // Auto-advance carousel every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSet((prev) => (prev + 1) % totalSets);
-    }, 5000); // 5 seconds = 5000 milliseconds
-
-    // Cleanup interval on unmount
-    return () => clearInterval(interval);
-  }, [totalSets]);
 
   // Text descriptions for each set of photos
   const setDescriptions = [
@@ -1836,6 +1822,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <AnalyticsTracker />
       {/* Global chat bot, visible on all pages */}
       <PopupChatBot />
       <Routes>
@@ -1878,6 +1865,17 @@ function ScrollToTop() {
     const t = setTimeout(scrollToTop, 100);
     return () => clearTimeout(t);
   }, [pathname]);
+
+  return null;
+}
+
+function AnalyticsTracker() {
+  useEffect(() => {
+    const cleanup = initAnalytics();
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, []);
 
   return null;
 }
