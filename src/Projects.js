@@ -248,7 +248,7 @@ export const projectsData = [
 export default function Projects() {
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   useEffect(() => {
     const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
     if (!window.dataLayer) {
@@ -277,8 +277,8 @@ export default function Projects() {
           <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
             Atishay Kasliwal
           </Link>
-          <button 
-            className="mobile-menu-toggle" 
+          <button
+            className="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
             translate="no"
@@ -290,7 +290,6 @@ export default function Projects() {
             <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
             <Link to="/art" translate="no">ART</Link>
-            <a href="/dashboard/index.html" translate="no">LOGIN</a>
           </nav>
         </div>
 
@@ -556,5 +555,3 @@ export default function Projects() {
     </div>
   );
 }
-
-
