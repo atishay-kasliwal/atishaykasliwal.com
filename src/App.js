@@ -809,7 +809,7 @@ function HomePage() {
             </div>
           </div>
 
-          <section className="featured-hero" data-analytics-section="cta" translate="no">
+          <section className="featured-hero section-wrap" data-analytics-section="cta" translate="no">
             <div className="featured-hero__label" translate="no">Currently Developing</div>
             <div className="featured-hero__media">
               <div className="featured-hero__media-inner">
@@ -843,9 +843,49 @@ function HomePage() {
             </div>
           </section>
         </div>
+        <section className="editorial-grid-section section-wrap" data-analytics-section="editorial" translate="no">
+          <div className="editorial-grid-inner">
+            <div className="editorial-grid-header" translate="no">
+              <h2 translate="no">Featured Highlights</h2>
+              <p translate="no">A curated look at recent work, research, and creative explorations.</p>
+            </div>
+            <div className="editorial-grid" translate="no">
+              <article className="editorial-card editorial-card--wide" translate="no">
+                <span className="editorial-tag" translate="no">Research</span>
+                <h3 translate="no">ML-Driven Insights for Healthcare Outcomes</h3>
+                <span className="editorial-pill" translate="no">Read More</span>
+              </article>
+              <article className="editorial-card editorial-card--medium" translate="no">
+                <span className="editorial-tag" translate="no">Product</span>
+                <h3 translate="no">Job Tracking Platform with AI Guidance</h3>
+                <span className="editorial-pill" translate="no">View Demo</span>
+              </article>
+              <article className="editorial-card editorial-card--medium" translate="no">
+                <span className="editorial-tag" translate="no">Systems</span>
+                <h3 translate="no">Data Pipelines Built for Speed and Clarity</h3>
+                <span className="editorial-pill" translate="no">Explore</span>
+              </article>
+              <article className="editorial-card editorial-card--medium" translate="no">
+                <span className="editorial-tag" translate="no">Strategy</span>
+                <h3 translate="no">Scalable Solutions for Enterprise Teams</h3>
+                <span className="editorial-pill" translate="no">Discover</span>
+              </article>
+              <article className="editorial-card editorial-card--medium" translate="no">
+                <span className="editorial-tag" translate="no">Design</span>
+                <h3 translate="no">Clean Interfaces for Complex Data</h3>
+                <span className="editorial-pill" translate="no">See Work</span>
+              </article>
+              <article className="editorial-card editorial-card--wide" translate="no">
+                <span className="editorial-tag" translate="no">Vision</span>
+                <h3 translate="no">Building Systems That Learn and Adapt</h3>
+                <span className="editorial-pill" translate="no">Learn More</span>
+              </article>
+            </div>
+          </div>
+        </section>
         {/* Testimonials Grid */}
-        <div id="testimonials-section" data-analytics-section="testimonials" style={{ width: '100%', display: 'block' }} translate="no">
-          <div style={{ 
+        <div id="testimonials-section" data-analytics-section="testimonials" className="testimonials-section section-wrap" style={{ width: '100%', display: 'block' }} translate="no">
+          <div className="testimonials-inner" style={{ 
             width: '100%', 
             maxWidth: '1540px', 
             margin: '0 auto',
@@ -855,12 +895,32 @@ function HomePage() {
                 ? '1rem 1.5rem 0.2rem 1.5rem'
                 : '1.2rem 2.5rem 0.3rem 2.5rem'
           }}>
+            <h2 className="testimonials-title" translate="no">Testimonials</h2>
+            <div className="testimonials-kpi" role="list" aria-label="Key statistics" translate="no">
+              <div className="kpi-item" role="listitem" translate="no">
+                <div className="kpi-value" translate="no">6+</div>
+                <div className="kpi-label" translate="no">Clients</div>
+              </div>
+              <div className="kpi-item" role="listitem" translate="no">
+                <div className="kpi-value" translate="no">5.0★</div>
+                <div className="kpi-label" translate="no">Average Rating</div>
+              </div>
+              <div className="kpi-item" role="listitem" translate="no">
+                <div className="kpi-value" translate="no">3</div>
+                <div className="kpi-label" translate="no">Universities</div>
+              </div>
+              <div className="kpi-item" role="listitem" translate="no">
+                <div className="kpi-value" translate="no">100%</div>
+                <div className="kpi-label" translate="no">On-Time Delivery</div>
+              </div>
+            </div>
             {/* Testimonials Container */}
-            <div style={{ 
+            <div className="testimonials-grid" style={{ 
               display: 'grid',
               gridTemplateColumns: windowWidth <= 768 ? 'repeat(1, 1fr)' : windowWidth <= 1024 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
               gridTemplateRows: windowWidth <= 768 ? 'repeat(6, auto)' : windowWidth <= 1024 ? 'repeat(3, auto)' : 'repeat(2, auto)',
-              gap: windowWidth <= 768 ? '0.8rem' : '1rem',
+              rowGap: '36px',
+              columnGap: windowWidth <= 768 ? '1rem' : '1.25rem',
               justifyContent: 'center',
               width: '100%'
             }}>
@@ -923,24 +983,24 @@ function HomePage() {
           </div>
         </div>
         
-        <div id="journey-section" data-analytics-section="features" translate="no">
+        <div id="journey-section" data-analytics-section="features" className="section-wrap" translate="no">
           <StoryTimeline />
         </div>
-        <div id="skills-section" data-analytics-section="skills" translate="no">
+        <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
           <SkillsSection />
         </div>
-        <div id="perspective-section" data-analytics-section="blog" translate="no">
+        <div id="perspective-section" data-analytics-section="blog" className="section-wrap" translate="no">
           <ImageCarousel />
         </div>
         
         {/* Final Product Images Section */}
-        <div id="final-product-section" data-analytics-section="gallery" translate="no">
+        <div id="final-product-section" data-analytics-section="gallery" className="section-wrap" translate="no">
           <FinalProductGrid />
         </div>
         
         {/* Contact Section */}
-        <div id="contact-section" data-analytics-section="cta_contact" style={{
-          padding: '4rem 2rem',
+        <div id="contact-section" data-analytics-section="cta_contact" className="section-wrap" style={{
+          padding: '0 2rem',
           background: 'transparent',
           color: '#fff',
           minHeight: '80vh',

@@ -151,6 +151,7 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 2rem;
   width: 100%;
+  align-items: stretch;
 }
 
 @media (max-width: 768px) {
@@ -176,8 +177,14 @@
   flex-direction: column;
   border: none;
   width: 100%;
+  height: 100%;
   -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
   touch-action: manipulation; /* Improves touch responsiveness */
+}
+
+.project-card-outer,
+.project-card-outer-link {
+  height: 100%;
 }
 
 /* Grid item is the card wrapper (Link/div), so span must be on the wrapper */
@@ -293,6 +300,22 @@
 @media (max-width: 768px) {
   .project-card-image.text-carousel-layout {
     min-height: auto;
+  }
+
+  .project-card-image.two-squares-layout {
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .project-square-images {
+    height: auto;
+  }
+
+  .project-square-image {
+    height: 0 !important;
+    padding-bottom: 77% !important;
+    flex: 0 0 auto;
   }
 }
 
@@ -471,12 +494,13 @@
 /* Two Squares Layout: two equal square images side by side */
 .project-card-image.two-squares-layout {
   margin-bottom: 0;
-  height: auto;
+  height: 100%;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   background: transparent;
   border-radius: 0;
-  overflow: visible;
+  overflow: hidden;
   padding: 1.5rem; /* Decent padding around the images */
 }
 
@@ -484,17 +508,19 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   gap: 1.5rem; /* Decent padding between images */
 }
 
 .project-square-image {
   width: 100% !important;
   position: relative;
-  height: 0 !important;
-  padding-bottom: 77% !important; /* Height reduced by 30% total (was 100%, now 70% = 10:7 aspect ratio) */
+  flex: 1 1 0;
+  height: auto !important;
+  padding-bottom: 0 !important;
   overflow: hidden;
   flex-shrink: 0;
-  flex-grow: 0;
+  flex-grow: 1;
   background: #000;
   box-sizing: border-box;
   min-height: 0 !important;
@@ -1058,8 +1084,9 @@
 
   .project-square-image {
     width: 100% !important;
-    height: 0 !important;
-    padding-bottom: 77% !important; /* Height reduced by 30% total on tablet */
+    height: auto !important;
+    padding-bottom: 0 !important;
+    flex: 1 1 0;
     min-height: 0 !important;
     max-height: none !important;
   }
