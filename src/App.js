@@ -46,8 +46,6 @@ const suggestionChips = [
 ];
 
 function PopupChatBot() {
-  const location = useLocation();
-  const isArtPage = location.pathname.startsWith('/art');
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState([]);
@@ -375,7 +373,7 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
     <>
       <div className="chat-popup-button-wrapper">
         <button
-          className={`chat-popup-button ${isArtPage ? 'chat-popup-button-art' : ''}`}
+          className="chat-popup-button"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Open chat"
           translate="no"
@@ -730,7 +728,7 @@ function HomePage() {
       </Helmet>
       {/* Artistic Background */}
       <div className="bg-art" translate="no" />
-      <div className="page-content" translate="no">
+      <div className="page-content page-content--landing" translate="no">
         {/* Header */}
         <div className="header" translate="no">
           <div className="header-inner">
@@ -848,53 +846,81 @@ function HomePage() {
             <div className="editorial-grid-header" translate="no">
               <h2 translate="no">Featured Highlights</h2>
               <p translate="no">A curated look at recent work, research, and creative explorations.</p>
-            </div>
-            <div className="editorial-grid" translate="no">
-              <article className="editorial-card editorial-card--wide" translate="no">
-                <span className="editorial-tag" translate="no">Research</span>
-                <h3 translate="no">ML-Driven Insights for Healthcare Outcomes</h3>
-                <span className="editorial-pill" translate="no">Read More</span>
-              </article>
-              <article className="editorial-card editorial-card--medium" translate="no">
-                <span className="editorial-tag" translate="no">Product</span>
-                <h3 translate="no">Job Tracking Platform with AI Guidance</h3>
-                <span className="editorial-pill" translate="no">View Demo</span>
-              </article>
-              <article className="editorial-card editorial-card--medium" translate="no">
-                <span className="editorial-tag" translate="no">Systems</span>
-                <h3 translate="no">Data Pipelines Built for Speed and Clarity</h3>
-                <span className="editorial-pill" translate="no">Explore</span>
-              </article>
-              <article className="editorial-card editorial-card--medium" translate="no">
-                <span className="editorial-tag" translate="no">Strategy</span>
-                <h3 translate="no">Scalable Solutions for Enterprise Teams</h3>
-                <span className="editorial-pill" translate="no">Discover</span>
-              </article>
-              <article className="editorial-card editorial-card--medium" translate="no">
-                <span className="editorial-tag" translate="no">Design</span>
-                <h3 translate="no">Clean Interfaces for Complex Data</h3>
-                <span className="editorial-pill" translate="no">See Work</span>
-              </article>
-              <article className="editorial-card editorial-card--wide" translate="no">
-                <span className="editorial-tag" translate="no">Vision</span>
-                <h3 translate="no">Building Systems That Learn and Adapt</h3>
-                <span className="editorial-pill" translate="no">Learn More</span>
-              </article>
-            </div>
-          </div>
-        </section>
+	            </div>
+	            <div className="editorial-grid" translate="no">
+	              <Link
+	                to="/highlights/healthcare-ai-research"
+	                className="editorial-card editorial-card--wide"
+	                aria-label="Read more: ML-Driven Insights for Healthcare Outcomes"
+	                translate="no"
+	              >
+	                <span className="editorial-tag" translate="no">Research</span>
+	                <h3 translate="no">ML-Driven Insights for Healthcare Outcomes</h3>
+	                <span className="editorial-pill" translate="no">Read More</span>
+	              </Link>
+
+	              <a
+	                href="https://www.atriveo.com/"
+	                target="_blank"
+	                rel="noopener noreferrer"
+	                className="editorial-card editorial-card--medium"
+	                aria-label="View demo: Job Tracking Platform with AI Guidance (opens in a new tab)"
+	                translate="no"
+	              >
+	                <span className="editorial-tag" translate="no">Product</span>
+	                <h3 translate="no">Job Tracking Platform with AI Guidance</h3>
+	                <span className="editorial-pill" translate="no">View Demo</span>
+	              </a>
+
+	              <Link
+	                to="/highlights/movie-data-analytics"
+	                className="editorial-card editorial-card--medium"
+	                aria-label="Explore: Data Pipelines Built for Speed and Clarity"
+	                translate="no"
+	              >
+	                <span className="editorial-tag" translate="no">Systems</span>
+	                <h3 translate="no">Data Pipelines Built for Speed and Clarity</h3>
+	                <span className="editorial-pill" translate="no">Explore</span>
+	              </Link>
+
+	              <Link
+	                to="/highlights/hospitality-ai-solutions"
+	                className="editorial-card editorial-card--medium"
+	                aria-label="Discover: Scalable Solutions for Enterprise Teams"
+	                translate="no"
+	              >
+	                <span className="editorial-tag" translate="no">Strategy</span>
+	                <h3 translate="no">Scalable Solutions for Enterprise Teams</h3>
+	                <span className="editorial-pill" translate="no">Discover</span>
+	              </Link>
+
+	              <Link
+	                to="/highlights"
+	                className="editorial-card editorial-card--medium"
+	                aria-label="See work: Clean Interfaces for Complex Data"
+	                translate="no"
+	              >
+	                <span className="editorial-tag" translate="no">Design</span>
+	                <h3 translate="no">Clean Interfaces for Complex Data</h3>
+	                <span className="editorial-pill" translate="no">See Work</span>
+	              </Link>
+
+	              <Link
+	                to="/highlights/gemma-nlp-research"
+	                className="editorial-card editorial-card--wide"
+	                aria-label="Learn more: Building Systems That Learn and Adapt"
+	                translate="no"
+	              >
+	                <span className="editorial-tag" translate="no">Vision</span>
+	                <h3 translate="no">Building Systems That Learn and Adapt</h3>
+	                <span className="editorial-pill" translate="no">Learn More</span>
+	              </Link>
+	            </div>
+	          </div>
+	        </section>
         {/* Testimonials Grid */}
-        <div id="testimonials-section" data-analytics-section="testimonials" className="testimonials-section section-wrap" style={{ width: '100%', display: 'block' }} translate="no">
-          <div className="testimonials-inner" style={{ 
-            width: '100%', 
-            maxWidth: '1540px', 
-            margin: '0 auto',
-            padding: windowWidth <= 480
-              ? '1rem 1rem 0.2rem 1rem'
-              : windowWidth <= 768
-                ? '1rem 1.5rem 0.2rem 1.5rem'
-                : '1.2rem 2.5rem 0.3rem 2.5rem'
-          }}>
+        <div id="testimonials-section" data-analytics-section="testimonials" className="testimonials-section section-wrap" translate="no">
+          <div className="testimonials-inner" translate="no">
             <h2 className="testimonials-title" translate="no">Testimonials</h2>
             <div className="testimonials-kpi" role="list" aria-label="Key statistics" translate="no">
               <div className="kpi-item" role="listitem" translate="no">
@@ -913,72 +939,42 @@ function HomePage() {
                 <div className="kpi-value" translate="no">100%</div>
                 <div className="kpi-label" translate="no">On-Time Delivery</div>
               </div>
-            </div>
-            {/* Testimonials Container */}
-            <div className="testimonials-grid" style={{ 
-              display: 'grid',
-              gridTemplateColumns: windowWidth <= 768 ? 'repeat(1, 1fr)' : windowWidth <= 1024 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-              gridTemplateRows: windowWidth <= 768 ? 'repeat(6, auto)' : windowWidth <= 1024 ? 'repeat(3, auto)' : 'repeat(2, auto)',
-              rowGap: '36px',
-              columnGap: windowWidth <= 768 ? '1rem' : '1.25rem',
-              justifyContent: 'center',
-              width: '100%'
-            }}>
-            {getCurrentTestimonials().map((t, idx) => (
-              <div
-                key={idx}
-                style={{ 
-                  color: '#fff', 
-                  fontSize: windowWidth <= 768 ? '0.89rem' : '1.01rem', 
-                  fontStyle: 'normal', 
-                  textAlign: 'left', 
-                  width: '100%', 
-                  opacity: 0.92, 
-                  letterSpacing: '0.01em', 
-                  background: 'transparent', 
-                  borderRadius: 12, 
-                  padding: windowWidth <= 768 ? '0.5rem 0.5rem 0.5rem 0.5rem' : '0.6rem 0.6rem 0.6rem 0.6rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'flex-start', 
-                  height: 'auto',
-                  justifyContent: 'space-between',
-                  transition: 'all 0.3s ease',
-                  border: 'none',
-                  boxShadow: 'none',
-                  margin: 0,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.3rem' }}>
-                  <img src={t.photo} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid #fff', background: '#222' }} />
-                  <div>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '1.05em', fontStyle: 'normal', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.5rem' }}>
-                      <span>{t.name.split('⭐⭐⭐⭐⭐')[0].trim()}</span>
-                      <span
-                        style={{
-                          color: '#ffd700',
-                          fontSize: '1.1em',
-                          marginLeft: windowWidth <= 480 ? '0.5rem' : '2rem',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        ⭐⭐⭐⭐⭐
-                      </span>
-                    </div>
-                    <div style={{ color: '#bbb', fontSize: '0.92em', fontStyle: 'normal' }}>{t.company} — {t.post}</div>
-                  </div>
-                </div>
-                <div style={{ 
-                  fontStyle: 'normal', 
-                  color: '#fff', 
-                  fontWeight: 400,
-                  flex: 1,
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  lineHeight: '1.5'
-                }}>{t.text}</div>
+              <div className="kpi-item" role="listitem" translate="no">
+                <div className="kpi-value" translate="no">5+</div>
+                <div className="kpi-label" translate="no">Years Experience</div>
               </div>
-            ))}
+            </div>
+
+            <div className="testimonials-grid" translate="no">
+              {getCurrentTestimonials().map((t, idx) => {
+                const displayName = String(t.name || '').replace('⭐⭐⭐⭐⭐', '').trim();
+                return (
+                  <article className="testimonial-card" key={idx} translate="no">
+                    <header className="testimonial-card__head" translate="no">
+                      <div className="testimonial-card__person" translate="no">
+                        <span className="testimonial-card__avatar-ring" aria-hidden="true" translate="no">
+                          <img
+                            src={t.photo}
+                            alt={displayName}
+                            className="testimonial-card__avatar"
+                            loading="lazy"
+                            decoding="async"
+                            translate="no"
+                          />
+                        </span>
+                        <div className="testimonial-card__meta" translate="no">
+                          <div className="testimonial-card__name" translate="no">{displayName}</div>
+                          <div className="testimonial-card__role" translate="no">{t.company} — {t.post}</div>
+                        </div>
+                      </div>
+                      <div className="testimonial-card__rating" aria-label="5 out of 5 stars" translate="no">
+                        <span aria-hidden="true">★★★★★</span>
+                      </div>
+                    </header>
+                    <p className="testimonial-card__quote" translate="no">{t.text}</p>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1276,7 +1272,7 @@ function ArtPage() {
     <div className="art-page" translate="no">
       <Helmet>
         <html lang="en" translate="no" />
-        <title>Atishay Kasliwal</title>
+        <title>Art | Atishay Kasliwal</title>
         <link rel="canonical" href="https://atishaykasliwal.com/art" />
         <meta name="google" content="notranslate" />
         <meta name="google-translate-customization" content="no" />
@@ -1288,35 +1284,41 @@ function ArtPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
-      <div className="art-header" translate="no">
-        <div className="header-inner">
-          <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            Atishay Kasliwal
-          </Link>
-          <button
-            className="mobile-menu-toggle black"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-            translate="no"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav black ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-            <Link to="/" className="nav-home-link" translate="no">AK</Link>
-            <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
-            <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
-            <Link to="/art" translate="no">ART</Link>
-          </nav>
-        </div>
-      </div>
-      <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
-      <div className="art-grid-fixed" style={{ minHeight: '90vh' }} translate="no">
-        {images.map((src, idx) => (
-          <div className="art-tile-fixed" key={idx} translate="no">
-            <img src={src} alt={`artwork-${idx}`} translate="no" />
+      <div className="bg-art" translate="no" />
+      <div className="page-content page-content--art" translate="no">
+        <div className="header" translate="no">
+          <div className="header-inner">
+            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+              Atishay Kasliwal
+            </Link>
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+              translate="no"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+              <Link to="/highlights" translate="no">HIGHLIGHTS</Link>
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
+              <Link to="/art" className="active" translate="no">ART</Link>
+            </nav>
           </div>
-        ))}
+        </div>
+
+        <div className="art-intro" translate="no">
+          <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
+        </div>
+
+        <div className="art-grid-fixed" style={{ minHeight: '90vh' }} translate="no">
+          {images.map((src, idx) => (
+            <div className="art-tile-fixed" key={idx} translate="no">
+              <img src={src} alt={`artwork-${idx}`} loading="lazy" decoding="async" translate="no" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
