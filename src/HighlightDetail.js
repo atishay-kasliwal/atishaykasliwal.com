@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useLayoutEffect, useRef, useCallback } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './HighlightDetail.css';
 
 // Import project data
@@ -157,6 +159,37 @@ export default function HighlightDetail() {
   // Active section for scroll spy
   const [activeSection, setActiveSection] = useState('article-lead');
 
+  // Copy code state
+  const [copiedCode, setCopiedCode] = useState(null);
+
+  // Swipe tracking
+  const touchStartX = useRef(null);
+
+  // Prev/next project (skip projects without links/detail pages)
+  const navigableProjects = projectsData.filter((p) => p.uuid);
+  const currentIndex = navigableProjects.findIndex((p) => p.uuid === projectUuid);
+  const prevProject = currentIndex > 0 ? navigableProjects[currentIndex - 1] : null;
+  const nextProject = currentIndex < navigableProjects.length - 1 ? navigableProjects[currentIndex + 1] : null;
+
+  const goToProject = useCallback((p) => {
+    if (p) navigate(`/highlights/${slugify(p.title)}`);
+  }, [navigate]);
+
+  // Swipe handler
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 60) {
+      if (delta > 0 && nextProject) goToProject(nextProject);
+      if (delta < 0 && prevProject) goToProject(prevProject);
+    }
+    touchStartX.current = null;
+  }, [nextProject, prevProject, goToProject]);
+
   // Reset iframe loading state when identifier changes
   useEffect(() => {
     setShouldLoadIframes(false);
@@ -165,6 +198,12 @@ export default function HighlightDetail() {
     if (document.documentElement) document.documentElement.scrollTop = 0;
     if (document.body) document.body.scrollTop = 0;
   }, [identifier]);
+
+  // Add body class so we can override overflow on #root/.App to allow sticky sidebar
+  useEffect(() => {
+    document.body.classList.add('pdp-active');
+    return () => document.body.classList.remove('pdp-active');
+  }, []);
 
   // Scroll to top AFTER content renders - use useLayoutEffect to run synchronously after DOM updates
   useLayoutEffect(() => {
@@ -466,7 +505,12 @@ export default function HighlightDetail() {
     : [];
 
   return (
-    <div className="project-detail-page" translate="no">
+    <div
+      className="project-detail-page"
+      translate="no"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <Helmet>
         <title>{project.title} | Atishay Kasliwal</title>
         <meta name="description" content={project.description} />
@@ -524,31 +568,33 @@ export default function HighlightDetail() {
         <div className="project-detail-layout" translate="no">
           {/* LEFT SIDEBAR */}
           <aside className="project-detail-sidebar-left" translate="no">
-            <button
-              className="project-detail-back-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                const currentScroll = window.scrollY;
-                navigate('/highlights', { replace: false });
-                setTimeout(() => window.scrollTo(0, currentScroll), 0);
-              }}
-              translate="no"
-            >
-              ← Back to Highlights
-            </button>
+            <div className="project-detail-sidebar-header" translate="no">
+              <button
+                className="project-detail-back-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const currentScroll = window.scrollY;
+                  navigate('/highlights', { replace: false });
+                  setTimeout(() => window.scrollTo(0, currentScroll), 0);
+                }}
+                translate="no"
+              >
+                ← Back to Highlights
+              </button>
 
-            <h2 className="project-detail-sidebar-title" translate="no">
-              {project.title}
-            </h2>
+              <h2 className="project-detail-sidebar-title" translate="no">
+                {project.title}
+              </h2>
 
-            <span className="project-detail-sidebar-badge" translate="no">
-              {project.category}
-            </span>
+              <span className="project-detail-sidebar-badge" translate="no">
+                {project.category}
+              </span>
 
-            <div className="project-detail-sidebar-meta" translate="no">
-              <span translate="no">{articleMeta.date}</span>
-              <span aria-hidden="true"> · </span>
-              <span translate="no">{articleMeta.readingTime}</span>
+              <div className="project-detail-sidebar-meta" translate="no">
+                <span translate="no">{articleMeta.date}</span>
+                <span aria-hidden="true"> · </span>
+                <span translate="no">{articleMeta.readingTime}</span>
+              </div>
             </div>
 
             {/* Section navigation */}
@@ -620,14 +666,22 @@ export default function HighlightDetail() {
           <main className="project-detail-content" translate="no">
             {/* Hero image */}
             {project.image && (
-              <figure className="project-detail-hero" translate="no">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="project-detail-hero-img"
-                  translate="no"
-                />
-              </figure>
+              <>
+                <div className="project-detail-hero-label" translate="no">
+                  <span className="project-detail-hero-label-title">{project.title}</span>
+                  {project.description && (
+                    <p className="project-detail-hero-label-desc">{project.description}</p>
+                  )}
+                </div>
+                <figure className="project-detail-hero" translate="no">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="project-detail-hero-img"
+                    translate="no"
+                  />
+                </figure>
+              </>
             )}
 
             {/* Article lead */}
@@ -643,28 +697,123 @@ export default function HighlightDetail() {
                   <h2 className="project-detail-h2" translate="no">
                     {s.heading}
                   </h2>
-                  {(s.paragraphs || []).map((p) => (
-                    <p key={p} className="project-detail-p" translate="no">
-                      {p}
-                    </p>
-                  ))}
-                  {Array.isArray(s.bullets) && s.bullets.length > 0 && (
-                    <ul className="project-detail-bullets" translate="no">
-                      {s.bullets.map((b) => (
-                        <li key={`${b.bold}-${b.text}`}>
-                          <strong>{b.bold}</strong>: {b.text}
-                        </li>
+                  {/* Side-by-side: layout 'image-right' or 'image-left' */}
+                  {s.image && (s.layout === 'image-right' || s.layout === 'image-left') ? (
+                    <div className={`project-detail-split ${s.layout === 'image-left' ? 'split-image-left' : 'split-image-right'}`} translate="no">
+                      <div className="project-detail-split-text" translate="no">
+                        {(s.paragraphs || []).map((p) => (
+                          <p key={p} className="project-detail-p" translate="no">{p}</p>
+                        ))}
+                        {Array.isArray(s.bullets) && s.bullets.length > 0 && (
+                          <ul className="project-detail-bullets" translate="no">
+                            {s.bullets.map((b) => (
+                              <li key={`${b.bold}-${b.text}`}><strong>{b.bold}</strong>: {b.text}</li>
+                            ))}
+                          </ul>
+                        )}
+                        {s.quote && (
+                          <div className="project-detail-quote" translate="no">
+                            <div className="project-detail-quote-pill" translate="no">{s.quote.pill}</div>
+                            <div className="project-detail-quote-text" translate="no">{s.quote.text}</div>
+                          </div>
+                        )}
+                      </div>
+                      <figure className="project-detail-section-figure split-figure" translate="no">
+                        <img
+                          src={s.image.src}
+                          alt={s.image.alt || ''}
+                          className="project-detail-section-img"
+                          style={{
+                            ...(s.image.width  ? { width: s.image.width } : {}),
+                            ...(s.image.height ? { height: s.image.height, objectFit: 'cover' } : {}),
+                          }}
+                        />
+                        {s.image.caption && (
+                          <figcaption className="project-detail-section-caption">{s.image.caption}</figcaption>
+                        )}
+                      </figure>
+                    </div>
+                  ) : (
+                    <>
+                      {(s.paragraphs || []).map((p) => (
+                        <p key={p} className="project-detail-p" translate="no">{p}</p>
                       ))}
-                    </ul>
+                      {Array.isArray(s.bullets) && s.bullets.length > 0 && (
+                        <ul className="project-detail-bullets" translate="no">
+                          {s.bullets.map((b) => (
+                            <li key={`${b.bold}-${b.text}`}><strong>{b.bold}</strong>: {b.text}</li>
+                          ))}
+                        </ul>
+                      )}
+                      {s.quote && (
+                        <div className="project-detail-quote" translate="no">
+                          <div className="project-detail-quote-pill" translate="no">{s.quote.pill}</div>
+                          <div className="project-detail-quote-text" translate="no">{s.quote.text}</div>
+                        </div>
+                      )}
+                      {s.image && (
+                        <figure className="project-detail-section-figure" translate="no">
+                          <img
+                            src={s.image.src}
+                            alt={s.image.alt || ''}
+                            className="project-detail-section-img"
+                            style={{
+                              ...(s.image.width  ? { width: s.image.width } : {}),
+                              ...(s.image.height ? { height: s.image.height } : {}),
+                            }}
+                          />
+                          {s.image.caption && (
+                            <figcaption className="project-detail-section-caption">{s.image.caption}</figcaption>
+                          )}
+                        </figure>
+                      )}
+                    </>
                   )}
-                  {s.quote && (
-                    <div className="project-detail-quote" translate="no">
-                      <div className="project-detail-quote-pill" translate="no">
-                        {s.quote.pill}
+                  {/* Code block */}
+                  {s.codeBlock && (
+                    <div className="project-detail-code-block" translate="no">
+                      <div className="project-detail-code-header">
+                        <span className="project-detail-code-lang">{s.codeBlock.language || 'code'}</span>
+                        <button
+                          className="project-detail-code-copy"
+                          onClick={() => {
+                            navigator.clipboard.writeText(s.codeBlock.code);
+                            setCopiedCode(s.number);
+                            setTimeout(() => setCopiedCode(null), 2000);
+                          }}
+                        >
+                          {copiedCode === s.number ? '✓ Copied' : 'Copy'}
+                        </button>
                       </div>
-                      <div className="project-detail-quote-text" translate="no">
-                        {s.quote.text}
-                      </div>
+                      <SyntaxHighlighter
+                        language={s.codeBlock.language || 'python'}
+                        style={oneDark}
+                        customStyle={{ margin: 0, borderRadius: '0 0 10px 10px', fontSize: '0.85rem' }}
+                        showLineNumbers={s.codeBlock.showLineNumbers !== false}
+                      >
+                        {s.codeBlock.code}
+                      </SyntaxHighlighter>
+                    </div>
+                  )}
+                  {/* Table */}
+                  {s.table && (
+                    <div className="project-detail-table-wrap" translate="no">
+                      <table className="project-detail-table">
+                        {s.table.headers && (
+                          <thead>
+                            <tr>
+                              {s.table.headers.map((h) => <th key={h}>{h}</th>)}
+                            </tr>
+                          </thead>
+                        )}
+                        <tbody>
+                          {(s.table.rows || []).map((row, ri) => (
+                            <tr key={ri}>
+                              {row.map((cell, ci) => <td key={ci}>{cell}</td>)}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </section>
@@ -728,12 +877,14 @@ export default function HighlightDetail() {
               )}
             </section>
           </main>
+        </div>
 
-          {/* RIGHT SIDEBAR */}
-          <aside className="project-detail-sidebar-right" translate="no">
-            <h3 className="project-detail-other-title" translate="no">
-              Other Highlights
-            </h3>
+        {/* BOTTOM ROW — Other Highlights */}
+        <div className="project-detail-bottom-row" translate="no">
+          <h3 className="project-detail-other-title" translate="no">
+            Other Highlights
+          </h3>
+          <div className="project-detail-other-cards-row" translate="no">
             {projectsData.map((p) => {
               const pSlug = slugify(p.title);
               const isActive = pSlug === currentSlug;
@@ -758,7 +909,7 @@ export default function HighlightDetail() {
                 </Link>
               );
             })}
-          </aside>
+          </div>
         </div>
       </div>
     </div>

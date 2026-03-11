@@ -832,17 +832,15 @@ body {
 
 .site-footer {
   width: 100%;
-  background: #111;
+  background: transparent;
   color: #fff;
-  padding: 1.6rem 0 1.6rem 0; /* increased vertical padding */
-  margin-top: 3rem;
+  padding: 2.5rem 0;
+  margin-top: 4rem;
   position: relative;
-  bottom: 0;
-  left: 0;
   z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .footer-content {
@@ -850,12 +848,20 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  max-width: 900px;
-  padding: 0 2rem;
-  font-size: 0.731025rem;
+  width: 92%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.45);
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.footer-content strong {
+  color: rgba(255,255,255,0.80);
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
@@ -905,7 +911,7 @@ body {
 
 .footer-socials {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
   margin-left: 1.5rem;
 }
 
@@ -913,12 +919,13 @@ body {
   display: flex;
   align-items: center;
   color: #fff;
-  opacity: 0.85;
-  transition: opacity 0.2s;
+  opacity: 0.45;
+  transition: opacity 0.2s, transform 0.2s;
 }
 
 .footer-socials a:hover {
-  opacity: 1;
+  opacity: 0.90;
+  transform: translateY(-2px);
 }
 
 .footer-resume-btn {
