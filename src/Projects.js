@@ -263,7 +263,7 @@ export default function Projects() {
       <div className="page-content" translate="no">
         <div className="header" translate="no">
           <div className="header-inner">
-            <Link to="/" className="logo libertinus-mono" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMobileMenuOpen(false)} translate="no">
+            <Link to="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)} translate="no">
               Atishay Kasliwal
             </Link>
             <button
@@ -275,10 +275,10 @@ export default function Projects() {
               {isMobileMenuOpen ? '✕' : '☰'}
             </button>
             <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-              <Link to="/highlights" className="active" translate="no">HIGHLIGHTS</Link>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" target="_blank" rel="noopener noreferrer" translate="no">RESUME</a>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LINKEDIN</a>
-              <Link to="/art" translate="no">ART</Link>
+              <Link to="/highlights" className="active" translate="no">Work</Link>
+              <Link to="/art" translate="no">Photography</Link>
+              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LinkedIn</a>
+              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer" translate="no">Resume</a>
             </nav>
           </div>
         </div>

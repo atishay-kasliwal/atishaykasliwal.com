@@ -1,18 +1,23 @@
 .story-timeline {
   background: transparent;
   color: #fff;
-  margin: 0 0 0 0;
-  padding: 0 2vw;
-  font-size: 70%;
+  width: 90vw;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
 }
+
 .story-title {
-  font-size: 2.5rem;
-  margin-bottom: 0.7rem;
-  font-weight: bold;
-  letter-spacing: 0.05em;
+  font-family: 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: #fff;
   text-align: left;
+  margin-bottom: 1.5rem;
 }
+
+/* Scrollable row */
 .story-cards {
   display: flex;
   overflow-x: auto;
@@ -20,17 +25,9 @@
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
   padding-bottom: 1rem;
   width: 100%;
-  position: relative;
-}
-
-.story-cards-container {
-  display: flex;
-  gap: 2.5rem;
-  width: max-content;
-  transition: none;
 }
 
 .story-cards::-webkit-scrollbar {
@@ -42,221 +39,164 @@
 }
 
 .story-cards::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 2px;
 }
-.story-card {
-  background: transparent;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255,255,255,0.15);
-  height: 440px;
-  min-width: 320px;
-  max-width: 340px;
-  width: 340px;
-  position: relative;
-  display: block;
-  flex-shrink: 0;
+
+.story-cards::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
-.story-card.active {
-  border-color: rgba(255,255,255,0.5);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+.story-cards-container {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+}
+
+/* Card */
+.story-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 280px;
+  height: 380px;
+  cursor: default;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .story-card:hover {
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
+/* Full-bleed image */
 .story-img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   z-index: 1;
-  display: block;
-  border-radius: 8px;
-  min-width: 100%;
-  min-height: 100%;
+  border-radius: 12px;
 }
 
-.story-img::after {
-  content: '';
+/* Gradient overlay — bottom two-thirds */
+.story-card-gradient {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: transparent;
+  inset: 0;
   z-index: 2;
+  border-radius: 12px;
+  background: linear-gradient(
+    to bottom,
+    transparent 20%,
+    rgba(0, 0, 0, 0.35) 50%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
 }
-.story-date {
-  font-size: 1rem;
-  color: #fff;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+
+/* Content layer on top */
+.story-card-content {
   position: absolute;
-  bottom: 0.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
+  inset: 0;
   z-index: 3;
-}
-.story-card-title {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  position: absolute;
-  bottom: 2.1rem;
-  left: 1.5rem;
-  right: 1.5rem;
-  z-index: 3;
-  color: #fff;
-  line-height: 1.3;
-}
-.story-desc {
-  font-size: 0.8rem;
-  color: #eee;
-  position: relative;
-  z-index: 3;
-  padding: 0 1.5rem 1.5rem 1.5rem;
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  padding: 14px 16px 18px 16px;
 }
 
-.journey-description {
-  margin-top: 3rem;
-  margin-bottom: 0; /* Remove bottom margin - let Skills section handle spacing */
-  padding: 0 2vw;
-  text-align: left;
+/* Bottom text block */
+.story-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
-.journey-description p {
+.story-card:hover .story-card-body {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.story-card-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #fff;
-  font-size: 1rem;
-  opacity: 0.95;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
+  line-height: 1.3;
 }
 
-/* Navigation buttons removed - using native scrolling instead */
-.journey-button-container {
-  display: none;
+.story-card-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.3;
 }
 
-/* Mobile Responsiveness */
+.story-date {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* Hover one-liner */
+.story-card-hover-line {
+  position: absolute;
+  bottom: 18px;
+  left: 16px;
+  right: 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.story-card:hover .story-card-hover-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   .story-timeline {
     padding: 0 1rem;
-    font-size: 65%;
   }
-  
+
   .story-title {
-    font-size: 2rem;
-    margin-bottom: 0.7rem;
-    font-weight: bold;
-    letter-spacing: 0.05em;
-    color: #fff;
-    text-align: left;
+    font-size: 1.75rem;
   }
-  
-  .story-cards-container {
-    gap: 1.5rem;
-  }
-  
+
   .story-card {
-    min-width: 280px;
-    max-width: 280px;
-    width: 280px;
-    height: 400px;
-  }
-  
-  .story-date {
-    font-size: 1rem;
-    bottom: 0.5rem;
-    left: 1.5rem;
-    right: 1.5rem;
-    font-weight: 700;
-  }
-  
-  .story-card-title {
-    font-size: 1rem;
-    bottom: 2.1rem;
-    left: 1.5rem;
-    right: 1.5rem;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-  
-  .journey-description {
-    margin-top: 2.5rem;
-    margin-bottom: 0; /* Remove bottom margin - let Skills section handle spacing */
-    padding: 0 1rem;
-  }
-  
-  .journey-description p {
-    font-size: 0.95rem;
-    opacity: 0.95;
+    width: 240px;
+    height: 320px;
   }
 }
 
 @media (max-width: 480px) {
   .story-timeline {
     padding: 0 0.5rem;
-    font-size: 60%;
   }
-  
+
   .story-title {
-    font-size: 1.8rem;
-    margin-bottom: 0.7rem;
-    font-weight: bold;
-    letter-spacing: 0.05em;
-    color: #fff;
-    text-align: left;
+    font-size: 1.5rem;
   }
-  
-  .story-cards-container {
-    gap: 1.2rem;
-  }
-  
+
   .story-card {
-    min-width: 260px;
-    max-width: 260px;
-    width: 260px;
-    height: 360px;
-  }
-  
-  .story-date {
-    font-size: 0.9rem;
-    bottom: 0.4rem;
-    left: 1.2rem;
-    right: 1.2rem;
-    font-weight: 700;
-  }
-  
-  .story-card-title {
-    font-size: 0.9rem;
-    bottom: 1.9rem;
-    left: 1.2rem;
-    right: 1.2rem;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-  
-  .journey-description {
-    margin-top: 2rem;
-    margin-bottom: 0; /* Remove bottom margin - let Skills section handle spacing */
-    padding: 0 0.5rem;
-  }
-  
-  .journey-description p {
-    font-size: 0.9rem;
-    opacity: 0.95;
+    width: 220px;
+    height: 300px;
   }
 }
