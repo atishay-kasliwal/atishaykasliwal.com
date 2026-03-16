@@ -12,9 +12,9 @@ const MOCK_STATS = {
 };
 
 const EXAMPLE_QUERIES = [
-  'What is section 80C?',
-  '80C deduction kya hai',
-  '¿Qué es la sección 80C?',
+  'What are penalties for concealing property?',
+  'राजनीतिक दलों की आय के प्रावधान क्या हैं?',
+  '¿Qué es la sección 292A?',
 ];
 
 const PIPELINE_STEPS = [
@@ -70,7 +70,7 @@ export default function LegalRAGChat({ project }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: 'Hello! I can answer questions about Indian tax law in multiple languages. Try asking about Section 80C, deductions, or any tax provision.',
+      text: 'Hello! I can answer questions about the Income Tax Act 1961 in multiple languages. Try asking about penalties, recovery provisions, or political party income rules.',
       sections: [],
       meta: null,
     },
