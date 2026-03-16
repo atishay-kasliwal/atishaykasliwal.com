@@ -1,6 +1,7 @@
 export interface Env {
   CHROMADB_API_KEY: string;
   GROQ_API_KEY: string;
+  COHERE_API_KEY: string;
 }
 
 // ── Config ─────────────────────────────────────────────────────────────────────
@@ -24,16 +25,69 @@ function detectLanguage(text: string): string {
   return 'English';
 }
 
-// ── ChromaDB Cloud — semantic query (embedding handled server-side) ────────────
+// ── Cohere — embed query text (multilingual-v2.0, 768 dims) ──────────────────
+
+async function embedQuery(text: string, cohereApiKey: string): Promise<number[]> {
+  const res = await fetch('https://api.cohere.com/v2/embed', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${cohereApiKey}`,
+    },
+    body: JSON.stringify({
+      texts: [text],
+      model: 'embed-multilingual-v2.0',
+      input_type: 'search_query',
+      embedding_types: ['float'],
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Cohere ${res.status}: ${body}`);
+  }
+
+  const data = await res.json<{ embeddings: { float: number[][] } }>();
+  return data.embeddings.float[0];
+}
+
+// ── ChromaDB Cloud — resolve collection name → UUID (cached per Worker instance)
+
+let cachedCollectionId: string | null = null;
+
+async function getCollectionId(apiKey: string): Promise<string> {
+  if (cachedCollectionId) return cachedCollectionId;
+
+  const url =
+    `https://api.trychroma.com/api/v2/tenants/${CHROMA_TENANT}` +
+    `/databases/${CHROMA_DATABASE}/collections/${CHROMA_COLLECTION}`;
+
+  const res = await fetch(url, {
+    headers: { 'x-chroma-token': apiKey },
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`ChromaDB collection lookup ${res.status}: ${body}`);
+  }
+
+  const data = await res.json<{ id: string }>();
+  cachedCollectionId = data.id;
+  return data.id;
+}
+
+// ── ChromaDB Cloud — query with pre-computed embeddings ───────────────────────
 
 async function queryChroma(
-  queryText: string,
+  queryEmbedding: number[],
   nResults: number,
   apiKey: string,
 ): Promise<{ documents: string[][]; metadatas: Record<string, string>[][]; distances: number[][] }> {
+  const collectionId = await getCollectionId(apiKey);
+
   const url =
     `https://api.trychroma.com/api/v2/tenants/${CHROMA_TENANT}` +
-    `/databases/${CHROMA_DATABASE}/collections/${CHROMA_COLLECTION}/query`;
+    `/databases/${CHROMA_DATABASE}/collections/${collectionId}/query`;
 
   const res = await fetch(url, {
     method: 'POST',
@@ -42,7 +96,7 @@ async function queryChroma(
       'x-chroma-token': apiKey,
     },
     body: JSON.stringify({
-      query_texts: [queryText],
+      query_embeddings: [queryEmbedding],
       n_results: nResults,
       include: ['documents', 'metadatas', 'distances'],
     }),
@@ -185,13 +239,16 @@ export default {
         try {
           const language = detectLanguage(query);
 
-          // 1. ChromaDB semantic search
-          const chromaResult = await queryChroma(query, n_results, env.CHROMADB_API_KEY);
+          // 1. Embed query with Cohere
+          const embedding = await embedQuery(query, env.COHERE_API_KEY);
+
+          // 2. ChromaDB vector search
+          const chromaResult = await queryChroma(embedding, n_results, env.CHROMADB_API_KEY);
 
           const sections = chromaResult.documents[0].map((doc, i) => ({
             document: doc,
             metadata: chromaResult.metadatas[0][i] ?? {},
-            similarity: Math.max(0, parseFloat((1 - (chromaResult.distances[0][i] ?? 1) / 2).toFixed(4))),
+            similarity: parseFloat((1 / (1 + (chromaResult.distances[0][i] ?? 100) / 100)).toFixed(4)),
           }));
 
           // Send metadata event
@@ -229,6 +286,27 @@ export default {
           'Access-Control-Allow-Origin': '*',
         },
       });
+    }
+
+    // Debug endpoint — remove after diagnosis
+    if (url.pathname === '/debug' && request.method === 'POST') {
+      const { query } = await request.json<{ query: string }>();
+      const embedding = await embedQuery(query, env.COHERE_API_KEY);
+      const collectionId = await getCollectionId(env.CHROMADB_API_KEY);
+      const raw = await fetch(
+        `https://api.trychroma.com/api/v2/tenants/${CHROMA_TENANT}/databases/${CHROMA_DATABASE}/collections/${collectionId}/query`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-chroma-token': env.CHROMADB_API_KEY },
+          body: JSON.stringify({
+            query_embeddings: [embedding],
+            n_results: 3,
+            include: ['documents', 'metadatas', 'distances'],
+          }),
+        }
+      );
+      const data = await raw.json();
+      return Response.json(data, { headers: { 'Access-Control-Allow-Origin': '*' } });
     }
 
     return Response.json({ error: 'Not found' }, { status: 404 });
