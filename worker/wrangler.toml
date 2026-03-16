@@ -1,0 +1,10 @@
+name = "legal-rag-api"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Non-secret config goes here.
+# Secrets (API keys) are set via:
+#   wrangler secret put CHROMADB_API_KEY
+#   wrangler secret put GROQ_API_KEY
