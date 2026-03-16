@@ -9,8 +9,10 @@ import './HighlightDetail.css';
 import { projectsData } from './Projects';
 import { getProjectArticleByUuid } from './project list';
 import FOMCDashboard from './FOMCDashboard';
+import LegalRAGChat from './LegalRAGChat';
 
 const FOMC_UUID = 'd4e5f6a7-b8c9-4012-d345-6789abcdef01';
+const LEGAL_RAG_UUID = 'c3d4e5f6-a7b8-4901-c234-56789abcdef0';
 
 const slugify = (value) =>
   String(value || '')
@@ -543,6 +545,9 @@ export default function HighlightDetail() {
 
         {/* FOMC Dashboard — rendered for the healthcare/FOMC project */}
         {projectUuid === FOMC_UUID && <FOMCDashboard project={project} />}
+
+        {/* Legal RAG Chat — multilingual tax law AI workspace */}
+        {projectUuid === LEGAL_RAG_UUID && <LegalRAGChat project={project} />}
 
         {/* content removed for other pages */}
         <div className="project-detail-layout" translate="no" style={{ display: 'none' }}>
