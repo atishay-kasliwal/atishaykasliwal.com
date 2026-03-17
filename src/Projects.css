@@ -219,6 +219,11 @@
   outline: none;
 }
 
+.project-card-grid.no-hover {
+  cursor: default;
+  pointer-events: none;
+}
+
 /* Prevent black selection boxes on dark card text - use visible highlight */
 .project-card-overlay-content .project-card-number,
 .project-card-overlay-content .project-card-title,
@@ -301,6 +306,7 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding-bottom: 3rem;
 }
 
 .project-text-blocks {
@@ -422,7 +428,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: transparent; /* Transparent background */
+  background: transparent;
   display: flex;
   flex-direction: column;
   min-height: 300px;
@@ -431,11 +437,12 @@
 
 .project-carousel-images {
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important; /* Use minmax to ensure equal widths */
-  gap: 1.5rem !important; /* Decent padding between carousel images */
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 1.5rem !important;
   width: 100% !important;
   position: relative;
 }
+
 
 .project-carousel-image {
   position: relative;

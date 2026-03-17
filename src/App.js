@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { Helmet } from 'react-helmet';
 import emailjs from '@emailjs/browser';
 import './App.css';
-import { initAnalytics } from './lib/analytics';
+import { initAnalytics, trackEvent } from './lib/analytics';
 
 import img1 from './assets/FidelityLogo.png';
 import img8 from './assets/atrium_health_wake_forest_baptist_logo.jpeg';
@@ -19,6 +19,7 @@ import nehaPhoto from './assets/Neha gupta.jpeg';
 import goldyPhoto from './assets/goldey.jpeg';
 import daMaPhoto from './assets/da ma.jpeg';
 import gunjanPhoto from './assets/gunjanjain.jpg';
+import HeroCarousel from './HeroCarousel';
 import StoryTimeline from './StoryTimeline';
 import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
@@ -514,18 +515,17 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
 
 
 function HomePage() {
-  const landingImages = [
-    { src: img1 },
-    { src: img8, light: true },
-    { src: img2 },
-    { src: img4 },
-    { src: img7, light: true },
-    { src: img3 },
-    { src: img6 },
-    { src: img9, light: true },
-    { src: img5 },
+  const gridImages = [
+    { src: img1,             company: 'Fidelity Investments',    role: 'Software Engineer',        impact: 'AI-powered equity research tools at scale' },
+    { src: img8, light: true, company: 'Atrium Health',           role: 'AI Research Intern',        impact: 'ML models for tumor detection & clinical workflows' },
+    { src: img2,             company: 'Bounteous',               role: 'Full-Stack Engineer',       impact: 'Digital platforms for Fortune 500 clients' },
+    { src: img4,             company: 'BT Group',                role: 'Software Engineer',        impact: 'Backend systems across telecom infrastructure' },
+    { src: img7, light: true, company: 'Accolite Digital',        role: 'Senior Software Engineer', impact: 'Led frontend delivery for enterprise clients' },
+    { src: img3,             company: 'T-Mobile',                role: 'Software Engineer',        impact: 'High-traffic mobile platform features' },
+    { src: img6,             company: 'Stony Brook University',  role: 'MS Data Science',          impact: 'Graduate research in AI, NLP & distributed systems' },
+    { src: img9, light: true, company: 'Shriffle Technologies',   role: 'Software Developer',       impact: 'Full-stack product development 0 → 1' },
+    { src: img5,             company: 'Accenture',               role: 'Software Engineer',        impact: 'Enterprise solutions across cloud & data platforms' },
   ];
-  const gridImages = landingImages;
 
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -592,6 +592,7 @@ function HomePage() {
         message: ''
       });
       
+      trackEvent('contact_form_submit', { page_path: window.location.pathname });
       setFormStatus('Thank you! Your message has been sent successfully.');
       
       // Clear status message after 5 seconds
@@ -767,22 +768,21 @@ function HomePage() {
           {/* Two-column Main Content */}
           <div className="landing-two-col" data-analytics-section="hero" translate="no">
             <div className="landing-left-text" translate="no">
-              <p className="hero-eyebrow" translate="no">AI Engineer • Full-Stack Developer • Data Systems</p>
+              <p className="hero-eyebrow" translate="no">Software Engineer · Full-Stack · Machine Learning</p>
               <h1 className="hero-name" translate="no">Atishay Kasliwal</h1>
               <p className="hero-description" translate="no">
-                5+ years building production systems at scale. From AI pipelines and LLM applications to full-stack platforms. Currently pursuing an MS in Data Science at Stony Brook University.
+                Full-stack engineer with 5 years of experience shipping production software across fintech, healthcare, and enterprise. I work across the stack and have built AI-powered features into real products used at scale.
               </p>
               <div className="button-group-theme hero-ctas" translate="no">
-                <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="btn-theme btn-primary-action btn-lg" target="_blank" rel="noopener noreferrer">
+                <Link to="/highlights" className="btn-theme btn-primary-action btn-lg" data-cta-position="hero_view_work">
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6em' }}>
-                    <svg width="16" height="16" fill="none" viewBox="0 0 20 20"><path d="M10 2v12m0 0l-4-4m4 4l4-4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="16" width="14" height="2" rx="1" fill="#000"/></svg>
-                    Resume
+                    View Work
+                    <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </span>
-                </a>
-                <a href="mailto:katishay@gmail.com" className="btn-theme btn-secondary btn-lg">
+                </Link>
+                <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="btn-theme btn-secondary btn-lg" target="_blank" rel="noopener noreferrer" data-cta-position="hero_resume">
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6em' }}>
-                    <svg width="16" height="16" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M2 4l8 7 8-7" stroke="currentColor" strokeWidth="2"/></svg>
-                    Contact
+                    Resume
                   </span>
                 </a>
                 <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="LinkedIn">
@@ -792,149 +792,128 @@ function HomePage() {
                   <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor"/></svg>
                 </a>
               </div>
-              <div className="exp-edu-list" translate="no">
-                {experienceEducation.map((line, idx) => {
-                  if (idx === 7) {
-                    return <div key={idx} className="exp-edu-divider" />;
-                  }
-                  return <div key={idx} className="exp-edu-item" dangerouslySetInnerHTML={{ __html: line }} />;
-                })}
+              <div className="hero-stats" translate="no">
+                <div className="hero-stat">
+                  <span className="hero-stat-num">5+</span>
+                  <span className="hero-stat-label">Years Experience</span>
+                </div>
+                <div className="hero-stat-divider" />
+                <div className="hero-stat">
+                  <span className="hero-stat-num">10+</span>
+                  <span className="hero-stat-label">Projects Shipped</span>
+                </div>
+                <div className="hero-stat-divider" />
+                <div className="hero-stat">
+                  <span className="hero-stat-num">8+</span>
+                  <span className="hero-stat-label">Enterprise Clients</span>
+                </div>
+                <div className="hero-stat-divider" />
+                <div className="hero-stat">
+                  <span className="hero-stat-num">MS</span>
+                  <span className="hero-stat-label">Data Science,<br/>Stony Brook</span>
+                </div>
               </div>
             </div>
             <div className="landing-right-images" translate="no">
+              <p className="grid-worked-with" translate="no">Worked with</p>
               <div className="landing-grid-3x3" translate="no">
-                {gridImages.map(({ src, light }, idx) => (
+                {gridImages.map(({ src, light, company, role, impact }, idx) => (
                   <div key={idx} className={`logo-tile${light ? ' logo-tile-light' : ''}`} translate="no">
-                    <img src={src} alt={`Company ${idx + 1}`} translate="no" />
+                    <img src={src} alt={company || `Company ${idx + 1}`} translate="no" />
+                    {company && (
+                      <div className="logo-tile-info" translate="no">
+                        <span className="logo-tile-company">{company}</span>
+                        <span className="logo-tile-role">{role}</span>
+                        <span className="logo-tile-impact">→ {impact}</span>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <section className="featured-hero section-wrap" data-analytics-section="cta" translate="no">
-            <div className="featured-hero__label" translate="no">Currently Developing</div>
-            <div className="featured-hero__media">
-              <div className="featured-hero__media-inner">
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="featured-hero__video"
-                  aria-label="Atriveo demo video"
-                >
-                  <source src="/featured-project.mp4" type="video/mp4" />
-                </video>
-              </div>
-            </div>
-            <div className="featured-hero__text" translate="no">
-              <div className="featured-hero__text-left">
-                Creating a platform to help track, manage, and optimize job applications using AI.
-              </div>
-              <div className="featured-hero__text-right">
-                <a
-                  href="https://www.atriveo.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="featured-hero__cta-primary"
-                  data-cta-position="product_demo"
-                >
-                  View Product
-                </a>
-              </div>
-            </div>
-          </section>
         </div>
         </div>
+
         <section className="editorial-grid-section section-wrap" data-analytics-section="editorial" translate="no">
           <div className="editorial-grid-inner">
             <div className="editorial-grid-header" translate="no">
               <h2 translate="no">Featured Highlights</h2>
               <p translate="no">A curated look at recent work, research, and creative explorations.</p>
-	            </div>
-	            <div className="editorial-grid" translate="no">
+            </div>
+            <div className="editorial-grid" translate="no">
 
-	              {/* 1 — FOMC Intelligence Dashboard */}
-	              <Link
-	                to="/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01"
-	                className="editorial-card editorial-card--wide editorial-card--has-bg"
-	                style={{ backgroundImage: 'url(/fmocc.jpeg)' }}
-	                aria-label="Read more: FOMC Intelligence Dashboard"
-	                translate="no"
-	              >
-	                <span className="editorial-tag" translate="no">Research</span>
-	                <h3 translate="no">FOMC Intelligence Dashboard</h3>
-	                <span className="editorial-pill" translate="no">Read More</span>
-	              </Link>
+              {/* 1 — FOMC Intelligence Dashboard */}
+              <Link to="/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01" className="editorial-card editorial-card--wide editorial-card--has-bg" style={{ backgroundImage: 'url(/fmocc.jpeg)' }} aria-label="Read more: FOMC Intelligence Dashboard" data-feature-name="FOMC Intelligence Dashboard" translate="no">
+                <span className="editorial-tag" translate="no">Research</span>
+                <div className="editorial-card-body" translate="no">
+                  <span className="editorial-subtitle">NLP · Monetary Policy</span>
+                  <h3>Decoding the Fed, One Meeting at a Time</h3>
+                  <p className="editorial-desc">Parses FOMC transcripts and press releases to surface rate signals, hawkish/dovish sentiment shifts, and policy language trends across meeting cycles.</p>
+                  <span className="editorial-cta">Read case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+                </div>
+              </Link>
 
-	              {/* 2 — Blank / Coming Soon */}
-	              <div
-	                className="editorial-card editorial-card--medium editorial-card--blank"
-	                translate="no"
-	              >
-	                <span className="editorial-tag" translate="no">Coming Soon</span>
-	                <h3 translate="no">Work in Progress</h3>
-	                <span className="editorial-pill editorial-pill--muted" translate="no">Stay Tuned</span>
-	              </div>
+              {/* 2 — RAG System */}
+              <Link to="/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0" className="editorial-card editorial-card--medium editorial-card--has-bg" style={{ backgroundImage: 'url(/4th.jpeg)' }} aria-label="Discover: Legal RAG" data-feature-name="Legal RAG System" translate="no">
+                <span className="editorial-tag" translate="no">AI</span>
+                <div className="editorial-card-body" translate="no">
+                  <span className="editorial-subtitle">LLM · Document Intelligence</span>
+                  <h3>Ask Your Documents Anything</h3>
+                  <p className="editorial-desc">A retrieval-augmented generation pipeline that lets you query legal documents, filings, and contracts using natural language.</p>
+                  <span className="editorial-cta">Try the demo <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+                </div>
+              </Link>
 
-	              {/* 3 — PolicyFabric */}
-	              <Link
-	                to="/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123"
-	                className="editorial-card editorial-card--medium editorial-card--has-bg"
-	                style={{ backgroundImage: 'url(/chrome.png)' }}
-	                aria-label="Explore: PolicyFabric"
-	                translate="no"
-	              >
-	                <span className="editorial-tag" translate="no">Systems</span>
-	                <h3 translate="no">PolicyFabric</h3>
-	                <span className="editorial-pill" translate="no">Explore</span>
-	              </Link>
+              {/* 3 — PolicyFabric */}
+              <Link to="/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123" className="editorial-card editorial-card--medium editorial-card--has-bg" style={{ backgroundImage: 'url(/5th%20image.jpeg)' }} aria-label="Explore: PolicyFabric" data-feature-name="PolicyFabric" translate="no">
+                <span className="editorial-tag" translate="no">Systems</span>
+                <div className="editorial-card-body" translate="no">
+                  <span className="editorial-subtitle">Systems Design · Data Contracts</span>
+                  <h3>Policy Enforcement at Every Layer</h3>
+                  <p className="editorial-desc">A live architecture walkthrough of how raw data flows through aggregation, contract validation, and cryptographic signing before reaching consumers.</p>
+                  <span className="editorial-cta">Explore the system <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+                </div>
+              </Link>
 
-	              {/* 4 — RAG System */}
-	              <Link
-	                to="/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0"
-	                className="editorial-card editorial-card--medium editorial-card--has-bg"
-	                style={{ backgroundImage: 'url(/4th.jpeg)' }}
-	                aria-label="Discover: RAG System"
-	                translate="no"
-	              >
-	                <span className="editorial-tag" translate="no">AI</span>
-	                <h3 translate="no">RAG System</h3>
-	                <span className="editorial-pill" translate="no">Discover</span>
-	              </Link>
+              {/* 4 — Job Intelligence Platform */}
+              <a href="https://chromewebstore.google.com/detail/atriveo-job-assistant/ocbmncmmepfjgpnakenoibaambecidcf?authuser=0&hl=en" target="_blank" rel="noopener noreferrer" className="editorial-card editorial-card--medium editorial-card--has-bg" style={{ backgroundImage: 'url(/chrome.png)' }} aria-label="View demo: Job Intelligence Platform" data-feature-name="Atriveo Chrome Extension" translate="no">
+                <span className="editorial-tag" translate="no">Product</span>
+                <div className="editorial-card-body" translate="no">
+                  <span className="editorial-subtitle">AI Product · Hiring</span>
+                  <h3>Smarter Hiring Starts Here</h3>
+                  <p className="editorial-desc">AI-native recruitment intelligence that ranks candidates, surfaces behavioral signals, and helps teams hire faster with less noise.</p>
+                  <span className="editorial-cta">Visit Atriveo <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+                </div>
+              </a>
 
-	              {/* 5 — MRI Brain Tumor Viewer */}
-	              <Link
-	                to="/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012"
-	                className="editorial-card editorial-card--medium editorial-card--has-bg"
-	                style={{ backgroundImage: 'url(/5th%20image.jpeg)' }}
-	                aria-label="View: MRI Brain Tumor Viewer"
-	                translate="no"
-	              >
-	                <span className="editorial-tag" translate="no">Medical AI</span>
-	                <h3 translate="no">MRI Brain Tumor Viewer</h3>
-	                <span className="editorial-pill" translate="no">View</span>
-	              </Link>
+              {/* 5 — MRI Brain Tumor Viewer */}
+              <Link to="/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012" className="editorial-card editorial-card--medium editorial-card--has-bg" style={{ backgroundImage: 'url(/mriimage.jpeg)' }} aria-label="View: MRI Brain Tumor Viewer" data-feature-name="MRI Brain Tumor Viewer" translate="no">
+                <span className="editorial-tag" translate="no">Medical AI</span>
+                <div className="editorial-card-body" translate="no">
+                  <span className="editorial-subtitle">Computer Vision · Radiology</span>
+                  <h3>Tumor Detection, Scan to Insight</h3>
+                  <p className="editorial-desc">An interactive MRI viewer powered by a trained CNN that segments and classifies brain tumor regions directly in the browser.</p>
+                  <span className="editorial-cta">View project <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+                </div>
+              </Link>
 
-	              {/* 6 — Atriveo */}
-	              <a
-	                href="https://www.atriveo.com/"
-	                target="_blank"
-	                rel="noopener noreferrer"
-	                className="editorial-card editorial-card--wide editorial-card--has-bg"
-	                style={{ backgroundImage: 'url(/Atriveo6th.png)' }}
-	                aria-label="Visit Atriveo"
-	                translate="no"
-	              >
-	                <span className="editorial-tag" translate="no">Product</span>
-	                <h3 translate="no">Atriveo</h3>
-	                <span className="editorial-pill" translate="no">Visit</span>
-	              </a>
+              {/* 6 — Atriveo */}
+              <a href="https://www.atriveo.com/" target="_blank" rel="noopener noreferrer" className="editorial-card editorial-card--wide editorial-card--has-bg" style={{ backgroundImage: 'url(/Atriveo6th.png)' }} aria-label="Visit Atriveo" data-feature-name="Atriveo Platform" translate="no">
+                <span className="editorial-tag" translate="no">Product</span>
+                <div className="editorial-card-body" translate="no">
+                  <span className="editorial-subtitle">AI Recruiting Platform</span>
+                  <h3>The AI-Native Hiring Platform</h3>
+                  <p className="editorial-desc">Built for modern recruiting teams. Atriveo combines candidate intelligence, engagement tracking, and workflow automation in one seamless platform.</p>
+                  <span className="editorial-cta">Visit Atriveo <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+                </div>
+              </a>
 
-	            </div>
-	          </div>
-	        </section>
+            </div>
+          </div>
+        </section>
+
         <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
           <SkillsSection />
         </div>
