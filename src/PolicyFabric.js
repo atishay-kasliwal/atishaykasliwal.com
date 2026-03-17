@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import './PolicyFabric.css';
 
 // ── Config ──────────────────────────────────────────────────────────────────
@@ -9,12 +9,12 @@ const CONTRACTS = {
     health:  [
       { field: 'age',       allowed: true  },
       { field: 'condition', allowed: true  },
-      { field: 'location',  allowed: false, reason: 'PII restricted' },
+      { field: 'location',  allowed: false },
     ],
     driving: [
       { field: 'score',      allowed: true  },
-      { field: 'violations', allowed: false, reason: 'Contract rule' },
-      { field: 'raw_logs',   allowed: false, reason: 'Contract rule' },
+      { field: 'violations', allowed: false },
+      { field: 'raw_logs',   allowed: false },
     ],
   },
   premium: {
@@ -27,408 +27,255 @@ const CONTRACTS = {
     driving: [
       { field: 'score',      allowed: true  },
       { field: 'violations', allowed: true  },
-      { field: 'raw_logs',   allowed: false, reason: 'Requires Enterprise tier' },
+      { field: 'raw_logs',   allowed: false },
     ],
   },
 };
 
-const STAGES = ['Validate', 'Aggregate', 'Enforce Policy', 'Transform', 'Respond'];
-
-function ts() {
-  const d = new Date();
-  return [d.getHours(), d.getMinutes(), d.getSeconds()]
-    .map(n => String(n).padStart(2, '0')).join(':');
-}
-
-// ── Story Flow Graph (Sequence Diagram) ─────────────────────────────────────
+// ── Horizontal Story Graph ───────────────────────────────────────────────────
 //
-//  Columns:  Consumer (CX)  |  Insurance Node (IX)  |  Providers (PX)
-//  Story reads top → bottom as events unfold in time.
+//  Three swim lanes (rows), five event columns flowing left → right.
+//
+//   Consumer     ─────●──────────────────────────────────────●─────
+//                      ↓ ① REQUEST              ⑤ RESPOND ↑
+//   Insurance    ──────●──────●────────●──────[POLICY]──────●─────
+//                       ↓ ② FETCH   ↑ ③ DATA IN
+//   Providers    ───────────────●────●─────────────────────────────
 
-const CX = 44, IX = 138, PX = 232;
+function StoryGraph({ isStale, contract }) {
+  const c       = CONTRACTS[contract];
+  const allowed = [...c.health, ...c.driving].filter(f => f.allowed);
+  const total   = c.health.length + c.driving.length;
+  const n       = allowed.length;
 
-// Which sequence step each pipeline stage lights up
-const STAGE_TO_STEP = { 0: 1, 1: 2, 2: 4, 3: 4, 4: 5 };
+  // Lane Y centers
+  const CY = 42, IY = 118, PY = 192;
 
-function Arrowhead({ x, y, dir = 'right', color = 'blue' }) {
-  const COLORS = {
-    blue:   'rgba(79,142,247,0.85)',
-    green:  'rgba(34,197,94,0.85)',
-    orange: 'rgba(245,158,11,0.85)',
-  };
-  const fill = COLORS[color];
-  // Small 6×5 triangle pointing right; flipped via scaleX for left-pointing
-  const pts = dir === 'right'
-    ? `${x},${y-3} ${x+6},${y} ${x},${y+3}`
-    : `${x},${y-3} ${x-6},${y} ${x},${y+3}`;
-  return <polygon points={pts} fill={fill} />;
-}
+  // Event X centers
+  const X1 = 172, X2 = 330, X3 = 488, X4 = 638, X5 = 786;
 
-function SeqStep({ lit, done, children }) {
-  const cls = lit ? 'pf-seq--lit' : done ? 'pf-seq--done' : 'pf-seq--idle';
-  return <g className={`pf-seq ${cls}`}>{children}</g>;
-}
+  // Colors
+  const B  = 'rgba(79,142,247,0.85)';
+  const G  = 'rgba(34,197,94,0.85)';
+  const O  = 'rgba(245,158,11,0.85)';
 
-function NetworkGraph({ isStale, active, activeStage }) {
-  const lit  = (step) => active && STAGE_TO_STEP[activeStage] === step;
-  const done = (step) => active && STAGE_TO_STEP[activeStage] > step;
+  // Mid-Y helpers
+  const mid = (a, b) => (a + b) / 2;
 
-  // contract from parent isn't passed, but we can show generic field names
   return (
-    <svg viewBox="0 0 276 388" className="pf-svg" style={{ overflow: 'visible' }}>
+    <svg viewBox="0 0 896 235" className="pf-hg">
       <defs>
-        <filter id="pfgb" x="-80%" y="-80%" width="260%" height="260%">
+        <filter id="pfgb2" x="-80%" y="-80%" width="260%" height="260%">
           <feGaussianBlur stdDeviation="3.5" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
-        <filter id="pfgw" x="-80%" y="-80%" width="260%" height="260%">
-          <feGaussianBlur stdDeviation="3.5" result="b"/>
+        <filter id="pfgw2" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="4" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
 
-      {/* ── Actor headers ───────────────────────────── */}
+      {/* ── ACTOR LABELS ── */}
+
       {/* Consumer */}
-      <rect x={CX-28} y={6} width={56} height={24} rx={5} className="pf-actor" />
-      <text x={CX} y={22} textAnchor="middle" className="pf-actor-lbl">Consumer</text>
+      <rect x={4} y={CY-15} width={90} height={28} rx={5}
+        fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      <text x={49} y={CY+5} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="7.5" fontWeight="600"
+        fill="rgba(255,255,255,0.75)">Consumer</text>
 
       {/* Insurance Node */}
-      <rect x={IX-44} y={6} width={88} height={24} rx={5}
-        className="pf-actor pf-actor--ins" style={{ filter: 'url(#pfgb)' }} />
-      <text x={IX} y={22} textAnchor="middle" className="pf-actor-lbl pf-actor-lbl--ins">Insurance Node</text>
+      <rect x={4} y={IY-15} width={90} height={28} rx={5}
+        fill="rgba(79,142,247,0.09)" stroke="rgba(79,142,247,0.38)" strokeWidth="1"
+        filter="url(#pfgb2)" />
+      <text x={49} y={IY+5} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="7" fontWeight="700"
+        fill="rgba(79,142,247,0.95)">Insurance Node</text>
 
       {/* Providers */}
-      <rect x={PX-30} y={6} width={60} height={24} rx={5} className="pf-actor" />
-      <text x={PX} y={18} textAnchor="middle" className="pf-actor-lbl" style={{ fontSize: '6.5px' }}>Provider A</text>
-      <text x={PX} y={27} textAnchor="middle" className="pf-actor-sub">Provider B</text>
+      <rect x={4} y={PY-15} width={90} height={28} rx={5}
+        fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      <text x={49} y={PY-3} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="7" fontWeight="600"
+        fill="rgba(255,255,255,0.7)">Provider A</text>
+      <text x={49} y={PY+8} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="5.5"
+        fill="rgba(255,255,255,0.32)">Provider B</text>
 
-      {/* ── Lifelines ───────────────────────────────── */}
-      <line x1={CX} y1={30} x2={CX} y2={378} className="pf-lifeline" />
-      <line x1={IX} y1={30} x2={IX} y2={378} className="pf-lifeline pf-lifeline--ins" />
-      <line x1={PX} y1={30} x2={PX} y2={378} className="pf-lifeline" />
+      {/* ── LIFELINES ── */}
+      <line x1={98} y1={CY} x2={875} y2={CY}
+        stroke="rgba(255,255,255,0.07)" strokeWidth="1" strokeDasharray="4 6" />
+      <line x1={98} y1={IY} x2={875} y2={IY}
+        stroke="rgba(79,142,247,0.2)" strokeWidth="1.5" />
+      <line x1={98} y1={PY} x2={875} y2={PY}
+        stroke="rgba(255,255,255,0.07)" strokeWidth="1" strokeDasharray="4 6" />
 
-      {/* Insurance activation box (taller when running) */}
-      {active && (
-        <rect x={IX-5} y={40} width={10} height={330} rx={2} className="pf-activation" />
-      )}
+      {/* Subtle time axis label */}
+      <text x={875} y={228} textAnchor="end"
+        fontFamily="Inter,sans-serif" fontSize="6" letterSpacing="0.08em"
+        fill="rgba(255,255,255,0.12)">TIME →</text>
 
-      {/* ── Step ① — Consumer sends request ─────────── y≈70 */}
-      <SeqStep lit={lit(1)} done={done(1)}>
-        {/* Step label */}
-        <text x={CX - 6} y={58} textAnchor="end" className="pf-snum">①</text>
-        <text x={(CX + IX) / 2} y={57} textAnchor="middle" className="pf-sphase">REQUEST</text>
-        {/* Arrow: Consumer → Insurance */}
-        <line x1={CX + 2} y1={66} x2={IX - 8} y2={66} className="pf-sarrow pf-sarrow--req" />
-        <Arrowhead x={IX - 8} y={66} dir="right" color="blue" />
-        <text x={(CX + IX) / 2} y={77} textAnchor="middle" className="pf-sdesc">send data request</text>
-      </SeqStep>
+      {/* ─────────────────────────────────────────────────────────────── */}
+      {/* STEP ① — Consumer sends request to Insurance                   */}
+      {/* ─────────────────────────────────────────────────────────────── */}
 
-      {/* ── Step ② — Insurance fetches from providers ─ y≈116 */}
-      <SeqStep lit={lit(2)} done={done(2)}>
-        <text x={IX - 6} y={108} textAnchor="end" className="pf-snum">②</text>
-        <text x={(IX + PX) / 2} y={107} textAnchor="middle" className="pf-sphase">FETCH</text>
-        {/* Arrow: Insurance → Providers (fetch health) */}
-        <line x1={IX + 8} y1={115} x2={PX - 8} y2={115} className="pf-sarrow pf-sarrow--fetch" />
-        <Arrowhead x={PX - 8} y={115} dir="right" color="blue" />
-        <text x={(IX + PX) / 2} y={126} textAnchor="middle" className="pf-sdesc">health data (120ms)</text>
-        {/* Arrow: Insurance → Providers (fetch driving) */}
-        <line x1={IX + 8} y1={141} x2={PX - 8} y2={141} className="pf-sarrow pf-sarrow--fetch" strokeDasharray="4 3" />
-        <Arrowhead x={PX - 8} y={141} dir="right" color="blue" />
-        <text x={(IX + PX) / 2} y={152} textAnchor="middle" className="pf-sdesc">driving data (340ms)</text>
-      </SeqStep>
+      {/* Step number + phase label above Consumer lane */}
+      <text x={X1} y={CY-20} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="8" fontWeight="700"
+        fill="rgba(79,142,247,0.65)">①</text>
+      <text x={X1} y={CY-10} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="5.5" fontWeight="700"
+        letterSpacing="0.1em" fill="rgba(255,255,255,0.22)">REQUEST</text>
 
-      {/* ── Step ③ — Providers return data ─────────── y≈186 */}
-      <SeqStep lit={lit(3)} done={done(3)}>
-        <text x={PX + 6} y={178} textAnchor="start" className="pf-snum">③</text>
-        <text x={(IX + PX) / 2} y={177} textAnchor="middle" className="pf-sphase">DATA IN</text>
-        {/* Health data return */}
-        <line x1={PX - 8} y1={186} x2={IX + 8} y2={186} className="pf-sarrow pf-sarrow--data" />
-        <Arrowhead x={IX + 8} y={186} dir="left" color="green" />
-        <text x={(IX + PX) / 2} y={197} textAnchor="middle" className="pf-sdesc">age · condition · location</text>
-        {/* Driving data return — stale or fresh */}
-        <line x1={PX - 8} y1={212} x2={IX + 8} y2={212}
-          className={`pf-sarrow ${isStale ? 'pf-sarrow--stale' : 'pf-sarrow--data'}`} />
-        <Arrowhead x={IX + 8} y={212} dir="left" color={isStale ? 'orange' : 'green'} />
-        <text x={(IX + PX) / 2} y={222} textAnchor="middle"
-          className={`pf-sdesc ${isStale ? 'pf-sdesc--warn' : ''}`}>
-          {isStale ? '⚠ score only · stale 3h' : 'score · violations · logs'}
-        </text>
-      </SeqStep>
+      {/* Dot on Consumer lifeline */}
+      <circle cx={X1} cy={CY} r={4.5}
+        fill="none" stroke={B} strokeWidth="1.5" />
 
-      {/* ── Step ④ — Policy enforced ────────────────── y≈250 */}
-      <SeqStep lit={lit(4)} done={done(4)}>
-        <text x={IX - 6} y={244} textAnchor="end" className="pf-snum">④</text>
-        {/* Policy box on Insurance lifeline */}
-        <rect x={IX - 46} y={248} width={92} height={26} rx={4} className="pf-policy-box" />
-        <text x={IX} y={265} textAnchor="middle" className="pf-policy-lbl">Policy Enforced</text>
-        {/* Field breakdown */}
-        <text x={IX} y={285} textAnchor="middle" className="pf-sdesc">
-          <tspan fill="rgba(34,197,94,0.8)">age ✓  score ✓</tspan>
-          <tspan>  </tspan>
-          <tspan fill="rgba(239,68,68,0.65)">location ✗  violations ✗</tspan>
-        </text>
-      </SeqStep>
+      {/* Vertical arrow: Consumer → Insurance */}
+      <line x1={X1} y1={CY+6} x2={X1} y2={IY-10}
+        stroke={B} strokeWidth="1.5" strokeLinecap="round" />
+      {/* Arrowhead ↓ */}
+      <polygon points={`${X1-5},${IY-12} ${X1+5},${IY-12} ${X1},${IY-4}`} fill={B} />
 
-      {/* ── Step ⑤ — Consumer receives filtered response ─ y≈320 */}
-      <SeqStep lit={lit(5)} done={done(5)}>
-        <text x={IX - 6} y={312} textAnchor="end" className="pf-snum">⑤</text>
-        <text x={(CX + IX) / 2} y={311} textAnchor="middle" className="pf-sphase pf-sphase--resp">RESPOND</text>
-        {/* Arrow: Insurance → Consumer */}
-        <line x1={IX - 8} y1={320} x2={CX + 2} y2={320} className="pf-sarrow pf-sarrow--resp" />
-        <Arrowhead x={CX + 2} y={320} dir="left" color="green" />
-        <text x={(CX + IX) / 2} y={332} textAnchor="middle" className="pf-sdesc pf-sdesc--resp">
-          3 of 5 fields shared
-        </text>
-        {/* End marker dots on lifelines */}
-        <circle cx={CX} cy={348} r={4} className="pf-lifeline-end" />
-        <circle cx={IX} cy={348} r={4} className="pf-lifeline-end pf-lifeline-end--ins" />
-        <circle cx={PX} cy={348} r={4} className="pf-lifeline-end" />
-      </SeqStep>
-    </svg>
-  );
-}
+      {/* Edge label */}
+      <text x={X1+11} y={mid(CY,IY)+3}
+        fontFamily="SF Mono,Fira Code,monospace" fontSize="6.5" fontWeight="500"
+        fill="rgba(255,255,255,0.45)">send data request</text>
 
-// ── Pipeline ─────────────────────────────────────────────────────────────────
+      {/* Dot on Insurance lifeline */}
+      <circle cx={X1} cy={IY} r={4.5} fill={B} opacity="0.55" />
 
-function Pipeline({ activeStage, logs }) {
-  return (
-    <div className="pf-pipeline">
-      <div className="pf-stages">
-        {STAGES.map((s, i) => {
-          const st = activeStage === -1 ? 'idle'
-            : i < activeStage  ? 'done'
-            : i === activeStage ? 'active'
-            : 'wait';
-          return (
-            <React.Fragment key={s}>
-              <div className={`pf-stage pf-stage--${st}`}>
-                <div className="pf-stage-dot">
-                  {st === 'done' && <span className="pf-stage-check">✓</span>}
-                </div>
-                <span className="pf-stage-lbl">{s}</span>
-              </div>
-              {i < STAGES.length - 1 && (
-                <div className={`pf-conn ${i < activeStage ? 'done' : ''}`} />
-              )}
-            </React.Fragment>
-          );
-        })}
-      </div>
+      {/* ─────────────────────────────────────────────────────────────── */}
+      {/* STEP ② — Insurance fetches from Providers                      */}
+      {/* ─────────────────────────────────────────────────────────────── */}
 
-      <div className="pf-live-logs">
-        {logs.length === 0 && (
-          <span className="pf-live-logs-empty">Pipeline idle — press Send Payload to run</span>
-        )}
-        {logs.map((l, i) => (
-          <div key={i} className={`pf-llog pf-llog--${l.type}`}>
-            <span className="pf-llog-icon">{l.type === 'warn' ? '⚠' : '✔'}</span>
-            {l.msg}
-          </div>
+      <text x={X2} y={IY-20} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="8" fontWeight="700"
+        fill="rgba(79,142,247,0.65)">②</text>
+      <text x={X2} y={IY-10} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="5.5" fontWeight="700"
+        letterSpacing="0.1em" fill="rgba(255,255,255,0.22)">FETCH</text>
+
+      <circle cx={X2} cy={IY} r={4.5}
+        fill="none" stroke={B} strokeWidth="1.5" />
+
+      <line x1={X2} y1={IY+6} x2={X2} y2={PY-10}
+        stroke={B} strokeWidth="1.5" strokeLinecap="round" strokeDasharray="5 3" />
+      {/* Arrowhead ↓ */}
+      <polygon points={`${X2-5},${PY-12} ${X2+5},${PY-12} ${X2},${PY-4}`} fill={B} />
+
+      <text x={X2+11} y={mid(IY,PY)+3}
+        fontFamily="SF Mono,Fira Code,monospace" fontSize="6.5" fontWeight="500"
+        fill="rgba(255,255,255,0.45)">health + driving</text>
+
+      <circle cx={X2} cy={PY} r={4.5} fill={B} opacity="0.4" />
+
+      {/* ─────────────────────────────────────────────────────────────── */}
+      {/* STEP ③ — Providers return data to Insurance                    */}
+      {/* ─────────────────────────────────────────────────────────────── */}
+
+      <text x={X3} y={PY+24} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="8" fontWeight="700"
+        fill="rgba(79,142,247,0.65)">③</text>
+      <text x={X3} y={PY+33} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="5.5" fontWeight="700"
+        letterSpacing="0.1em" fill="rgba(255,255,255,0.22)">DATA IN</text>
+
+      <circle cx={X3} cy={PY} r={4.5}
+        fill="none" stroke={isStale ? O : G} strokeWidth="1.5" />
+
+      <line x1={X3} y1={PY-6} x2={X3} y2={IY+10}
+        stroke={isStale ? O : G} strokeWidth="1.5" strokeLinecap="round"
+        strokeDasharray={isStale ? "5 3" : undefined} />
+      {/* Arrowhead ↑ */}
+      <polygon points={`${X3-5},${IY+12} ${X3+5},${IY+12} ${X3},${IY+4}`}
+        fill={isStale ? O : G} />
+
+      <text x={X3+11} y={mid(IY,PY)+3}
+        fontFamily="SF Mono,Fira Code,monospace" fontSize="6.5" fontWeight="500"
+        fill={isStale ? "rgba(245,158,11,0.8)" : "rgba(255,255,255,0.45)"}>
+        {isStale ? '⚠ stale  3h old' : 'age · condition · score'}
+      </text>
+
+      <circle cx={X3} cy={IY} r={4.5}
+        fill={isStale ? O : G} opacity="0.6" />
+
+      {/* ─────────────────────────────────────────────────────────────── */}
+      {/* STEP ④ — Policy enforced on Insurance Node                     */}
+      {/* ─────────────────────────────────────────────────────────────── */}
+
+      <text x={X4} y={CY-20} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="8" fontWeight="700"
+        fill="rgba(79,142,247,0.65)">④</text>
+      <text x={X4} y={CY-10} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="5.5" fontWeight="700"
+        letterSpacing="0.1em" fill="rgba(255,255,255,0.22)">POLICY</text>
+
+      {/* Policy box on Insurance lifeline */}
+      <rect x={X4-52} y={IY-19} width={104} height={38} rx={5}
+        fill="rgba(79,142,247,0.08)" stroke="rgba(79,142,247,0.28)" strokeWidth="1" />
+      <text x={X4} y={IY-6} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="6" fontWeight="700"
+        letterSpacing="0.08em" fill="rgba(79,142,247,0.9)">POLICY ENFORCED</text>
+      {/* Allowed fields */}
+      <text x={X4} y={IY+5} textAnchor="middle"
+        fontFamily="SF Mono,Fira Code,monospace" fontSize="5.5">
+        {allowed.map((f, i) => (
+          <tspan key={f.field} fill="rgba(34,197,94,0.85)">{f.field}{i < allowed.length - 1 ? '  ' : ''}</tspan>
         ))}
-      </div>
-    </div>
-  );
-}
+      </text>
+      {/* Denied fields */}
+      <text x={X4} y={IY+15} textAnchor="middle"
+        fontFamily="SF Mono,Fira Code,monospace" fontSize="5.5">
+        {[...c.health, ...c.driving].filter(f => !f.allowed).map((f, i, arr) => (
+          <tspan key={f.field} fill="rgba(239,68,68,0.55)">{f.field}✗{i < arr.length - 1 ? '  ' : ''}</tspan>
+        ))}
+      </text>
 
-// ── Contract Panel ───────────────────────────────────────────────────────────
+      {/* ─────────────────────────────────────────────────────────────── */}
+      {/* STEP ⑤ — Insurance sends filtered response to Consumer         */}
+      {/* ─────────────────────────────────────────────────────────────── */}
 
-function FieldRow({ field, allowed, reason }) {
-  const [tip, setTip] = useState(false);
-  return (
-    <div className={`pf-frow ${allowed ? 'pf-frow--ok' : 'pf-frow--no'}`}>
-      <span className="pf-ficon">{allowed ? '✅' : '❌'}</span>
-      <span className="pf-fname">{field}</span>
-      {!allowed && (
-        <span className="pf-tip-wrap"
-          onMouseEnter={() => setTip(true)}
-          onMouseLeave={() => setTip(false)}>
-          <span className="pf-tip-icon">ⓘ</span>
-          {tip && (
-            <div className="pf-tip">Access denied due to contract rule: {reason}</div>
-          )}
-        </span>
-      )}
-    </div>
-  );
-}
+      <text x={X5} y={IY+24} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="8" fontWeight="700"
+        fill="rgba(34,197,94,0.75)">⑤</text>
+      <text x={X5} y={IY+33} textAnchor="middle"
+        fontFamily="Inter,sans-serif" fontSize="5.5" fontWeight="700"
+        letterSpacing="0.1em" fill="rgba(34,197,94,0.35)">RESPOND</text>
 
-function ContractPanel({ contract }) {
-  const c = CONTRACTS[contract];
-  return (
-    <div className="pf-contract">
-      <div className="pf-contract-meta">
-        <span className="pf-contract-badge">ACTIVE CONTRACT</span>
-        <h3 className="pf-contract-name">{c.label}</h3>
-      </div>
+      <circle cx={X5} cy={IY} r={4.5}
+        fill="none" stroke={G} strokeWidth="1.5" />
 
-      <div className="pf-csection">
-        <div className="pf-csection-lbl">HEALTH DATA</div>
-        {c.health.map(f => <FieldRow key={f.field} {...f} />)}
-      </div>
+      <line x1={X5} y1={IY-6} x2={X5} y2={CY+10}
+        stroke={G} strokeWidth="2" strokeLinecap="round" />
+      {/* Arrowhead ↑ */}
+      <polygon points={`${X5-5},${CY+12} ${X5+5},${CY+12} ${X5},${CY+4}`} fill={G} />
 
-      <div className="pf-cdivider" />
+      {/* Field count label — to the LEFT so it doesn't clip */}
+      <text x={X5-11} y={mid(CY,IY)+3} textAnchor="end"
+        fontFamily="SF Mono,Fira Code,monospace" fontSize="7" fontWeight="700"
+        fill="rgba(34,197,94,0.85)">{n} of {total} fields</text>
 
-      <div className="pf-csection">
-        <div className="pf-csection-lbl">DRIVING DATA</div>
-        {c.driving.map(f => <FieldRow key={f.field} {...f} />)}
-      </div>
-
-      <div className="pf-contract-note">
-        Fields marked as restricted require Premium access
-      </div>
-    </div>
-  );
-}
-
-// ── Bottom Drawer ────────────────────────────────────────────────────────────
-
-const BASE_TABLE = [
-  { field: 'Name',          owner: 'Alice', basic: 'Alice',       premium: 'Alice'  },
-  { field: 'Age',           owner: '34',    basic: 'Hidden',      premium: '34'     },
-  { field: 'Condition',     owner: 'Good',  basic: 'Hidden',      premium: 'Good'   },
-  { field: 'Driving Score', owner: '82',    basic: '82 (Cached)', premium: '82'     },
-  { field: 'Location',      owner: 'NYC',   basic: 'Hidden',      premium: 'NYC'    },
-];
-
-function BottomDrawer({ open, onToggle, systemLogs, contract }) {
-  const [tab, setTab]         = useState('logs');
-  const [viewMode, setViewMode] = useState('consumer');
-
-  const rows = BASE_TABLE.map(r => ({
-    ...r,
-    consumer: r[contract],
-  }));
-  const visible = rows.filter(r => r.consumer !== 'Hidden').length;
-
-  return (
-    <div className={`pf-drawer ${open ? 'pf-drawer--open' : ''}`}>
-      <button className="pf-drawer-handle" onClick={onToggle}>
-        <span className="pf-drawer-handle-label">System Logs &amp; Data View</span>
-        <span className="pf-drawer-handle-chevron">{open ? '▾' : '▴'}</span>
-      </button>
-
-      <div className="pf-drawer-body">
-        <div className="pf-tabs">
-          <button className={`pf-tab ${tab === 'logs' ? 'active' : ''}`} onClick={() => setTab('logs')}>Logs</button>
-          <button className={`pf-tab ${tab === 'data' ? 'active' : ''}`} onClick={() => setTab('data')}>Data View</button>
-        </div>
-
-        {tab === 'logs' && (
-          <div className="pf-log-list">
-            {systemLogs.map((l, i) => (
-              <div key={i} className={`pf-log pf-log--${l.type}`}>
-                <span className="pf-log-ts">[{l.time}]</span>
-                <span className="pf-log-msg">{l.msg}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === 'data' && (
-          <div className="pf-data">
-            <div className="pf-data-toggle">
-              <button className={`pf-dtog ${viewMode === 'consumer' ? 'active' : ''}`}
-                onClick={() => setViewMode('consumer')}>Consumer</button>
-              <button className={`pf-dtog ${viewMode === 'owner' ? 'active' : ''}`}
-                onClick={() => setViewMode('owner')}>Owner</button>
-            </div>
-            <table className="pf-table">
-              <thead>
-                <tr>
-                  <th>Field</th>
-                  <th>Owner</th>
-                  <th>Consumer</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map(r => (
-                  <tr key={r.field} className={r.consumer === 'Hidden' ? 'pf-tr--hidden' : ''}>
-                    <td>{r.field}</td>
-                    <td className="pf-td-owner">
-                      {viewMode === 'owner' ? r.owner : <span className="pf-td-redact">—</span>}
-                    </td>
-                    <td className={r.consumer === 'Hidden' ? 'pf-td-hidden' : 'pf-td-ok'}>
-                      {r.consumer}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="pf-data-summary">
-              Consumer sees {visible} of {rows.length} fields
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+      {/* Consumer receives — glowing dot */}
+      <circle cx={X5} cy={CY} r={6} fill={G} opacity="0.18" filter="url(#pfgb2)" />
+      <circle cx={X5} cy={CY} r={4.5} fill={G} opacity="0.75" />
+    </svg>
   );
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 export default function PolicyFabric() {
-  const [contract,    setContract]    = useState('basic');
-  const [isStale,     setIsStale]     = useState(false);
-  const [activeStage, setActiveStage] = useState(-1);
-  const [running,     setRunning]     = useState(false);
-  const [inlineLogs,  setInlineLogs]  = useState([]);
-  const [systemLogs,  setSystemLogs]  = useState([
-    { time: '12:01:02', msg: 'Request received',   type: 'info' },
-    { time: '12:01:02', msg: 'Contract validated', type: 'ok'   },
-  ]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [contract, setContract] = useState('basic');
+  const [isStale,  setIsStale]  = useState(false);
 
-  const c = CONTRACTS[contract];
+  const c       = CONTRACTS[contract];
   const allowed = [...c.health, ...c.driving].filter(f => f.allowed).length;
   const total   = c.health.length + c.driving.length;
 
-  const addLog = useCallback((msg, type) => {
-    const t = ts();
-    setSystemLogs(prev => [...prev, { time: t, msg, type }]);
-    setInlineLogs(prev => [...prev.slice(-5), { msg, type }]);
-  }, []);
-
-  // Update logs when contract switches
-  useEffect(() => {
-    addLog(`Contract switched to ${CONTRACTS[contract].label}`, 'info');
-    setInlineLogs([]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contract]);
-
-  // Update logs when stale toggles
-  useEffect(() => {
-    if (isStale) addLog('Provider B marked stale (3h old)', 'warn');
-    else         addLog('Provider B recovered — data fresh', 'ok');
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStale]);
-
-  const sendPayload = useCallback(async () => {
-    if (running) return;
-    setRunning(true);
-    setInlineLogs([]);
-
-    const steps = [
-      { delay: 480, msg: 'Contract validated',                              type: 'ok'   },
-      { delay: 420, msg: isStale ? 'Provider B stale (3h old)' : 'Providers healthy', type: isStale ? 'warn' : 'ok' },
-      { delay: 560, msg: 'Policy enforced',                                 type: 'ok'   },
-      { delay: 380, msg: 'Response transformed',                            type: 'ok'   },
-      { delay: 480, msg: `Response generated (${allowed} fields)`,          type: 'ok'   },
-    ];
-
-    for (let i = 0; i < steps.length; i++) {
-      setActiveStage(i);
-      await new Promise(r => setTimeout(r, steps[i].delay));
-      addLog(steps[i].msg, steps[i].type);
-    }
-
-    setActiveStage(steps.length); // all done
-    await new Promise(r => setTimeout(r, 700));
-    setActiveStage(-1);
-    setRunning(false);
-  }, [running, isStale, allowed, addLog]);
-
   return (
     <div className="pf-page project-detail-page">
+
       {/* ── Page Header ── */}
       <div className="pf-header">
         <div className="pf-header-text">
@@ -443,72 +290,46 @@ export default function PolicyFabric() {
         </div>
       </div>
 
-      {/* ── Top bar ── */}
+      {/* ── Controls Bar ── */}
       <div className="pf-topbar">
         <div className="pf-logo">
           <svg className="pf-logo-icon" viewBox="0 0 20 20" fill="none">
-            <polygon points="10,1 18.66,6 18.66,14 10,19 1.34,14 1.34,6" stroke="#4f8ef7" strokeWidth="1.5" fill="rgba(79,142,247,0.08)" />
-            <polygon points="10,5 15,7.5 15,12.5 10,15 5,12.5 5,7.5" fill="#4f8ef7" opacity="0.5" />
+            <polygon points="10,1 18.66,6 18.66,14 10,19 1.34,14 1.34,6"
+              stroke="#4f8ef7" strokeWidth="1.5" fill="rgba(79,142,247,0.08)" />
+            <polygon points="10,5 15,7.5 15,12.5 10,15 5,12.5 5,7.5"
+              fill="#4f8ef7" opacity="0.5" />
           </svg>
           <span className="pf-logo-text">PolicyFabric</span>
         </div>
 
         <div className="pf-topbar-center">
-          <select className="pf-selector" value={contract} onChange={e => setContract(e.target.value)}>
+          <select className="pf-selector" value={contract}
+            onChange={e => setContract(e.target.value)}>
             <option value="basic">Basic Tier</option>
             <option value="premium">Premium Tier</option>
           </select>
         </div>
 
         <div className="pf-topbar-right">
+          <label className="pf-stale-ctrl">
+            <input type="checkbox" checked={isStale}
+              onChange={e => setIsStale(e.target.checked)} />
+            <span>Simulate Stale Provider B</span>
+          </label>
+          <span className="pf-divider-v" />
           <span className="pf-live-dot" />
           <span className="pf-live-lbl">Live</span>
-          <span className="pf-metrics-pill">Latency: 320ms | Fields: {allowed}/{total}</span>
+          <span className="pf-metrics-pill">
+            Latency: 320ms | Fields: {allowed}/{total}
+          </span>
         </div>
       </div>
 
-      {/* ── Three panels ── */}
-      <div className="pf-layout">
-        {/* LEFT — Topology */}
-        <div className="pf-panel pf-panel--left">
-          <div className="pf-panel-head">Data Flow Story</div>
-          <NetworkGraph isStale={isStale} active={running} activeStage={activeStage} />
-          <label className="pf-stale-ctrl">
-            <input type="checkbox" checked={isStale} onChange={e => setIsStale(e.target.checked)} />
-            <span className="pf-stale-ctrl-lbl">Simulate Stale Provider B</span>
-          </label>
-        </div>
-
-        {/* CENTER — Pipeline */}
-        <div className="pf-panel pf-panel--center">
-          <div className="pf-panel-head">Request Pipeline</div>
-          <button
-            className={`pf-cta ${running ? 'pf-cta--busy' : ''}`}
-            onClick={sendPayload}
-            disabled={running}
-          >
-            {running
-              ? <><span className="pf-spinner" /> Processing…</>
-              : 'Send Payload'
-            }
-          </button>
-          <Pipeline activeStage={activeStage} logs={inlineLogs} />
-        </div>
-
-        {/* RIGHT — Contract */}
-        <div className="pf-panel pf-panel--right">
-          <div className="pf-panel-head">Active Contract</div>
-          <ContractPanel contract={contract} />
-        </div>
+      {/* ── Full-width graph ── */}
+      <div className="pf-main">
+        <StoryGraph isStale={isStale} contract={contract} />
       </div>
 
-      {/* ── Bottom drawer ── */}
-      <BottomDrawer
-        open={drawerOpen}
-        onToggle={() => setDrawerOpen(v => !v)}
-        systemLogs={systemLogs}
-        contract={contract}
-      />
     </div>
   );
 }

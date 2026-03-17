@@ -1,5 +1,5 @@
 /* ============================================================
-   PolicyFabric — distributed systems dashboard
+   PolicyFabric — horizontal story graph
    ============================================================ */
 
 .pf-page {
@@ -67,7 +67,7 @@
   background: rgba(34, 197, 94, 0.06);
 }
 
-/* ── Top Bar ─────────────────────────────────────────────── */
+/* ── Controls Bar ───────────────────────────────────────── */
 
 .pf-topbar {
   position: sticky;
@@ -77,7 +77,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
+  padding: 0 4%;
   background: rgba(8, 12, 24, 0.97);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(16px);
@@ -127,7 +127,6 @@
   background-position: right 0.6rem center;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .pf-selector:focus {
   outline: none;
   border-color: #4f8ef7;
@@ -137,8 +136,30 @@
 .pf-topbar-right {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   flex-shrink: 0;
+}
+
+.pf-stale-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  user-select: none;
+}
+.pf-stale-ctrl input[type="checkbox"] {
+  accent-color: #f59e0b;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+}
+
+.pf-divider-v {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .pf-live-dot {
@@ -149,7 +170,6 @@
   box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
   animation: pf-blink 2s ease-in-out infinite;
 }
-
 @keyframes pf-blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.5; }
@@ -171,609 +191,30 @@
   padding: 0.22rem 0.6rem;
 }
 
-/* ── Layout ──────────────────────────────────────────────── */
+/* ── Graph Canvas ───────────────────────────────────────── */
 
-.pf-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr 252px;
-  gap: 1rem;
-  padding: 1rem 4%;
-  flex: 1;
-  min-height: 0;
-  box-sizing: border-box;
-}
-
-/* ── Panel Base ──────────────────────────────────────────── */
-
-.pf-panel {
+.pf-main {
+  width: 92%;
+  max-width: 1400px;
+  margin: 2.5rem auto 3rem;
   background: rgba(8, 12, 24, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-height: 500px;
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.35);
 }
 
-.pf-panel-head {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.28);
-}
-
-/* ── Left Panel — Story Flow Graph ──────────────────────── */
-
-.pf-svg {
+.pf-hg {
   width: 100%;
-  flex: 1;
+  height: auto;
+  display: block;
   overflow: visible;
 }
 
-/* Actor header boxes */
-.pf-actor {
-  fill: rgba(255, 255, 255, 0.04);
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 1;
-}
-.pf-actor--ins {
-  fill: rgba(79, 142, 247, 0.08);
-  stroke: rgba(79, 142, 247, 0.35);
-}
-.pf-actor-lbl {
-  font-family: 'Inter', sans-serif;
-  font-size: 7px;
-  font-weight: 600;
-  fill: rgba(255, 255, 255, 0.72);
-}
-.pf-actor-lbl--ins { fill: rgba(79, 142, 247, 0.95); }
-.pf-actor-sub {
-  font-family: 'Inter', sans-serif;
-  font-size: 5.5px;
-  fill: rgba(255, 255, 255, 0.3);
-}
+/* ── Responsive ─────────────────────────────────────────── */
 
-/* Vertical lifelines */
-.pf-lifeline {
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 1;
-  stroke-dasharray: 3 4;
-}
-.pf-lifeline--ins {
-  stroke: rgba(79, 142, 247, 0.2);
-  stroke-dasharray: none;
-  stroke-width: 1;
-}
-
-/* Insurance activation box */
-.pf-activation {
-  fill: rgba(79, 142, 247, 0.06);
-  stroke: rgba(79, 142, 247, 0.15);
-  stroke-width: 1;
-}
-
-/* Sequence step states */
-.pf-seq { transition: opacity 0.3s; }
-.pf-seq--idle  { opacity: 0.45; }
-.pf-seq--lit   { opacity: 1; }
-.pf-seq--done  { opacity: 0.75; }
-
-/* No active pipeline: show all at full opacity */
-.pf-seq:not(.pf-seq--idle):not(.pf-seq--lit):not(.pf-seq--done) { opacity: 1; }
-
-/* Step number circles */
-.pf-snum {
-  font-family: 'Inter', sans-serif;
-  font-size: 7.5px;
-  font-weight: 700;
-  fill: rgba(79, 142, 247, 0.6);
-}
-
-/* Phase label above each arrow */
-.pf-sphase {
-  font-family: 'Inter', sans-serif;
-  font-size: 5.5px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  fill: rgba(255, 255, 255, 0.25);
-  text-transform: uppercase;
-}
-.pf-sphase--resp { fill: rgba(34, 197, 94, 0.6); }
-
-/* Description text below each arrow */
-.pf-sdesc {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 6px;
-  fill: rgba(255, 255, 255, 0.38);
-}
-.pf-sdesc--warn { fill: rgba(245, 158, 11, 0.8); }
-.pf-sdesc--resp { fill: rgba(34, 197, 94, 0.7); font-weight: 600; font-size: 6.5px; }
-
-/* Arrows */
-.pf-sarrow {
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  fill: none;
-}
-.pf-sarrow--req   { stroke: rgba(79, 142, 247, 0.65); }
-.pf-sarrow--fetch { stroke: rgba(79, 142, 247, 0.45); }
-.pf-sarrow--data  { stroke: rgba(34, 197, 94, 0.65); }
-.pf-sarrow--stale { stroke: rgba(245, 158, 11, 0.75); stroke-dasharray: 5 3; }
-.pf-sarrow--resp  { stroke: rgba(34, 197, 94, 0.85); stroke-width: 2; }
-
-/* Policy enforcement box */
-.pf-policy-box {
-  fill: rgba(79, 142, 247, 0.07);
-  stroke: rgba(79, 142, 247, 0.28);
-  stroke-width: 1;
-}
-.pf-policy-lbl {
-  font-family: 'Inter', sans-serif;
-  font-size: 6.5px;
-  font-weight: 700;
-  fill: rgba(79, 142, 247, 0.85);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-/* Lifeline end markers */
-.pf-lifeline-end     { fill: rgba(255, 255, 255, 0.12); }
-.pf-lifeline-end--ins { fill: rgba(79, 142, 247, 0.3); }
-
-/* Stale toggle */
-.pf-stale-ctrl {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  padding-top: 0.5rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.45);
-  user-select: none;
-}
-.pf-stale-ctrl input[type="checkbox"] {
-  accent-color: #f59e0b;
-  width: 14px;
-  height: 14px;
-  cursor: pointer;
-}
-.pf-stale-ctrl-lbl { cursor: pointer; }
-
-/* ── Center Panel — Pipeline ─────────────────────────────── */
-
-/* Send button */
-.pf-cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.65rem 1.5rem;
-  background: linear-gradient(135deg, #1d4ed8, #4f8ef7);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(79, 142, 247, 0.28);
-  flex-shrink: 0;
-}
-.pf-cta:hover:not(:disabled) {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 28px rgba(79, 142, 247, 0.4);
-}
-.pf-cta:disabled { opacity: 0.65; cursor: default; transform: none; }
-.pf-cta--busy { background: linear-gradient(135deg, #1e3a5f, #2563eb); }
-
-.pf-spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255,255,255,0.25);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: pf-spin 0.65s linear infinite;
-}
-@keyframes pf-spin { to { transform: rotate(360deg); } }
-
-/* Pipeline stages */
-.pf-pipeline {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  flex: 1;
-}
-
-.pf-stages {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0;
-  padding: 1.75rem 0.5rem 0.5rem;
-  flex-wrap: nowrap;
-}
-
-.pf-stage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 0 0 auto;
-}
-
-.pf-stage-dot {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  position: relative;
-}
-.pf-stage-check {
-  font-size: 0.7rem;
-  color: #22c55e;
-  line-height: 1;
-}
-
-.pf-stage--active .pf-stage-dot {
-  border-color: #4f8ef7;
-  background: rgba(79, 142, 247, 0.12);
-  box-shadow: 0 0 0 6px rgba(79, 142, 247, 0.08), 0 0 20px rgba(79, 142, 247, 0.4);
-  animation: pf-stage-pulse 1.1s ease-in-out infinite;
-}
-@keyframes pf-stage-pulse {
-  0%, 100% { box-shadow: 0 0 0 6px rgba(79, 142, 247, 0.08), 0 0 20px rgba(79, 142, 247, 0.4); }
-  50%       { box-shadow: 0 0 0 8px rgba(79, 142, 247, 0.05), 0 0 32px rgba(79, 142, 247, 0.65); }
-}
-
-.pf-stage--done .pf-stage-dot {
-  border-color: rgba(34, 197, 94, 0.5);
-  background: rgba(34, 197, 94, 0.08);
-}
-
-.pf-stage-lbl {
-  font-size: 0.62rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.25);
-  white-space: nowrap;
-  transition: color 0.3s;
-  text-align: center;
-}
-.pf-stage--active .pf-stage-lbl { color: #4f8ef7; font-weight: 600; }
-.pf-stage--done   .pf-stage-lbl { color: rgba(34,197,94,0.7); }
-
-/* Connector between stages */
-.pf-conn {
-  width: 28px;
-  height: 2px;
-  background: rgba(255,255,255,0.07);
-  margin-bottom: 20px; /* align with dot centers */
-  flex-shrink: 0;
-  transition: background 0.3s;
-  border-radius: 1px;
-}
-.pf-conn.done { background: rgba(34,197,94,0.35); }
-
-/* Live inline logs */
-.pf-live-logs {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 8px;
-  padding: 0.75rem 0.875rem;
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  flex: 1;
-}
-.pf-live-logs-empty {
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.15);
-  font-style: italic;
-}
-.pf-llog {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.74rem;
-  animation: pf-log-slide 0.2s ease-out;
-}
-@keyframes pf-log-slide {
-  from { opacity: 0; transform: translateX(-6px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-.pf-llog-icon  { font-size: 0.68rem; flex-shrink: 0; }
-.pf-llog--ok   { color: rgba(255,255,255,0.6); }
-.pf-llog--warn { color: #f59e0b; }
-.pf-llog--info { color: rgba(255,255,255,0.4); }
-
-/* ── Right Panel — Contract ──────────────────────────────── */
-
-.pf-contract {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  flex: 1;
-}
-
-.pf-contract-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.pf-contract-badge {
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #4f8ef7;
-  text-transform: uppercase;
-}
-.pf-contract-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.88);
-  margin: 0;
-}
-
-.pf-csection {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-.pf-csection-lbl {
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-  margin-bottom: 0.2rem;
-  padding-bottom: 0.2rem;
-}
-.pf-cdivider {
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-}
-
-/* Field rows */
-.pf-frow {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.28rem 0.4rem;
-  border-radius: 5px;
-  transition: background 0.15s;
-  position: relative;
-}
-.pf-frow:hover { background: rgba(255,255,255,0.04); }
-.pf-ficon { font-size: 0.68rem; flex-shrink: 0; }
-.pf-fname {
-  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-  font-size: 0.73rem;
-  flex: 1;
-}
-.pf-frow--ok .pf-fname { color: rgba(255,255,255,0.72); }
-.pf-frow--no .pf-fname { color: rgba(255,255,255,0.25); text-decoration: line-through; }
-
-/* Tooltip */
-.pf-tip-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-  cursor: help;
-}
-.pf-tip-icon {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.22);
-}
-.pf-tip {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 5px);
-  width: 168px;
-  background: #1a2235;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 7px;
-  padding: 0.4rem 0.6rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.65);
-  z-index: 200;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
-  line-height: 1.45;
-  pointer-events: none;
-}
-
-/* Note */
-.pf-contract-note {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.25);
-  font-style: italic;
-  padding: 0.5rem 0.6rem;
-  background: rgba(79, 142, 247, 0.04);
-  border: 1px solid rgba(79, 142, 247, 0.1);
-  border-radius: 6px;
-  line-height: 1.45;
-  margin-top: auto;
-}
-
-/* ── Bottom Drawer ───────────────────────────────────────── */
-
-.pf-drawer {
-  position: sticky;
-  bottom: 0;
-  z-index: 30;
-  background: rgba(8, 12, 24, 0.98);
-  border-top: 1px solid rgba(255,255,255,0.07);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.pf-drawer-handle {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.35);
-  transition: color 0.2s;
-}
-.pf-drawer-handle:hover { color: rgba(255,255,255,0.6); }
-.pf-drawer-handle-label { letter-spacing: 0.03em; }
-.pf-drawer-handle-chevron { font-size: 0.6rem; }
-
-.pf-drawer-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.25s ease, opacity 0.2s ease;
-  opacity: 0;
-  padding: 0 1.5rem;
-}
-.pf-drawer--open .pf-drawer-body {
-  max-height: 280px;
-  opacity: 1;
-  padding-bottom: 1rem;
-  overflow-y: auto;
-}
-
-/* Tabs */
-.pf-tabs {
-  display: flex;
-  gap: 0.25rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  margin-bottom: 0.75rem;
-}
-.pf-tab {
-  background: none;
-  border: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.3);
-  padding: 0.28rem 0.7rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.pf-tab.active {
-  color: #4f8ef7;
-  background: rgba(79, 142, 247, 0.1);
-}
-
-/* Log list */
-.pf-log-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.28rem;
-}
-.pf-log {
-  display: flex;
-  gap: 0.75rem;
-  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-  font-size: 0.71rem;
-  padding: 0.18rem 0;
-  animation: pf-log-slide 0.2s ease-out;
-}
-.pf-log-ts  { color: rgba(255,255,255,0.22); flex-shrink: 0; }
-.pf-log--info .pf-log-msg { color: rgba(255,255,255,0.48); }
-.pf-log--ok   .pf-log-msg { color: rgba(34,197,94,0.75); }
-.pf-log--warn .pf-log-msg { color: #f59e0b; }
-
-/* Data view */
-.pf-data { display: flex; flex-direction: column; gap: 0.75rem; }
-
-.pf-data-toggle {
-  display: flex;
-  gap: 0.25rem;
-}
-.pf-dtog {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 5px;
-  color: rgba(255,255,255,0.35);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
-  padding: 0.24rem 0.65rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.pf-dtog.active {
-  background: rgba(79, 142, 247, 0.12);
-  border-color: rgba(79, 142, 247, 0.28);
-  color: #4f8ef7;
-}
-
-.pf-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.73rem;
-}
-.pf-table th {
-  text-align: left;
-  padding: 0.28rem 0.6rem;
-  color: rgba(255,255,255,0.25);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-.pf-table td {
-  padding: 0.28rem 0.6rem;
-  border-bottom: 1px solid rgba(255,255,255,0.035);
-  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-  font-size: 0.71rem;
-}
-.pf-tr--hidden td { opacity: 0.45; }
-.pf-td-owner  { color: rgba(255,255,255,0.55); }
-.pf-td-redact { color: rgba(255,255,255,0.18); }
-.pf-td-hidden { color: rgba(239,68,68,0.65); }
-.pf-td-ok     { color: rgba(34,197,94,0.75); }
-
-.pf-data-summary {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.3);
-  font-style: italic;
-  text-align: right;
-}
-
-/* ── Responsive ──────────────────────────────────────────── */
-
-@media (max-width: 900px) {
-  .pf-layout {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-  .pf-panel--right {
-    grid-column: span 2;
-  }
-}
-
-@media (max-width: 600px) {
-  .pf-layout {
-    grid-template-columns: 1fr;
-  }
-  .pf-panel--right {
-    grid-column: span 1;
-  }
+@media (max-width: 700px) {
   .pf-topbar-center { display: none; }
   .pf-metrics-pill  { display: none; }
+  .pf-main          { padding: 1.5rem 0.75rem; }
 }
