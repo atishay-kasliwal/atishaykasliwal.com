@@ -205,7 +205,7 @@
   color: rgba(255, 255, 255, 0.28);
 }
 
-/* ── Left Panel — SVG Graph ──────────────────────────────── */
+/* ── Left Panel — Story Flow Graph ──────────────────────── */
 
 .pf-svg {
   width: 100%;
@@ -213,68 +213,115 @@
   overflow: visible;
 }
 
-/* Edges */
-.pf-edge {
-  stroke-width: 1.5;
-  stroke-linecap: round;
+/* Actor header boxes */
+.pf-actor {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
 }
-.pf-edge--live  { stroke: rgba(79, 142, 247, 0.3); }
-.pf-edge--stale { stroke: rgba(245, 158, 11, 0.35); stroke-dasharray: 6 4; }
-
-/* Pulse dots */
-.pf-pulse--live  { fill: #4f8ef7; filter: url(#pfgb); }
-.pf-pulse--stale { fill: #f59e0b; filter: url(#pfgw); }
-
-/* Node rings (glow halos) */
-.pf-ring { opacity: 0.12; }
-.pf-ring--core  { fill: #4f8ef7; }
-.pf-ring--norm  { fill: #4f8ef7; }
-.pf-ring--stale {
-  fill: #f59e0b;
-  animation: pf-ring-warn 1.6s ease-in-out infinite;
+.pf-actor--ins {
+  fill: rgba(79, 142, 247, 0.08);
+  stroke: rgba(79, 142, 247, 0.35);
 }
-
-@keyframes pf-ring-warn {
-  0%, 100% { opacity: 0.12; }
-  50%       { opacity: 0.32; }
-}
-
-/* Node bodies */
-.pf-body { stroke-width: 1.5; fill: #080c18; }
-.pf-body--core  { stroke: #4f8ef7; filter: url(#pfgb); }
-.pf-body--norm  { stroke: rgba(79, 142, 247, 0.45); }
-.pf-body--stale { stroke: #f59e0b; filter: url(#pfgw); }
-
-/* Node text */
-.pf-nlabel {
+.pf-actor-lbl {
+  font-family: 'Inter', sans-serif;
   font-size: 7px;
   font-weight: 600;
-  fill: rgba(255, 255, 255, 0.82);
-  font-family: 'Inter', sans-serif;
+  fill: rgba(255, 255, 255, 0.72);
 }
-.pf-nsub {
-  font-size: 5.8px;
-  fill: rgba(255, 255, 255, 0.32);
+.pf-actor-lbl--ins { fill: rgba(79, 142, 247, 0.95); }
+.pf-actor-sub {
   font-family: 'Inter', sans-serif;
+  font-size: 5.5px;
+  fill: rgba(255, 255, 255, 0.3);
 }
 
-/* Latency badge */
-.pf-badge-bg  { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.08); stroke-width: 0.5; }
-.pf-badge-txt { font-size: 5.5px; fill: rgba(255,255,255,0.4); font-family: 'SF Mono','Fira Code',monospace; }
+/* Vertical lifelines */
+.pf-lifeline {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.pf-lifeline--ins {
+  stroke: rgba(79, 142, 247, 0.2);
+  stroke-dasharray: none;
+  stroke-width: 1;
+}
 
-/* Status dot on node */
-.pf-status-dot { }
-.pf-status-dot--core  { fill: #4f8ef7; }
-.pf-status-dot--norm  { fill: #22c55e; }
-.pf-status-dot--stale { fill: #f59e0b; }
+/* Insurance activation box */
+.pf-activation {
+  fill: rgba(79, 142, 247, 0.06);
+  stroke: rgba(79, 142, 247, 0.15);
+  stroke-width: 1;
+}
 
-/* Stale label under node */
-.pf-stale-lbl {
+/* Sequence step states */
+.pf-seq { transition: opacity 0.3s; }
+.pf-seq--idle  { opacity: 0.45; }
+.pf-seq--lit   { opacity: 1; }
+.pf-seq--done  { opacity: 0.75; }
+
+/* No active pipeline: show all at full opacity */
+.pf-seq:not(.pf-seq--idle):not(.pf-seq--lit):not(.pf-seq--done) { opacity: 1; }
+
+/* Step number circles */
+.pf-snum {
+  font-family: 'Inter', sans-serif;
+  font-size: 7.5px;
+  font-weight: 700;
+  fill: rgba(79, 142, 247, 0.6);
+}
+
+/* Phase label above each arrow */
+.pf-sphase {
+  font-family: 'Inter', sans-serif;
+  font-size: 5.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  fill: rgba(255, 255, 255, 0.25);
+  text-transform: uppercase;
+}
+.pf-sphase--resp { fill: rgba(34, 197, 94, 0.6); }
+
+/* Description text below each arrow */
+.pf-sdesc {
+  font-family: 'SF Mono', 'Fira Code', monospace;
   font-size: 6px;
-  fill: #f59e0b;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
+  fill: rgba(255, 255, 255, 0.38);
 }
+.pf-sdesc--warn { fill: rgba(245, 158, 11, 0.8); }
+.pf-sdesc--resp { fill: rgba(34, 197, 94, 0.7); font-weight: 600; font-size: 6.5px; }
+
+/* Arrows */
+.pf-sarrow {
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  fill: none;
+}
+.pf-sarrow--req   { stroke: rgba(79, 142, 247, 0.65); }
+.pf-sarrow--fetch { stroke: rgba(79, 142, 247, 0.45); }
+.pf-sarrow--data  { stroke: rgba(34, 197, 94, 0.65); }
+.pf-sarrow--stale { stroke: rgba(245, 158, 11, 0.75); stroke-dasharray: 5 3; }
+.pf-sarrow--resp  { stroke: rgba(34, 197, 94, 0.85); stroke-width: 2; }
+
+/* Policy enforcement box */
+.pf-policy-box {
+  fill: rgba(79, 142, 247, 0.07);
+  stroke: rgba(79, 142, 247, 0.28);
+  stroke-width: 1;
+}
+.pf-policy-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 6.5px;
+  font-weight: 700;
+  fill: rgba(79, 142, 247, 0.85);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Lifeline end markers */
+.pf-lifeline-end     { fill: rgba(255, 255, 255, 0.12); }
+.pf-lifeline-end--ins { fill: rgba(79, 142, 247, 0.3); }
 
 /* Stale toggle */
 .pf-stale-ctrl {
