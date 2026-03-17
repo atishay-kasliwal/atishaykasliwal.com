@@ -670,19 +670,19 @@ function HomePage() {
     <>
       <Helmet>
         <html lang="en" translate="no" />
-        <title>Atishay Kasliwal. Full Stack Engineer | Portfolio & Resume</title>
+        <title>Atishay Kasliwal - Full Stack Engineer | Portfolio & Resume</title>
         <link rel="canonical" href="https://atishaykasliwal.com/" />
         <meta name="google" content="notranslate" />
         <meta name="google-translate-customization" content="no" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Atishay Kasliwal. Full Stack Engineer" />
-        <meta property="og:description" content="Portfolio & resume of Atishay Kasliwal. React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
+        <meta property="og:title" content="Atishay Kasliwal - Full Stack Engineer" />
+        <meta property="og:description" content="Portfolio & resume of Atishay Kasliwal - React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
         <meta property="og:url" content="https://atishaykasliwal.com/" />
         <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Atishay Kasliwal. Full Stack Engineer" />
-        <meta name="twitter:description" content="Portfolio & resume of Atishay Kasliwal. React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
-        <meta name="description" content="Atishay Kasliwal. Full Stack Engineer. Portfolio, resume, and projects. Software engineer with 5+ years experience at Fidelity Investments, currently pursuing MS in Data Science at Stony Brook University. React, Next.js, Node, Python, GCP, AI/ML." />
+        <meta name="twitter:title" content="Atishay Kasliwal - Full Stack Engineer" />
+        <meta name="twitter:description" content="Portfolio & resume of Atishay Kasliwal - React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
+        <meta name="description" content="Atishay Kasliwal - Full Stack Engineer. Portfolio, resume, and projects. Software engineer with 5+ years experience at Fidelity Investments, currently pursuing MS in Data Science at Stony Brook University. React, Next.js, Node, Python, GCP, AI/ML." />
         <meta name="keywords" content="Atishay Kasliwal, Atishay Kasliwal portfolio, Atishay Kasliwal resume, data scientist, software engineer, full-stack engineer, React developer, Python developer, Stony Brook University, Fidelity Investments, Atrium Health Wake Forest" />
         <meta name="author" content="Atishay Kasliwal" />
         <script type="application/ld+json">
@@ -1538,7 +1538,7 @@ function Footer() {
   return (
     <footer className="site-footer" translate="no">
       <div className="footer-content" translate="no">
-        <span translate="no">© {new Date().getFullYear()} <strong>Atishay Kasliwal</strong>. Full Stack Engineer</span>
+        <span translate="no">© {new Date().getFullYear()} <strong>Atishay Kasliwal</strong> - Full Stack Engineer</span>
         <span className="footer-socials" translate="no">
           <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" translate="no">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z"/></svg>
