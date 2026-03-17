@@ -9,7 +9,7 @@ const MODALITIES = ['T1', 'T2', 'FLAIR', 'DWI', 'ADC', 'OVERLAY'];
 
 const METADATA = {
   totalSlices: 31,
-  tumorRange: { start: 11, end: 20, center: 15 },
+  tumorRange: { start: 12, end: 16, center: 14 },
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -115,6 +115,21 @@ export default function MRIViewer() {
   const changeSlice = useCallback((delta) => {
     setCurrentSlice((prev) => Math.max(0, Math.min(totalSlices - 1, prev + delta)));
   }, [totalSlices]);
+
+  // Lock page scroll while mouse is over viewer, restore on leave
+  useEffect(() => {
+    const el = viewerRef.current;
+    if (!el) return;
+    const lock   = () => { document.body.style.overflow = 'hidden'; };
+    const unlock = () => { document.body.style.overflow = ''; };
+    el.addEventListener('mouseenter', lock);
+    el.addEventListener('mouseleave', unlock);
+    return () => {
+      el.removeEventListener('mouseenter', lock);
+      el.removeEventListener('mouseleave', unlock);
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   // Wheel — only fires when mouse is over the viewer div
   useEffect(() => {
