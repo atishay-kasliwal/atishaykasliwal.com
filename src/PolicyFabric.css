@@ -1,4 +1,4 @@
-/* PolicyFabric — Minimalist interactive story diagram */
+/* PolicyFabric — 5-column minimalist interactive pipeline */
 
 /* ── Page ─────────────────────────────────────────── */
 
@@ -72,8 +72,8 @@
 /* ── Canvas Wrap ──────────────────────────────────── */
 
 .pf-canvas-wrap {
-  width: 92%;
-  max-width: 1060px;
+  width: 94%;
+  max-width: 1160px;
   margin: 2rem auto 0;
   background: rgba(6,10,20,0.8);
   border: 1px solid rgba(255,255,255,0.06);
@@ -86,11 +86,31 @@
 
 .pf-canvas {
   position: relative;
-  min-width: 900px;
-  height: 540px;
+  min-width: 1080px;
+  height: 520px;
   background-color: #060a14;
-  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255,255,255,0.038) 1px, transparent 1px);
   background-size: 28px 28px;
+}
+
+/* ── Column labels ────────────────────────────────── */
+
+.pf-col-labels {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.pf-col-labels span {
+  position: absolute;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.16);
+  text-align: center;
 }
 
 /* ── SVG edge layer ───────────────────────────────── */
@@ -107,28 +127,28 @@
 /* ── Animations ───────────────────────────────────── */
 
 @keyframes pf-flow {
-  from { stroke-dashoffset: 30; }
+  from { stroke-dashoffset: 24; }
   to   { stroke-dashoffset: 0;  }
 }
 
-.pf-flow { animation: pf-flow 1s linear infinite; }
+.pf-flow { animation: pf-flow 0.9s linear infinite; }
 
 @keyframes pf-blink {
   0%,100% { opacity: 1; }
-  50%     { opacity: 0.3; }
+  50%     { opacity: 0.25; }
 }
 
-/* ── Dim — inactive nodes ─────────────────────────── */
+/* ── Dim ──────────────────────────────────────────── */
 
 .pf-dim {
-  opacity: 0.1 !important;
-  filter: none !important;
+  opacity: 0.08 !important;
+  pointer-events: none;
 }
 
 .pf-pcard,
-.pf-ins,
+.pf-mid,
 .pf-consumer {
-  transition: opacity 0.4s ease, box-shadow 0.4s ease;
+  transition: opacity 0.38s ease, box-shadow 0.38s ease;
 }
 
 /* ── Provider Cards ───────────────────────────────── */
@@ -136,7 +156,7 @@
 .pf-pcard {
   position: absolute;
   left: 16px;
-  width: 175px;
+  width: 155px;
   height: 52px;
   background: #0c1220;
   border: 1px solid rgba(255,255,255,0.07);
@@ -146,7 +166,7 @@
 }
 
 .pf-pcard:hover:not(.pf-dim) {
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.35);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .pf-pcard-accent {
@@ -165,7 +185,7 @@
 }
 
 .pf-pcard-name {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: rgba(255,255,255,0.82);
   white-space: nowrap;
@@ -181,8 +201,8 @@
 }
 
 .pf-pcard-sub {
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.28);
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.26);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -191,146 +211,118 @@
 
 .pf-pcard-lat {
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.35);
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.32);
   flex-shrink: 0;
 }
 
-/* ── Insurance Node ───────────────────────────────── */
+/* ── Mid-column nodes (Aggregator / Contract / Validator) ─── */
 
-.pf-ins {
+.pf-mid {
   position: absolute;
-  left: 244px;
-  top: 120px;
-  width: 234px;
-  height: 300px;
   background: rgba(8,14,28,0.97);
-  border: 1px solid rgba(79,142,247,0.25);
+  border: 1px solid rgba(var(--ma-rgb, 79,142,247), 0.22);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 40px rgba(79,142,247,0.1);
   overflow: hidden;
+  box-shadow: 0 0 32px rgba(var(--ma-rgb, 79,142,247), 0.08);
 }
 
-/* Corner brackets */
-.pf-ins::before,
-.pf-ins::after {
+/* Corner brackets on mid nodes */
+.pf-mid::before,
+.pf-mid::after {
   content: '';
   position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: rgba(79,142,247,0.45);
+  width: 10px;
+  height: 10px;
+  border-color: rgba(var(--ma-rgb, 79,142,247), 0.4);
   border-style: solid;
   z-index: 2;
   pointer-events: none;
 }
+.pf-mid::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
+.pf-mid::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
 
-.pf-ins::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
-.pf-ins::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
+/* Position each mid node */
+.pf-agg { left: 222px; top: 115px; width: 162px; height: 290px; --ma: #4f8ef7; --ma-rgb: 79,142,247; }
+.pf-ct  { left: 432px; top: 125px; width: 162px; height: 270px; --ma: #8b5cf6; --ma-rgb: 139,92,246; }
+.pf-val { left: 642px; top: 135px; width: 155px; height: 250px; --ma: #22c55e; --ma-rgb: 34,197,94; }
 
-.pf-ins-head {
+.pf-mid-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 13px 13px 10px;
+  gap: 7px;
+  padding: 12px 12px 9px;
   flex-shrink: 0;
 }
 
-.pf-ins-title {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.88);
-  letter-spacing: -0.01em;
+.pf-mid-icon {
+  font-size: 0.88rem;
+  color: var(--ma, #4f8ef7);
+  flex-shrink: 0;
+  line-height: 1;
+  filter: drop-shadow(0 0 5px var(--ma, #4f8ef7));
 }
 
-.pf-ins-rule {
+.pf-mid-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+}
+
+.pf-mid-badge {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ma, #4f8ef7);
+  background: rgba(var(--ma-rgb, 79,142,247), 0.12);
+  border-radius: 3px;
+  padding: 2px 5px;
+  flex-shrink: 0;
+  animation: pf-blink 1.6s ease-in-out infinite;
+}
+
+.pf-mid-rule {
   height: 1px;
   background: rgba(255,255,255,0.06);
   flex-shrink: 0;
 }
 
-/* Stages */
-.pf-ins-stages {
-  padding: 12px;
+.pf-mid-body {
+  flex: 1;
+  padding: 12px 12px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  flex: 1;
+  justify-content: center;
 }
 
-.pf-stage {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 10px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  background: rgba(255,255,255,0.02);
-  transition: background 0.35s, border-color 0.35s;
-}
-
-.pf-stage--on {
-  background: rgba(var(--sc-rgb), 0.08);
-  border-color: rgba(var(--sc-rgb), 0.22);
-}
-
-.pf-stage-led {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.1);
-  transition: background 0.35s, box-shadow 0.35s;
-}
-
-.pf-stage-led--on {
-  background: var(--sc, #4f8ef7);
-  box-shadow: 0 0 8px var(--sc, #4f8ef7);
-  animation: pf-blink 1.4s ease-in-out infinite;
-}
-
-.pf-stage-name {
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.5);
-  flex: 1;
-  transition: color 0.35s;
-}
-
-.pf-stage--on .pf-stage-name {
-  color: rgba(255,255,255,0.9);
-}
-
-.pf-stage-pill {
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--sc, #4f8ef7);
-  background: rgba(var(--sc-rgb), 0.12);
-  border-radius: 3px;
-  padding: 2px 5px;
-}
-
-/* Step log */
-.pf-ins-log {
-  padding: 10px 13px 12px;
+.pf-mid-info {
   font-family: 'SF Mono', 'Fira Code', monospace;
   font-size: 0.65rem;
-  color: rgba(255,255,255,0.38);
-  line-height: 1.5;
-  flex-shrink: 0;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  display: block;
+}
+
+.pf-mid-idle {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.18);
+  font-style: italic;
 }
 
 /* ── Consumer Node ────────────────────────────────── */
 
 .pf-consumer {
   position: absolute;
-  left: 530px;
-  top: 140px;
-  width: 190px;
-  height: 260px;
+  left: 848px;
+  top: 115px;
+  width: 168px;
+  height: 290px;
   background: rgba(8,14,28,0.97);
   border: 1px solid rgba(34,197,94,0.2);
   border-radius: 10px;
@@ -355,8 +347,8 @@
 }
 
 .pf-consumer-tier {
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.28);
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.26);
 }
 
 .pf-consumer-rule {
@@ -372,10 +364,9 @@
 }
 
 .pf-consumer-idle {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.22);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.2);
   font-style: italic;
-  padding-top: 2px;
 }
 
 .pf-consumer-fields {
@@ -389,7 +380,7 @@
   align-items: center;
   gap: 6px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
 }
 
 .pf-cf-dot {
@@ -406,7 +397,7 @@
 
 .pf-consumer-foot {
   padding: 7px 12px;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
   font-family: 'SF Mono', 'Fira Code', monospace;
   color: rgba(34,197,94,0.7);
@@ -417,8 +408,8 @@
 /* ── Step Panel ───────────────────────────────────── */
 
 .pf-step-panel {
-  width: 92%;
-  max-width: 1060px;
+  width: 94%;
+  max-width: 1160px;
   margin: 0 auto 3rem;
   background: rgba(8,12,22,0.75);
   border: 1px solid rgba(255,255,255,0.06);
@@ -434,7 +425,7 @@
 
 .pf-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #4f8ef7, #8b5cf6);
+  background: linear-gradient(90deg, #4f8ef7, #8b5cf6, #22c55e);
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -447,7 +438,7 @@
   font-size: 0.68rem;
   color: rgba(255,255,255,0.2);
   display: block;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.4rem;
   letter-spacing: 0.08em;
 }
 
@@ -456,13 +447,13 @@
   font-size: 1rem;
   font-weight: 700;
   color: rgba(255,255,255,0.9);
-  margin: 0 0 0.45rem;
+  margin: 0 0 0.4rem;
   letter-spacing: -0.01em;
 }
 
 .pf-step-narration {
   font-size: 0.86rem;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.44);
   margin: 0;
   line-height: 1.65;
   max-width: 640px;
@@ -480,7 +471,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.48);
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 7px;
@@ -496,10 +487,7 @@
   background: rgba(255,255,255,0.04);
 }
 
-.pf-btn:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
-}
+.pf-btn:disabled { opacity: 0.22; cursor: not-allowed; }
 
 .pf-btn--primary {
   color: rgba(79,142,247,0.9);
@@ -513,7 +501,6 @@
   background: rgba(79,142,247,0.12);
 }
 
-/* Step dots */
 .pf-step-dots {
   display: flex;
   gap: 6px;
@@ -548,5 +535,4 @@
   .pf-step-content  { padding: 1.2rem 1.2rem 0.75rem; }
   .pf-step-controls { padding: 0.75rem 1.2rem 1.2rem; }
   .pf-step-dots     { display: none; }
-  .pf-canvas-wrap   { margin: 1.5rem auto 0; }
 }
