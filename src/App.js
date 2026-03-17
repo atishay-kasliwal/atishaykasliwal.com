@@ -893,7 +893,7 @@ function HomePage() {
 
 	              {/* 4 — RAG System */}
 	              <Link
-	                to="/highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef"
+	                to="/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/4th.jpeg)' }}
 	                aria-label="Discover: RAG System"
