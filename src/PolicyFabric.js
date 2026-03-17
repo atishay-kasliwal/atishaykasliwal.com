@@ -431,8 +431,29 @@ export default function PolicyFabric() {
         </div>
       </div>
 
-      {/* Canvas */}
+      {/* Canvas + Step row */}
       <div className="pf-canvas-wrap">
+
+        {/* Single-row step bar */}
+        <div className="pf-stepbar">
+          <div className="pf-stepbar-left">
+            <span className="pf-stepbar-num">{String(step + 1).padStart(2, '0')}/{STEPS.length}</span>
+            <span className="pf-stepbar-title">{s.title}</span>
+          </div>
+          <p className="pf-stepbar-narration">{s.narration}</p>
+          <div className="pf-stepbar-btns">
+            <button className="pf-btn" onClick={prev} disabled={step === 0}>←</button>
+            <button className="pf-btn pf-btn--primary" onClick={next} disabled={step === STEPS.length - 1}>
+              {step === STEPS.length - 1 ? '✓' : '→'}
+            </button>
+          </div>
+        </div>
+
+        {/* Progress line */}
+        <div className="pf-topbar-progress">
+          <div className="pf-topbar-bar" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
+        </div>
+
         <div className="pf-canvas">
           <EdgeSVG step={s} />
 
@@ -508,35 +529,6 @@ export default function PolicyFabric() {
 
           {/* Col 5 — Consumer */}
           <ConsumerNode step={s} />
-        </div>
-      </div>
-
-      {/* Step Panel */}
-      <div className="pf-step-panel">
-        <div className="pf-progress">
-          <div className="pf-progress-bar"
-            style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
-        </div>
-        <div className="pf-step-content">
-          <span className="pf-step-num">{String(step + 1).padStart(2, '0')} / {STEPS.length}</span>
-          <h2 className="pf-step-title">{s.title}</h2>
-          <p className="pf-step-narration">{s.narration}</p>
-        </div>
-        <div className="pf-step-controls">
-          <button className="pf-btn" onClick={prev} disabled={step === 0}>← Back</button>
-          <div className="pf-step-dots">
-            {STEPS.map((_, i) => (
-              <button key={i}
-                className={`pf-dot-btn${i === step ? ' pf-dot-btn--on' : ''}`}
-                onClick={() => setStep(i)}
-                aria-label={`Step ${i + 1}`}
-              />
-            ))}
-          </div>
-          <button className="pf-btn pf-btn--primary" onClick={next}
-            disabled={step === STEPS.length - 1}>
-            {step === STEPS.length - 1 ? 'Done' : 'Continue →'}
-          </button>
         </div>
       </div>
 

@@ -74,19 +74,20 @@
 .pf-canvas-wrap {
   width: 92%;
   max-width: 1200px;
-  margin: 2rem auto 0;
-  background: rgba(6,10,20,0.8);
+  margin: 2rem auto 3rem;
   border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px 14px 0 0;
-  overflow-x: auto;
+  border-radius: 14px;
+  overflow: hidden;
   box-shadow: 0 8px 48px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Canvas ───────────────────────────────────────── */
 
 .pf-canvas {
   position: relative;
-  min-width: 1080px;
+  overflow-x: auto;
   height: 640px;
   background-color: #060a14;
   background-image: radial-gradient(rgba(255,255,255,0.038) 1px, transparent 1px);
@@ -462,136 +463,122 @@
   flex-shrink: 0;
 }
 
-/* ── Step Panel ───────────────────────────────────── */
+/* ── Step bar — single row above canvas ───────────── */
 
-.pf-step-panel {
-  width: 92%;
-  max-width: 1200px;
-  margin: 0 auto 3rem;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-top: none;
-  border-radius: 0 0 14px 14px;
+.pf-stepbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.25rem;
+  height: 50px;
+  background: rgba(8,12,24,0.98);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.pf-stepbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.pf-stepbar-num {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.pf-stepbar-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* Divider between title and narration */
+.pf-stepbar-left::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.12);
+  margin-left: 0.1rem;
+}
+
+.pf-stepbar-narration {
+  flex: 1;
+  font-size: 0.76rem;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+  white-space: nowrap;
   overflow: hidden;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
-.pf-progress {
+.pf-stepbar-btns {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* Progress line under the stepbar */
+.pf-topbar-progress {
   height: 2px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.04);
+  flex-shrink: 0;
 }
 
-.pf-progress-bar {
+.pf-topbar-bar {
   height: 100%;
   background: linear-gradient(90deg, #4f8ef7, #8b5cf6, #22c55e);
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.pf-step-content {
-  padding: 1.5rem 2rem 1rem;
-}
-
-.pf-step-num {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.35);
-  display: block;
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.08em;
-}
-
-.pf-step-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 0.4rem;
-  letter-spacing: -0.01em;
-}
-
-.pf-step-narration {
-  font-size: 0.86rem;
-  color: rgba(255,255,255,0.7);
-  margin: 0;
-  line-height: 1.65;
-  max-width: 640px;
-}
-
-.pf-step-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.9rem 2rem 1.4rem;
-  gap: 1rem;
-}
+/* ── Buttons ──────────────────────────────────────── */
 
 .pf-btn {
   font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.48);
+  color: rgba(255,255,255,0.45);
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 7px;
-  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  padding: 0.32rem 0.8rem;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .pf-btn:hover:not(:disabled) {
   color: rgba(255,255,255,0.85);
-  border-color: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.2);
   background: rgba(255,255,255,0.04);
 }
 
-.pf-btn:disabled { opacity: 0.22; cursor: not-allowed; }
+.pf-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
 .pf-btn--primary {
   color: rgba(79,142,247,0.9);
   border-color: rgba(79,142,247,0.3);
-  background: rgba(79,142,247,0.05);
+  background: rgba(79,142,247,0.06);
 }
 
 .pf-btn--primary:hover:not(:disabled) {
   color: #fff;
-  border-color: rgba(79,142,247,0.6);
+  border-color: rgba(79,142,247,0.55);
   background: rgba(79,142,247,0.12);
-}
-
-.pf-step-dots {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.pf-dot-btn {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.14);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-
-.pf-dot-btn--on {
-  background: #4f8ef7;
-  transform: scale(1.5);
-}
-
-.pf-dot-btn:hover:not(.pf-dot-btn--on) {
-  background: rgba(255,255,255,0.35);
 }
 
 /* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 700px) {
-  .pf-step-content  { padding: 1.2rem 1.2rem 0.75rem; }
-  .pf-step-controls { padding: 0.75rem 1.2rem 1.2rem; }
-  .pf-step-dots     { display: none; }
+  .pf-stepbar-narration { display: none; }
 }
