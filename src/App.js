@@ -854,79 +854,84 @@ function HomePage() {
               <p translate="no">A curated look at recent work, research, and creative explorations.</p>
 	            </div>
 	            <div className="editorial-grid" translate="no">
+
+	              {/* 1 — FOMC Intelligence Dashboard */}
 	              <Link
 	                to="/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01"
 	                className="editorial-card editorial-card--wide editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/fmocc.jpeg)' }}
-	                aria-label="Read more: Brain MRI Analysis with Deep Learning"
+	                aria-label="Read more: FOMC Intelligence Dashboard"
 	                translate="no"
 	              >
 	                <span className="editorial-tag" translate="no">Research</span>
-	                <h3 translate="no">Brain MRI Analysis with Deep Learning at Wake Forest</h3>
+	                <h3 translate="no">FOMC Intelligence Dashboard</h3>
 	                <span className="editorial-pill" translate="no">Read More</span>
 	              </Link>
 
-	              <a
-	                href="https://www.atriveo.com/"
-	                target="_blank"
-	                rel="noopener noreferrer"
-	                className="editorial-card editorial-card--medium editorial-card--has-bg"
-	                style={{ backgroundImage: 'url(/mriimage.jpeg)' }}
-	                aria-label="View demo: Job Intelligence Platform for Modern Hiring"
+	              {/* 2 — Blank / Coming Soon */}
+	              <div
+	                className="editorial-card editorial-card--medium editorial-card--blank"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Product</span>
-	                <h3 translate="no">Job Intelligence Platform for Modern Hiring</h3>
-	                <span className="editorial-pill" translate="no">View Demo</span>
-	              </a>
+	                <span className="editorial-tag" translate="no">Coming Soon</span>
+	                <h3 translate="no">Work in Progress</h3>
+	                <span className="editorial-pill editorial-pill--muted" translate="no">Stay Tuned</span>
+	              </div>
 
+	              {/* 3 — PolicyFabric */}
 	              <Link
 	                to="/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/chrome.png)' }}
-	                aria-label="Explore: PolicyFabric — Distributed Data Access Control"
+	                aria-label="Explore: PolicyFabric"
 	                translate="no"
 	              >
 	                <span className="editorial-tag" translate="no">Systems</span>
-	                <h3 translate="no">PolicyFabric — Distributed Data Access Control</h3>
+	                <h3 translate="no">PolicyFabric</h3>
 	                <span className="editorial-pill" translate="no">Explore</span>
 	              </Link>
 
+	              {/* 4 — RAG System */}
 	              <Link
 	                to="/highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/4th.jpeg)' }}
-	                aria-label="Discover: Movie Industry Analytics with Sentiment Modeling"
+	                aria-label="Discover: RAG System"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Data</span>
-	                <h3 translate="no">Movie Industry Analytics with Sentiment Modeling</h3>
+	                <span className="editorial-tag" translate="no">AI</span>
+	                <h3 translate="no">RAG System</h3>
 	                <span className="editorial-pill" translate="no">Discover</span>
 	              </Link>
 
+	              {/* 5 — MRI Brain Tumor Viewer */}
 	              <Link
 	                to="/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/5th%20image.jpeg)' }}
-	                aria-label="View: Multi-Modal MRI Brain Viewer"
+	                aria-label="View: MRI Brain Tumor Viewer"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Product</span>
-	                <h3 translate="no">Multi-Modal MRI Brain Viewer</h3>
+	                <span className="editorial-tag" translate="no">Medical AI</span>
+	                <h3 translate="no">MRI Brain Tumor Viewer</h3>
 	                <span className="editorial-pill" translate="no">View</span>
 	              </Link>
 
-	              <Link
-	                to="/highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde"
+	              {/* 6 — Atriveo */}
+	              <a
+	                href="https://www.atriveo.com/"
+	                target="_blank"
+	                rel="noopener noreferrer"
 	                className="editorial-card editorial-card--wide editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/Atriveo6th.png)' }}
-	                aria-label="Learn more: Gemma 3 NLP Research — Fine-tuning Language Models"
+	                aria-label="Visit Atriveo"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Research</span>
-	                <h3 translate="no">Gemma 3 NLP Research — Fine-tuning Language Models</h3>
-	                <span className="editorial-pill" translate="no">Learn More</span>
-	              </Link>
+	                <span className="editorial-tag" translate="no">Product</span>
+	                <h3 translate="no">Atriveo</h3>
+	                <span className="editorial-pill" translate="no">Visit</span>
+	              </a>
+
 	            </div>
 	          </div>
 	        </section>

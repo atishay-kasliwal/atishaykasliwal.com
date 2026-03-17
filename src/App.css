@@ -1419,6 +1419,30 @@ body {
   z-index: 1;
 }
 
+.editorial-card--blank {
+  cursor: default;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.015) 0px,
+    rgba(255,255,255,0.015) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  border: 1px dashed rgba(255,255,255,0.1);
+}
+
+.editorial-card--blank:hover {
+  transform: none;
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: none;
+}
+
+.editorial-pill--muted {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.08);
+}
+
 .editorial-card:hover {
   border-color: rgba(255, 255, 255, 0.18);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
