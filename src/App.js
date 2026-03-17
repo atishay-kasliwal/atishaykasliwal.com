@@ -905,7 +905,7 @@ function HomePage() {
 	              </Link>
 
 	              <Link
-	                to="/highlights"
+	                to="/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/5th%20image.jpeg)' }}
 	                aria-label="See work: Clean Interfaces for Complex Data"
