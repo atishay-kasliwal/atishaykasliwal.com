@@ -213,6 +213,18 @@ export const projectsData = [
     textOverlay: true
   },
   {
+    id: 17,
+    title: 'PolicyFabric',
+    description: 'Real-time distributed systems dashboard with contract-based access control, animated data flow, and policy enforcement visualization',
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop',
+    link: '/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123',
+    uuid: 'f6a7b8c9-d0e1-4234-f567-89abcdef0123',
+    category: 'Systems & Data Engineering',
+    size: 'medium',
+    span: 2,
+    textOverlay: true
+  },
+  {
     id: 16,
     title: 'MRI Brain Viewer',
     description: 'Fullscreen multi-modal MRI brain viewer with slice navigation, tumor highlighting, and real-time preloading',
