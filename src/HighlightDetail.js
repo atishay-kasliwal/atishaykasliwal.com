@@ -493,7 +493,6 @@ export default function HighlightDetail() {
   ];
 
   // All projects for right sidebar (mark active)
-  const currentSlug = slugify(project.title);
 
   // Category tags derived from project.category — split on &, comma, or /
   const categoryTags = project.category

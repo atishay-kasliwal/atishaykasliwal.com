@@ -14,22 +14,22 @@ const pCY = i => pY(i) + PH / 2;
 const PR  = PL + PW;   // 171
 
 // Col 2 — Aggregator
-const AGL = 222, AGW = 162, AGH = 340, AGT = (CH - AGH) / 2;   // top=150
+const AGL = 222, AGW = 162;   // top=150
 const AGR = AGL + AGW;                                           // 384
 const AGCY = CH / 2;                                             // 320
 
 // Col 3 — Contract Engine
-const CTL = 432, CTW = 162, CTH = 320, CTT = (CH - CTH) / 2;   // top=160
+const CTL = 432, CTW = 162;   // top=160
 const CTR = CTL + CTW;                                           // 594
 const CTCY = CH / 2;                                             // 320
 
 // Col 4 — Validator
-const VL = 642, VW = 155, VH = 300, VT = (CH - VH) / 2;        // top=170
+const VL = 642, VW = 155;        // top=170
 const VR  = VL + VW;                                             // 797
 const VCY = CH / 2;                                              // 320
 
 // Col 5 — Consumer
-const OL = 848, OW = 168, OH = 340, OT = (CH - OH) / 2;        // top=150
+const OL = 848, OW = 168;        // top=150
 const OCY = CH / 2;                                              // 320
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -176,13 +176,6 @@ function fanPath(i) {
   return `M${PR},${cy} C${PR + 26},${cy} ${AGL - 15},${AGCY} ${AGL},${AGCY}`;
 }
 
-function hexToRgb(hex) {
-  return [
-    parseInt(hex.slice(1, 3), 16),
-    parseInt(hex.slice(3, 5), 16),
-    parseInt(hex.slice(5, 7), 16),
-  ].join(',');
-}
 
 // ── EdgeSVG ───────────────────────────────────────────────────────────────────
 const H_EDGES = [
