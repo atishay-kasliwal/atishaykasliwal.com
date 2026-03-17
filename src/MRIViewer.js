@@ -107,6 +107,7 @@ const Timeline = memo(function Timeline({ currentSlice, totalSlices, tumorRange,
 export default function MRIViewer() {
   const [currentSlice, setCurrentSlice] = useState(METADATA.tumorRange.center);
   const lastScrollAt = useRef(0);
+  const viewerRef = useRef(null);
   const { totalSlices, tumorRange } = METADATA;
 
   const isInTumor = currentSlice >= tumorRange.start && currentSlice <= tumorRange.end;
@@ -115,17 +116,20 @@ export default function MRIViewer() {
     setCurrentSlice((prev) => Math.max(0, Math.min(totalSlices - 1, prev + delta)));
   }, [totalSlices]);
 
-  // Wheel — throttled to 30 ms
+  // Wheel — only fires when mouse is over the viewer div
   useEffect(() => {
+    const el = viewerRef.current;
+    if (!el) return;
     const onWheel = (e) => {
       const now = Date.now();
       if (now - lastScrollAt.current < 30) return;
       lastScrollAt.current = now;
       e.preventDefault();
+      e.stopPropagation();
       changeSlice(e.deltaY > 0 ? 1 : -1);
     };
-    window.addEventListener('wheel', onWheel, { passive: false });
-    return () => window.removeEventListener('wheel', onWheel);
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
   }, [changeSlice]);
 
   // Keyboard
@@ -143,33 +147,48 @@ export default function MRIViewer() {
     preloadSlices(currentSlice, totalSlices);
   }, [currentSlice, totalSlices]);
 
-
   return (
-    <div className="mriv-root">
-      {/* 6-panel grid */}
-      <div className="mriv-grid">
-        {MODALITIES.map((mod) => (
-          <Panel key={mod} modality={mod} slice={currentSlice} />
-        ))}
+    <div className="mriv-page project-detail-page">
+      {/* ── Header ── */}
+      <div className="mriv-header">
+        <div className="mriv-header-text">
+          <h1 className="mriv-title">MRI Brain Tumor Viewer</h1>
+          <p className="mriv-subtitle">Multi-modal neuroimaging with real-time slice navigation</p>
+        </div>
+        <div className="mriv-header-badges">
+          <span className="mriv-badge">Modalities: 6</span>
+          <span className="mriv-badge">Slices: {totalSlices}</span>
+          <span className="mriv-badge tumor">Tumor region: {tumorRange.start}–{tumorRange.end}</span>
+        </div>
       </div>
 
-      {/* Floating slice indicator */}
-      <div className="mriv-indicator">
-        <span className="mriv-indicator-slice">{currentSlice}</span>
-        <span className="mriv-indicator-sep"> / {totalSlices - 1}</span>
-        {isInTumor && <span className="mriv-indicator-tumor"> · Tumor</span>}
+      {/* ── Viewer ── */}
+      <div className="mriv-root" ref={viewerRef}>
+        {/* 6-panel grid */}
+        <div className="mriv-grid">
+          {MODALITIES.map((mod) => (
+            <Panel key={mod} modality={mod} slice={currentSlice} />
+          ))}
+        </div>
+
+        {/* Floating slice indicator */}
+        <div className="mriv-indicator">
+          <span className="mriv-indicator-slice">{currentSlice}</span>
+          <span className="mriv-indicator-sep"> / {totalSlices - 1}</span>
+          {isInTumor && <span className="mriv-indicator-tumor"> · Tumor</span>}
+        </div>
+
+        {/* Keyboard hint */}
+        <div className="mriv-hint">↑ ↓ scroll to navigate</div>
+
+        {/* Timeline */}
+        <Timeline
+          currentSlice={currentSlice}
+          totalSlices={totalSlices}
+          tumorRange={tumorRange}
+          onSeek={setCurrentSlice}
+        />
       </div>
-
-      {/* Keyboard hint */}
-      <div className="mriv-hint">↑ ↓ scroll to navigate</div>
-
-      {/* Timeline */}
-      <Timeline
-        currentSlice={currentSlice}
-        totalSlices={totalSlices}
-        tumorRange={tumorRange}
-        onSeek={setCurrentSlice}
-      />
     </div>
   );
 }
