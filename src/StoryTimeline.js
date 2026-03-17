@@ -19,7 +19,7 @@ const stories = [
     tag: 'Research'
   },
   {
-    image: 'https://i.ytimg.com/vi/MiZf2qRBQ7k/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCsno81_sYAASs6LZHeei9o5v18iw',
+    image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
     date: '2023–2024',
     role: 'Senior Software Engineer',
     title: 'Accolite / Fidelity',

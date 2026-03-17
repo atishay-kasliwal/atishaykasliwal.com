@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import HeroCarousel from './HeroCarousel';
 import './Projects.css';
 import { Helmet } from 'react-helmet';
 import wakeforeststudent from './assets/WakeForsetstudent.JPG';
@@ -69,7 +70,41 @@ export const projectsData = [
       conference,
       MRIimage
     ],
-    textOverlay: true // Hide text content below
+    textOverlay: true,
+    noLink: true,
+  },
+  {
+    id: 3,
+    title: 'Policy Enforcement at Every Layer',
+    description: 'Interactive data contract enforcement system with real-time architecture visualization.',
+    image: '/5th%20image.jpeg',
+    link: '/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123',
+    uuid: 'f6a7b8c9-d0e1-4234-f567-89abcdef0123',
+    category: 'Systems',
+    size: 'medium',
+    span: 2,
+  },
+  {
+    id: 4,
+    title: 'Ask Your Documents Anything',
+    description: 'Retrieval-augmented generation for querying legal filings in natural language.',
+    image: '/4th.jpeg',
+    link: '/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    category: 'AI',
+    size: 'medium',
+    span: 2,
+  },
+  {
+    id: 5,
+    title: 'Tumor Detection Scan to Insight',
+    description: 'CNN-powered MRI viewer with real-time tumor segmentation running in the browser.',
+    image: '/mriimage.jpeg',
+    link: '/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012',
+    uuid: 'e5f6a7b8-c9d0-4123-e456-789abcdef012',
+    category: 'Medical AI',
+    size: 'medium',
+    span: 2,
   },
   {
     id: 2,
@@ -87,11 +122,12 @@ export const projectsData = [
     leftText: {
       label: 'Behind the Designs',
       title: 'Atirum Health Wake Forest Baptist Hospital',
-      description: "I'm a Senior Software Engineer specializing in building scalable, user centered solutions that address complex healthcare challenges."
+      description: ""
     },
     rightText: {
       subtitle: "Let's Build Something Meaningful Together",
-      buttonText: 'Project page'
+      buttonText: "Let's Connect",
+      buttonHref: 'https://www.linkedin.com/in/atishay-kasliwal/',
     },
     carouselImages: [
       wakeforeststudent,
@@ -176,66 +212,6 @@ export const projectsData = [
   //   size: 'wide',
   //   span: 2 // Row 4: Equal (1/3 width)
   // },
-  {
-    id: 13,
-    title: 'Gemma NLP Research',
-    description: 'Advanced NLP research using Google\'s Gemma 3 models for language understanding and text analysis',
-    image: Gemma,
-    link: `/highlights/${slugify('Gemma NLP Research')}`,
-    uuid: 'a1b2c3d4-e5f6-4789-a012-3456789abcde',
-    category: 'Research & NLP',
-    size: 'medium',
-    span: 2, // Row 4: Equal (1/3 width)
-    textOverlay: true // Text overlay on image
-  },  
-  {
-    id: 14,
-    title: 'Movie Data Analytics',
-    description: 'Data-driven analytics platform for movie insights, sentiment analysis, and audience preferences',
-    image: Moviedata,
-    link: `/highlights/${slugify('Movie Data Analytics')}`,
-    uuid: 'b2c3d4e5-f6a7-4890-b123-456789abcdef',
-    category: 'Data Analytics',
-    size: 'medium',
-    span: 2, // Row 4: Equal (1/3 width)
-    textOverlay: true // Text overlay on image
-  }, 
-   {
-    id: 15,
-    title: 'Hospitality AI Solutions',
-    description: 'AI-powered solutions for the hospitality industry, focusing on customer experience and operational efficiency',
-    image: hosp,
-    link: `/highlights/${slugify('Hospitality AI Solutions')}`,
-    uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
-    category: 'AI & Hospitality',
-    size: 'medium',
-    span: 2,
-    textOverlay: true
-  },
-  {
-    id: 17,
-    title: 'PolicyFabric',
-    description: 'Real-time distributed systems dashboard with contract-based access control, animated data flow, and policy enforcement visualization',
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop',
-    link: '/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123',
-    uuid: 'f6a7b8c9-d0e1-4234-f567-89abcdef0123',
-    category: 'Systems & Data Engineering',
-    size: 'medium',
-    span: 2,
-    textOverlay: true
-  },
-  {
-    id: 16,
-    title: 'MRI Brain Viewer',
-    description: 'Fullscreen multi-modal MRI brain viewer with slice navigation, tumor highlighting, and real-time preloading',
-    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?q=80&w=800&auto=format&fit=crop',
-    link: '/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012',
-    uuid: 'e5f6a7b8-c9d0-4123-e456-789abcdef012',
-    category: 'Medical Imaging & AI',
-    size: 'medium',
-    span: 2,
-    textOverlay: true
-  },
   // {
   //   id: 10,
   //   title: 'Machine Learning Solutions',
@@ -372,14 +348,50 @@ export default function Projects() {
                 </div> */}
               </div>
 
+          <section className="featured-hero section-wrap" data-analytics-section="cta" translate="no">
+            <div className="featured-hero__label" translate="no">Currently Developing</div>
+            <div className="featured-hero__media">
+              <div className="featured-hero__media-inner">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="featured-hero__video"
+                  aria-label="Atriveo demo video"
+                >
+                  <source src="/featured-project.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+            <div className="featured-hero__text" translate="no">
+              <div className="featured-hero__text-left">
+                Creating a platform to help track, manage, and optimize job applications using AI.
+              </div>
+              <div className="featured-hero__text-right">
+                <a
+                  href="https://www.atriveo.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="featured-hero__cta-primary"
+                  data-cta-position="product_demo"
+                >
+                  View Product
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <HeroCarousel />
+
           <div className="projects-grid" translate="no">
             {projectsData
-              .filter(project => ![5, 11, 12].includes(project.id))
+              .filter(project => ![3, 4, 5, 11, 12].includes(project.id))
               .map((project, index) => {
                 // Recalculate index after filtering for proper numbering
                 const filteredProjects = projectsData.filter(p => ![5, 11, 12].includes(p.id));
                 const displayIndex = filteredProjects.findIndex(p => p.id === project.id);
-                const isClickableOverlayCard = project.textOverlay && project.link && String(project.link).startsWith('/');
+                const isClickableOverlayCard = project.textOverlay && project.link && String(project.link).startsWith('/') && !project.rightText?.buttonHref && !project.noLink;
                 const CardWrapper = isClickableOverlayCard ? Link : 'div';
                 const spanClass = project.span === 3 ? 'span-3' : project.span === 4 ? 'span-4' : project.span === 6 ? 'span-6' : 'span-2';
                 const cardWrapperProps = isClickableOverlayCard
@@ -388,7 +400,7 @@ export default function Projects() {
                 return (
               <CardWrapper key={project.id} {...cardWrapperProps} translate="no">
                 <div 
-                  className={`project-card-grid project-card-${project.size || 'medium'} ${project.textOverlay ? 'text-overlay' : ''} notranslate`}
+                  className={`project-card-grid project-card-${project.size || 'medium'} ${project.textOverlay ? 'text-overlay' : ''} ${project.noLink ? 'no-hover' : ''} notranslate`}
                   data-feature-name={project.title}
                   translate="no"
                 >
@@ -428,9 +440,20 @@ export default function Projects() {
                             <p className="project-text-subtitle" translate="no">{project.rightText.subtitle}</p>
                           )}
                           {project.rightText?.buttonText && (
-                            project.uuid ? (
-                              <Link 
-                                to={project.link} 
+                            project.rightText.buttonHref ? (
+                              <a
+                                href={project.rightText.buttonHref}
+                                className="project-text-button"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                translate="no"
+                              >
+                                {project.rightText.buttonText}
+                                <span className="button-arrow">→</span>
+                              </a>
+                            ) : project.uuid ? (
+                              <Link
+                                to={project.link}
                                 className="project-text-button"
                                 translate="no"
                               >
@@ -438,10 +461,10 @@ export default function Projects() {
                                 <span className="button-arrow">→</span>
                               </Link>
                             ) : (
-                              <a 
-                                href={project.link} 
+                              <a
+                                href={project.link}
                                 className="project-text-button"
-                                target="_blank" 
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 translate="no"
                               >

@@ -179,11 +179,34 @@ export const trackOutboundLinks = () => {
     const link = target.closest('a[href]');
     if (!link) return;
 
+    const href = link.getAttribute('href') || '';
+    const linkText = normalizeText(link.innerText || link.textContent);
+
+    // Resume download
+    if (href.includes('.pdf')) {
+      trackEvent('resume_download', { page_path: getPagePath() });
+    }
+
+    // LinkedIn click
+    if (href.includes('linkedin.com')) {
+      trackEvent('linkedin_click', { page_path: getPagePath(), position: link.getAttribute('data-cta-position') || 'unknown' });
+    }
+
+    // GitHub click
+    if (href.includes('github.com')) {
+      trackEvent('github_click', { page_path: getPagePath() });
+    }
+
+    // Chrome extension click
+    if (href.includes('chromewebstore.google.com')) {
+      trackEvent('chrome_extension_click', { page_path: getPagePath() });
+    }
+
     const url = new URL(link.href, window.location.origin);
     if (url.origin !== window.location.origin) {
       trackEvent('outbound_click', {
         destination_url: url.href,
-        link_text: normalizeText(link.innerText || link.textContent),
+        link_text: linkText,
         page_path: getPagePath()
       });
     }
