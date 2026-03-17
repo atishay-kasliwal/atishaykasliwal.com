@@ -1,234 +1,235 @@
 import React, { useState } from 'react';
 import './PolicyFabric.css';
 
-// ── Constants ────────────────────────────────────────────────────────────────
+// ── Canvas geometry ────────────────────────────────────────────────────────────
+const CW = 900, CH = 540;
+const PL = 16, PW = 175, PH = 52, PG = 10;
+const IL = 244, IW = 234, IH = 300;
+const IT = (CH - IH) / 2;   // 120
+const IRE = IL + IW;          // 478
+const ICY = CH / 2;           // 270
+const OL = 530, OW = 190, OH = 260;
+const OT = (CH - OH) / 2;   // 140
+const OCY = CH / 2;           // 270
+// 8*52 + 7*10 = 486 → PS = (540-486)/2 = 27
+const PS = (CH - (8 * PH + 7 * PG)) / 2;
+const pY  = i => PS + i * (PH + PG);
+const pCY = i => pY(i) + PH / 2;
 
-const CANVAS_W = 870;
-const CANVAS_H = 680;
-
-const PROV_W = 192;
-const PROV_H = 62;
-const PROV_GAP = 12;
-const PROV_L = 16;
-
-const INS_L = 264;
-const INS_W = 280;
-const INS_H = 400;
-const INS_T = 140; // (680 - 400) / 2
-const INS_RE = 544; // INS_L + INS_W
-const INS_CY = 340; // INS_T + INS_H / 2
-
-const CON_L = 600;
-const CON_W = 205;
-const CON_H = 250;
-const CON_T = 215; // (680 - 250) / 2
-const CON_CY = 340;
-
-// Provider Y: startY = (680 - (8*62 + 7*12)) / 2 = (680 - 580) / 2 = 50
-const PROV_START_Y = 50;
-const provY = (i) => PROV_START_Y + i * (PROV_H + PROV_GAP);
-const provCY = (i) => provY(i) + PROV_H / 2;
-
-// ── Data ─────────────────────────────────────────────────────────────────────
-
+// ── Data ──────────────────────────────────────────────────────────────────────
 const PROVIDERS = [
-  { id: 'health-api',  label: 'Health Records API', sub: 'EHR System',      status: 'active',     lat: '120ms', color: '#4f8ef7', tag: 'HEALTH'    },
-  { id: 'driving',     label: 'Driving Score',       sub: 'Telematics Feed', status: 'stale',      lat: '340ms', color: '#f59e0b', tag: 'TELEMATIC' },
-  { id: 'med-history', label: 'Medical History',     sub: 'FHIR Gateway',    status: 'active',     lat: '89ms',  color: '#4f8ef7', tag: 'HEALTH'    },
-  { id: 'location',    label: 'Location Service',    sub: 'Geo / PII',       status: 'restricted', lat: '210ms', color: '#ef4444', tag: 'PII'       },
-  { id: 'financial',   label: 'Financial Score',     sub: 'Credit Bureau',   status: 'active',     lat: '156ms', color: '#8b5cf6', tag: 'FINANCIAL' },
-  { id: 'behavioral',  label: 'Behavioral Data',     sub: 'Analytics API',   status: 'processing', lat: '445ms', color: '#06b6d4', tag: 'ANALYTICS' },
-  { id: 'telematics',  label: 'Telematics Hub',      sub: 'IoT Gateway',     status: 'active',     lat: '78ms',  color: '#22c55e', tag: 'IOT'       },
-  { id: 'claims',      label: 'Claims History',      sub: 'Internal DB',     status: 'active',     lat: '190ms', color: '#f97316', tag: 'INSURANCE' },
+  { id: 'health-api',  label: 'Health Records',  sub: 'EHR · FHIR',       status: 'active',     lat: '120ms', color: '#4f8ef7' },
+  { id: 'driving',     label: 'Driving Score',   sub: 'Telematics Feed',   status: 'stale',      lat: '340ms', color: '#f59e0b' },
+  { id: 'med-history', label: 'Medical History', sub: 'FHIR Gateway',      status: 'active',     lat: '89ms',  color: '#4f8ef7' },
+  { id: 'location',    label: 'Location',        sub: 'Geo / PII',         status: 'restricted', lat: '—',     color: '#ef4444' },
+  { id: 'financial',   label: 'Financial Score', sub: 'Credit Bureau',     status: 'active',     lat: '156ms', color: '#8b5cf6' },
+  { id: 'behavioral',  label: 'Behavioral',      sub: 'Analytics API',     status: 'processing', lat: '445ms', color: '#06b6d4' },
+  { id: 'telematics',  label: 'Telematics Hub',  sub: 'IoT Gateway',       status: 'active',     lat: '78ms',  color: '#22c55e' },
+  { id: 'claims',      label: 'Claims History',  sub: 'Internal DB',       status: 'active',     lat: '190ms', color: '#f97316' },
 ];
 
-const CONTRACTS = {
-  basic: {
-    label: 'Basic Tier',
-    groups: [
-      { name: 'Health',    fields: [{ n: 'age', ok: true }, { n: 'condition', ok: true }, { n: 'bmi', ok: false }] },
-      { name: 'Telematic', fields: [{ n: 'drive_score', ok: true }, { n: 'violations', ok: false }] },
-      { name: 'Financial', fields: [{ n: 'credit', ok: false }, { n: 'income', ok: false }] },
-      { name: 'Claims',    fields: [{ n: 'prior_claims', ok: false }, { n: 'incidents', ok: false }] },
-    ],
+const STEPS = [
+  {
+    title: 'Consumer Sends Request',
+    narration: 'A user requests a personalized insurance policy quote. The Consumer node initiates a data request to PolicyFabric, specifying their contract tier.',
+    activeNodes: ['consumer'],
+    activeEdges: [],
+    insStage: null,
+    log: null,
   },
-  premium: {
-    label: 'Premium Tier',
-    groups: [
-      { name: 'Health',    fields: [{ n: 'age', ok: true }, { n: 'condition', ok: true }, { n: 'bmi', ok: true }] },
-      { name: 'Telematic', fields: [{ n: 'drive_score', ok: true }, { n: 'violations', ok: true }] },
-      { name: 'Financial', fields: [{ n: 'credit', ok: true }, { n: 'income', ok: false }] },
-      { name: 'Claims',    fields: [{ n: 'prior_claims', ok: true }, { n: 'incidents', ok: false }] },
-    ],
+  {
+    title: 'Insurance Node Receives',
+    narration: 'The request arrives at the Insurance Node. It parses the contract tier and begins orchestrating parallel data fetches from all 8 registered providers.',
+    activeNodes: ['consumer', 'insurance'],
+    activeEdges: [],
+    insStage: null,
+    log: '→ Parsing contract tier: Basic',
   },
-};
+  {
+    title: 'Provider Discovery',
+    narration: '8 data providers are registered in the system. The Insurance Node maps each provider to the fields it can supply, ranked by contract tier eligibility.',
+    activeNodes: ['insurance', ...PROVIDERS.map(p => p.id)],
+    activeEdges: [],
+    insStage: 'aggregator',
+    log: '→ 8 providers discovered',
+  },
+  {
+    title: 'Health Data Fetched',
+    narration: 'Health Records API responds in 120ms. Medical History returns via FHIR Gateway in 89ms. Both payloads are queued in the Aggregator.',
+    activeNodes: ['health-api', 'med-history', 'insurance'],
+    activeEdges: ['health-api', 'med-history'],
+    insStage: 'aggregator',
+    log: '→ Health payloads merged',
+  },
+  {
+    title: 'Telematics Fetched',
+    narration: 'Driving Score returns at 340ms — flagged stale (3h old). Telematics Hub responds fresh at 78ms. The Validator queues a staleness warning for driving data.',
+    activeNodes: ['driving', 'telematics', 'insurance'],
+    activeEdges: ['driving', 'telematics'],
+    insStage: 'aggregator',
+    log: '⚠ Stale flag: drive_score',
+  },
+  {
+    title: 'Financial Data Fetched',
+    narration: 'Credit Bureau returns a financial score in 156ms. Under Basic tier, raw income and credit details are policy-blocked — only the aggregate score index passes through.',
+    activeNodes: ['financial', 'insurance'],
+    activeEdges: ['financial'],
+    insStage: 'aggregator',
+    log: '→ Financial score queued',
+  },
+  {
+    title: 'PII Access Blocked',
+    narration: 'Location Service is marked RESTRICTED. No query is dispatched. The Contract Engine logs a policy block and marks geolocation fields unavailable for this request.',
+    activeNodes: ['location', 'insurance'],
+    activeEdges: [],
+    blockedEdges: ['location'],
+    insStage: 'contract',
+    log: '✕ PII block logged: location',
+  },
+  {
+    title: 'Behavioral & Claims',
+    narration: 'Behavioral Data is still pending at 445ms. Claims History returns from the internal DB instantly at 190ms. Aggregator marks behavioral as pending.',
+    activeNodes: ['behavioral', 'claims', 'insurance'],
+    activeEdges: ['behavioral', 'claims'],
+    insStage: 'aggregator',
+    log: '→ Claims merged; behavioral pending',
+  },
+  {
+    title: 'Aggregation Complete',
+    narration: '7 providers returned data. 1 blocked (PII). 1 stale (telematics). The unified data object advances to the Contract Engine for policy evaluation.',
+    activeNodes: ['insurance'],
+    activeEdges: [],
+    insStage: 'aggregator',
+    log: '→ Aggregation complete: 7/8',
+  },
+  {
+    title: 'Contract Enforcement',
+    narration: 'The Contract Engine applies tier rules field-by-field. Basic tier strips 5 of 9 fields. Premium tier allows 7 of 9. Every decision is logged immutably.',
+    activeNodes: ['insurance'],
+    activeEdges: [],
+    insStage: 'contract',
+    log: '→ 5 fields stripped (Basic tier)',
+  },
+  {
+    title: 'Validation & Signing',
+    narration: 'The Validator confirms schema compliance, checks for restricted data leaks, and signs the response with a policy hash before releasing it downstream.',
+    activeNodes: ['insurance'],
+    activeEdges: [],
+    insStage: 'validator',
+    log: '→ Signature: 0x4fa3…c2d1',
+  },
+  {
+    title: 'Response Delivered',
+    narration: 'The signed, filtered payload is delivered to the Consumer. Basic tier receives 4 of 9 fields. Each blocked field returns a policy reason code instead of data.',
+    activeNodes: ['insurance', 'consumer'],
+    activeEdges: ['out'],
+    insStage: 'validator',
+    log: '→ Response dispatched: 4/9 fields',
+  },
+];
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function edgePath(i) {
-  const cy = provCY(i);
-  return `M${PROV_L + PROV_W},${cy} C${PROV_L + PROV_W + 80},${cy} ${INS_L - 60},${INS_CY} ${INS_L},${INS_CY}`;
+  const cy = pCY(i);
+  return `M${PL + PW},${cy} C${PL + PW + 55},${cy} ${IL - 55},${ICY} ${IL},${ICY}`;
 }
 
-function pulseDur(status) {
-  if (status === 'stale') return '2.2s';
-  if (status === 'processing') return '1.8s';
-  return '1.4s';
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `${r},${g},${b}`;
 }
 
-// ── EdgeSVG ──────────────────────────────────────────────────────────────────
+// ── EdgeSVG ───────────────────────────────────────────────────────────────────
+function EdgeSVG({ step }) {
+  const { activeEdges = [], blockedEdges = [] } = step;
 
-function EdgeSVG({ contract }) {
   return (
-    <svg
-      className="pf-edge-layer"
-      viewBox={`0 0 ${CANVAS_W} ${CANVAS_H}`}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className="pf-edge-layer" viewBox={`0 0 ${CW} ${CH}`} xmlns="http://www.w3.org/2000/svg">
       <defs>
-        {/* Blur glow for provider edges */}
-        <filter id="pfgb" x="-80%" y="-80%" width="260%" height="260%">
-          <feGaussianBlur stdDeviation="4" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
+        <filter id="pfgb" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="3" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
-
-        {/* Stronger glow for output edge */}
-        <filter id="pfgo" x="-80%" y="-80%" width="260%" height="260%">
-          <feGaussianBlur stdDeviation="6" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-
-        {/* Hidden motion paths — one per provider */}
         {PROVIDERS.map((p, i) => (
-          <path
-            key={`pp-${p.id}`}
-            id={`pp-${p.id}`}
-            d={edgePath(i)}
-            fill="none"
-          />
+          <path key={`pp-${p.id}`} id={`pp-${p.id}`} d={edgePath(i)} fill="none" />
         ))}
-
-        {/* Output motion path */}
-        <path id="pp-out" d={`M${INS_RE},${INS_CY} L${CON_L},${CON_CY}`} fill="none" />
+        <path id="pp-out" d={`M${IRE},${ICY} L${OL},${OCY}`} fill="none" />
       </defs>
 
-      {/* Provider → Insurance edges */}
       {PROVIDERS.map((p, i) => {
-        const path = edgePath(i);
-        const isRestricted = p.status === 'restricted';
-        const isStale = p.status === 'stale';
-        const dur = pulseDur(p.status);
-        const dur2 = parseFloat(dur) * 0.33 + 's';
-        const dur3 = parseFloat(dur) * 0.66 + 's';
+        const isActive  = activeEdges.includes(p.id);
+        const isBlocked = blockedEdges.includes(p.id);
+        if (!isActive && !isBlocked) return null;
 
         return (
           <g key={p.id}>
-            {/* Glow backing */}
-            <path
-              d={path}
-              stroke={p.color}
-              strokeWidth="5"
-              fill="none"
-              opacity="0.08"
-              filter="url(#pfgb)"
-            />
-
-            {/* Animated flow line */}
-            <path
-              d={path}
-              stroke={p.color}
-              strokeWidth="1.2"
-              fill="none"
-              opacity={isRestricted ? 0.2 : 0.5}
-              strokeDasharray={isStale || isRestricted ? '5 4' : '6 30'}
-              className="pf-flow"
-            />
-
-            {/* Pulse dots — skip restricted */}
-            {!isRestricted && (
+            {isActive && (
               <>
-                <circle r="3" fill={p.color} filter="url(#pfgb)" opacity="0.9">
-                  <animateMotion dur={dur} begin="0s" repeatCount="indefinite">
+                <path d={edgePath(i)} stroke={p.color} strokeWidth="5"
+                  fill="none" opacity="0.06" filter="url(#pfgb)" />
+                <path d={edgePath(i)} stroke={p.color} strokeWidth="1.2"
+                  fill="none" opacity="0.45" strokeDasharray="6 18" className="pf-flow" />
+                <circle r="2.5" fill={p.color} filter="url(#pfgb)" opacity="0.85">
+                  <animateMotion dur="1.1s" begin="0s" repeatCount="indefinite">
                     <mpath href={`#pp-${p.id}`} />
                   </animateMotion>
                 </circle>
-                <circle r="3" fill={p.color} filter="url(#pfgb)" opacity="0.9">
-                  <animateMotion dur={dur} begin={dur2} repeatCount="indefinite">
+                <circle r="2.5" fill={p.color} filter="url(#pfgb)" opacity="0.85">
+                  <animateMotion dur="1.1s" begin="0.37s" repeatCount="indefinite">
                     <mpath href={`#pp-${p.id}`} />
                   </animateMotion>
                 </circle>
-                <circle r="3" fill={p.color} filter="url(#pfgb)" opacity="0.9">
-                  <animateMotion dur={dur} begin={dur3} repeatCount="indefinite">
-                    <mpath href={`#pp-${p.id}`} />
-                  </animateMotion>
-                </circle>
+              </>
+            )}
+            {isBlocked && (
+              <>
+                <path d={edgePath(i)} stroke="#ef4444" strokeWidth="1"
+                  fill="none" opacity="0.35" strokeDasharray="3 6" />
+                <text x={PL + PW + 20} y={pCY(i) + 4}
+                  fontSize="8" fill="#ef4444" opacity="0.65" fontFamily="monospace" letterSpacing="0.5">
+                  BLOCKED
+                </text>
               </>
             )}
           </g>
         );
       })}
 
-      {/* Insurance → Consumer output edge */}
-      <g>
-        {/* Thick glow */}
-        <path
-          d={`M${INS_RE},${INS_CY} L${CON_L},${CON_CY}`}
-          stroke="#22c55e"
-          strokeWidth="6"
-          fill="none"
-          opacity="0.1"
-          filter="url(#pfgo)"
-        />
-        {/* Line */}
-        <path
-          d={`M${INS_RE},${INS_CY} L${CON_L},${CON_CY}`}
-          stroke="#22c55e"
-          strokeWidth="2"
-          fill="none"
-          opacity="0.8"
-          strokeDasharray="6 30"
-          className="pf-flow"
-        />
-        {/* Pulse dots */}
-        {[0, 0.33, 0.66].map((offset, idx) => (
-          <circle key={idx} r="3.5" fill="#22c55e" filter="url(#pfgo)" opacity="0.9">
-            <animateMotion dur="0.9s" begin={`${(0.9 * offset).toFixed(2)}s`} repeatCount="indefinite">
-              <mpath href="#pp-out" />
-            </animateMotion>
-          </circle>
-        ))}
-      </g>
+      {activeEdges.includes('out') && (
+        <g>
+          <path d={`M${IRE},${ICY} L${OL},${OCY}`}
+            stroke="#22c55e" strokeWidth="5" fill="none" opacity="0.07" filter="url(#pfgb)" />
+          <path d={`M${IRE},${ICY} L${OL},${OCY}`}
+            stroke="#22c55e" strokeWidth="1.5" fill="none" opacity="0.7"
+            strokeDasharray="6 16" className="pf-flow" />
+          {[0, 0.5].map((off, idx) => (
+            <circle key={idx} r="3" fill="#22c55e" filter="url(#pfgb)" opacity="0.9">
+              <animateMotion dur="0.75s" begin={`${0.75 * off}s`} repeatCount="indefinite">
+                <mpath href="#pp-out" />
+              </animateMotion>
+            </circle>
+          ))}
+        </g>
+      )}
     </svg>
   );
 }
 
-// ── ProviderCard ─────────────────────────────────────────────────────────────
-
-function ProviderCard({ p, i }) {
+// ── ProviderCard ──────────────────────────────────────────────────────────────
+function ProviderCard({ p, i, dim }) {
   return (
     <div
-      className={`pf-pcard pf-pcard--${p.status}`}
-      style={{ top: provY(i), '--c': p.color }}
+      className={`pf-pcard pf-pcard--${p.status}${dim ? ' pf-dim' : ''}`}
+      style={{ top: pY(i), '--c': p.color }}
     >
       <div className="pf-pcard-accent" />
       <div className="pf-pcard-body">
-        <div className="pf-pcard-top">
-          <span className="pf-pcard-name">{p.label}</span>
-          <span className={`pf-tag pf-tag--${p.tag}`}>{p.tag}</span>
-        </div>
-        <div className="pf-pcard-bot">
+        <div className="pf-pcard-name">{p.label}</div>
+        <div className="pf-pcard-foot">
           <span className="pf-pcard-sub">{p.sub}</span>
-          <div className="pf-pcard-meta">
-            <span className={`pf-dot pf-dot--${p.status}`} />
-            <span className="pf-pcard-status">{p.status}</span>
-            <span className="pf-pcard-lat">{p.lat}</span>
-          </div>
+          <span className="pf-pcard-lat">{p.lat}</span>
         </div>
       </div>
     </div>
@@ -236,193 +237,175 @@ function ProviderCard({ p, i }) {
 }
 
 // ── InsuranceNode ─────────────────────────────────────────────────────────────
+const INS_STAGES = [
+  { id: 'aggregator', label: 'Aggregator',      color: '#4f8ef7' },
+  { id: 'contract',   label: 'Contract Engine', color: '#8b5cf6' },
+  { id: 'validator',  label: 'Validator',        color: '#22c55e' },
+];
 
-function InsuranceNode({ contract }) {
-  const c = CONTRACTS[contract];
-  const allFields = c.groups.flatMap(g => g.fields);
-  const allowed = allFields.filter(f => f.ok).length;
-  const total = allFields.length;
+function InsuranceNode({ step }) {
+  const dim = !step.activeNodes.includes('insurance');
+  const { insStage, log } = step;
 
   return (
-    <div className="pf-ins">
+    <div className={`pf-ins${dim ? ' pf-dim' : ''}`}>
       <div className="pf-ins-head">
-        <div className="pf-ins-icon">
-          {/* Hexagon SVG */}
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <polygon
-              points="8,1 14.5,4.5 14.5,11.5 8,15 1.5,11.5 1.5,4.5"
-              stroke="#4f8ef7"
-              strokeWidth="1.2"
-              fill="rgba(79,142,247,0.15)"
-            />
-            <polygon
-              points="8,4.5 11.5,6.5 11.5,10 8,12 4.5,10 4.5,6.5"
-              fill="#4f8ef7"
-              opacity="0.4"
-            />
-          </svg>
-        </div>
-        <div>
-          <div className="pf-ins-title">Insurance Node</div>
-          <div className="pf-ins-sub">Aggregation · Contract Engine · Validator</div>
-        </div>
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <polygon
+            points="6.5,1 11.5,3.75 11.5,9.25 6.5,12 1.5,9.25 1.5,3.75"
+            stroke="#4f8ef7" strokeWidth="1.1" fill="rgba(79,142,247,0.12)"
+          />
+        </svg>
+        <span className="pf-ins-title">Insurance Node</span>
       </div>
 
       <div className="pf-ins-rule" />
 
-      <div className="pf-ins-systems">
-        <div className="pf-sys pf-sys--ok">
-          <span className="pf-sys-led pf-sys-led--green" />
-          <span className="pf-sys-name">Aggregator</span>
-          <span className="pf-sys-badge">running</span>
-        </div>
-        <div className="pf-sys pf-sys--active">
-          <span className="pf-sys-led pf-sys-led--pulse" />
-          <span className="pf-sys-name">Contract Engine</span>
-          <span className="pf-sys-badge pf-sys-badge--active">enforcing</span>
-        </div>
-        <div className="pf-sys pf-sys--warn">
-          <span className="pf-sys-led pf-sys-led--warn" />
-          <span className="pf-sys-name">Validator</span>
-          <span className="pf-sys-badge pf-sys-badge--warn">stale check</span>
-        </div>
+      <div className="pf-ins-stages">
+        {INS_STAGES.map(s => (
+          <div
+            key={s.id}
+            className={`pf-stage${insStage === s.id ? ' pf-stage--on' : ''}`}
+            style={{ '--sc': s.color, '--sc-rgb': hexToRgb(s.color) }}
+          >
+            <span className={`pf-stage-led${insStage === s.id ? ' pf-stage-led--on' : ''}`} />
+            <span className="pf-stage-name">{s.label}</span>
+            {insStage === s.id && <span className="pf-stage-pill">active</span>}
+          </div>
+        ))}
       </div>
 
-      <div className="pf-ins-rule" />
-
-      <div className="pf-ins-logs">
-        <div className="pf-ilog pf-ilog--ok">
-          <span>✔</span>
-          <span>Contract applied — {c.label}</span>
-        </div>
-        <div className="pf-ilog pf-ilog--warn">
-          <span>⚠</span>
-          <span>Provider B stale (3h old)</span>
-        </div>
-        <div className="pf-ilog pf-ilog--ok">
-          <span>✔</span>
-          <span>Response sent — {allowed}/{total} fields</span>
-        </div>
-      </div>
+      {log && (
+        <>
+          <div className="pf-ins-rule" />
+          <div className="pf-ins-log">{log}</div>
+        </>
+      )}
     </div>
   );
 }
 
 // ── ConsumerNode ──────────────────────────────────────────────────────────────
+const CONSUMER_FIELDS = [
+  { n: 'age',          ok: true  },
+  { n: 'condition',    ok: true  },
+  { n: 'drive_score',  ok: true  },
+  { n: 'credit_idx',   ok: true  },
+  { n: 'bmi',          ok: false },
+  { n: 'violations',   ok: false },
+  { n: 'income',       ok: false },
+  { n: 'location',     ok: false },
+  { n: 'behavior_raw', ok: false },
+];
 
-function ConsumerNode({ contract }) {
-  const c = CONTRACTS[contract];
-  const allFields = c.groups.flatMap(g => g.fields);
-  const allowed = allFields.filter(f => f.ok).length;
-  const total = allFields.length;
+function ConsumerNode({ step }) {
+  const dim = !step.activeNodes.includes('consumer');
+  const delivered = step.title === 'Response Delivered';
+  const waiting = !delivered && step.activeNodes.includes('consumer');
 
   return (
-    <div className="pf-consumer">
+    <div className={`pf-consumer${dim ? ' pf-dim' : ''}`}>
       <div className="pf-consumer-head">
-        <span className="pf-consumer-arrow">→</span>
-        <div>
-          <div className="pf-consumer-title">Consumer</div>
-          <div className="pf-consumer-tier">{c.label}</div>
-        </div>
+        <span className="pf-consumer-title">Consumer</span>
+        <span className="pf-consumer-tier">Basic Tier</span>
       </div>
-
       <div className="pf-consumer-rule" />
-
       <div className="pf-consumer-body">
-        {c.groups.map(g => (
-          <div key={g.name} className="pf-cgroup">
-            <div className="pf-cgroup-label">{g.name}</div>
-            {g.fields.map(f => (
+        {delivered ? (
+          <div className="pf-consumer-fields">
+            {CONSUMER_FIELDS.map(f => (
               <div key={f.n} className={`pf-cf pf-cf--${f.ok ? 'ok' : 'no'}`}>
-                <span className="pf-cf-dot" />
-                {f.n}
+                <span className="pf-cf-dot" />{f.n}
               </div>
             ))}
           </div>
-        ))}
+        ) : (
+          <div className="pf-consumer-idle">
+            {waiting ? 'Awaiting response…' : 'Idle'}
+          </div>
+        )}
       </div>
-
-      <div className="pf-consumer-foot">{allowed} of {total} fields</div>
+      {delivered && (
+        <div className="pf-consumer-foot">4 / 9 fields permitted</div>
+      )}
     </div>
   );
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
-
+// ── Main ──────────────────────────────────────────────────────────────────────
 export default function PolicyFabric() {
-  const [contract, setContract] = useState('basic');
+  const [step, setStep] = useState(0);
+  const s = STEPS[step];
 
-  const c = CONTRACTS[contract];
-  const allFields = c.groups.flatMap(g => g.fields);
-  const allowed = allFields.filter(f => f.ok).length;
-  const total = allFields.length;
+  const prev = () => setStep(i => Math.max(0, i - 1));
+  const next = () => setStep(i => Math.min(STEPS.length - 1, i + 1));
 
   return (
     <div className="pf-page project-detail-page">
 
-      {/* Page Header */}
+      {/* Header */}
       <div className="pf-header">
         <div className="pf-header-text">
           <h1 className="pf-header-title">PolicyFabric</h1>
           <p className="pf-header-subtitle">
-            Real-time distributed architecture with contract-based access control,
-            8 live data providers, and policy enforcement at the insurance node.
+            A distributed data architecture with contract-based access control.
+            Step through the full request lifecycle — from consumer request to filtered payload delivery.
           </p>
         </div>
         <div className="pf-header-badges">
-          <span className="pf-header-badge">Providers: 8</span>
-          <span className="pf-header-badge">Contracts: 2</span>
-          <span className="pf-header-badge">Fields: {allowed}/{total}</span>
+          <span className="pf-header-badge">8 Providers</span>
+          <span className="pf-header-badge">12 Steps</span>
           <span className="pf-header-badge pf-header-badge--live">● Live</span>
         </div>
       </div>
 
-      {/* Controls Topbar */}
-      <div className="pf-topbar">
-        <div className="pf-logo">
-          <svg className="pf-logo-icon" viewBox="0 0 20 20" fill="none">
-            <polygon
-              points="10,1 18.66,6 18.66,14 10,19 1.34,14 1.34,6"
-              stroke="#4f8ef7"
-              strokeWidth="1.5"
-              fill="rgba(79,142,247,0.08)"
+      {/* Canvas */}
+      <div className="pf-canvas-wrap">
+        <div className="pf-canvas">
+          <EdgeSVG step={s} />
+          {PROVIDERS.map((p, i) => (
+            <ProviderCard
+              key={p.id} p={p} i={i}
+              dim={!s.activeNodes.includes(p.id)}
             />
-            <polygon
-              points="10,5 15,7.5 15,12.5 10,15 5,12.5 5,7.5"
-              fill="#4f8ef7"
-              opacity="0.5"
-            />
-          </svg>
-          <span className="pf-logo-text">PolicyFabric</span>
-        </div>
-
-        <div className="pf-topbar-center">
-          <select
-            className="pf-selector"
-            value={contract}
-            onChange={e => setContract(e.target.value)}
-          >
-            <option value="basic">Basic Tier</option>
-            <option value="premium">Premium Tier</option>
-          </select>
-        </div>
-
-        <div className="pf-topbar-right">
-          <span className="pf-live-dot" />
-          <span className="pf-live-lbl">Live</span>
-          <span className="pf-metrics-pill">8 providers · {allowed}/{total} fields</span>
+          ))}
+          <InsuranceNode step={s} />
+          <ConsumerNode step={s} />
         </div>
       </div>
 
-      {/* Main Canvas */}
-      <div className="pf-canvas-wrap">
-        <div className="pf-canvas">
-          <EdgeSVG contract={contract} />
-          {PROVIDERS.map((p, i) => (
-            <ProviderCard key={p.id} p={p} i={i} />
-          ))}
-          <InsuranceNode contract={contract} />
-          <ConsumerNode contract={contract} />
+      {/* Step Panel */}
+      <div className="pf-step-panel">
+        <div className="pf-progress">
+          <div
+            className="pf-progress-bar"
+            style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+          />
+        </div>
+        <div className="pf-step-content">
+          <span className="pf-step-num">{String(step + 1).padStart(2, '0')} / {STEPS.length}</span>
+          <h2 className="pf-step-title">{s.title}</h2>
+          <p className="pf-step-narration">{s.narration}</p>
+        </div>
+        <div className="pf-step-controls">
+          <button className="pf-btn" onClick={prev} disabled={step === 0}>← Back</button>
+          <div className="pf-step-dots">
+            {STEPS.map((_, i) => (
+              <button
+                key={i}
+                className={`pf-dot-btn${i === step ? ' pf-dot-btn--on' : ''}`}
+                onClick={() => setStep(i)}
+                aria-label={`Step ${i + 1}`}
+              />
+            ))}
+          </div>
+          <button
+            className="pf-btn pf-btn--primary"
+            onClick={next}
+            disabled={step === STEPS.length - 1}
+          >
+            {step === STEPS.length - 1 ? 'Done' : 'Continue →'}
+          </button>
         </div>
       </div>
 

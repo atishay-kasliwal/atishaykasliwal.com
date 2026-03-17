@@ -1,8 +1,6 @@
-/* ============================================================
-   PolicyFabric — AWS-style architecture diagram / radial graph
-   ============================================================ */
+/* PolicyFabric — Minimalist interactive story diagram */
 
-/* ── Page ─────────────────────────────────────────────────── */
+/* ── Page ─────────────────────────────────────────── */
 
 .pf-page {
   min-height: 100vh;
@@ -14,7 +12,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Page Header ────────────────────────────────────────────── */
+/* ── Header ───────────────────────────────────────── */
 
 .pf-header {
   max-width: 1200px;
@@ -25,28 +23,26 @@
   align-items: flex-end;
   gap: 1.5rem;
   flex-wrap: wrap;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.pf-header-text {
-  flex: 1;
-  min-width: 220px;
-}
+.pf-header-text { flex: 1; min-width: 220px; }
 
 .pf-header-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(255,255,255,0.96);
   margin: 0 0 0.3rem;
   letter-spacing: -0.02em;
 }
 
 .pf-header-subtitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.40);
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.38);
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.55;
+  max-width: 520px;
 }
 
 .pf-header-badges {
@@ -59,145 +55,45 @@
 .pf-header-badge {
   font-size: 0.72rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.58);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 20px;
-  padding: 0.3rem 0.75rem;
+  padding: 0.28rem 0.72rem;
   white-space: nowrap;
 }
 
 .pf-header-badge--live {
-  color: rgba(34, 197, 94, 0.85);
-  border-color: rgba(34, 197, 94, 0.2);
-  background: rgba(34, 197, 94, 0.06);
+  color: rgba(34,197,94,0.85);
+  border-color: rgba(34,197,94,0.2);
+  background: rgba(34,197,94,0.05);
 }
 
-/* ── Topbar ─────────────────────────────────────────────────── */
-
-.pf-topbar {
-  position: sticky;
-  top: 72px;
-  z-index: 40;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 4%;
-  background: rgba(8, 12, 24, 0.97);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.pf-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.pf-logo-icon {
-  width: 20px;
-  height: 20px;
-  filter: drop-shadow(0 0 6px rgba(79, 142, 247, 0.6));
-}
-
-.pf-logo-text {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: -0.02em;
-  color: #f1f5f9;
-}
-
-.pf-topbar-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.pf-selector {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #e2e8f0;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 500;
-  padding: 0.35rem 2.2rem 0.35rem 0.75rem;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23667' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.6rem center;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.pf-selector:focus {
-  outline: none;
-  border-color: #4f8ef7;
-  box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
-}
-
-.pf-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-shrink: 0;
-}
-
-.pf-live-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
-  animation: pf-blink 2s ease-in-out infinite;
-}
-
-.pf-live-lbl {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #22c55e;
-}
-
-.pf-metrics-pill {
-  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 6px;
-  padding: 0.22rem 0.6rem;
-}
-
-/* ── Canvas Wrap ────────────────────────────────────────────── */
+/* ── Canvas Wrap ──────────────────────────────────── */
 
 .pf-canvas-wrap {
   width: 92%;
-  max-width: 1100px;
-  margin: 2rem auto 3rem;
-  background: rgba(8, 12, 24, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 16px;
+  max-width: 1060px;
+  margin: 2rem auto 0;
+  background: rgba(6,10,20,0.8);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px 14px 0 0;
   overflow-x: auto;
-  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 48px rgba(0,0,0,0.4);
 }
 
-/* ── Canvas — dot grid ──────────────────────────────────────── */
+/* ── Canvas ───────────────────────────────────────── */
 
 .pf-canvas {
   position: relative;
-  min-width: 870px;
-  height: 680px;
+  min-width: 900px;
+  height: 540px;
   background-color: #060a14;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
-/* ── SVG Edge Layer ─────────────────────────────────────────── */
+/* ── SVG edge layer ───────────────────────────────── */
 
 .pf-edge-layer {
   position: absolute;
@@ -208,84 +104,76 @@
   pointer-events: none;
 }
 
-/* ── Flow animation (stroke-dashoffset) ─────────────────────── */
+/* ── Animations ───────────────────────────────────── */
 
 @keyframes pf-flow {
   from { stroke-dashoffset: 30; }
-  to   { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 0;  }
 }
 
-.pf-flow {
-  animation: pf-flow 1.2s linear infinite;
-}
-
-/* ── Blink animation ────────────────────────────────────────── */
+.pf-flow { animation: pf-flow 1s linear infinite; }
 
 @keyframes pf-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.3; }
 }
 
-/* ── Provider Card ──────────────────────────────────────────── */
+/* ── Dim — inactive nodes ─────────────────────────── */
+
+.pf-dim {
+  opacity: 0.1 !important;
+  filter: none !important;
+}
+
+.pf-pcard,
+.pf-ins,
+.pf-consumer {
+  transition: opacity 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ── Provider Cards ───────────────────────────────── */
 
 .pf-pcard {
   position: absolute;
   left: 16px;
-  width: 192px;
-  height: 62px;
+  width: 175px;
+  height: 52px;
   background: #0c1220;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 6px;
   display: flex;
   overflow: hidden;
-  transition: box-shadow 0.2s;
 }
 
-.pf-pcard:hover {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 4px 20px rgba(0, 0, 0, 0.4);
+.pf-pcard:hover:not(.pf-dim) {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.35);
 }
 
 .pf-pcard-accent {
   width: 3px;
   flex-shrink: 0;
-  background: var(--c);
+  background: var(--c, #4f8ef7);
 }
-
-/* Status-specific accent fallbacks */
-.pf-pcard--stale      .pf-pcard-accent { background: #f59e0b; }
-.pf-pcard--restricted .pf-pcard-accent { background: #ef4444; }
-.pf-pcard--processing .pf-pcard-accent { background: #06b6d4; }
 
 .pf-pcard-body {
   flex: 1;
-  padding: 8px 10px;
+  padding: 7px 9px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-width: 0;
 }
 
-.pf-pcard-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-}
-
 .pf-pcard-name {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255,255,255,0.82);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
 }
 
-.pf-pcard-bot {
+.pf-pcard-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -293,344 +181,207 @@
 }
 
 .pf-pcard-sub {
-  font-size: 0.62rem;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.28);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
-  min-width: 0;
-}
-
-.pf-pcard-meta {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  flex-shrink: 0;
-}
-
-.pf-pcard-status {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.35);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .pf-pcard-lat {
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.62rem;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* ── Status Dots ────────────────────────────────────────────── */
-
-.pf-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.35);
   flex-shrink: 0;
-  display: inline-block;
 }
 
-.pf-dot--active {
-  background: #22c55e;
-  box-shadow: 0 0 5px #22c55e;
-}
-
-.pf-dot--stale {
-  background: #f59e0b;
-  box-shadow: 0 0 5px #f59e0b;
-  animation: pf-blink 1.5s ease-in-out infinite;
-}
-
-.pf-dot--restricted {
-  background: #ef4444;
-  box-shadow: 0 0 5px #ef4444;
-}
-
-.pf-dot--processing {
-  background: #06b6d4;
-  box-shadow: 0 0 5px #06b6d4;
-  animation: pf-blink 0.8s ease-in-out infinite;
-}
-
-/* ── Tag Badges ─────────────────────────────────────────────── */
-
-.pf-tag {
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 2px 5px;
-  border-radius: 3px;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-.pf-tag--HEALTH    { background: rgba(79, 142, 247, 0.15); color: #4f8ef7; }
-.pf-tag--TELEMATIC { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.pf-tag--PII       { background: rgba(239, 68, 68, 0.15);  color: #ef4444; }
-.pf-tag--FINANCIAL { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
-.pf-tag--ANALYTICS { background: rgba(6, 182, 212, 0.15);  color: #06b6d4; }
-.pf-tag--IOT       { background: rgba(34, 197, 94, 0.15);  color: #22c55e; }
-.pf-tag--INSURANCE { background: rgba(249, 115, 22, 0.15); color: #f97316; }
-
-/* ── Insurance Node ─────────────────────────────────────────── */
+/* ── Insurance Node ───────────────────────────────── */
 
 .pf-ins {
   position: absolute;
-  left: 264px;
-  top: 140px;
-  width: 280px;
-  height: 400px;
-  background: rgba(8, 14, 28, 0.95);
-  border: 1px solid rgba(79, 142, 247, 0.28);
+  left: 244px;
+  top: 120px;
+  width: 234px;
+  height: 300px;
+  background: rgba(8,14,28,0.97);
+  border: 1px solid rgba(79,142,247,0.25);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  box-shadow:
-    0 0 0 1px rgba(79, 142, 247, 0.06),
-    0 0 50px rgba(79, 142, 247, 0.14),
-    inset 0 0 80px rgba(79, 142, 247, 0.03);
+  box-shadow: 0 0 40px rgba(79,142,247,0.1);
   overflow: hidden;
 }
 
-/* Corner decorators */
+/* Corner brackets */
 .pf-ins::before,
 .pf-ins::after {
   content: '';
   position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: rgba(79, 142, 247, 0.5);
+  width: 12px;
+  height: 12px;
+  border-color: rgba(79,142,247,0.45);
   border-style: solid;
   z-index: 2;
   pointer-events: none;
 }
 
-.pf-ins::before {
-  top: -1px;
-  left: -1px;
-  border-width: 2px 0 0 2px;
-  border-radius: 3px 0 0 0;
-}
+.pf-ins::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
+.pf-ins::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
 
-.pf-ins::after {
-  bottom: -1px;
-  right: -1px;
-  border-width: 0 2px 2px 0;
-  border-radius: 0 0 3px 0;
-}
-
-/* Insurance head */
 .pf-ins-head {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 14px 14px 10px;
-}
-
-.pf-ins-icon {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  background: rgba(79, 142, 247, 0.1);
-  border: 1px solid rgba(79, 142, 247, 0.2);
-  border-radius: 6px;
+  gap: 8px;
+  padding: 13px 13px 10px;
+  flex-shrink: 0;
 }
 
 .pf-ins-title {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255,255,255,0.88);
   letter-spacing: -0.01em;
-}
-
-.pf-ins-sub {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.3);
-  margin-top: 2px;
-  line-height: 1.3;
 }
 
 .pf-ins-rule {
   height: 1px;
-  background: rgba(255, 255, 255, 0.06);
-  margin: 0;
+  background: rgba(255,255,255,0.06);
   flex-shrink: 0;
 }
 
-/* Subsystems */
-.pf-ins-systems {
-  padding: 10px 14px;
+/* Stages */
+.pf-ins-stages {
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
+  flex: 1;
 }
 
-.pf-sys {
+.pf-stage {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.025);
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 6px;
   border: 1px solid transparent;
+  background: rgba(255,255,255,0.02);
+  transition: background 0.35s, border-color 0.35s;
 }
 
-.pf-sys--active {
-  background: rgba(79, 142, 247, 0.08);
-  border-color: rgba(79, 142, 247, 0.18);
+.pf-stage--on {
+  background: rgba(var(--sc-rgb), 0.08);
+  border-color: rgba(var(--sc-rgb), 0.22);
 }
 
-.pf-sys--warn {
-  background: rgba(245, 158, 11, 0.05);
-}
-
-.pf-sys-led {
+.pf-stage-led {
   width: 7px;
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  transition: background 0.35s, box-shadow 0.35s;
 }
 
-.pf-sys-led--green {
-  background: #22c55e;
-  box-shadow: 0 0 6px #22c55e;
+.pf-stage-led--on {
+  background: var(--sc, #4f8ef7);
+  box-shadow: 0 0 8px var(--sc, #4f8ef7);
+  animation: pf-blink 1.4s ease-in-out infinite;
 }
 
-.pf-sys-led--pulse {
-  background: #4f8ef7;
-  box-shadow: 0 0 8px #4f8ef7;
-  animation: pf-blink 1.2s ease-in-out infinite;
-}
-
-.pf-sys-led--warn {
-  background: #f59e0b;
-  box-shadow: 0 0 6px #f59e0b;
-  animation: pf-blink 2s ease-in-out infinite;
-}
-
-.pf-sys-name {
+.pf-stage-name {
   font-size: 0.72rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255,255,255,0.5);
   flex: 1;
+  transition: color 0.35s;
 }
 
-.pf-sys-badge {
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.28);
+.pf-stage--on .pf-stage-name {
+  color: rgba(255,255,255,0.9);
+}
+
+.pf-stage-pill {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 2px 5px;
+  color: var(--sc, #4f8ef7);
+  background: rgba(var(--sc-rgb), 0.12);
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 5px;
 }
 
-.pf-sys-badge--active {
-  color: rgba(79, 142, 247, 0.9);
-  background: rgba(79, 142, 247, 0.1);
-}
-
-.pf-sys-badge--warn {
-  color: rgba(245, 158, 11, 0.8);
-  background: rgba(245, 158, 11, 0.08);
-}
-
-/* Insurance logs */
-.pf-ins-logs {
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-}
-
-.pf-ilog {
-  font-size: 0.68rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
+/* Step log */
+.pf-ins-log {
+  padding: 10px 13px 12px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  line-height: 1.4;
-}
-
-.pf-ilog span:first-child {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.5;
   flex-shrink: 0;
 }
 
-.pf-ilog--ok   { color: rgba(34, 197, 94, 0.75); }
-.pf-ilog--warn { color: rgba(245, 158, 11, 0.85); }
-
-/* ── Consumer Node ──────────────────────────────────────────── */
+/* ── Consumer Node ────────────────────────────────── */
 
 .pf-consumer {
   position: absolute;
-  left: 600px;
-  top: 215px;
-  width: 205px;
-  height: 250px;
-  background: rgba(8, 14, 28, 0.95);
-  border: 1px solid rgba(34, 197, 94, 0.22);
+  left: 530px;
+  top: 140px;
+  width: 190px;
+  height: 260px;
+  background: rgba(8,14,28,0.97);
+  border: 1px solid rgba(34,197,94,0.2);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.08);
+  box-shadow: 0 0 25px rgba(34,197,94,0.06);
 }
 
 .pf-consumer-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   padding: 12px 12px 8px;
   flex-shrink: 0;
-}
-
-.pf-consumer-arrow {
-  font-size: 1.1rem;
-  color: rgba(34, 197, 94, 0.8);
-  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .pf-consumer-title {
   font-size: 0.78rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255,255,255,0.88);
 }
 
 .pf-consumer-tier {
   font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.3);
-  margin-top: 1px;
+  color: rgba(255,255,255,0.28);
 }
 
 .pf-consumer-rule {
   height: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255,255,255,0.06);
   flex-shrink: 0;
 }
 
 .pf-consumer-body {
   flex: 1;
+  padding: 10px 12px;
   overflow: hidden;
 }
 
-.pf-cgroup {
-  padding: 5px 12px 3px;
+.pf-consumer-idle {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.22);
+  font-style: italic;
+  padding-top: 2px;
 }
 
-.pf-cgroup-label {
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
-  margin-bottom: 3px;
+.pf-consumer-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .pf-cf {
@@ -638,8 +389,7 @@
   align-items: center;
   gap: 6px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.64rem;
-  margin-bottom: 2px;
+  font-size: 0.62rem;
 }
 
 .pf-cf-dot {
@@ -649,39 +399,154 @@
   flex-shrink: 0;
 }
 
-.pf-cf--ok .pf-cf-dot {
-  background: rgba(34, 197, 94, 0.9);
-  box-shadow: 0 0 4px rgba(34, 197, 94, 0.6);
-}
-
-.pf-cf--ok {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.pf-cf--no .pf-cf-dot {
-  background: rgba(239, 68, 68, 0.6);
-}
-
-.pf-cf--no {
-  color: rgba(255, 255, 255, 0.22);
-  text-decoration: line-through;
-}
+.pf-cf--ok .pf-cf-dot { background: rgba(34,197,94,0.9); box-shadow: 0 0 4px rgba(34,197,94,0.5); }
+.pf-cf--ok             { color: rgba(255,255,255,0.72); }
+.pf-cf--no .pf-cf-dot { background: rgba(239,68,68,0.5); }
+.pf-cf--no             { color: rgba(255,255,255,0.18); text-decoration: line-through; }
 
 .pf-consumer-foot {
-  margin-top: auto;
-  padding: 8px 12px;
-  font-size: 0.68rem;
-  color: rgba(34, 197, 94, 0.7);
+  padding: 7px 12px;
+  font-size: 0.65rem;
   font-weight: 600;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(34,197,94,0.7);
+  border-top: 1px solid rgba(255,255,255,0.06);
   flex-shrink: 0;
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
+/* ── Step Panel ───────────────────────────────────── */
+
+.pf-step-panel {
+  width: 92%;
+  max-width: 1060px;
+  margin: 0 auto 3rem;
+  background: rgba(8,12,22,0.75);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+}
+
+.pf-progress {
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+}
+
+.pf-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4f8ef7, #8b5cf6);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pf-step-content {
+  padding: 1.5rem 2rem 1rem;
+}
+
+.pf-step-num {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.2);
+  display: block;
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.08em;
+}
+
+.pf-step-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 0.45rem;
+  letter-spacing: -0.01em;
+}
+
+.pf-step-narration {
+  font-size: 0.86rem;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+  line-height: 1.65;
+  max-width: 640px;
+}
+
+.pf-step-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 2rem 1.4rem;
+  gap: 1rem;
+}
+
+.pf-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px;
+  padding: 0.45rem 1.1rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.pf-btn:hover:not(:disabled) {
+  color: rgba(255,255,255,0.85);
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.04);
+}
+
+.pf-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.pf-btn--primary {
+  color: rgba(79,142,247,0.9);
+  border-color: rgba(79,142,247,0.3);
+  background: rgba(79,142,247,0.05);
+}
+
+.pf-btn--primary:hover:not(:disabled) {
+  color: #fff;
+  border-color: rgba(79,142,247,0.6);
+  background: rgba(79,142,247,0.12);
+}
+
+/* Step dots */
+.pf-step-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pf-dot-btn {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.14);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.pf-dot-btn--on {
+  background: #4f8ef7;
+  transform: scale(1.5);
+}
+
+.pf-dot-btn:hover:not(.pf-dot-btn--on) {
+  background: rgba(255,255,255,0.35);
+}
+
+/* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 700px) {
-  .pf-topbar-center { display: none; }
-  .pf-metrics-pill  { display: none; }
-  .pf-canvas-wrap   { margin: 1rem auto 2rem; }
+  .pf-step-content  { padding: 1.2rem 1.2rem 0.75rem; }
+  .pf-step-controls { padding: 0.75rem 1.2rem 1.2rem; }
+  .pf-step-dots     { display: none; }
+  .pf-canvas-wrap   { margin: 1.5rem auto 0; }
 }
