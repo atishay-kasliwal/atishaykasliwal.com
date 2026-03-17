@@ -136,11 +136,11 @@ export default function MRIViewer() {
     const el = viewerRef.current;
     if (!el) return;
     const onWheel = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const now = Date.now();
       if (now - lastScrollAt.current < 30) return;
       lastScrollAt.current = now;
-      e.preventDefault();
-      e.stopPropagation();
       changeSlice(e.deltaY > 0 ? 1 : -1);
     };
     el.addEventListener('wheel', onWheel, { passive: false });
