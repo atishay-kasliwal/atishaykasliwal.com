@@ -858,11 +858,11 @@ function HomePage() {
 	                to="/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01"
 	                className="editorial-card editorial-card--wide editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/fmocc.jpeg)' }}
-	                aria-label="Read more: Predicting S&P 500 Trends Using FOMC Data"
+	                aria-label="Read more: Brain MRI Analysis with Deep Learning"
 	                translate="no"
 	              >
 	                <span className="editorial-tag" translate="no">Research</span>
-	                <h3 translate="no">Predicting S&P 500 Trends Using FOMC Data</h3>
+	                <h3 translate="no">Brain MRI Analysis with Deep Learning at Wake Forest</h3>
 	                <span className="editorial-pill" translate="no">Read More</span>
 	              </Link>
 
@@ -872,35 +872,35 @@ function HomePage() {
 	                rel="noopener noreferrer"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/mriimage.jpeg)' }}
-	                aria-label="View demo: Job Tracking Platform with AI Guidance (opens in a new tab)"
+	                aria-label="View demo: Job Intelligence Platform for Modern Hiring"
 	                translate="no"
 	              >
 	                <span className="editorial-tag" translate="no">Product</span>
-	                <h3 translate="no">Job Tracking Platform with AI Guidance</h3>
+	                <h3 translate="no">Job Intelligence Platform for Modern Hiring</h3>
 	                <span className="editorial-pill" translate="no">View Demo</span>
 	              </a>
 
 	              <Link
-	                to="/highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef"
+	                to="/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/chrome.png)' }}
-	                aria-label="Explore: Data Pipelines Built for Speed and Clarity"
+	                aria-label="Explore: PolicyFabric — Distributed Data Access Control"
 	                translate="no"
 	              >
 	                <span className="editorial-tag" translate="no">Systems</span>
-	                <h3 translate="no">Data Pipelines Built for Speed and Clarity</h3>
+	                <h3 translate="no">PolicyFabric — Distributed Data Access Control</h3>
 	                <span className="editorial-pill" translate="no">Explore</span>
 	              </Link>
 
 	              <Link
-	                to="/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0"
+	                to="/highlights/b2c3d4e5-f6a7-4890-b123-456789abcdef"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/4th.jpeg)' }}
-	                aria-label="Discover: Scalable Solutions for Enterprise Teams"
+	                aria-label="Discover: Movie Industry Analytics with Sentiment Modeling"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Strategy</span>
-	                <h3 translate="no">Scalable Solutions for Enterprise Teams</h3>
+	                <span className="editorial-tag" translate="no">Data</span>
+	                <h3 translate="no">Movie Industry Analytics with Sentiment Modeling</h3>
 	                <span className="editorial-pill" translate="no">Discover</span>
 	              </Link>
 
@@ -908,23 +908,23 @@ function HomePage() {
 	                to="/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012"
 	                className="editorial-card editorial-card--medium editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/5th%20image.jpeg)' }}
-	                aria-label="See work: Clean Interfaces for Complex Data"
+	                aria-label="View: Multi-Modal MRI Brain Viewer"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Design</span>
-	                <h3 translate="no">Clean Interfaces for Complex Data</h3>
-	                <span className="editorial-pill" translate="no">See Work</span>
+	                <span className="editorial-tag" translate="no">Product</span>
+	                <h3 translate="no">Multi-Modal MRI Brain Viewer</h3>
+	                <span className="editorial-pill" translate="no">View</span>
 	              </Link>
 
 	              <Link
 	                to="/highlights/a1b2c3d4-e5f6-4789-a012-3456789abcde"
 	                className="editorial-card editorial-card--wide editorial-card--has-bg"
 	                style={{ backgroundImage: 'url(/Atriveo6th.png)' }}
-	                aria-label="Learn more: Building Systems That Learn and Adapt"
+	                aria-label="Learn more: Gemma 3 NLP Research — Fine-tuning Language Models"
 	                translate="no"
 	              >
-	                <span className="editorial-tag" translate="no">Vision</span>
-	                <h3 translate="no">Building Systems That Learn and Adapt</h3>
+	                <span className="editorial-tag" translate="no">Research</span>
+	                <h3 translate="no">Gemma 3 NLP Research — Fine-tuning Language Models</h3>
 	                <span className="editorial-pill" translate="no">Learn More</span>
 	              </Link>
 	            </div>
