@@ -8,9 +8,6 @@ import conference from './assets/confremce.JPG';
 import MRIimage from './assets/atrium health.jpg';
 import wakeatishay from './assets/wakwforest.jpg';
 import braint1 from './assets/T1.png';
-import Gemma from './assets/Gemma.png';
-import hosp from './assets/2016-azure-sql-integrations-1.jpeg';
-import Moviedata from './assets/bigdata.jpg';
 // Banner block content - customize these arrays for different banner content
 // Each item can be:
 //   - A string: displays as text (e.g., 'MACHINE LEARNING')
