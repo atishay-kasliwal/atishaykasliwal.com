@@ -369,6 +369,20 @@ export default function PolicyFabric() {
 
   return (
     <div className="pf-page project-detail-page">
+      {/* ── Page Header ── */}
+      <div className="pf-header">
+        <div className="pf-header-text">
+          <h1 className="pf-header-title">PolicyFabric</h1>
+          <p className="pf-header-subtitle">Real-time distributed systems with contract-based access control and policy enforcement</p>
+        </div>
+        <div className="pf-header-badges">
+          <span className="pf-header-badge">Nodes: 4</span>
+          <span className="pf-header-badge">Contracts: 2</span>
+          <span className="pf-header-badge">Pipeline Stages: 5</span>
+          <span className="pf-header-badge pf-header-badge--live">● Live</span>
+        </div>
+      </div>
+
       {/* ── Top bar ── */}
       <div className="pf-topbar">
         <div className="pf-logo">
