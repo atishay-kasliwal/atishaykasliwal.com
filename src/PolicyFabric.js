@@ -40,90 +40,150 @@ function ts() {
     .map(n => String(n).padStart(2, '0')).join(':');
 }
 
-// ── SVG Network Graph ────────────────────────────────────────────────────────
+// ── Story Flow Graph (Sequence Diagram) ─────────────────────────────────────
+//
+//  Columns:  Consumer (CX)  |  Insurance Node (IX)  |  Providers (PX)
+//  Story reads top → bottom as events unfold in time.
 
-const NODES = {
-  insurance: { x: 150, y: 152, r: 28, label: 'Insurance Node', sub: 'Core',        latency: '45ms'  },
-  providerA: { x: 64,  y: 68,  r: 20, label: 'Provider A',     sub: 'Health Data',  latency: '120ms' },
-  providerB: { x: 236, y: 68,  r: 20, label: 'Provider B',     sub: 'Driving Data', latency: '340ms' },
-  consumer:  { x: 150, y: 240, r: 20, label: 'Consumer',       sub: 'Requester',    latency: '80ms'  },
-};
+const CX = 44, IX = 138, PX = 232;
 
-const EDGES = [
-  { id: 'a',   from: 'providerA', to: 'insurance' },
-  { id: 'b',   from: 'providerB', to: 'insurance' },
-  { id: 'out', from: 'insurance', to: 'consumer'  },
-];
+// Which sequence step each pipeline stage lights up
+const STAGE_TO_STEP = { 0: 1, 1: 2, 2: 4, 3: 4, 4: 5 };
 
-function NetworkGraph({ isStale, active }) {
+function Arrowhead({ x, y, dir = 'right', color = 'blue' }) {
+  const COLORS = {
+    blue:   'rgba(79,142,247,0.85)',
+    green:  'rgba(34,197,94,0.85)',
+    orange: 'rgba(245,158,11,0.85)',
+  };
+  const fill = COLORS[color];
+  // Small 6×5 triangle pointing right; flipped via scaleX for left-pointing
+  const pts = dir === 'right'
+    ? `${x},${y-3} ${x+6},${y} ${x},${y+3}`
+    : `${x},${y-3} ${x-6},${y} ${x},${y+3}`;
+  return <polygon points={pts} fill={fill} />;
+}
+
+function SeqStep({ lit, done, children }) {
+  const cls = lit ? 'pf-seq--lit' : done ? 'pf-seq--done' : 'pf-seq--idle';
+  return <g className={`pf-seq ${cls}`}>{children}</g>;
+}
+
+function NetworkGraph({ isStale, active, activeStage }) {
+  const lit  = (step) => active && STAGE_TO_STEP[activeStage] === step;
+  const done = (step) => active && STAGE_TO_STEP[activeStage] > step;
+
+  // contract from parent isn't passed, but we can show generic field names
   return (
-    <svg viewBox="0 0 300 310" className="pf-svg">
+    <svg viewBox="0 0 276 388" className="pf-svg" style={{ overflow: 'visible' }}>
       <defs>
-        <filter id="pfgb" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="4" result="b"/>
+        <filter id="pfgb" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
-        <filter id="pfgw" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="4" result="b"/>
+        <filter id="pfgw" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
 
-      {/* Hidden paths for animateMotion */}
-      {EDGES.map(e => {
-        const f = NODES[e.from], t = NODES[e.to];
-        return <path key={`hp-${e.id}`} id={`pf-ep-${e.id}`} d={`M${f.x} ${f.y} L${t.x} ${t.y}`} fill="none" stroke="none" />;
-      })}
+      {/* ── Actor headers ───────────────────────────── */}
+      {/* Consumer */}
+      <rect x={CX-28} y={6} width={56} height={24} rx={5} className="pf-actor" />
+      <text x={CX} y={22} textAnchor="middle" className="pf-actor-lbl">Consumer</text>
 
-      {/* Visible edges */}
-      {EDGES.map(e => {
-        const f = NODES[e.from], t = NODES[e.to];
-        const stale = e.id === 'b' && isStale;
-        return (
-          <line key={e.id} x1={f.x} y1={f.y} x2={t.x} y2={t.y}
-            className={`pf-edge ${stale ? 'pf-edge--stale' : 'pf-edge--live'}`} />
-        );
-      })}
+      {/* Insurance Node */}
+      <rect x={IX-44} y={6} width={88} height={24} rx={5}
+        className="pf-actor pf-actor--ins" style={{ filter: 'url(#pfgb)' }} />
+      <text x={IX} y={22} textAnchor="middle" className="pf-actor-lbl pf-actor-lbl--ins">Insurance Node</text>
 
-      {/* Animated pulses */}
-      {active && EDGES.map(e => {
-        const stale = e.id === 'b' && isStale;
-        const dur = stale ? 2.2 : 1.6;
-        return [0, 0.35, 0.7].map((off, oi) => (
-          <circle key={`${e.id}-${oi}`} r="3.5"
-            className={`pf-pulse ${stale ? 'pf-pulse--stale' : 'pf-pulse--live'}`}>
-            <animateMotion dur={`${dur}s`} begin={`${off * dur}s`} repeatCount="indefinite">
-              <mpath href={`#pf-ep-${e.id}`} />
-            </animateMotion>
-          </circle>
-        ));
-      })}
+      {/* Providers */}
+      <rect x={PX-30} y={6} width={60} height={24} rx={5} className="pf-actor" />
+      <text x={PX} y={18} textAnchor="middle" className="pf-actor-lbl" style={{ fontSize: '6.5px' }}>Provider A</text>
+      <text x={PX} y={27} textAnchor="middle" className="pf-actor-sub">Provider B</text>
 
-      {/* Nodes */}
-      {Object.entries(NODES).map(([key, n]) => {
-        const core  = key === 'insurance';
-        const stale = key === 'providerB' && isStale;
-        const cls   = stale ? 'stale' : core ? 'core' : 'norm';
-        return (
-          <g key={key}>
-            <circle cx={n.x} cy={n.y} r={n.r + 9} className={`pf-ring pf-ring--${cls}`} />
-            <circle cx={n.x} cy={n.y} r={n.r}     className={`pf-body pf-body--${cls}`} />
-            <text x={n.x} y={n.y - 4}  textAnchor="middle" className="pf-nlabel">{n.label}</text>
-            <text x={n.x} y={n.y + 7}  textAnchor="middle" className="pf-nsub">{n.sub}</text>
-            {/* Latency badge */}
-            <rect x={n.x + n.r - 2} y={n.y - n.r - 15} width="34" height="13" rx="4" className="pf-badge-bg" />
-            <text x={n.x + n.r + 15}  y={n.y - n.r - 6}  textAnchor="middle" className="pf-badge-txt">{n.latency}</text>
-            {/* Status dot */}
-            <circle cx={n.x - n.r + 4} cy={n.y - n.r + 4} r="4"
-              className={`pf-status-dot pf-status-dot--${cls}`} />
-            {stale && (
-              <text x={n.x} y={n.y + n.r + 15} textAnchor="middle" className="pf-stale-lbl">
-                Stale Data (3h old)
-              </text>
-            )}
-          </g>
-        );
-      })}
+      {/* ── Lifelines ───────────────────────────────── */}
+      <line x1={CX} y1={30} x2={CX} y2={378} className="pf-lifeline" />
+      <line x1={IX} y1={30} x2={IX} y2={378} className="pf-lifeline pf-lifeline--ins" />
+      <line x1={PX} y1={30} x2={PX} y2={378} className="pf-lifeline" />
+
+      {/* Insurance activation box (taller when running) */}
+      {active && (
+        <rect x={IX-5} y={40} width={10} height={330} rx={2} className="pf-activation" />
+      )}
+
+      {/* ── Step ① — Consumer sends request ─────────── y≈70 */}
+      <SeqStep lit={lit(1)} done={done(1)}>
+        {/* Step label */}
+        <text x={CX - 6} y={58} textAnchor="end" className="pf-snum">①</text>
+        <text x={(CX + IX) / 2} y={57} textAnchor="middle" className="pf-sphase">REQUEST</text>
+        {/* Arrow: Consumer → Insurance */}
+        <line x1={CX + 2} y1={66} x2={IX - 8} y2={66} className="pf-sarrow pf-sarrow--req" />
+        <Arrowhead x={IX - 8} y={66} dir="right" color="blue" />
+        <text x={(CX + IX) / 2} y={77} textAnchor="middle" className="pf-sdesc">send data request</text>
+      </SeqStep>
+
+      {/* ── Step ② — Insurance fetches from providers ─ y≈116 */}
+      <SeqStep lit={lit(2)} done={done(2)}>
+        <text x={IX - 6} y={108} textAnchor="end" className="pf-snum">②</text>
+        <text x={(IX + PX) / 2} y={107} textAnchor="middle" className="pf-sphase">FETCH</text>
+        {/* Arrow: Insurance → Providers (fetch health) */}
+        <line x1={IX + 8} y1={115} x2={PX - 8} y2={115} className="pf-sarrow pf-sarrow--fetch" />
+        <Arrowhead x={PX - 8} y={115} dir="right" color="blue" />
+        <text x={(IX + PX) / 2} y={126} textAnchor="middle" className="pf-sdesc">health data (120ms)</text>
+        {/* Arrow: Insurance → Providers (fetch driving) */}
+        <line x1={IX + 8} y1={141} x2={PX - 8} y2={141} className="pf-sarrow pf-sarrow--fetch" strokeDasharray="4 3" />
+        <Arrowhead x={PX - 8} y={141} dir="right" color="blue" />
+        <text x={(IX + PX) / 2} y={152} textAnchor="middle" className="pf-sdesc">driving data (340ms)</text>
+      </SeqStep>
+
+      {/* ── Step ③ — Providers return data ─────────── y≈186 */}
+      <SeqStep lit={lit(3)} done={done(3)}>
+        <text x={PX + 6} y={178} textAnchor="start" className="pf-snum">③</text>
+        <text x={(IX + PX) / 2} y={177} textAnchor="middle" className="pf-sphase">DATA IN</text>
+        {/* Health data return */}
+        <line x1={PX - 8} y1={186} x2={IX + 8} y2={186} className="pf-sarrow pf-sarrow--data" />
+        <Arrowhead x={IX + 8} y={186} dir="left" color="green" />
+        <text x={(IX + PX) / 2} y={197} textAnchor="middle" className="pf-sdesc">age · condition · location</text>
+        {/* Driving data return — stale or fresh */}
+        <line x1={PX - 8} y1={212} x2={IX + 8} y2={212}
+          className={`pf-sarrow ${isStale ? 'pf-sarrow--stale' : 'pf-sarrow--data'}`} />
+        <Arrowhead x={IX + 8} y={212} dir="left" color={isStale ? 'orange' : 'green'} />
+        <text x={(IX + PX) / 2} y={222} textAnchor="middle"
+          className={`pf-sdesc ${isStale ? 'pf-sdesc--warn' : ''}`}>
+          {isStale ? '⚠ score only · stale 3h' : 'score · violations · logs'}
+        </text>
+      </SeqStep>
+
+      {/* ── Step ④ — Policy enforced ────────────────── y≈250 */}
+      <SeqStep lit={lit(4)} done={done(4)}>
+        <text x={IX - 6} y={244} textAnchor="end" className="pf-snum">④</text>
+        {/* Policy box on Insurance lifeline */}
+        <rect x={IX - 46} y={248} width={92} height={26} rx={4} className="pf-policy-box" />
+        <text x={IX} y={265} textAnchor="middle" className="pf-policy-lbl">Policy Enforced</text>
+        {/* Field breakdown */}
+        <text x={IX} y={285} textAnchor="middle" className="pf-sdesc">
+          <tspan fill="rgba(34,197,94,0.8)">age ✓  score ✓</tspan>
+          <tspan>  </tspan>
+          <tspan fill="rgba(239,68,68,0.65)">location ✗  violations ✗</tspan>
+        </text>
+      </SeqStep>
+
+      {/* ── Step ⑤ — Consumer receives filtered response ─ y≈320 */}
+      <SeqStep lit={lit(5)} done={done(5)}>
+        <text x={IX - 6} y={312} textAnchor="end" className="pf-snum">⑤</text>
+        <text x={(CX + IX) / 2} y={311} textAnchor="middle" className="pf-sphase pf-sphase--resp">RESPOND</text>
+        {/* Arrow: Insurance → Consumer */}
+        <line x1={IX - 8} y1={320} x2={CX + 2} y2={320} className="pf-sarrow pf-sarrow--resp" />
+        <Arrowhead x={CX + 2} y={320} dir="left" color="green" />
+        <text x={(CX + IX) / 2} y={332} textAnchor="middle" className="pf-sdesc pf-sdesc--resp">
+          3 of 5 fields shared
+        </text>
+        {/* End marker dots on lifelines */}
+        <circle cx={CX} cy={348} r={4} className="pf-lifeline-end" />
+        <circle cx={IX} cy={348} r={4} className="pf-lifeline-end pf-lifeline-end--ins" />
+        <circle cx={PX} cy={348} r={4} className="pf-lifeline-end" />
+      </SeqStep>
     </svg>
   );
 }
@@ -411,8 +471,8 @@ export default function PolicyFabric() {
       <div className="pf-layout">
         {/* LEFT — Topology */}
         <div className="pf-panel pf-panel--left">
-          <div className="pf-panel-head">System Topology</div>
-          <NetworkGraph isStale={isStale} active={running} />
+          <div className="pf-panel-head">Data Flow Story</div>
+          <NetworkGraph isStale={isStale} active={running} activeStage={activeStage} />
           <label className="pf-stale-ctrl">
             <input type="checkbox" checked={isStale} onChange={e => setIsStale(e.target.checked)} />
             <span className="pf-stale-ctrl-lbl">Simulate Stale Provider B</span>
