@@ -3,34 +3,34 @@ import './PolicyFabric.css';
 
 // ── Canvas geometry ────────────────────────────────────────────────────────────
 // 5 columns:  Providers | Aggregator | Contract Engine | Validator | Consumer
-const CW = 1080, CH = 520;
+const CW = 1080, CH = 640;
 
 // Col 1 — Providers
 const PL = 16, PW = 155, PH = 52, PG = 10;
-// 8 providers: 8*52 + 7*10 = 486 → PS = (520-486)/2 = 17
+// 8 providers: 8*52 + 7*10 = 486 → PS = (640-486)/2 = 77
 const PS  = (CH - (8 * PH + 7 * PG)) / 2;
 const pY  = i => PS + i * (PH + PG);
 const pCY = i => pY(i) + PH / 2;
 const PR  = PL + PW;   // 171
 
 // Col 2 — Aggregator
-const AGL = 222, AGW = 162, AGH = 290, AGT = (CH - AGH) / 2;   // top=115
+const AGL = 222, AGW = 162, AGH = 340, AGT = (CH - AGH) / 2;   // top=150
 const AGR = AGL + AGW;                                           // 384
-const AGCY = CH / 2;                                             // 260
+const AGCY = CH / 2;                                             // 320
 
 // Col 3 — Contract Engine
-const CTL = 432, CTW = 162, CTH = 270, CTT = (CH - CTH) / 2;   // top=125
+const CTL = 432, CTW = 162, CTH = 320, CTT = (CH - CTH) / 2;   // top=160
 const CTR = CTL + CTW;                                           // 594
-const CTCY = CH / 2;                                             // 260
+const CTCY = CH / 2;                                             // 320
 
 // Col 4 — Validator
-const VL = 642, VW = 155, VH = 250, VT = (CH - VH) / 2;        // top=135
+const VL = 642, VW = 155, VH = 300, VT = (CH - VH) / 2;        // top=170
 const VR  = VL + VW;                                             // 797
-const VCY = CH / 2;                                              // 260
+const VCY = CH / 2;                                              // 320
 
 // Col 5 — Consumer
-const OL = 848, OW = 168, OH = 290, OT = (CH - OH) / 2;        // top=115
-const OCY = CH / 2;                                              // 260
+const OL = 848, OW = 168, OH = 340, OT = (CH - OH) / 2;        // top=150
+const OCY = CH / 2;                                              // 320
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const PROVIDERS = [
@@ -296,22 +296,61 @@ function ProviderCard({ p, i, dim }) {
   );
 }
 
+// ── Schema data ───────────────────────────────────────────────────────────────
+const AGG_SCHEMA = [
+  { k: 'name',        v: '"Atishay Kasliwal"', t: 'str' },
+  { k: 'age',         v: '34',                 t: 'num' },
+  { k: 'condition',   v: '"T2D"',              t: 'str' },
+  { k: 'bmi',         v: '24.8',               t: 'num' },
+  { k: 'drive_score', v: '82',                 t: 'num' },
+  { k: 'violations',  v: '1',                  t: 'num' },
+  { k: 'credit',      v: '712',                t: 'num' },
+  { k: 'location',    v: '[28.6, 77.2]',       t: 'arr' },
+  { k: 'behavior',    v: '{pending}',           t: 'obj' },
+];
+
+const CT_SCHEMA = [
+  { k: 'age',          pass: true,  note: ''           },
+  { k: 'condition',    pass: true,  note: ''           },
+  { k: 'bmi',          pass: false, note: 'blocked'    },
+  { k: 'drive_score',  pass: true,  note: ''           },
+  { k: 'violations',   pass: false, note: 'blocked'    },
+  { k: 'credit',       pass: false, note: 'raw block'  },
+  { k: 'income',       pass: false, note: 'n/a'        },
+  { k: 'location',     pass: false, note: 'restricted' },
+  { k: 'behavior_raw', pass: false, note: 'blocked'    },
+];
+
+const VAL_SCHEMA = [
+  { k: 'age',           v: '34',            t: 'num' },
+  { k: 'condition',     v: '"T2D"',         t: 'str' },
+  { k: 'drive_score',   v: '82',            t: 'num' },
+  { k: 'credit_idx',    v: '0.74',          t: 'num' },
+  { k: '// 5 redacted', v: null,            t: 'dim' },
+  { k: 'sig',           v: '0x4fa3…c2d1',   t: 'sig' },
+];
+
 // ── Shared mid-column node ────────────────────────────────────────────────────
-function MidNode({ className, dim, icon, title, accent, info, badge }) {
+function MidNode({ className, dim, icon, title, info, badge, children }) {
   return (
-    <div className={`pf-mid ${className}${dim ? ' pf-dim' : ''}`}
-      style={{ '--ma': accent }}>
+    <div className={`pf-mid ${className}${dim ? ' pf-dim' : ''}`}>
       <div className="pf-mid-head">
         <span className="pf-mid-icon">{icon}</span>
-        <span className="pf-mid-title">{title}</span>
-        {!dim && badge && <span className="pf-mid-badge">{badge}</span>}
+        <div className="pf-mid-head-text">
+          <span className="pf-mid-title">{title}</span>
+          {!dim && badge && <span className="pf-mid-badge">{badge}</span>}
+        </div>
       </div>
       <div className="pf-mid-rule" />
-      <div className="pf-mid-body">
+      <div className="pf-mid-status">
         {info
           ? <span className="pf-mid-info">{info}</span>
           : <span className="pf-mid-idle">Idle</span>
         }
+      </div>
+      <div className="pf-mid-rule" />
+      <div className="pf-mid-schema">
+        {children}
       </div>
     </div>
   );
@@ -418,10 +457,16 @@ export default function PolicyFabric() {
             dim={!s.activeNodes.includes('aggregator')}
             icon="⬡"
             title="Aggregator"
-            accent="#4f8ef7"
             info={s.aggInfo}
             badge={s.aggInfo ? 'collecting' : null}
-          />
+          >
+            {AGG_SCHEMA.map(f => (
+              <div key={f.k} className="pf-sr">
+                <span className="pf-sr-k">{f.k}</span>
+                <span className={`pf-sr-v pf-sr-v--${f.t}`}>{f.v}</span>
+              </div>
+            ))}
+          </MidNode>
 
           {/* Col 3 — Contract Engine */}
           <MidNode
@@ -429,10 +474,17 @@ export default function PolicyFabric() {
             dim={!s.activeNodes.includes('contract')}
             icon="◈"
             title="Contract Engine"
-            accent="#8b5cf6"
             info={s.ctInfo}
             badge={s.ctInfo ? 'enforcing' : null}
-          />
+          >
+            {CT_SCHEMA.map(f => (
+              <div key={f.k} className={`pf-sr pf-sr--ct${f.pass ? ' pf-sr--pass' : ' pf-sr--fail'}`}>
+                <span className="pf-sr-mark">{f.pass ? '✓' : '✗'}</span>
+                <span className="pf-sr-k">{f.k}</span>
+                {f.note && <span className="pf-sr-note">{f.note}</span>}
+              </div>
+            ))}
+          </MidNode>
 
           {/* Col 4 — Validator */}
           <MidNode
@@ -440,10 +492,19 @@ export default function PolicyFabric() {
             dim={!s.activeNodes.includes('validator')}
             icon="◉"
             title="Validator"
-            accent="#22c55e"
             info={s.valInfo}
             badge={s.valInfo ? 'active' : null}
-          />
+          >
+            {VAL_SCHEMA.map(f => (
+              <div key={f.k} className="pf-sr">
+                <span className="pf-sr-k">{f.k}</span>
+                {f.v !== null
+                  ? <span className={`pf-sr-v pf-sr-v--${f.t}`}>{f.v}</span>
+                  : null
+                }
+              </div>
+            ))}
+          </MidNode>
 
           {/* Col 5 — Consumer */}
           <ConsumerNode step={s} />
