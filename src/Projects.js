@@ -209,8 +209,20 @@ export const projectsData = [
     uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
     category: 'AI & Hospitality',
     size: 'medium',
-    span: 2, // Row 4: Equal (1/3 width)
-    textOverlay: true // Text overlay on image
+    span: 2,
+    textOverlay: true
+  },
+  {
+    id: 16,
+    title: 'MRI Brain Viewer',
+    description: 'Fullscreen multi-modal MRI brain viewer with slice navigation, tumor highlighting, and real-time preloading',
+    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?q=80&w=800&auto=format&fit=crop',
+    link: '/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012',
+    uuid: 'e5f6a7b8-c9d0-4123-e456-789abcdef012',
+    category: 'Medical Imaging & AI',
+    size: 'medium',
+    span: 2,
+    textOverlay: true
   },
   // {
   //   id: 10,
