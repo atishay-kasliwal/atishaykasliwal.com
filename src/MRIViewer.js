@@ -8,8 +8,8 @@ const BASE_URL = process.env.REACT_APP_MRI_CDN || '';
 const MODALITIES = ['T1', 'T2', 'FLAIR', 'DWI', 'ADC', 'OVERLAY'];
 
 const METADATA = {
-  totalSlices: 60,
-  tumorRange: { start: 22, end: 35, center: 28 },
+  totalSlices: 31,
+  tumorRange: { start: 11, end: 20, center: 15 },
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -143,11 +143,6 @@ export default function MRIViewer() {
     preloadSlices(currentSlice, totalSlices);
   }, [currentSlice, totalSlices]);
 
-  // Hide site header while viewer is mounted
-  useEffect(() => {
-    document.body.classList.add('mriv-active');
-    return () => document.body.classList.remove('mriv-active');
-  }, []);
 
   return (
     <div className="mriv-root">

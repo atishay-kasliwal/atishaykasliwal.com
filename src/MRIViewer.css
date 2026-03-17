@@ -2,23 +2,15 @@
    MRI VIEWER — Fullscreen minimal medical imaging UI
    ============================================================ */
 
-/* Hide site header/nav while viewer is active */
-body.mriv-active .header,
-body.mriv-active .bg-art {
-  display: none !important;
-}
-
-/* ── Root ─────────────────────────────────────────────────── */
+/* ── Root — embedded in page flow below site header ──────── */
 
 .mriv-root {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 72px); /* fill below fixed site header */
   background: #0a0a0a;
   overflow: hidden;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  z-index: 9999;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -27,7 +19,7 @@ body.mriv-active .bg-art {
 .mriv-grid {
   position: absolute;
   inset: 0;
-  bottom: 56px; /* leave room for timeline */
+  bottom: 56px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
