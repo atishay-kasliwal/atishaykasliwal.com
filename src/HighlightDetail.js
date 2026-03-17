@@ -10,9 +10,11 @@ import { projectsData } from './Projects';
 import { getProjectArticleByUuid } from './project list';
 import FOMCDashboard from './FOMCDashboard';
 import LegalRAGChat from './LegalRAGChat';
+import MRIViewer from './MRIViewer';
 
-const FOMC_UUID = 'd4e5f6a7-b8c9-4012-d345-6789abcdef01';
+const FOMC_UUID      = 'd4e5f6a7-b8c9-4012-d345-6789abcdef01';
 const LEGAL_RAG_UUID = 'c3d4e5f6-a7b8-4901-c234-56789abcdef0';
+const MRI_UUID       = 'e5f6a7b8-c9d0-4123-e456-789abcdef012';
 
 const slugify = (value) =>
   String(value || '')
@@ -548,6 +550,9 @@ export default function HighlightDetail() {
 
         {/* Legal RAG Chat — multilingual tax law AI workspace */}
         {projectUuid === LEGAL_RAG_UUID && <LegalRAGChat project={project} />}
+
+        {/* MRI Viewer — fullscreen brain imaging UI */}
+        {projectUuid === MRI_UUID && <MRIViewer />}
 
         {/* content removed for other pages */}
         <div className="project-detail-layout" translate="no" style={{ display: 'none' }}>
