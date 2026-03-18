@@ -452,7 +452,6 @@ export default function HighlightDetail() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Link to="/highlights" className="active">Work</Link>
-                <Link to="/art">Photography</Link>
                 <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                 <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
               </nav>
