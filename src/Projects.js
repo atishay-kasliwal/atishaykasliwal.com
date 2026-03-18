@@ -58,7 +58,7 @@ export const projectsData = [
     description: 'Machine learning research and healthcare data analytics at Atrium Health Wake Forest',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
     link: `/highlights/${slugify('Healthcare AI Research')}`,
-    uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    uuid: 'a1b2c3d4-e5f6-4789-a012-bcdef0123456',
     category: 'Research',
     size: 'tall',
     span: 2, // Row 1: Normal width
@@ -72,6 +72,17 @@ export const projectsData = [
   },
   {
     id: 3,
+    title: 'FOMC Intelligence Dashboard',
+    description: 'NLP pipeline surfacing rate signals and sentiment shifts from Federal Reserve transcripts.',
+    image: '/fmocc.jpeg',
+    link: '/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    category: 'NLP',
+    size: 'medium',
+    span: 2,
+  },
+  {
+    id: 6,
     title: 'Policy Enforcement at Every Layer',
     description: 'Interactive data contract enforcement system with real-time architecture visualization.',
     image: '/5th%20image.jpeg',
@@ -383,7 +394,7 @@ export default function Projects() {
 
           <div className="projects-grid" translate="no">
             {projectsData
-              .filter(project => ![3, 4, 5, 11, 12].includes(project.id))
+              .filter(project => ![3, 4, 5, 6, 11, 12].includes(project.id))
               .map((project, index) => {
                 // Recalculate index after filtering for proper numbering
                 const filteredProjects = projectsData.filter(p => ![5, 11, 12].includes(p.id));
