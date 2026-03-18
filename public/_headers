@@ -3,3 +3,15 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
+# OG preview images must be embeddable by crawlers
+/fmocc.jpeg
+  X-Frame-Options: ALLOWALL
+/4th.jpeg
+  X-Frame-Options: ALLOWALL
+/mriimage.jpeg
+  X-Frame-Options: ALLOWALL
+/5th image.jpeg
+  X-Frame-Options: ALLOWALL
+/profile-dark-theme.jpg
+  X-Frame-Options: ALLOWALL
+
