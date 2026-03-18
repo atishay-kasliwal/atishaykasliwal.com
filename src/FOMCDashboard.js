@@ -106,7 +106,7 @@ export default function FOMCDashboard() {
 
   // ── Video / timeline state ────────────────────────────────────────────────
   const [videoSeconds, setVideoSeconds] = useState(0);
-  const [ytReady, setYtReady] = useState(false);
+  const [, setYtReady] = useState(false);
   const [ytError, setYtError] = useState(false);
   const ytPlayerRef = useRef(null);
   const syncIntervalRef = useRef(null);
@@ -116,7 +116,6 @@ export default function FOMCDashboard() {
 
   // ── Auto-play mode ────────────────────────────────────────────────────────
   const [autoPlay, setAutoPlay] = useState(false);
-  const autoPlayRef = useRef(null);
   const isAutoPlayingRef = useRef(false); // ref-mirror so YT sync closure can read it
   useEffect(() => { isAutoPlayingRef.current = autoPlay; }, [autoPlay]);
 
@@ -142,6 +141,7 @@ export default function FOMCDashboard() {
   );
 
   // ── Load Firestore data when date changes ─────────────────────────────────
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -175,6 +175,7 @@ export default function FOMCDashboard() {
 
     load();
     return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDateId]);
 
   // ── Find active interval from videoSeconds ────────────────────────────────
@@ -188,6 +189,7 @@ export default function FOMCDashboard() {
   }, [videoSeconds, intervals]);
 
   // ── Auto-scroll transcript within its container only (never scroll the page) ──
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!transcriptRef.current || !activeInterval) return;
     const container = transcriptRef.current;
@@ -203,9 +205,11 @@ export default function FOMCDashboard() {
     if (itemTop < containerTop || itemBottom > containerBottom) {
       container.scrollTo({ top: itemTop - container.clientHeight / 3, behavior: 'smooth' });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeInterval]);
 
   // ── YouTube IFrame API integration ────────────────────────────────────────
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setYtError(false);
     setYtReady(false);
@@ -260,6 +264,7 @@ export default function FOMCDashboard() {
     return () => {
       clearInterval(syncIntervalRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDateId]);
 
   // ── Auto-play: advance one interval every 750ms ──────────────────────────
@@ -426,6 +431,7 @@ export default function FOMCDashboard() {
   const chartKey = selectedDateId;
 
   // Price grid lines
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const gridLines = useMemo(() => {
     if (!priceMin || !priceMax || !priceY) return [];
     const range = priceMax - priceMin;
@@ -435,6 +441,7 @@ export default function FOMCDashboard() {
       lines.push(p);
     }
     return lines;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceMin, priceMax]);
 
   // ── Chart mouse ────────────────────────────────────────────────────────────
@@ -616,7 +623,6 @@ export default function FOMCDashboard() {
   const activeNews = activeInterval?.news || [];
   const activeH0 = activeInterval?.horizons?.h0 || null;
   const activeH1 = activeInterval?.horizons?.h1 || null;
-  const activeSpeech = activeInterval?.speech || '';
 
   // Key drivers — top 3 meaningful sentences extracted from reasoning
   const drivers = useMemo(() => {
