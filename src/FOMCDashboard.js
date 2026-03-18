@@ -672,7 +672,7 @@ export default function FOMCDashboard() {
         <div className="fomc-hero-stats">
           <div className="fomc-stat">
             <div className="fomc-stat-lbl">Sessions</div>
-            <div className="fomc-stat-val">6</div>
+            <div className="fomc-stat-val">{FOMC_DATES.length}</div>
           </div>
           <div className="fomc-stat">
             <div className="fomc-stat-lbl">AI Accuracy</div>
