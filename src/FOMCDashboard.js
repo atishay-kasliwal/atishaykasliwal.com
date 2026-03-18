@@ -6,12 +6,19 @@ import './FOMCDashboard.css';
 // ── FOMC Sessions ─────────────────────────────────────────────────────────────
 
 const FOMC_DATES = [
-  { id: 0, date: '2024-06-12', label: 'Jun 12', year: '2024', rate: 'Hold → 5.25–5.50%',    videoId: 'q3ZE5tF_IMU' },
-  { id: 1, date: '2024-07-31', label: 'Jul 31', year: '2024', rate: 'Hold → 5.25–5.50%',    videoId: 'd1wx4mCqYF8' },
-  { id: 2, date: '2024-09-18', label: 'Sep 18', year: '2024', rate: '-50bps → 4.75–5.00%',  videoId: '8S7JjIcIrkI' },
-  { id: 3, date: '2024-11-07', label: 'Nov 7',  year: '2024', rate: '-25bps → 4.50–4.75%',  videoId: '3adfVQCpEBk' },
-  { id: 4, date: '2024-12-18', label: 'Dec 18', year: '2024', rate: '-25bps → 4.25–4.50%',  videoId: 'nsNgk46qHgw' },
-  { id: 5, date: '2025-01-29', label: 'Jan 29', year: '2025', rate: 'Hold → 4.25–4.50%',    videoId: 'REimusg6un4' },
+  { id: 0,  date: '2024-06-12', label: 'Jun 12', year: '2024', rate: 'Hold → 5.25–5.50%',   videoId: 'q3ZE5tF_IMU' },
+  { id: 1,  date: '2024-07-31', label: 'Jul 31', year: '2024', rate: 'Hold → 5.25–5.50%',   videoId: 'd1wx4mCqYF8' },
+  { id: 2,  date: '2024-09-18', label: 'Sep 18', year: '2024', rate: '-50bps → 4.75–5.00%', videoId: '8S7JjIcIrkI' },
+  { id: 3,  date: '2024-11-07', label: 'Nov 7',  year: '2024', rate: '-25bps → 4.50–4.75%', videoId: '3adfVQCpEBk' },
+  { id: 4,  date: '2024-12-18', label: 'Dec 18', year: '2024', rate: '-25bps → 4.25–4.50%', videoId: 'nsNgk46qHgw' },
+  { id: 5,  date: '2025-01-29', label: 'Jan 29', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'REimusg6un4' },
+  { id: 6,  date: '2025-03-19', label: 'Mar 19', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'zmfyoadWHME' },
+  { id: 7,  date: '2025-05-07', label: 'May 7',  year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'mu6VPhhZfkQ' },
+  { id: 8,  date: '2025-06-18', label: 'Jun 18', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'iAiL1UMgkYQ' },
+  { id: 9,  date: '2025-07-30', label: 'Jul 30', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'tt1n8ceFmSY' },
+  { id: 10, date: '2025-09-17', label: 'Sep 17', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'EEIs8ossWyM' },
+  { id: 11, date: '2025-10-29', label: 'Oct 29', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'gZsAKn1UtH4' },
+  { id: 12, date: '2025-12-10', label: 'Dec 10', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'Ko-_yb2UkDk' },
 ];
 
 // ── Chart geometry ─────────────────────────────────────────────────────────────
