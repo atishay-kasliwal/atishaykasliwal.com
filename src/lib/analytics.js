@@ -1,5 +1,19 @@
 const isDev = process.env.NODE_ENV !== 'production';
 
+// ── UTM helpers ────────────────────────────────────────────────────────────────
+
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+
+const getUTMParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  const result = {};
+  UTM_KEYS.forEach((key) => {
+    const value = params.get(key);
+    if (value) result[key] = value;
+  });
+  return result;
+};
+
 let initialized = false;
 let lastLocation = '';
 let engagementScore = 0;
@@ -57,16 +71,34 @@ export const trackEvent = (eventName, params = {}) => {
 
 export const trackPageView = (sourcePage) => {
   const pagePath = getPagePath();
+  const utmParams = getUTMParams();
   trackEvent('page_view', {
     page_path: pagePath,
     page_title: getPageTitle(),
-    page_location: getPageLocation()
+    page_location: getPageLocation(),
+    ...utmParams
   });
 
   if (pagePath === '/') {
     const source = sourcePage || 'direct';
-    trackEvent('landing_view', { source_page: source });
+    trackEvent('landing_view', { source_page: source, ...utmParams });
   }
+};
+
+// ── Portfolio-specific events ──────────────────────────────────────────────────
+
+export const trackProjectClick = (projectName, pagePath = getPagePath()) => {
+  const name = normalizeText(projectName);
+  if (!name) return;
+  trackEvent('project_click', { project_name: name, page_path: pagePath });
+};
+
+export const trackContactClick = (method = 'email', pagePath = getPagePath()) => {
+  trackEvent('contact_click', { contact_method: method, page_path: pagePath });
+};
+
+export const trackResumeDownload = (source = 'hero', pagePath = getPagePath()) => {
+  trackEvent('resume_download', { source, page_path: pagePath });
 };
 
 export const trackScrollDepth = ({ pagePath = getPagePath(), thresholds = [25, 50, 75, 90] } = {}) => {
@@ -349,6 +381,23 @@ const initClickTracking = () => {
     const featureEl = target.closest('[data-feature-name]');
     if (featureEl) {
       trackFeatureInterest(featureEl.getAttribute('data-feature-name'), pagePath);
+    }
+
+    // Auto-detect project card clicks via data-project-name attribute
+    const projectEl = target.closest('[data-project-name]');
+    if (projectEl) {
+      trackProjectClick(projectEl.getAttribute('data-project-name'), pagePath);
+    }
+
+    // Auto-detect resume downloads (same-origin PDF links)
+    if (link && link.href && link.href.toLowerCase().includes('.pdf')) {
+      const isNav = String(link.className || '').includes('nav-resume');
+      trackResumeDownload(isNav ? 'nav' : 'hero', pagePath);
+    }
+
+    // Auto-detect contact clicks (mailto: links)
+    if (link && link.href && link.href.startsWith('mailto:')) {
+      trackContactClick('email', pagePath);
     }
   };
 

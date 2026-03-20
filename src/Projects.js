@@ -405,7 +405,7 @@ export default function Projects() {
                   ? { to: project.link, className: `project-card-outer-link ${spanClass}`, style: { textDecoration: 'none', color: 'inherit' } }
                   : { className: `project-card-outer ${spanClass}` };
                 return (
-              <CardWrapper key={project.id} {...cardWrapperProps} translate="no">
+              <CardWrapper key={project.id} {...cardWrapperProps} data-project-name={project.title} translate="no">
                 <div 
                   className={`project-card-grid project-card-${project.size || 'medium'} ${project.textOverlay ? 'text-overlay' : ''} ${project.noLink ? 'no-hover' : ''} notranslate`}
                   data-feature-name={project.title}
