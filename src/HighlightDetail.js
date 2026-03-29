@@ -506,18 +506,29 @@ export default function HighlightDetail() {
       onTouchEnd={handleTouchEnd}
     >
       <Helmet>
-        <title>{project.title} | Atishay Kasliwal</title>
-        <meta name="description" content={project.description} />
+        <title>{project.seoTitle || project.title} | Atishay Kasliwal</title>
+        <meta name="description" content={project.seoDescription || project.description} />
         <meta property="og:type"        content="article" />
         <meta property="og:site_name"   content="Atishay Kasliwal" />
-        <meta property="og:title"       content={`${project.title} | Atishay Kasliwal`} />
-        <meta property="og:description" content={project.description} />
+        <meta property="og:title"       content={`${project.seoTitle || project.title} | Atishay Kasliwal`} />
+        <meta property="og:description" content={project.seoDescription || project.description} />
         <meta property="og:url"         content={`https://atishaykasliwal.com/highlights/${project.uuid}`} />
         <meta property="og:image"       content={project.image?.startsWith('http') ? project.image : `https://atishaykasliwal.com${project.image}`} />
         <meta name="twitter:card"        content="summary_large_image" />
-        <meta name="twitter:title"       content={`${project.title} | Atishay Kasliwal`} />
-        <meta name="twitter:description" content={project.description} />
+        <meta name="twitter:title"       content={`${project.seoTitle || project.title} | Atishay Kasliwal`} />
+        <meta name="twitter:description" content={project.seoDescription || project.description} />
         <meta name="twitter:image"       content={project.image?.startsWith('http') ? project.image : `https://atishaykasliwal.com${project.image}`} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": project.title,
+          "description": project.seoDescription || project.description,
+          "url": `https://atishaykasliwal.com/highlights/${project.uuid}`,
+          "image": project.image?.startsWith('http') ? project.image : `https://atishaykasliwal.com${project.image}`,
+          "author": { "@id": "https://atishaykasliwal.com/#person" },
+          "applicationCategory": project.category,
+          "datePublished": getArticleMeta(project.uuid).date,
+        })}</script>
       </Helmet>
 
       <div className="bg-art" translate="no" />

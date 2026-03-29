@@ -607,6 +607,420 @@
     {
       "question": "Give me a summary line that sounds like a recommendation",
       "answer": "He’s the kind of engineer I’d happily recommend for any team that values ownership and clarity."
+    },
+
+    {
+      "question": "What did Atishay do at Fidelity Investments?",
+      "answer": "Fidelity Investments is one of the companies Atishay has worked with. His formal 3-year engineering role was at Bounteous (2021–2024) as a Senior Software Engineer building distributed systems."
+    },
+    {
+      "question": "How long was Atishay at Bounteous?",
+      "answer": "Atishay was at Bounteous for 3 years, from August 2021 to August 2024, as a Senior Software Engineer."
+    },
+    {
+      "question": "What was Atishay’s main engineering role?",
+      "answer": "Atishay’s most recent full-time engineering role was Senior Software Engineer at Bounteous (2021–2024), building billing, payments, and distributed microservices using Java, Spring Boot, and AWS for 100K+ users."
+    },
+    {
+      "question": "What did Atishay achieve at Bounteous?",
+      "answer": "At Bounteous, Atishay reduced P99 latency by 40%, cut deployment time from 6 hours to 90 seconds, eliminated Sev1 incidents, and enabled 20+ monthly production releases via CI/CD."
+    },
+    {
+      "question": "What tech did Atishay use at Bounteous?",
+      "answer": "At Bounteous, Atishay used Java, Spring Boot, AWS (RDS, SQS, SNS, S3), React, Jenkins, Docker, Kubernetes, and Terraform to build and ship enterprise distributed systems."
+    },
+    {
+      "question": "What is Atishay doing at Atrium Health Wake Forest?",
+      "answer": "Atishay is an AI and Analytics intern at Atrium Health Wake Forest Baptist, working on ML research — including CNN-powered brain tumor detection and clinical data analytics alongside neurosurgeons."
+    },
+    {
+      "question": "What ML work did Atishay do at Wake Forest?",
+      "answer": "At Wake Forest, Atishay built CNN-powered models for brain tumor segmentation in MRI scans and worked on clinical data pipelines, collaborating directly with neurosurgeons and a medical AI professor."
+    },
+    {
+      "question": "Did Atishay work in healthcare AI?",
+      "answer": "Yes — Atishay is currently at Atrium Health Wake Forest Baptist doing AI research, specifically MRI tumor detection and predictive clinical models with real medical teams."
+    },
+    {
+      "question": "Did Atishay work with doctors?",
+      "answer": "Yes, at Atrium Health Wake Forest, Atishay collaborated directly with Dr. Goldy Khanna (a neurosurgeon) and Dr. Da Ma (an AI professor) on healthcare ML research."
+    },
+    {
+      "question": "What did Atishay do at BT Group?",
+      "answer": "Atishay worked as a Software Engineer at BT Group, contributing to backend systems across telecom infrastructure."
+    },
+    {
+      "question": "Did Atishay work in telecom?",
+      "answer": "Yes, Atishay worked at BT Group as a Software Engineer, building backend systems for telecom infrastructure."
+    },
+    {
+      "question": "What was Atishay’s role at T-Mobile?",
+      "answer": "Atishay worked as a Software Engineer at T-Mobile, contributing to high-traffic mobile platform features."
+    },
+    {
+      "question": "Did Atishay work at T-Mobile?",
+      "answer": "Yes, Atishay worked as a Software Engineer at T-Mobile on high-traffic mobile platform features."
+    },
+    {
+      "question": "What was Atishay’s role at Accolite Digital?",
+      "answer": "Atishay was a Senior Software Engineer at Accolite Digital, leading frontend delivery and engineering for enterprise clients."
+    },
+    {
+      "question": "What did Atishay do at Bounteous?",
+      "answer": "At Bounteous, Atishay worked as a Full-Stack Engineer, building digital platforms for Fortune 500 clients."
+    },
+    {
+      "question": "What research did Atishay do at Stony Brook?",
+      "answer": "As a Graduate Research Assistant at Stony Brook, Atishay built high-availability distributed APIs using FastAPI and AWS (ECS, Lambda, API Gateway), serving 10K+ daily requests and reducing latency by 83%."
+    },
+    {
+      "question": "Which companies has Atishay worked at?",
+      "answer": "Atishay has worked at Fidelity Investments, Atrium Health Wake Forest, BT Group, T-Mobile, Accolite Digital, Bounteous, and Shriffle Technologies — across fintech, healthcare, telecom, and enterprise."
+    },
+    {
+      "question": "Has Atishay worked at big companies?",
+      "answer": "Yes — Fidelity Investments, T-Mobile, BT Group, and Accolite Digital are among his past employers, plus healthcare research at Wake Forest."
+    },
+
+    {
+      "question": "When does Atishay graduate?",
+      "answer": "Atishay is expected to graduate with his MS in Data Science from Stony Brook University in May 2026."
+    },
+    {
+      "question": "What is Atishay studying?",
+      "answer": "He’s pursuing a Master of Science in Data Science at Stony Brook University, expected to graduate in May 2026."
+    },
+    {
+      "question": "Where did Atishay go to college for undergrad?",
+      "answer": "Atishay completed his Bachelor of Technology in Computer Science and IT from Symbiosis University of Applied Sciences in India."
+    },
+    {
+      "question": "What is Atishay’s undergraduate degree?",
+      "answer": "He has a Bachelor of Technology in CSIT from Symbiosis University of Applied Sciences in India."
+    },
+    {
+      "question": "What is Atishay’s MS degree in?",
+      "answer": "He’s doing a Master of Science in Data Science at Stony Brook University, expected May 2026."
+    },
+    {
+      "question": "Is Atishay currently a student?",
+      "answer": "Yes, Atishay is pursuing an MS in Data Science at Stony Brook University while actively working on AI research and projects."
+    },
+    {
+      "question": "Is Atishay doing a PhD?",
+      "answer": "No, Atishay is currently pursuing an MS in Data Science at Stony Brook University, expected to complete in May 2026."
+    },
+    {
+      "question": "What university does Atishay go to?",
+      "answer": "Atishay is at Stony Brook University in New York, pursuing his Master of Science in Data Science."
+    },
+
+    {
+      "question": "What is the FOMC Intelligence Dashboard?",
+      "answer": "It’s an NLP pipeline that parses every Federal Reserve meeting transcript and tags hawkish vs. dovish language in real time — surfacing rate signals visually so you can see the Fed’s tone shift over time."
+    },
+    {
+      "question": "How does the FOMC dashboard work?",
+      "answer": "The FOMC dashboard uses Python and NLP to analyze Fed transcripts, classify sentiment shifts (hawkish vs. dovish), and display them with an interactive timeline powered by Firebase and React."
+    },
+    {
+      "question": "What tech powers the FOMC project?",
+      "answer": "The FOMC project uses Python, spaCy, Firebase, and React — NLP processing on the backend, interactive real-time visualizations on the frontend."
+    },
+    {
+      "question": "Can I try the FOMC dashboard?",
+      "answer": "Yes — it’s a live interactive demo on Atishay’s portfolio at atishaykasliwal.com. You can explore real Federal Reserve transcript data and see the sentiment analysis in action."
+    },
+    {
+      "question": "What is hawkish and dovish in the FOMC context?",
+      "answer": "The dashboard tags ‘hawkish’ language (signals for rate hikes, tightening) vs ‘dovish’ language (signals for rate cuts, easing) in Fed transcripts — making the Fed’s tone searchable and visual."
+    },
+
+    {
+      "question": "What is the legal RAG system?",
+      "answer": "It’s a retrieval-augmented generation pipeline built from scratch — you ask a question in plain English, and it finds the exact paragraph from contracts or SEC filings that answers it. No hallucinations."
+    },
+    {
+      "question": "What does Ask Your Documents Anything do?",
+      "answer": "It lets you query legal documents — contracts, SEC filings — using plain English questions, returning the actual relevant passage instead of a guess."
+    },
+    {
+      "question": "What is RAG?",
+      "answer": "RAG stands for Retrieval-Augmented Generation — the system finds relevant document chunks first, then generates an answer grounded in them. Atishay built one from scratch for legal documents."
+    },
+    {
+      "question": "What tech is the legal RAG built with?",
+      "answer": "The legal RAG system uses Python, embedding models, a vector store, and a custom reranking pipeline — built from scratch, not a pre-packaged LLM framework."
+    },
+    {
+      "question": "Does the legal RAG support multiple languages?",
+      "answer": "Yes, the Legal RAG system supports English, Hindi, and Spanish with multilingual query support built into the pipeline."
+    },
+
+    {
+      "question": "What is the MRI brain tumor viewer?",
+      "answer": "A CNN-powered MRI viewer that runs brain tumor segmentation entirely in the browser via TensorFlow.js — no upload, no server, zero data leaves your machine."
+    },
+    {
+      "question": "How does the MRI viewer work?",
+      "answer": "It loads a pre-trained CNN via TensorFlow.js, lets you switch between T1, T2, FLAIR, DWI, and ADC modalities, and overlays tumor segmentation on the scan in real time."
+    },
+    {
+      "question": "What modalities does the MRI viewer support?",
+      "answer": "The MRI viewer supports T1, T2, FLAIR, DWI, ADC, and overlay modes — you can switch between them to see how the tumor appears differently across each scan type."
+    },
+    {
+      "question": "Does the MRI viewer work without internet?",
+      "answer": "Once loaded, the MRI viewer runs entirely in your browser — the CNN runs client-side via TensorFlow.js and WebAssembly, so no data is ever uploaded."
+    },
+    {
+      "question": "Was the MRI viewer used in real research?",
+      "answer": "Yes — it was built during Atishay’s research at Atrium Health Wake Forest Baptist, collaborating directly with a neurosurgeon and a medical AI professor."
+    },
+
+    {
+      "question": "What is PolicyFabric?",
+      "answer": "PolicyFabric is a data contract enforcement engine that validates schemas, lineage, and SLAs at every layer of a pipeline in real time — with a live architecture diagram you can interact with."
+    },
+    {
+      "question": "What problem does PolicyFabric solve?",
+      "answer": "It stops bad data from silently propagating through pipelines — if a schema breaks or an SLA is missed, PolicyFabric catches it at the layer it happened, not three systems later."
+    },
+    {
+      "question": "What is a data contract?",
+      "answer": "Data contracts define what data should look like between systems. PolicyFabric enforces those contracts at runtime, flagging violations before bad data reaches consumers."
+    },
+
+    {
+      "question": "What is Atriveo?",
+      "answer": "Atriveo is an AI-native recruitment intelligence platform Atishay is building — it tracks job applications, extracts key info from job descriptions, and includes a Chrome extension for one-click capture from job boards."
+    },
+    {
+      "question": "What does Atriveo do?",
+      "answer": "Atriveo helps job seekers track applications intelligently using AI — it surfaces insights from job descriptions, matches them to your profile, and makes the job search less chaotic."
+    },
+    {
+      "question": "Is Atriveo live?",
+      "answer": "Atriveo is actively in development and is Atishay’s current main project. Keep an eye on atishaykasliwal.com or his LinkedIn for updates."
+    },
+    {
+      "question": "Does Atriveo have a Chrome extension?",
+      "answer": "Yes, Atriveo includes a Chrome extension that lets you capture job postings from any job board with one click directly into your tracker."
+    },
+
+    {
+      "question": "Does Atishay know Python?",
+      "answer": "Yes, Python is one of Atishay’s primary languages — he uses it for data pipelines, ML models, NLP, and backend development daily."
+    },
+    {
+      "question": "Does Atishay know React?",
+      "answer": "Yes, React is Atishay’s main frontend framework — he has 5+ years of production experience building complex React applications."
+    },
+    {
+      "question": "Does Atishay know TensorFlow?",
+      "answer": "Yes — Atishay has used TensorFlow and TensorFlow.js in production, most notably for the CNN-powered MRI brain tumor viewer that runs entirely in the browser."
+    },
+    {
+      "question": "What ML frameworks does Atishay use?",
+      "answer": "Atishay works with TensorFlow, PyTorch, and scikit-learn — choosing based on the problem and whether it’s deployed server-side or in the browser."
+    },
+    {
+      "question": "Does Atishay know SQL?",
+      "answer": "Yes, SQL is core to Atishay’s work — he’s used PostgreSQL, MySQL, and BigQuery across multiple production systems."
+    },
+    {
+      "question": "Does Atishay know Node.js?",
+      "answer": "Yes, Atishay uses Node.js and Express for backend APIs — it’s a core part of his full-stack toolkit alongside Python."
+    },
+    {
+      "question": "What cloud platforms does Atishay use?",
+      "answer": "Atishay has production experience with both AWS and GCP — using Lambda, S3, API Gateway, Firebase, BigQuery, and GCP compute services."
+    },
+    {
+      "question": "Does Atishay know TypeScript?",
+      "answer": "Yes, Atishay uses TypeScript extensively in production React and Node.js projects."
+    },
+    {
+      "question": "Has Atishay worked with LLMs?",
+      "answer": "Yes — Atishay has built with LLMs including an LLM-based trading simulation and the Legal RAG system that grounds LLM output in real document retrieval."
+    },
+    {
+      "question": "Does Atishay know NLP?",
+      "answer": "Yes, NLP is one of Atishay’s key areas — he’s built NLP pipelines for Federal Reserve transcript analysis and LLM-based legal document querying."
+    },
+    {
+      "question": "Does Atishay know Next.js?",
+      "answer": "Yes, Atishay uses Next.js for production web applications alongside React."
+    },
+    {
+      "question": "Does Atishay know AWS?",
+      "answer": "Yes, Atishay has used AWS in production — Lambda functions, API Gateway, and S3 are part of his regular cloud toolkit."
+    },
+    {
+      "question": "Does Atishay know GCP?",
+      "answer": "Yes, Atishay has production experience with Google Cloud Platform — Firebase, BigQuery, and GCP compute services."
+    },
+    {
+      "question": "Does Atishay know MongoDB?",
+      "answer": "Yes, Atishay has worked with MongoDB for NoSQL data storage in full-stack applications."
+    },
+    {
+      "question": "Does Atishay know computer vision?",
+      "answer": "Yes — Atishay built a CNN-powered brain tumor segmentation model as part of his research at Wake Forest, running inference client-side via TensorFlow.js."
+    },
+    {
+      "question": "What databases does Atishay know?",
+      "answer": "Atishay has worked with PostgreSQL, MongoDB, MySQL, Firebase Firestore, and BigQuery across production systems."
+    },
+    {
+      "question": "Does Atishay know Docker?",
+      "answer": "Atishay has worked with containerization as part of his full-stack and data engineering work."
+    },
+    {
+      "question": "Does Atishay know GraphQL?",
+      "answer": "Yes, Atishay has designed and built GraphQL APIs alongside REST APIs in production systems."
+    },
+    {
+      "question": "What is Atishay’s tech stack?",
+      "answer": "Atishay’s stack spans Java, Python, TypeScript, and Go for languages; Spring Boot, FastAPI, and React for frameworks; AWS (Lambda, ECS, SQS, RDS), Docker, Kubernetes, and Terraform for cloud/infra; and TensorFlow/PyTorch for ML."
+    },
+    {
+      "question": "Is Atishay a full stack developer?",
+      "answer": "Yes — Atishay is a full-stack engineer with 5+ years across frontend (React, TypeScript), backend (Java, Spring Boot, Python, FastAPI), distributed systems, and AI/ML."
+    },
+    {
+      "question": "Does Atishay know Java?",
+      "answer": "Yes, Java is one of Atishay’s primary languages — he used it extensively at Bounteous building Spring Boot microservices for billing, payments, and distributed systems serving 100K+ users."
+    },
+    {
+      "question": "Does Atishay know Spring Boot?",
+      "answer": "Yes, Atishay has 3+ years of production experience with Java and Spring Boot, building billing, payments, and distributed microservices at Bounteous."
+    },
+    {
+      "question": "Does Atishay know Kubernetes?",
+      "answer": "Yes, Atishay has used Kubernetes in production at Bounteous for container orchestration and standardizing CI/CD pipelines with Docker and Terraform."
+    },
+    {
+      "question": "Does Atishay know Terraform?",
+      "answer": "Yes, Atishay used Terraform at Bounteous for infrastructure-as-code, enabling 20+ monthly production releases across hybrid cloud environments."
+    },
+    {
+      "question": "Does Atishay know Kafka?",
+      "answer": "Yes, Kafka is part of Atishay’s distributed systems toolkit for event-driven data pipelines."
+    },
+    {
+      "question": "Does Atishay know FastAPI?",
+      "answer": "Yes — Atishay used FastAPI at Stony Brook to build high-availability distributed APIs serving 10K+ daily requests, reducing latency by 83%."
+    },
+    {
+      "question": "Does Atishay know Go or Golang?",
+      "answer": "Yes, Go (Golang) is in Atishay’s language toolkit alongside Java, Python, TypeScript, and JavaScript."
+    },
+    {
+      "question": "What is Atishay’s GPA?",
+      "answer": "Atishay has a 3.64/4.0 GPA in his MS Data Science at Stony Brook University and graduated with a 3.6/4.0 from his B.Tech at Symbiosis."
+    },
+    {
+      "question": "What is Atishay’s GPA at Stony Brook?",
+      "answer": "Atishay’s GPA at Stony Brook University is 3.64 out of 4.0."
+    },
+    {
+      "question": "What courses has Atishay taken?",
+      "answer": "At Stony Brook, Atishay has taken Neural Networks, Big Data Algorithms and Networks, Big Data Analytics, Statistical Computing, and Data Management."
+    },
+    {
+      "question": "Does Atishay have distributed systems experience?",
+      "answer": "Yes — distributed systems is a core part of Atishay’s background. At Bounteous he built distributed microservices for 100K+ users; at Stony Brook he built distributed APIs serving 10K+ daily requests with 83% latency reduction."
+    },
+    {
+      "question": "What metrics has Atishay shipped?",
+      "answer": "Atishay’s shipped results include: 83% latency reduction, deployment time cut from 6 hours to 90 seconds, P99 latency reduced by 40%, 50% faster MTTR, 35% faster dashboards, and $50K+ revenue from billing microservices."
+    },
+
+    {
+      "question": "How can I contact Atishay?",
+      "answer": "You can reach Atishay at katishay@gmail.com or connect on LinkedIn at linkedin.com/in/atishay-kasliwal."
+    },
+    {
+      "question": "What is Atishay’s email?",
+      "answer": "Atishay’s email is katishay@gmail.com."
+    },
+    {
+      "question": "Is Atishay open to new opportunities?",
+      "answer": "Yes, Atishay is actively open to new opportunities in software engineering, AI/ML, and data science roles."
+    },
+    {
+      "question": "Is Atishay looking for a job?",
+      "answer": "Yes, Atishay is open to new full-time roles — particularly at the intersection of full-stack engineering, ML, and data science. Reach him at katishay@gmail.com."
+    },
+    {
+      "question": "Where is Atishay based?",
+      "answer": "Atishay is based in New York City."
+    },
+    {
+      "question": "Is Atishay open to remote work?",
+      "answer": "Yes, Atishay is open to remote, hybrid, and in-person roles."
+    },
+    {
+      "question": "What kind of role is Atishay looking for?",
+      "answer": "Atishay is most interested in roles at the intersection of software engineering and AI/ML — full-stack, data science, or ML engineering positions."
+    },
+    {
+      "question": "Can I hire Atishay?",
+      "answer": "Absolutely — reach out at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal to start a conversation."
+    },
+    {
+      "question": "Is Atishay available for freelance work?",
+      "answer": "You can reach Atishay at katishay@gmail.com to discuss any project or engagement."
+    },
+    {
+      "question": "What is Atishay’s LinkedIn?",
+      "answer": "Atishay’s LinkedIn is linkedin.com/in/atishay-kasliwal — he’s active there and open to connections."
+    },
+    {
+      "question": "What is Atishay’s GitHub?",
+      "answer": "Atishay’s GitHub is github.com/atishay-kasliwal."
+    },
+    {
+      "question": "Can I see Atishay’s resume?",
+      "answer": "Yes — you can download Atishay’s resume directly from atishaykasliwal.com by clicking the Resume button in the navigation."
+    },
+    {
+      "question": "Is Atishay open to relocating?",
+      "answer": "Atishay is based in New York but is open to discussing relocation for the right opportunity."
+    },
+    {
+      "question": "When can Atishay start a new role?",
+      "answer": "Atishay is currently pursuing his MS and is open to discussing start dates — reach out at katishay@gmail.com for specifics."
+    },
+    {
+      "question": "What is Atishay’s website?",
+      "answer": "Atishay’s portfolio and resume are at atishaykasliwal.com — it also has live interactive demos of all his projects."
+    },
+    {
+      "question": "Does Atishay have a portfolio?",
+      "answer": "Yes — atishaykasliwal.com is his full portfolio with live interactive project demos, his resume, and this chatbot you’re talking to right now."
+    },
+    {
+      "question": "Is Atishay on Twitter or X?",
+      "answer": "Yes, Atishay is on X at @AtiahayKasliwal."
+    },
+
+    {
+      "question": "What are Atishay’s hobbies?",
+      "answer": "Outside of work, Atishay is into photography, art, and travel — he has an art section on his portfolio site showing some of his work."
+    },
+    {
+      "question": "Does Atishay do photography?",
+      "answer": "Yes, photography is one of Atishay’s creative outlets — you can check out his work at atishaykasliwal.com/art."
+    },
+    {
+      "question": "What does Atishay do outside of work?",
+      "answer": "Atishay enjoys photography, art, and travel when he’s not building things."
+    },
+    {
+      "question": "Is Atishay creative outside of tech?",
+      "answer": "Yes — Atishay is into photography and art, and he documents his work in the art section of his portfolio."
     }
   ]
 }
