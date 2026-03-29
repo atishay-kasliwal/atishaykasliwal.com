@@ -2,6 +2,73 @@
  * Simple keyword-based search to find relevant chunks from about-me data
  */
 
+const STOP_WORDS = new Set([
+  'what','is','the','a','an','do','you','your','how','can','tell','me','about',
+  'have','are','does','did','will','would','could','should','who','which','when',
+  'where','why','to','of','in','for','on','with','at','by','from','as','or','and',
+  'but','if','his','her','their','its','my','our','any','all','i','he','she','they',
+  'we','it','that','this','be','been','was','were','has','had','get','just','so',
+  'up','out','no','not','more','also','too','some','give','atishay','s','re','ve',
+  'please','let','know','me','us'
+]);
+
+function tokenize(text) {
+  return text.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length > 1 && !STOP_WORDS.has(w));
+}
+
+function cosineSim(a, b) {
+  const freqA = {}, freqB = {};
+  a.forEach(t => { freqA[t] = (freqA[t] || 0) + 1; });
+  b.forEach(t => { freqB[t] = (freqB[t] || 0) + 1; });
+  const terms = new Set([...Object.keys(freqA), ...Object.keys(freqB)]);
+  let dot = 0, normA = 0, normB = 0;
+  terms.forEach(t => {
+    const fa = freqA[t] || 0, fb = freqB[t] || 0;
+    dot += fa * fb; normA += fa * fa; normB += fb * fb;
+  });
+  return normA === 0 || normB === 0 ? 0 : dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
+/**
+ * Find the single best-matching Q&A for a user query using TF-IDF cosine similarity.
+ * Returns the matched answer directly — no LLM needed.
+ */
+export function findBestMatch(qaExamples, query, threshold = 0.05) {
+  if (!qaExamples || qaExamples.length === 0) return null;
+
+  const qTokens = tokenize(query);
+
+  // Greetings fast path
+  if (qTokens.length === 0) {
+    const t = query.trim().toLowerCase();
+    if (/^(hi|hey|hello|yo|hola|sup|heyy?|hii+)[!.?,\s]*$/.test(t)) {
+      return { answer: "Hey — happy to answer anything about Atishay's work, skills, or background.", score: 1 };
+    }
+    return { answer: "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.", score: 0 };
+  }
+
+  let best = null, bestScore = -1;
+  qaExamples.forEach(ex => {
+    const eTokens = tokenize(ex.question);
+    const uniScore = cosineSim(qTokens, eTokens);
+    // Bigram bonus
+    const qBi = [], eBi = [];
+    for (let i = 0; i < qTokens.length - 1; i++) qBi.push(qTokens[i] + '_' + qTokens[i + 1]);
+    for (let i = 0; i < eTokens.length - 1; i++) eBi.push(eTokens[i] + '_' + eTokens[i + 1]);
+    const biScore = qBi.length > 0 ? cosineSim(qBi, eBi) * 0.4 : 0;
+    const total = uniScore + biScore;
+    if (total > bestScore) { bestScore = total; best = { ...ex, score: total }; }
+  });
+
+  if (!best || bestScore < threshold) {
+    return { answer: "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.", score: 0 };
+  }
+  return best;
+}
+
 /**
  * Load about-me.json data
  */

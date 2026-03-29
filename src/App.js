@@ -21,8 +21,7 @@ import gunjanPhoto from './assets/gunjanjain.jpg';
 import StoryTimeline from './StoryTimeline';
 import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
-import { initializeWebLLM, generateResponse, isWebLLMSupported } from './webllmClient';
-import { loadAboutMeData, extractRelevantContext, loadQAExamples, findSimilarQAExamples } from './knowledgeRetrieval';
+import { loadQAExamples, findBestMatch } from './knowledgeRetrieval';
 
 const img5 = '/1ed668f5-0d8d-46c3-ad9a-c585b625d869.png';
 
@@ -38,15 +37,10 @@ function PopupChatBot() {
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState([]);
   const [hasShownWelcome, setHasShownWelcome] = useState(false);
-  const [avatarLoaded, setAvatarLoaded] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModelLoading, setIsModelLoading] = useState(false);
-  const [modelReady, setModelReady] = useState(false);
-  const [aboutMeData, setAboutMeData] = useState(null);
   const [qaExamples, setQaExamples] = useState([]);
-  const [error, setError] = useState(null);
-  const [loadingProgress, setLoadingProgress] = useState(null);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Stable session id per browser for logging (stored in localStorage)
   const [sessionId] = useState(() => {
@@ -63,298 +57,44 @@ function PopupChatBot() {
     }
   });
 
-  // Load about-me data and start WebLLM download immediately when component mounts
   useEffect(() => {
-    const initialize = async () => {
-      try {
-        // Load about-me data and Q&A examples (lightweight, fast)
-        const [data, qaData] = await Promise.all([
-          loadAboutMeData(),
-          loadQAExamples()
-        ]);
-        setAboutMeData(data);
-        setQaExamples(qaData.examples || []);
-
-        // Check if WebLLM is supported
-        if (!isWebLLMSupported()) {
-          setError('WebLLM requires WebGPU support. Please use Chrome, Edge, or Safari (latest versions).');
-          return;
-        }
-
-        // Start downloading WebLLM model in the background immediately
-        // This way it's ready when user opens the chat
-        setIsModelLoading(true);
-        setLoadingProgress({ text: 'Preparing AI model...', progress: 0 });
-
-        // Initialize with progress tracking
-        await initializeWebLLM((progress) => {
-          if (progress && (progress.progress !== undefined || progress.text)) {
-            setLoadingProgress({
-              text: progress.text || 'Loading model...',
-              progress: progress.progress !== undefined ? progress.progress : 0
-            });
-          }
-        });
-
-        setModelReady(true);
-        setIsModelLoading(false);
-        setLoadingProgress(null);
-      } catch (err) {
-        console.error('Initialization error:', err);
-        setError('Failed to initialize AI model. You can still try asking questions - it will load on demand.');
-        setIsModelLoading(false);
-        setLoadingProgress(null);
-      }
-    };
-
-    initialize();
+    loadQAExamples().then(data => setQaExamples(data.examples || []));
   }, []);
 
 
-  // Show welcome message after 2 seconds when page loads
   useEffect(() => {
     if (!hasShownWelcome && isOpen) {
-      const timer = setTimeout(() => {
-        const welcomeMessage = {
-          id: Date.now(),
-          text: "Hi! I can help answer questions about my work, experience, projects, and journey. Feel free to ask me anything!",
-          sender: 'bot'
-        };
-        setMessages([welcomeMessage]);
-        setHasShownWelcome(true);
-        // Scroll to bottom after welcome message
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }, 2000);
-
-      return () => clearTimeout(timer);
+      setMessages([{ id: Date.now(), text: "Hey \u2014 ask me anything about Atishay's work, projects, or experience.", sender: 'bot' }]);
+      setHasShownWelcome(true);
+      setTimeout(() => inputRef.current?.focus(), 150);
     }
   }, [hasShownWelcome, isOpen]);
 
-  // Core send logic used by both manual input and suggestion chips
-  const sendMessage = async (userQuery) => {
-    if (!userQuery || isLoading) return;
-
-    // Add user message
-    const userMessage = {
-      id: Date.now(),
-      text: userQuery,
-      sender: 'user'
-    };
-    setMessages(prev => [...prev, userMessage]);
+  const sendMessage = (userQuery) => {
+    const trimmed = userQuery.trim();
+    if (!trimmed || isLoading) return;
+    setMessages(prev => [...prev, { id: Date.now(), text: trimmed, sender: 'user' }]);
     setQuery('');
     setIsLoading(true);
-    setError(null);
-    
-    // Scroll to bottom when user sends message
+    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-
-    // Wait for model if it's still loading
-    if (!modelReady && isModelLoading) {
-      const loadingMessageId = Date.now() + 1;
-      setMessages(prev => [...prev, {
-        id: loadingMessageId,
-        text: '⏳ Model is still loading... Almost ready!',
-        sender: 'bot'
-      }]);
-
-      // Wait for initialization to complete
-      while (isModelLoading && !modelReady) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
-
-      // Remove loading message
-      setMessages(prev => prev.filter(msg => msg.id !== loadingMessageId));
-
-      if (!modelReady) {
-        setError('Model failed to load. Please refresh and try again.');
-        setIsLoading(false);
-        return;
-      }
-    }
-
-    if (!modelReady) {
-      setError('AI model is not ready yet. Please wait a moment and try again.');
+      const match = findBestMatch(qaExamples, trimmed);
+      const answer = match?.answer || "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.";
+      setMessages(prev => [...prev, { id: Date.now(), text: answer, sender: 'bot' }]);
       setIsLoading(false);
-      return;
-    }
-
-    const botMessageId = Date.now() + 1;
-
-    try {
-      // Quick path for simple greetings - keep it very short and friendly, no LLM needed
-      const trimmed = userQuery.trim().toLowerCase();
-      const isGreetingOnly = /^(hi|hey|hello|yo|hola|sup|heyy?|hii+)[!.?,\s]*$/.test(trimmed);
-      if (isGreetingOnly) {
-        const greetingResponse = "Hey — happy to help you explore Atishay’s work, skills, and projects whenever you’re ready.";
-
-        setMessages(prev => [...prev, {
-          id: botMessageId,
-          text: greetingResponse,
-          sender: 'bot',
-          isStreaming: false
-        }]);
-
-        // Scroll to bottom after greeting
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-
-        // Log greeting turn
-        try {
-          fetch('https://kxkcjiro44.execute-api.ap-south-1.amazonaws.com/log', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              sessionId,
-              userMessage: userQuery,
-              botReply: greetingResponse,
-              timestamp: new Date().toISOString(),
-            }),
-          })
-            .then(async (res) => {
-              const bodyText = await res.text().catch(() => '');
-              if (!res.ok) {
-                console.error('Conversation log failed', res.status, res.statusText, bodyText);
-              } else {
-                console.log('Conversation log success (greeting)', res.status, bodyText);
-              }
-            })
-            .catch((err) => {
-              console.error('Conversation log error', err);
-            });
-        } catch (err) {
-          console.error('Conversation log exception', err);
-        }
-
-        return;
-      }
-
-      // Extract relevant context from about-me data
-      const context = aboutMeData ? extractRelevantContext(aboutMeData, userQuery) : '';
-
-      // Find similar Q&A examples for few-shot learning
-      const similarExamples = findSimilarQAExamples(qaExamples, userQuery, 3);
-      
-      // Build few-shot examples string
-      let fewShotExamples = '';
-      if (similarExamples.length > 0) {
-        fewShotExamples = '\n\nEXAMPLES OF FACTS AND TONE (convert to third person about Atishay when you answer):\n';
-        similarExamples.forEach((ex, idx) => {
-          fewShotExamples += `\nExample ${idx + 1}:\nQ: ${ex.question}\nA: ${ex.answer}\n`;
-        });
-        fewShotExamples += '\nUse the style and content of these examples, but ALWAYS talk about Atishay in third person (he/him/his), not as "I".';
-      }
-
-      // Create system prompt - wingman style based on user's spec
-      const systemPrompt = `You are an assistant that answers questions about Atishay’s work, skills, background, and experience.
-
-Speak in third person, as an informative guide describing Atishay. Do not greet Atishay directly or pretend to be him. When users ask personal questions, respond as "Atishay has..." or "He has...".
-
-CRITICAL RULES:
-- ALWAYS talk about Atishay in third person (use "he", "him", "his" or "Atishay"), NOT "I" or "my"
- - NEVER start responses with phrases like "I am", "I'm", or "My name is"
-- Keep responses helpful, warm, and professional
-- Be VERY concise – think like a message to a friend: 1–2 short sentences, max ~35–40 words
-- Do NOT use bullet points, lists, headings, or long paragraphs. Just a single, tight response.
-- Sound natural and authentic, not robotic or formal
-- If you don't know something, say you don't have that information
-- If the user asks about projects, client work, or building things based on requirements, clearly say that Atishay HAS done multiple projects based on user and business requirements. Do NOT say he hasn't worked on such projects.
-- Do NOT say things like "my research data suggests" or speak like an outside analyst. Answer directly.
-- If a user asks casually, you may respond casually. If they ask professionally, answer in a clear professional tone.
-
-ABOUT ATISHAY:
-${context}${fewShotExamples}
-
-Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Always speak in third person about Atishay. Never mention that you are an AI, bot, or assistant. Stay natural, confident, and slightly playful when appropriate.`;
-
-      // Generate response with streaming
-      let botResponse = '';
-      
-      // Add placeholder bot message
-      setMessages(prev => [...prev, {
-        id: botMessageId,
-        text: '',
-        sender: 'bot',
-        isStreaming: true
-      }]);
-
-      await generateResponse(systemPrompt, userQuery, (partialResponse) => {
-        botResponse = partialResponse;
-        // Update the message in real-time
-        setMessages(prev => prev.map(msg => 
-          msg.id === botMessageId 
-            ? { ...msg, text: partialResponse, isStreaming: true }
-            : msg
-        ));
-        // Auto-scroll to bottom during streaming
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      });
-
-      // Finalize the message
-      setMessages(prev => prev.map(msg => 
-        msg.id === botMessageId 
-          ? { ...msg, text: botResponse, isStreaming: false }
-          : msg
-      ));
-      
-      // Scroll to bottom after message is complete
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-
-      // Fire-and-forget: log this turn to backend (Lambda + Mongo)
-      try {
-        fetch('https://kxkcjiro44.execute-api.ap-south-1.amazonaws.com/log', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sessionId,
-            userMessage: userQuery,
-            botReply: botResponse,
-            timestamp: new Date().toISOString(),
-          }),
-        })
-          .then(async (res) => {
-            const bodyText = await res.text().catch(() => '');
-            if (!res.ok) {
-              console.error('Conversation log failed', res.status, res.statusText, bodyText);
-            } else {
-              console.log('Conversation log success', res.status, bodyText);
-            }
-          })
-          .catch((err) => {
-            console.error('Conversation log error', err);
-          });
-      } catch (err) {
-        console.error('Conversation log exception', err);
-      }
-
-    } catch (err) {
-      console.error('Error generating response:', err);
-      setError('Sorry, I encountered an error. Please try again.');
-      
-      // Remove the streaming message on error
-      setMessages(prev => prev.filter(msg => msg.id !== botMessageId));
-    } finally {
-      setIsLoading(false);
-    }
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      fetch('https://kxkcjiro44.execute-api.ap-south-1.amazonaws.com/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, userMessage: trimmed, botReply: answer, timestamp: new Date().toISOString() }),
+      }).catch(() => {});
+    }, 350);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!query.trim() || isLoading) return;
-    await sendMessage(query.trim());
-  };
-
-  const handleChipClick = (label) => {
-    if (isLoading || !modelReady || isModelLoading) return;
-    sendMessage(label);
+    sendMessage(query);
   };
 
   return (
@@ -371,14 +111,6 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
-          ) : avatarLoaded ? (
-            <img 
-              src="/chat-bot-avatar.jpg" 
-              alt="Chat with Atishay" 
-              className="chat-bot-avatar"
-              onError={() => setAvatarLoaded(false)}
-              onLoad={() => setAvatarLoaded(true)}
-            />
           ) : (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -387,51 +119,18 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
         </button>
       </div>
 
-      {/* Chat Popup Window */}
       {isOpen && (
         <div className="chat-popup-window" aria-label="Ask Atishay anything">
           <div className="chat-widget">
             <div className="chat-widget-header">
               <h2 className="chat-widget-title">Ask me anything</h2>
-              <p className="chat-widget-subtitle">
-                about Atishay's work, experience, and journey
-              </p>
+              <p className="chat-widget-subtitle">about Atishay's work, experience, and journey</p>
             </div>
 
-            {/* Model Loading Indicator - Only show when chat is open */}
-            {isModelLoading && isOpen && (
-              <div className="chat-loading-indicator">
-                <div className="chat-loading-spinner"></div>
-                <p>{loadingProgress?.text || 'Loading AI model...'}</p>
-                {loadingProgress?.progress !== undefined && (
-                  <div className="chat-progress-bar">
-                    <div 
-                      className="chat-progress-fill" 
-                      style={{ width: `${(loadingProgress.progress || 0) * 100}%` }}
-                    ></div>
-                  </div>
-                )}
-                <p className="chat-loading-note">Preparing AI model... This only happens once!</p>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {error && (
-              <div className="chat-error-message">
-                {error}
-              </div>
-            )}
-
-            {/* Suggested questions - show at top, before messages */}
-            {messages.filter(msg => msg.sender === 'user').length === 0 && (
+            {messages.filter(m => m.sender === 'user').length === 0 && (
               <div className="chat-suggestions">
-                {suggestionChips.map((chip) => (
-                  <button
-                    key={chip.label}
-                    type="button"
-                    onClick={() => handleChipClick(chip.label)}
-                    className="chat-chip"
-                  >
+                {suggestionChips.map(chip => (
+                  <button key={chip.label} type="button" onClick={() => sendMessage(chip.label)} className="chat-chip">
                     <span>{chip.emoji}</span>
                     <span>{chip.label}</span>
                   </button>
@@ -439,47 +138,33 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
               </div>
             )}
 
-            {/* Messages Area */}
-            {messages.length > 0 && (
-              <div className="chat-messages">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`chat-message ${message.sender === 'bot' ? 'chat-message-bot' : 'chat-message-user'} ${message.isStreaming ? 'chat-message-streaming' : ''}`}
-                  >
-                    <div className="chat-message-content">
-                      {message.text.split('\n').map((line, idx) => (
-                        <span key={idx}>
-                          {line}
-                          {idx < message.text.split('\n').length - 1 && <br />}
-                        </span>
-                      ))}
-                      {message.isStreaming && (
-                        <span className="chat-streaming-cursor">▊</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-            )}
+            <div className="chat-messages">
+              {messages.map(msg => (
+                <div key={msg.id} className={`chat-message ${msg.sender === 'bot' ? 'chat-message-bot' : 'chat-message-user'}`}>
+                  <div className="chat-message-content">{msg.text}</div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="chat-message chat-message-bot">
+                  <div className="chat-typing-indicator"><span /><span /><span /></div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
 
             <form onSubmit={handleSubmit} className="chat-widget-form">
               <div className="chat-input-wrapper">
                 <span className="chat-input-icon" aria-hidden="true">🔍</span>
                 <input
+                  ref={inputRef}
                   type="text"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={modelReady ? "Ask me anything..." : (isModelLoading ? "Model loading... almost ready!" : "Preparing...")}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Ask me anything..."
                   className="chat-input"
                   disabled={isLoading}
                 />
-                <button
-                  type="submit"
-                  className="chat-submit"
-                  disabled={!query.trim() || !modelReady || isLoading || isModelLoading}
-                >
+                <button type="submit" className="chat-submit" disabled={!query.trim() || isLoading}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -488,9 +173,7 @@ Remember: Keep responses SHORT (1–2 sentences, message-to-a-friend length). Al
               </div>
             </form>
 
-            <p className="chat-footer">
-              Just doing my part to help Atishay get hired 🤞
-            </p>
+            <p className="chat-footer">Just doing my part to help Atishay get hired 🤞</p>
           </div>
         </div>
       )}

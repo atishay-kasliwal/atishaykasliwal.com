@@ -5,11 +5,11 @@
   <!-- Homepage -->
   <url>
     <loc>https://atishaykasliwal.com/</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://atishaykasliwal.com/atishaylogo.png</image:loc>
+      <image:loc>https://atishaykasliwal.com/AtishayKasliwal.JPG</image:loc>
       <image:title>Atishay Kasliwal - Full Stack Engineer</image:title>
     </image:image>
   </url>

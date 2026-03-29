@@ -2,77 +2,100 @@
   "name": "Atishay Kasliwal",
   "title": "Full Stack Engineer - Atishay Kasliwal",
   "email": "katishay@gmail.com",
-  "summary": "Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University.",
-  
+  "summary": "Software Engineer with over 5 years of professional experience, currently pursuing a Master's in Data Science from Stony Brook University (GPA 3.64). Strong background in distributed systems, cloud infrastructure, and AI/ML.",
+
   "education": [
     {
       "degree": "MS in Data Science",
       "institution": "Stony Brook University",
+      "location": "New York, USA",
+      "period": "August 2024 – May 2026",
       "status": "Currently pursuing",
-      "location": "New York, USA"
+      "gpa": "3.64 / 4.0",
+      "coursework": ["Neural Networks", "Big Data Algorithms and Networks", "Big Data Analytics", "Statistical Computing", "Data Management"]
     },
     {
-      "degree": "Bachelor of Technology in CSIT",
+      "degree": "Bachelor of Technology in Computer Science and Information Technology",
       "institution": "Symbiosis University of Applied Sciences",
+      "location": "Indore, India",
+      "period": "May 2018 – May 2022",
       "status": "Completed",
-      "location": "India"
+      "gpa": "3.6 / 4.0",
+      "coursework": ["Distributed Systems", "Operating Systems", "Computer Networks", "Software Development", "Data Structures", "Algorithms"]
     }
   ],
-  
+
   "experience": [
     {
-      "role": "Artificial Intelligence and Analytics",
-      "company": "Atrium Health Wake Forest",
-      "period": "2025",
-      "type": "Current"
-    },
-    {
-      "role": "Research Assistant",
+      "role": "Graduate Research Assistant",
       "company": "Stony Brook University",
-      "period": "2024–2025",
-      "type": "Current"
+      "period": "November 2024 – Present",
+      "type": "Current",
+      "highlights": [
+        "Architected high-availability distributed APIs using Python (FastAPI) and AWS (ECS, Lambda, API Gateway), serving 10K+ daily requests, reducing latency by 83%.",
+        "Led CI/CD pipelines using Jenkins, Docker, and AWS, cutting deployment time from 6 hours to 90 seconds.",
+        "Implemented monitoring and alerting using CloudWatch and Prometheus, reducing MTTR by 50%.",
+        "Authored technical design documents across 10+ distributed systems."
+      ]
     },
     {
       "role": "Senior Software Engineer",
-      "company": "Fidelity Investments",
-      "period": "2021–2024",
+      "company": "Bounteous",
+      "period": "August 2021 – August 2024",
       "type": "Previous",
-      "description": "Worked as a senior software engineer with focus on full-stack development"
+      "highlights": [
+        "Architected billing, payments, and invoicing integrations using Java, Spring Boot, and AWS (RDS, SQS, SNS, S3), serving 100K+ users.",
+        "Designed REST APIs and optimized microservices, reducing P99 latency by 40% and eliminating Sev1 incidents.",
+        "Standardized CI/CD pipelines using Jenkins, Docker, Kubernetes, and Terraform — 20+ monthly production releases.",
+        "Developed React frontend components integrated with Java Spring Boot microservices, reducing dashboard load time by 35%.",
+        "Collaborated across 5+ product teams in Agile/Scrum environments."
+      ]
     },
     {
-      "role": "Software Developer",
+      "role": "Software Engineer Intern",
       "company": "Shriffle",
-      "period": "2020–2021",
-      "type": "Previous"
-    },
-    {
-      "role": "Artificial Intelligence Project Development",
-      "company": "Verzeo Learning",
-      "period": "2020",
-      "type": "Previous"
-    },
-    {
-      "role": "Data Analyst",
-      "company": "Crime Branch Indore",
-      "period": "2020",
-      "type": "Previous"
-    },
-    {
-      "role": "Web Application Developer",
-      "company": "N-TIER Pvt Ltd",
-      "period": "2019–2020",
-      "type": "Previous"
+      "period": "August 2020 – May 2021",
+      "type": "Previous",
+      "highlights": [
+        "Developed billing microservices using Java and Spring Boot on GCP, processing 10K+ transactions generating $50K+ revenue.",
+        "Containerized services with Docker; contributed to engineering reviews, reducing rework by 30%."
+      ]
     }
   ],
-  
+
   "skills": {
-    "languages": ["Python", "JavaScript", "TypeScript", "Java", "SQL", "HTML", "CSS", "R"],
-    "frontend": ["React", "Next.js", "JavaScript", "TypeScript", "HTML5", "CSS3", "Tailwind CSS", "Redux"],
-    "backend": ["Node.js", "Express", "REST APIs", "GraphQL", "MongoDB", "PostgreSQL"],
-    "cloud": ["AWS", "GCP"],
-    "other": ["Corda", "PHP"]
+    "languages": ["Java", "Python", "SQL", "Go (Golang)", "TypeScript", "JavaScript", "C++"],
+    "backend": ["REST", "Microservices", "Spring Boot", "FastAPI", "Node.js", "PostgreSQL", "MySQL", "Kafka", "Distributed Systems"],
+    "frontend": ["React", "TypeScript", "JavaScript", "Next.js", "HTML5", "CSS3"],
+    "cloud": ["AWS (Lambda, API Gateway, SQS, RDS, ECS)", "GCP", "Docker", "Kubernetes", "OpenShift", "Terraform", "CI/CD"],
+    "ai_ml": ["Neural Networks", "TensorFlow", "PyTorch", "NLP", "Computer Vision", "RAG", "LLMs"],
+    "tools": ["Jenkins", "Git", "Linux/Unix", "Prometheus", "CloudWatch", "Agile/Scrum", "GitHub Copilot"]
   },
-  
+
+  "projects": [
+    {
+      "name": "Atriveo",
+      "year": "2026",
+      "description": "Open-source scalable SaaS platform using React, TypeScript, PostgreSQL, and AWS — deployed via Docker on OpenShift with GenAI-powered insights, processing 2K+ records daily."
+    },
+    {
+      "name": "FOMC Intelligence Dashboard",
+      "description": "NLP pipeline analyzing Federal Reserve transcripts for rate signals and sentiment shifts."
+    },
+    {
+      "name": "Legal RAG System",
+      "description": "Retrieval-augmented generation pipeline for querying legal filings in natural language."
+    },
+    {
+      "name": "MRI Brain Tumor Viewer",
+      "description": "CNN-powered MRI viewer with real-time tumor segmentation running entirely in the browser via TensorFlow.js."
+    },
+    {
+      "name": "PolicyFabric",
+      "description": "Data contract enforcement system with real-time architecture visualization."
+    }
+  ],
+
   "testimonials": [
     {
       "name": "Ankit Jain",
@@ -111,20 +134,13 @@
       "text": "Working with Atishay was a pleasure. His innovative approach made him exceptional."
     }
   ],
-  
+
   "social": {
     "linkedin": "https://www.linkedin.com/in/atishay-kasliwal/",
     "github": "https://github.com/atishay-kasliwal",
     "twitter": "https://x.com/AtiahayKasliwal",
     "instagram": "https://www.instagram.com/atishay_kasliwal/"
   },
-  
-  "interests": [
-    "Photography",
-    "Art",
-    "Travel",
-    "Machine Learning",
-    "Full-Stack Development"
-  ]
-}
 
+  "interests": ["Photography", "Art", "Travel", "Machine Learning", "Full-Stack Development"]
+}
