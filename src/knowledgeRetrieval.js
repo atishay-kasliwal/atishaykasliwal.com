@@ -8,8 +8,8 @@ const STOP_WORDS = new Set([
   'where','why','to','of','in','for','on','with','at','by','from','as','or','and',
   'but','if','his','her','their','its','my','our','any','all','i','he','she','they',
   'we','it','that','this','be','been','was','were','has','had','get','just','so',
-  'up','out','no','not','more','also','too','some','give','atishay','s','re','ve',
-  'please','let','know','me','us'
+  'up','out','no','not','more','also','too','some','give','s','re','ve',
+  'please','let','know','us','much','many','few','lot','bit'
 ]);
 
 function tokenize(text) {
