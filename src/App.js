@@ -83,7 +83,10 @@ function PopupChatBot() {
       const answer = match?.answer || "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.";
       setMessages(prev => [...prev, { id: Date.now(), text: answer, sender: 'bot' }]);
       setIsLoading(false);
-      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        inputRef.current?.focus();
+      }, 100);
       fetch('https://kxkcjiro44.execute-api.ap-south-1.amazonaws.com/log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,8 +126,11 @@ function PopupChatBot() {
         <div className="chat-popup-window" aria-label="Ask Atishay anything">
           <div className="chat-widget">
             <div className="chat-widget-header">
-              <h2 className="chat-widget-title">Ask me anything</h2>
-              <p className="chat-widget-subtitle">about Atishay's work, experience, and journey</p>
+              <span className="chat-status-dot" />
+              <div>
+                <h2 className="chat-widget-title">Ask about Atishay</h2>
+                <p className="chat-widget-subtitle">work, projects, experience</p>
+              </div>
             </div>
 
             {messages.filter(m => m.sender === 'user').length === 0 && (
@@ -154,7 +160,6 @@ function PopupChatBot() {
 
             <form onSubmit={handleSubmit} className="chat-widget-form">
               <div className="chat-input-wrapper">
-                <span className="chat-input-icon" aria-hidden="true">🔍</span>
                 <input
                   ref={inputRef}
                   type="text"
