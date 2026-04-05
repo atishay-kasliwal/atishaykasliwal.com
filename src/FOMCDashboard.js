@@ -796,130 +796,6 @@ export default function FOMCDashboard() {
         </button>
       </div>
 
-      {/* ── ROW 1: Video (50%) + Chart (50%) ─────────────────────────────── */}
-      <div className="fomc-row1">
-
-        {/* Video */}
-        <div className="fomc-panel">
-          <div className="fomc-panel-hd">
-            <span className="fomc-panel-ttl">PRESS CONFERENCE FEED</span>
-            <div className="fomc-live-badge"><span className="fomc-live-dot" /> LIVE</div>
-          </div>
-          <div className="fomc-video-body">
-            {selectedSession.videoId && !selectedSession.videoId.startsWith('REPLACE') && !ytError ? (
-              <div className="fomc-screen-outer">
-                <div className="fomc-yt-wrap">
-                  <div id="yt-player" />
-                </div>
-                {activeInterval && (() => {
-                  const reaction = activeInterval.horizons?.h0?.reaction?.toLowerCase();
-                  const isBull = reaction === 'positive';
-                  const isBear = reaction === 'negative';
-                  return (
-                    <div className="fomc-nlp-stack">
-                      <span className={`fomc-nlp-chip ${isBull ? 'fomc-nlp-chip-bull' : isBear ? 'fomc-nlp-chip-bear' : ''}`}>
-                        {isBull ? '▲ BULLISH' : isBear ? '▼ BEARISH' : '● NEUTRAL'}
-                      </span>
-                      {confidence != null && (
-                        <span className="fomc-nlp-chip">{confidence}% CONF</span>
-                      )}
-                      <span className="fomc-nlp-chip">{activeInterval.id}</span>
-                    </div>
-                  );
-                })()}
-              </div>
-            ) : (
-              <div className="fomc-screen">
-                {activeInterval && (() => {
-                  const reaction = activeInterval.horizons?.h0?.reaction?.toLowerCase();
-                  const isBull = reaction === 'positive';
-                  const isBear = reaction === 'negative';
-                  return (
-                    <div className="fomc-nlp-stack">
-                      <span className={`fomc-nlp-chip ${isBull ? 'fomc-nlp-chip-bull' : isBear ? 'fomc-nlp-chip-bear' : ''}`}>
-                        {isBull ? '▲ BULLISH' : isBear ? '▼ BEARISH' : '● NEUTRAL'}
-                      </span>
-                      {confidence != null && (
-                        <span className="fomc-nlp-chip">{confidence}% CONF</span>
-                      )}
-                    </div>
-                  );
-                })()}
-                <div className="fomc-screen-inner">
-                  <div className="fomc-screen-text">
-                    <div className="fomc-screen-org">FEDERAL RESERVE</div>
-                    <div className="fomc-screen-event">FOMC Press Conference</div>
-                    <div className="fomc-screen-date">{selectedSession.label} {selectedSession.year}</div>
-                  </div>
-                  {ytError && (
-                    <a
-                      className="fomc-yt-link"
-                      href={`https://www.youtube.com/watch?v=${selectedSession.videoId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      ▶ Watch on YouTube
-                    </a>
-                  )}
-                </div>
-                <div className="fomc-screen-lower">
-                  <div className="fomc-screen-name">JEROME H. POWELL</div>
-                  <div className="fomc-screen-role">Chair, Federal Reserve</div>
-                </div>
-              </div>
-            )}
-            <div className="fomc-waveform">
-              {waveformHeights.map((h, i) => {
-                const barSecs = (i / waveformHeights.length) * totalDuration;
-                const played = barSecs <= videoSeconds;
-                return (
-                  <div
-                    key={i}
-                    className="fomc-wave-bar"
-                    style={{
-                      height: `${h}px`,
-                      background: played ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.08)',
-                    }}
-                  />
-                );
-              })}
-            </div>
-            <div className="fomc-controls">
-              {ytError && (
-                <div className="fomc-manual-hint">Drag to sync panels with video →</div>
-              )}
-              <div className="fomc-prog-track"
-                ref={timelineRef}
-                onClick={handleTimelineInteract}
-                onMouseMove={handleTimelineMouseMove}
-              >
-                <div className="fomc-prog-fill" style={{ width: `${timelinePos}%` }} />
-                <div className="fomc-prog-thumb" style={{ left: `${timelinePos}%` }} />
-              </div>
-              <div className="fomc-time-lbl">{tlLabel} / {durMin}:{durSec}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Chart */}
-        <div className="fomc-panel fomc-chart-panel">
-          <div className="fomc-panel-hd">
-            <span className="fomc-panel-ttl">
-              SPX · 1-MIN · {selectedSession.label.toUpperCase()} {selectedSession.year}
-            </span>
-            <div className="fomc-chart-hd-right">
-              <div className="fomc-chart-legend-ai">
-                <div className="fomc-ai-line-demo" /> H0
-              </div>
-              <div className="fomc-chart-legend-ai fomc-legend-h1">
-                <div className="fomc-ai-line-demo fomc-ai-line-h1" /> H1
-              </div>
-            </div>
-          </div>
-          {chartSvg}
-        </div>
-      </div>
-
       {/* ── ROW 2: Portfolio Trading Desk + Timeline ──────────────────────── */}
       <div className="fomc-panel fomc-tl-panel fomc-portfolio-panel">
 
@@ -1085,6 +961,130 @@ export default function FOMCDashboard() {
           </div>
         </div>
 
+      </div>
+
+      {/* ── ROW 1: Video (50%) + Chart (50%) ─────────────────────────────── */}
+      <div className="fomc-row1">
+
+        {/* Video */}
+        <div className="fomc-panel">
+          <div className="fomc-panel-hd">
+            <span className="fomc-panel-ttl">PRESS CONFERENCE FEED</span>
+            <div className="fomc-live-badge"><span className="fomc-live-dot" /> LIVE</div>
+          </div>
+          <div className="fomc-video-body">
+            {selectedSession.videoId && !selectedSession.videoId.startsWith('REPLACE') && !ytError ? (
+              <div className="fomc-screen-outer">
+                <div className="fomc-yt-wrap">
+                  <div id="yt-player" />
+                </div>
+                {activeInterval && (() => {
+                  const reaction = activeInterval.horizons?.h0?.reaction?.toLowerCase();
+                  const isBull = reaction === 'positive';
+                  const isBear = reaction === 'negative';
+                  return (
+                    <div className="fomc-nlp-stack">
+                      <span className={`fomc-nlp-chip ${isBull ? 'fomc-nlp-chip-bull' : isBear ? 'fomc-nlp-chip-bear' : ''}`}>
+                        {isBull ? '▲ BULLISH' : isBear ? '▼ BEARISH' : '● NEUTRAL'}
+                      </span>
+                      {confidence != null && (
+                        <span className="fomc-nlp-chip">{confidence}% CONF</span>
+                      )}
+                      <span className="fomc-nlp-chip">{activeInterval.id}</span>
+                    </div>
+                  );
+                })()}
+              </div>
+            ) : (
+              <div className="fomc-screen">
+                {activeInterval && (() => {
+                  const reaction = activeInterval.horizons?.h0?.reaction?.toLowerCase();
+                  const isBull = reaction === 'positive';
+                  const isBear = reaction === 'negative';
+                  return (
+                    <div className="fomc-nlp-stack">
+                      <span className={`fomc-nlp-chip ${isBull ? 'fomc-nlp-chip-bull' : isBear ? 'fomc-nlp-chip-bear' : ''}`}>
+                        {isBull ? '▲ BULLISH' : isBear ? '▼ BEARISH' : '● NEUTRAL'}
+                      </span>
+                      {confidence != null && (
+                        <span className="fomc-nlp-chip">{confidence}% CONF</span>
+                      )}
+                    </div>
+                  );
+                })()}
+                <div className="fomc-screen-inner">
+                  <div className="fomc-screen-text">
+                    <div className="fomc-screen-org">FEDERAL RESERVE</div>
+                    <div className="fomc-screen-event">FOMC Press Conference</div>
+                    <div className="fomc-screen-date">{selectedSession.label} {selectedSession.year}</div>
+                  </div>
+                  {ytError && (
+                    <a
+                      className="fomc-yt-link"
+                      href={`https://www.youtube.com/watch?v=${selectedSession.videoId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      ▶ Watch on YouTube
+                    </a>
+                  )}
+                </div>
+                <div className="fomc-screen-lower">
+                  <div className="fomc-screen-name">JEROME H. POWELL</div>
+                  <div className="fomc-screen-role">Chair, Federal Reserve</div>
+                </div>
+              </div>
+            )}
+            <div className="fomc-waveform">
+              {waveformHeights.map((h, i) => {
+                const barSecs = (i / waveformHeights.length) * totalDuration;
+                const played = barSecs <= videoSeconds;
+                return (
+                  <div
+                    key={i}
+                    className="fomc-wave-bar"
+                    style={{
+                      height: `${h}px`,
+                      background: played ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.08)',
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <div className="fomc-controls">
+              {ytError && (
+                <div className="fomc-manual-hint">Drag to sync panels with video →</div>
+              )}
+              <div className="fomc-prog-track"
+                ref={timelineRef}
+                onClick={handleTimelineInteract}
+                onMouseMove={handleTimelineMouseMove}
+              >
+                <div className="fomc-prog-fill" style={{ width: `${timelinePos}%` }} />
+                <div className="fomc-prog-thumb" style={{ left: `${timelinePos}%` }} />
+              </div>
+              <div className="fomc-time-lbl">{tlLabel} / {durMin}:{durSec}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Chart */}
+        <div className="fomc-panel fomc-chart-panel">
+          <div className="fomc-panel-hd">
+            <span className="fomc-panel-ttl">
+              SPX · 1-MIN · {selectedSession.label.toUpperCase()} {selectedSession.year}
+            </span>
+            <div className="fomc-chart-hd-right">
+              <div className="fomc-chart-legend-ai">
+                <div className="fomc-ai-line-demo" /> H0
+              </div>
+              <div className="fomc-chart-legend-ai fomc-legend-h1">
+                <div className="fomc-ai-line-demo fomc-ai-line-h1" /> H1
+              </div>
+            </div>
+          </div>
+          {chartSvg}
+        </div>
       </div>
 
       {/* ── MOBILE TAB NAV (hidden on desktop) ───────────────────────────── */}
