@@ -333,6 +333,84 @@ export default function FOMCDashboard() {
   const durMin = Math.floor(totalDuration / 60);
   const durSec = String(totalDuration % 60).padStart(2, '0');
 
+  // ── Portfolio simulation (100 shares, strategy: buy open, flip on signal) ──
+  const PORTFOLIO_SHARES = 100;
+  const PORTFOLIO_START  = 10000; // $100 × 100 shares baseline
+
+  const portfolioHistory = useMemo(() => {
+    if (!intervals.length) return [];
+    let balance = PORTFOLIO_START;
+    let pos = 'FLAT'; // FLAT | LONG | SHORT
+    const history = [];
+    intervals.forEach((iv, i) => {
+      const isFirst = i === 0;
+      const isLast  = i === intervals.length - 1;
+      const signal  = iv.horizons?.h0?.reaction?.toLowerCase(); // 'positive'|'negative'
+      const actual  = iv.actualChange || 0;
+
+      // Decide position
+      if (isFirst) {
+        pos = 'LONG';
+      } else if (isLast) {
+        pos = 'FLAT';
+      } else if (signal === 'positive') {
+        pos = pos === 'SHORT' ? 'LONG' : (pos === 'FLAT' ? 'LONG' : pos);
+      } else if (signal === 'negative') {
+        pos = pos === 'LONG' ? 'SHORT' : (pos === 'FLAT' ? 'SHORT' : pos);
+      }
+
+      // P&L this minute
+      let intervalPnl = 0;
+      if (pos === 'LONG')  intervalPnl = actual * PORTFOLIO_SHARES;
+      if (pos === 'SHORT') intervalPnl = -actual * PORTFOLIO_SHARES;
+      balance += intervalPnl;
+
+      history.push({
+        id: iv.id,
+        videoSeconds: iv.videoSeconds,
+        balance,
+        intervalPnl,
+        position: pos,
+        signal,
+        actual,
+        correct: iv.horizons?.h0?.correctDirection,
+      });
+    });
+    return history;
+  }, [intervals]);
+
+  // Portfolio state up to current video position
+  const portfolioNow = useMemo(() => {
+    if (!portfolioHistory.length) return null;
+    const visible = portfolioHistory.filter((h) => h.videoSeconds <= videoSeconds);
+    return visible.length ? visible[visible.length - 1] : portfolioHistory[0];
+  }, [portfolioHistory, videoSeconds]);
+
+  const portfolioFinal = portfolioHistory.length
+    ? portfolioHistory[portfolioHistory.length - 1]
+    : null;
+
+  const portfolioVisibleCount = portfolioHistory.filter((h) => h.videoSeconds <= videoSeconds).length;
+
+  // SVG equity curve
+  const EQUITY_W = 1200;
+  const EQUITY_H = 52;
+  const equityCurveD = useMemo(() => {
+    if (portfolioHistory.length < 2) return '';
+    const vals = portfolioHistory.map((h) => h.balance);
+    const lo = Math.min(...vals);
+    const hi = Math.max(...vals);
+    const range = hi - lo || 1;
+    const xStep = EQUITY_W / (portfolioHistory.length - 1);
+    return portfolioHistory
+      .map((h, i) => {
+        const x = (i * xStep).toFixed(1);
+        const y = (EQUITY_H - 4 - ((h.balance - lo) / range) * (EQUITY_H - 8)).toFixed(1);
+        return `${i === 0 ? 'M' : 'L'}${x},${y}`;
+      })
+      .join(' ');
+  }, [portfolioHistory]);
+
   // ── Chart data from intervals ─────────────────────────────────────────────
   // Build a cumulative price series from actualChange per interval.
   // Start from a baseline of 100 (percentage-based since we don't have raw price).
@@ -842,45 +920,171 @@ export default function FOMCDashboard() {
         </div>
       </div>
 
-      {/* ── ROW 2: Timeline (full width) ──────────────────────────────────── */}
-      <div className="fomc-panel fomc-tl-panel">
-        <div className="fomc-tl-hd">
-          <span className="fomc-panel-ttl">TIMELINE · {selectedSession.label} {selectedSession.year}</span>
-          {sessionMeta && (
-            <span className="fomc-tl-accuracy">
-              AI Accuracy: <strong>{sessionMeta.accuracyPct?.toFixed(1)}%</strong>
-              &nbsp;·&nbsp; MAE: <strong>{sessionMeta.mae?.toFixed(3)}</strong>
-            </span>
-          )}
+      {/* ── ROW 2: Portfolio Trading Desk + Timeline ──────────────────────── */}
+      <div className="fomc-panel fomc-tl-panel fomc-portfolio-panel">
+
+        {/* ── Top bar: balance + stats ────────────────────────────────────── */}
+        <div className="fomc-port-topbar">
+          <div className="fomc-port-left">
+            <span className="fomc-panel-ttl">TRADING DESK · {selectedSession.label} {selectedSession.year}</span>
+            <span className="fomc-port-sub">100 shares SPY · Paper trading · Buys open, flips on signal</span>
+          </div>
+          <div className="fomc-port-stats">
+            {/* Current balance */}
+            <div className="fomc-port-stat fomc-port-balance">
+              <span className="fomc-port-stat-lbl">PORTFOLIO VALUE</span>
+              <span className={`fomc-port-stat-val fomc-port-big ${portfolioNow && portfolioNow.balance >= PORTFOLIO_START ? 'fomc-port-green' : 'fomc-port-red'}`}>
+                ${portfolioNow ? portfolioNow.balance.toFixed(2) : PORTFOLIO_START.toFixed(2)}
+              </span>
+            </div>
+            {/* Total P&L */}
+            <div className="fomc-port-stat">
+              <span className="fomc-port-stat-lbl">TOTAL P&amp;L</span>
+              <span className={`fomc-port-stat-val ${portfolioNow && portfolioNow.balance - PORTFOLIO_START >= 0 ? 'fomc-port-green' : 'fomc-port-red'}`}>
+                {portfolioNow
+                  ? `${portfolioNow.balance - PORTFOLIO_START >= 0 ? '+' : ''}$${(portfolioNow.balance - PORTFOLIO_START).toFixed(2)}`
+                  : '$0.00'}
+              </span>
+            </div>
+            {/* This minute */}
+            <div className="fomc-port-stat">
+              <span className="fomc-port-stat-lbl">THIS MINUTE</span>
+              <span className={`fomc-port-stat-val ${portfolioNow && portfolioNow.intervalPnl >= 0 ? 'fomc-port-green' : 'fomc-port-red'}`}>
+                {portfolioNow
+                  ? `${portfolioNow.intervalPnl >= 0 ? '+' : ''}$${portfolioNow.intervalPnl.toFixed(2)}`
+                  : '—'}
+              </span>
+            </div>
+            {/* Position */}
+            <div className="fomc-port-stat">
+              <span className="fomc-port-stat-lbl">POSITION</span>
+              <span className={`fomc-port-stat-val fomc-port-pos fomc-port-pos-${(portfolioNow?.position || 'FLAT').toLowerCase()}`}>
+                {portfolioNow?.position === 'LONG'  ? '▲ LONG'  :
+                 portfolioNow?.position === 'SHORT' ? '▼ SHORT' : '■ FLAT'}
+              </span>
+            </div>
+            {/* Session P&L */}
+            <div className="fomc-port-stat">
+              <span className="fomc-port-stat-lbl">SESSION FINAL</span>
+              <span className={`fomc-port-stat-val ${portfolioFinal && portfolioFinal.balance - PORTFOLIO_START >= 0 ? 'fomc-port-green' : 'fomc-port-red'}`}>
+                {portfolioFinal
+                  ? `${portfolioFinal.balance - PORTFOLIO_START >= 0 ? '+' : ''}$${(portfolioFinal.balance - PORTFOLIO_START).toFixed(2)}`
+                  : '—'}
+              </span>
+            </div>
+            {/* AI accuracy */}
+            {sessionMeta && (
+              <div className="fomc-port-stat">
+                <span className="fomc-port-stat-lbl">AI ACCURACY</span>
+                <span className="fomc-port-stat-val fomc-port-blue">
+                  {sessionMeta.accuracyPct?.toFixed(1)}%
+                </span>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* ── Equity curve SVG ────────────────────────────────────────────── */}
+        <div className="fomc-port-curve-wrap">
+          <svg
+            className="fomc-port-curve-svg"
+            viewBox={`0 0 ${EQUITY_W} ${EQUITY_H}`}
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="eqGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(63,182,139,0.25)" />
+                <stop offset="100%" stopColor="rgba(63,182,139,0)" />
+              </linearGradient>
+              <linearGradient id="eqGradRed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(224,93,93,0)" />
+                <stop offset="100%" stopColor="rgba(224,93,93,0.25)" />
+              </linearGradient>
+            </defs>
+            {/* Baseline */}
+            <line
+              x1="0" y1={EQUITY_H / 2} x2={EQUITY_W} y2={EQUITY_H / 2}
+              stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" strokeDasharray="4,6"
+            />
+            {/* Clipped equity line up to current video position */}
+            {equityCurveD && (
+              <>
+                <clipPath id="eqClip">
+                  <rect
+                    x="0" y="0"
+                    width={portfolioHistory.length > 1
+                      ? `${(portfolioVisibleCount / portfolioHistory.length) * EQUITY_W}`
+                      : 0}
+                    height={EQUITY_H}
+                  />
+                </clipPath>
+                <path
+                  d={equityCurveD}
+                  fill="none"
+                  stroke={portfolioNow && portfolioNow.balance >= PORTFOLIO_START
+                    ? 'rgba(63,182,139,0.9)'
+                    : 'rgba(224,93,93,0.9)'}
+                  strokeWidth="1.5"
+                  clipPath="url(#eqClip)"
+                />
+              </>
+            )}
+          </svg>
+        </div>
+
+        {/* ── Interval tick strip ──────────────────────────────────────────── */}
         <div className="fomc-tl-wrap">
-          <div className="fomc-tl-track"
+          <div
+            className="fomc-tl-track fomc-port-track"
             onClick={handleTimelineInteract}
             onMouseMove={handleTimelineMouseMove}
           >
             <div className="fomc-tl-zone-pre" style={{ width: '100%' }} />
-            {/* Interval markers */}
-            {intervals.map((iv) => {
-              const pct = (iv.videoSeconds / totalDuration) * 100;
-              const isActive = iv.id === activeInterval?.id;
-              const correct = iv.horizons?.h0?.correctDirection;
-              const color = correct === true ? 'rgba(63,182,139,0.5)' : correct === false ? 'rgba(224,93,93,0.5)' : 'rgba(255,255,255,0.15)';
+            {portfolioHistory.map((h) => {
+              const pct = (h.videoSeconds / totalDuration) * 100;
+              const isActive = h.id === activeInterval?.id;
+              const madeMoney = h.intervalPnl > 0;
+              const lostMoney = h.intervalPnl < 0;
+              const color = madeMoney
+                ? 'rgba(63,182,139,0.75)'
+                : lostMoney
+                ? 'rgba(224,93,93,0.75)'
+                : 'rgba(255,255,255,0.15)';
+              const isFuture = h.videoSeconds > videoSeconds;
               return (
                 <div
-                  key={iv.id}
-                  className={`fomc-tl-iv-mark${isActive ? ' active' : ''}`}
-                  style={{ left: `${pct}%`, background: color }}
-                  onClick={(e) => { e.stopPropagation(); manualSeek(iv.videoSeconds); }}
+                  key={h.id}
+                  title={`${h.intervalPnl >= 0 ? '+' : ''}$${h.intervalPnl.toFixed(2)} · ${h.position} · Signal: ${h.signal || '—'}`}
+                  className={`fomc-tl-iv-mark fomc-port-mark${isActive ? ' active' : ''}${isFuture ? ' fomc-port-future' : ''}`}
+                  style={{ left: `${pct}%`, background: isFuture ? 'rgba(255,255,255,0.08)' : color }}
+                  onClick={(e) => { e.stopPropagation(); manualSeek(h.videoSeconds); }}
                 />
               );
             })}
+            {/* P&L label above active marker */}
+            {portfolioNow && (
+              <div
+                className="fomc-port-pnl-bubble"
+                style={{ left: `${(portfolioNow.videoSeconds / totalDuration) * 100}%` }}
+              >
+                {portfolioNow.intervalPnl >= 0 ? '+' : ''}${portfolioNow.intervalPnl.toFixed(2)}
+              </div>
+            )}
             <div className="fomc-slider" style={{ left: `${timelinePos}%` }}>
               <div className="fomc-sl-line" />
               <div className="fomc-sl-thumb" />
               <div className="fomc-sl-lbl">{tlLabel}</div>
             </div>
           </div>
+          {/* Legend */}
+          <div className="fomc-port-legend">
+            <span className="fomc-port-leg fomc-port-leg-green">▲ Profit interval</span>
+            <span className="fomc-port-leg fomc-port-leg-red">▼ Loss interval</span>
+            <span className="fomc-port-leg fomc-port-leg-dim">· No position</span>
+            <span className="fomc-port-leg fomc-port-leg-future">░ Not yet played</span>
+          </div>
         </div>
+
       </div>
 
       {/* ── MOBILE TAB NAV (hidden on desktop) ───────────────────────────── */}
