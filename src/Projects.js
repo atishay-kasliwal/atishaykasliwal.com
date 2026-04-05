@@ -74,7 +74,7 @@ export const projectsData = [
     id: 3,
     title: 'FOMC Intelligence Dashboard',
     description: 'NLP pipeline surfacing rate signals and sentiment shifts from Federal Reserve transcripts.',
-    seoTitle: 'I Made the Fed\'s Meeting Transcripts Searchable — FOMC Sentiment NLP Dashboard',
+    seoTitle: 'FOMC Intelligence Dashboard — Fed Sentiment & Rate Signal Analysis',
     seoDescription: 'An NLP pipeline that parses Federal Reserve meeting transcripts, tags hawkish vs. dovish language shift by shift, and surfaces rate signals visually. Built with Python, spaCy, and Firebase — the Fed speaks plainly now.',
     image: '/fmocc.jpeg',
     link: '/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
