@@ -638,6 +638,165 @@
   margin-bottom: 12px;
 }
 
+/* ── Portfolio Trading Desk ─────────────────────────────────────────────── */
+.fomc-portfolio-panel {
+  padding: 12px 16px 14px;
+  background: linear-gradient(135deg, rgba(10,16,28,0.95) 0%, rgba(6,10,20,0.98) 100%);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+/* Top bar */
+.fomc-port-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.fomc-port-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fomc-port-sub {
+  font-size: 9.5px;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.3px;
+}
+
+/* Stats row */
+.fomc-port-stats {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.fomc-port-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  gap: 3px;
+  min-width: 90px;
+}
+
+.fomc-port-balance {
+  background: rgba(255,255,255,0.055);
+  border-color: rgba(255,255,255,0.1);
+}
+
+.fomc-port-stat-lbl {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+}
+
+.fomc-port-stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: rgba(255,255,255,0.7);
+}
+
+.fomc-port-big {
+  font-size: 16px;
+}
+
+.fomc-port-green { color: #3fb68b !important; }
+.fomc-port-red   { color: #e05d5d !important; }
+.fomc-port-blue  { color: #6eb3ff !important; }
+
+/* Position badge */
+.fomc-port-pos {
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 4px;
+}
+.fomc-port-pos-long  { color: #3fb68b; background: rgba(63,182,139,0.12); }
+.fomc-port-pos-short { color: #e05d5d; background: rgba(224,93,93,0.12); }
+.fomc-port-pos-flat  { color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+
+/* Equity curve */
+.fomc-port-curve-wrap {
+  width: 100%;
+  height: 52px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.fomc-port-curve-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Tick strip */
+.fomc-port-track {
+  height: 28px !important;
+}
+
+.fomc-port-mark {
+  width: 3px !important;
+  border-radius: 2px !important;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.fomc-port-mark:hover {
+  transform: translateX(-50%) scaleY(1.4) !important;
+  opacity: 1 !important;
+  z-index: 10;
+}
+
+.fomc-port-future {
+  opacity: 0.35 !important;
+}
+
+/* P&L bubble above active marker */
+.fomc-port-pnl-bubble {
+  position: absolute;
+  top: -20px;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #3fb68b;
+  background: rgba(63,182,139,0.12);
+  border: 1px solid rgba(63,182,139,0.3);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Legend */
+.fomc-port-legend {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.fomc-port-leg {
+  font-size: 9px;
+  letter-spacing: 0.3px;
+  color: rgba(255,255,255,0.25);
+}
+.fomc-port-leg-green { color: rgba(63,182,139,0.7); }
+.fomc-port-leg-red   { color: rgba(224,93,93,0.7); }
+.fomc-port-leg-dim   { color: rgba(255,255,255,0.25); }
+.fomc-port-leg-future { color: rgba(255,255,255,0.2); }
+
 .fomc-tl-hd {
   display: flex;
   align-items: center;
