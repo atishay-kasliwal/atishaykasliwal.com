@@ -2,6 +2,25 @@ import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import './FOMCDashboard.css';
+import FOMCApiAccessPanel from './FOMCApiAccessPanel';
+
+// ── Model Evaluation Results (live from Firestore fomc_sessions) ──────────────
+
+const EXPANDING_WINDOW_DATA = [
+  { num:  1, testDate: '2024-06-12', rate: 'Hold → 5.25–5.50%',   totalIntervals: 94, pos: 17, neg:  6, accuracy: 67.74, mae: 0.4594, mse:  0.0732 },
+  { num:  2, testDate: '2024-07-31', rate: 'Hold → 5.25–5.50%',   totalIntervals: 86, pos: 16, neg:  5, accuracy: 61.18, mae: 0.5070, mse:  0.1104 },
+  { num:  3, testDate: '2024-09-18', rate: '-50bps → 4.75–5.00%', totalIntervals: 90, pos: 21, neg:  0, accuracy: 41.57, mae: 1.2106, mse:  0.8538 },
+  { num:  4, testDate: '2024-11-07', rate: '-25bps → 4.50–4.75%', totalIntervals: 76, pos: 15, neg:  2, accuracy: 56.00, mae: 0.3048, mse:  0.1121 },
+  { num:  5, testDate: '2024-12-18', rate: '-25bps → 4.25–4.50%', totalIntervals: 96, pos: 10, neg: 14, accuracy: 48.42, mae: 0.6793, mse:  0.3814 },
+  { num:  6, testDate: '2025-01-29', rate: 'Hold → 4.25–4.50%',   totalIntervals: 90, pos:  0, neg: 21, accuracy: 69.66, mae: 0.3645, mse:  0.0600 },
+  { num:  7, testDate: '2025-03-19', rate: 'Hold → 4.25–4.50%',   totalIntervals: 45, pos:  0, neg: 45, accuracy: 31.11, mae: 0.8821, mse: -0.8099 },
+  { num:  8, testDate: '2025-05-07', rate: 'Hold → 4.25–4.50%',   totalIntervals: 43, pos:  1, neg: 42, accuracy: 44.19, mae: 0.9012, mse: -0.6807 },
+  { num:  9, testDate: '2025-06-18', rate: 'Hold → 4.25–4.50%',   totalIntervals: 47, pos:  0, neg: 47, accuracy: 61.70, mae: 0.6393, mse: -0.2328 },
+  { num: 10, testDate: '2025-07-30', rate: 'Hold → 4.25–4.50%',   totalIntervals: 40, pos:  0, neg: 40, accuracy: 70.00, mae: 0.5480, mse: -0.0406 },
+  { num: 11, testDate: '2025-09-17', rate: 'TBD',                  totalIntervals: 48, pos: 17, neg: 31, accuracy: 58.33, mae: 0.9945, mse: -0.1614 },
+  { num: 12, testDate: '2025-10-29', rate: 'TBD',                  totalIntervals: 50, pos:  1, neg: 49, accuracy: 52.00, mae: 0.9785, mse: -0.5245 },
+  { num: 13, testDate: '2025-12-10', rate: 'TBD',                  totalIntervals: 47, pos:  3, neg: 44, accuracy: 42.55, mae: 0.6921, mse: -0.5587 },
+];
 
 // ── FOMC Sessions ─────────────────────────────────────────────────────────────
 
@@ -20,6 +39,110 @@ const FOMC_DATES = [
   { id: 11, date: '2025-10-29', label: 'Oct 29', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'gZsAKn1UtH4' },
   { id: 12, date: '2025-12-10', label: 'Dec 10', year: '2025', rate: 'Hold → 4.25–4.50%',   videoId: 'Ko-_yb2UkDk' },
 ];
+
+// ── Models ────────────────────────────────────────────────────────────────────
+
+const MODELS = [
+  { key: 'gpt_5min_news',   label: 'GPT',        sub: '5min · News',    color: 'rgba(210,195,255,1)'   },
+  { key: 'gpt_5min_nonews', label: 'GPT',        sub: '5min · No News', color: 'rgba(100,220,180,0.9)' },
+  { key: 'gpt_1min_news',   label: 'GPT',        sub: '1min · News',    color: 'rgba(255,210,80,0.9)'  },
+  { key: 'gpt_10min_news',  label: 'GPT',        sub: '10min · News',   color: 'rgba(80,180,255,0.9)'  },
+  { key: 'longformer_5min', label: 'Longformer', sub: '5min · News',    color: 'rgba(255,140,80,0.9)'  },
+];
+
+const FOMC_API_BASE =
+  process.env.REACT_APP_FOMC_API_BASE || 'https://legal-rag-api.katishay.workers.dev';
+
+const STATIC_EVAL_BY_DATE = Object.fromEntries(
+  EXPANDING_WINDOW_DATA.map((r) => [r.testDate, r])
+);
+
+function toMetricOrFallback(value, fallback) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function buildEvaluationRowsForModel(modelKey, bundleByDate = new Map()) {
+  return FOMC_DATES.map((session, idx) => {
+    const fallback = STATIC_EVAL_BY_DATE[session.date] || null;
+    const fallbackMetrics = modelKey === 'gpt_5min_news' ? fallback : null;
+    const bundle = bundleByDate.get(session.date) || null;
+    const modelMeta = bundle?.modelMeta || null;
+    const intervalsLen = Array.isArray(bundle?.intervals) ? bundle.intervals.length : null;
+    const useLiveIntervalCount = modelKey !== 'gpt_5min_news';
+
+    return {
+      num: idx + 1,
+      testDate: session.date,
+      rate: session.rate || fallback?.rate || 'TBD',
+      totalIntervals: toMetricOrFallback(
+        modelMeta?.totalIntervals,
+        useLiveIntervalCount
+          ? toMetricOrFallback(intervalsLen, null)
+          : fallbackMetrics?.totalIntervals ?? null
+      ),
+      pos: toMetricOrFallback(modelMeta?.pos, fallbackMetrics?.pos ?? null),
+      neg: toMetricOrFallback(modelMeta?.neg, fallbackMetrics?.neg ?? null),
+      accuracy: toMetricOrFallback(modelMeta?.accuracyPct, fallbackMetrics?.accuracy ?? null),
+      mae: toMetricOrFallback(modelMeta?.mae, fallbackMetrics?.mae ?? null),
+      mse: toMetricOrFallback(modelMeta?.mse, fallbackMetrics?.mse ?? null),
+    };
+  });
+}
+
+function computeVideoSeconds(startTime, date) {
+  try {
+    const norm = (startTime || '').replace(' ', 'T').replace(/[+Z].*$/, '');
+    const base = new Date(`${date}T18:30:00`);
+    const t    = new Date(norm.includes('T') ? norm : `${date}T18:30:00`);
+    return Math.max(0, Math.round((t - base) / 1000));
+  } catch { return 0; }
+}
+
+async function loadIntervalsFromFirestore(db, date, modelKey) {
+  if (modelKey === 'gpt_5min_news') {
+    const snap = await getDocs(collection(db, 'fomc_sessions', date, 'intervals'));
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => a.videoSeconds - b.videoSeconds);
+  }
+  const snap = await getDocs(
+    collection(db, 'fomc_sessions', date, 'models', modelKey, 'predictions')
+  );
+  return snap.docs
+    .map(d => {
+      const p = d.data();
+      return {
+        id:          p.uid || d.id,
+        videoSeconds:computeVideoSeconds(p.startTime, date),
+        speech:      p.speech      || '',
+        news:        p.news        || [],
+        actualChange:p.actualChange || 0,
+        volatility:  p.volatility  || 0,
+        horizons: {
+          h0: {
+            reaction:        p.reaction         || '',
+            change:          p.change           || 0,
+            correctDirection:p.correctDirection || false,
+            signedError:     p.signedError      || 0,
+            absError:        p.absError         || 0,
+            reasoning:       p.reasoning        || '',
+          }
+        }
+      };
+    })
+    .sort((a, b) => a.videoSeconds - b.videoSeconds);
+}
+
+async function loadSessionBundleFromPublicApi(date, modelKey) {
+  const qs = new URLSearchParams({ session_date: date, model_key: modelKey });
+  const res = await fetch(`${FOMC_API_BASE}/public/fomc/session?${qs.toString()}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Public fallback failed (${res.status}): ${body || res.statusText}`);
+  }
+  return res.json();
+}
 
 // ── Chart geometry ─────────────────────────────────────────────────────────────
 
@@ -96,8 +219,20 @@ export default function FOMCDashboard() {
   const [selectedDateId, setSelectedDateId] = useState(0); // Jun 12, 2024
   const selectedSession = FOMC_DATES[selectedDateId];
 
+  // ── Model selection ───────────────────────────────────────────────────────
+  const [selectedModel, setSelectedModel] = useState('gpt_5min_news');
+  const [compareModel,  setCompareModel]  = useState('gpt_5min_nonews');
+  const [compareOn,     setCompareOn]     = useState(false);
+  const [comparePredictions, setComparePredictions] = useState([]);
+  const [evaluationRows, setEvaluationRows] = useState(() =>
+    buildEvaluationRowsForModel('gpt_5min_news')
+  );
+  const [evaluationLoading, setEvaluationLoading] = useState(false);
+  const evaluationCacheRef = useRef(new Map());
+
   // ── Firestore data ────────────────────────────────────────────────────────
   const [sessionMeta, setSessionMeta] = useState(null);
+  const [modelMeta,   setModelMeta]   = useState(null);
   const [intervals, setIntervals] = useState([]);   // sorted by videoSeconds
   const [loading, setLoading] = useState(true);
 
@@ -140,43 +275,155 @@ export default function FOMCDashboard() {
     []
   );
 
-  // ── Load Firestore data when date changes ─────────────────────────────────
+  // ── Load model-specific evaluation table (all sessions) ─────────────────────
+  useEffect(() => {
+    let cancelled = false;
+
+    const cached = evaluationCacheRef.current.get(selectedModel);
+    if (cached) {
+      setEvaluationRows(cached);
+      setEvaluationLoading(false);
+      return () => { cancelled = true; };
+    }
+
+    if (selectedModel === 'gpt_5min_news') {
+      const rows = buildEvaluationRowsForModel(selectedModel);
+      evaluationCacheRef.current.set(selectedModel, rows);
+      setEvaluationRows(rows);
+      setEvaluationLoading(false);
+      return () => { cancelled = true; };
+    }
+
+    setEvaluationLoading(true);
+
+    async function load() {
+      const pairs = await Promise.all(
+        FOMC_DATES.map(async (s) => {
+          try {
+            const bundle = await loadSessionBundleFromPublicApi(s.date, selectedModel);
+            return [s.date, bundle];
+          } catch (err) {
+            console.warn(`Evaluation fallback failed for ${selectedModel} @ ${s.date}:`, err);
+            return [s.date, null];
+          }
+        })
+      );
+      if (cancelled) return;
+      const byDate = new Map(pairs);
+      const rows = buildEvaluationRowsForModel(selectedModel, byDate);
+      evaluationCacheRef.current.set(selectedModel, rows);
+      setEvaluationRows(rows);
+      setEvaluationLoading(false);
+    }
+
+    load();
+    return () => { cancelled = true; };
+  }, [selectedModel]);
+
+  // ── Load Firestore data when date or model changes ────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setIntervals([]);
     setSessionMeta(null);
+    setModelMeta(null);
     setActiveInterval(null);
     setVideoSeconds(0);
+    setComparePredictions([]);
 
     async function load() {
       const date = selectedSession.date;
-      try {
-        // Session metadata
-        const sessionSnap = await getDoc(doc(db, 'fomc_sessions', date));
-        if (cancelled) return;
-        if (sessionSnap.exists()) setSessionMeta(sessionSnap.data());
+      let fsSessionMeta = null;
+      let fsModelMeta = null;
+      let fsIntervals = [];
+      let fsFailed = false;
 
-        // All intervals
-        const intSnap = await getDocs(collection(db, 'fomc_sessions', date, 'intervals'));
-        if (cancelled) return;
-        const docs = intSnap.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .sort((a, b) => a.videoSeconds - b.videoSeconds);
-        setIntervals(docs);
-        if (docs.length) setActiveInterval(docs[0]);
+      try {
+        const sessionSnap = await getDoc(doc(db, 'fomc_sessions', date));
+        if (sessionSnap.exists()) fsSessionMeta = sessionSnap.data();
       } catch (err) {
-        console.error('Firestore load error:', err);
-      } finally {
-        if (!cancelled) setLoading(false);
+        fsFailed = true;
+        console.warn('Session meta read failed:', err);
       }
+
+      if (selectedModel !== 'gpt_5min_news') {
+        try {
+          const mSnap = await getDoc(doc(db, 'fomc_sessions', date, 'models', selectedModel));
+          if (mSnap.exists()) fsModelMeta = mSnap.data();
+        } catch (err) {
+          fsFailed = true;
+          // Do not block interval data if model summary doc is not publicly readable.
+          console.warn(`Model meta read failed for ${selectedModel}:`, err);
+        }
+      }
+
+      try {
+        fsIntervals = await loadIntervalsFromFirestore(db, date, selectedModel);
+      } catch (err) {
+        fsFailed = true;
+        console.error(`Intervals read failed for ${selectedModel} @ ${date}:`, err);
+      }
+
+      if (cancelled) return;
+
+      const needsFallback =
+        fsFailed || (!fsIntervals.length && selectedModel !== 'gpt_5min_news');
+
+      if (needsFallback) {
+        try {
+          const fallback = await loadSessionBundleFromPublicApi(date, selectedModel);
+          if (cancelled) return;
+          setSessionMeta(fallback.sessionMeta || fsSessionMeta);
+          setModelMeta(fallback.modelMeta || fsModelMeta);
+          setIntervals(Array.isArray(fallback.intervals) ? fallback.intervals : []);
+          if (Array.isArray(fallback.intervals) && fallback.intervals.length) {
+            setActiveInterval(fallback.intervals[0]);
+          }
+          setLoading(false);
+          return;
+        } catch (err) {
+          console.error(`Public fallback failed for ${selectedModel} @ ${date}:`, err);
+        }
+      }
+
+      setSessionMeta(fsSessionMeta);
+      setModelMeta(fsModelMeta);
+      setIntervals(fsIntervals);
+      if (fsIntervals.length) setActiveInterval(fsIntervals[0]);
+      setLoading(false);
     }
 
     load();
     return () => { cancelled = true; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDateId]);
+  }, [selectedDateId, selectedModel]);
+
+  // ── Load compare predictions ───────────────────────────────────────────────
+  useEffect(() => {
+    if (!compareOn) { setComparePredictions([]); return; }
+    let cancelled = false;
+    async function loadCompare() {
+      try {
+        const docs = await loadIntervalsFromFirestore(db, selectedSession.date, compareModel);
+        if (!cancelled) setComparePredictions(docs);
+      } catch (err) {
+        console.error('Compare load (Firestore) error:', err);
+        try {
+          const fallback = await loadSessionBundleFromPublicApi(selectedSession.date, compareModel);
+          if (!cancelled) {
+            setComparePredictions(Array.isArray(fallback.intervals) ? fallback.intervals : []);
+          }
+        } catch (fallbackErr) {
+          console.error('Compare load (public fallback) error:', fallbackErr);
+          if (!cancelled) setComparePredictions([]);
+        }
+      }
+    }
+    loadCompare();
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compareOn, compareModel, selectedDateId, selectedModel]);
 
   // ── Find active interval from videoSeconds ────────────────────────────────
   useEffect(() => {
@@ -505,6 +752,26 @@ export default function FOMCDashboard() {
     return { aiMidD: midD, aiBandD: bandD, ai1MidD: ai1D };
   }, [intervals, chartCandles, candleX, priceY, visibleCount]);
 
+  // Active model config
+  const activeModelCfg  = MODELS.find(m => m.key === selectedModel)  || MODELS[0];
+  const compareModelCfg = MODELS.find(m => m.key === compareModel)   || MODELS[1];
+  const displayMeta     = modelMeta || sessionMeta;
+
+  // Compare overlay path — matches compare predictions to primary candle X positions
+  const compareAiMidD = useMemo(() => {
+    if (!compareOn || !comparePredictions.length || !priceY || !candleX || !chartCandles.length) return '';
+    const pts = intervals.slice(0, visibleCount).map((iv, i) => {
+      const cp = comparePredictions.reduce((best, c) =>
+        Math.abs(c.videoSeconds - iv.videoSeconds) < Math.abs(best.videoSeconds - iv.videoSeconds) ? c : best
+      , comparePredictions[0]);
+      if (!cp || cp.horizons?.h0?.change == null) return null;
+      return { x: candleX(i), y: priceY(chartCandles[i].o + (cp.horizons.h0.change || 0)) };
+    }).filter(Boolean);
+    return pts.length
+      ? pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+      : '';
+  }, [compareOn, comparePredictions, intervals, chartCandles, candleX, priceY, visibleCount]);
+
   // Chart animation key — changes when date changes to re-trigger entry animations
   const chartKey = selectedDateId;
 
@@ -588,8 +855,12 @@ export default function FOMCDashboard() {
           {aiBandD && <path d={aiBandD} fill="rgba(155,140,255,0.06)" className="fomc-band-fade" />}
 
           {/* h0 nowcast line — draws left to right */}
-          {aiMidD && <path d={aiMidD} fill="none" stroke="rgba(210,195,255,1)" strokeWidth="1.5"
+          {aiMidD && <path d={aiMidD} fill="none" stroke={activeModelCfg.color} strokeWidth="1.5"
             strokeLinejoin="round" strokeLinecap="round" className="fomc-ai-draw" />}
+
+          {/* Compare model overlay — dashed */}
+          {compareAiMidD && <path d={compareAiMidD} fill="none" stroke={compareModelCfg.color} strokeWidth="1.2"
+            strokeDasharray="5,3" strokeLinejoin="round" strokeLinecap="round" className="fomc-ai-draw" />}
 
           {/* h1 forecast line — draws left to right, slightly delayed */}
           {ai1MidD && <path d={ai1MidD} fill="none" stroke="rgba(100,200,255,0.7)" strokeWidth="1.2"
@@ -755,7 +1026,7 @@ export default function FOMCDashboard() {
           <div className="fomc-stat">
             <div className="fomc-stat-lbl">AI Accuracy</div>
             <div className="fomc-stat-val fomc-val-blue">
-              {sessionMeta?.accuracyPct != null ? `${sessionMeta.accuracyPct.toFixed(1)}%` : '—'}
+              {displayMeta?.accuracyPct != null ? `${displayMeta.accuracyPct.toFixed(1)}%` : '—'}
             </div>
           </div>
           <div className="fomc-stat">
@@ -794,6 +1065,49 @@ export default function FOMCDashboard() {
         >
           {autoPlay ? '■ STOP' : '▶ AUTO'}
         </button>
+      </div>
+
+      {/* ── MODEL SELECTOR ────────────────────────────────────────────────── */}
+      <div className="fomc-model-bar">
+        <span className="fomc-model-label">MODEL</span>
+        <div className="fomc-model-pills">
+          {MODELS.map(m => (
+            <button
+              key={m.key}
+              className={`fomc-model-pill${selectedModel === m.key ? ' active' : ''}`}
+              style={selectedModel === m.key ? { borderColor: m.color, color: m.color } : {}}
+              onClick={() => { setSelectedModel(m.key); setCompareOn(false); }}
+            >
+              <span className="fomc-model-pill-name">{m.label}</span>
+              <span className="fomc-model-pill-sub">{m.sub}</span>
+            </button>
+          ))}
+        </div>
+        <div className="fomc-compare-ctrl">
+          <button
+            className={`fomc-compare-toggle${compareOn ? ' on' : ''}`}
+            onClick={() => setCompareOn(v => !v)}
+          >
+            {compareOn ? '◈ Compare ON' : '◇ Compare'}
+          </button>
+          {compareOn && (
+            <select
+              className="fomc-compare-select"
+              value={compareModel}
+              onChange={e => setCompareModel(e.target.value)}
+            >
+              {MODELS.filter(m => m.key !== selectedModel).map(m => (
+                <option key={m.key} value={m.key}>{m.label} {m.sub}</option>
+              ))}
+            </select>
+          )}
+          {compareOn && (
+            <span className="fomc-compare-legend">
+              <span style={{ color: activeModelCfg.color }}>— {activeModelCfg.sub}</span>
+              <span style={{ color: compareModelCfg.color, marginLeft: 10 }}>-- {compareModelCfg.sub}</span>
+            </span>
+          )}
+        </div>
       </div>
 
       {/* ── ROW 2: Portfolio Trading Desk + Timeline ──────────────────────── */}
@@ -849,11 +1163,11 @@ export default function FOMCDashboard() {
               </span>
             </div>
             {/* AI accuracy */}
-            {sessionMeta && (
+            {displayMeta && (
               <div className="fomc-port-stat">
                 <span className="fomc-port-stat-lbl">AI ACCURACY</span>
                 <span className="fomc-port-stat-val fomc-port-blue">
-                  {sessionMeta.accuracyPct?.toFixed(1)}%
+                  {displayMeta.accuracyPct?.toFixed(1)}%
                 </span>
               </div>
             )}
@@ -1076,11 +1390,20 @@ export default function FOMCDashboard() {
             </span>
             <div className="fomc-chart-hd-right">
               <div className="fomc-chart-legend-ai">
-                <div className="fomc-ai-line-demo" /> H0
+                <div className="fomc-ai-line-demo" style={{ background: activeModelCfg.color }} />
+                <span style={{ color: activeModelCfg.color }}>{activeModelCfg.sub}</span>
               </div>
-              <div className="fomc-chart-legend-ai fomc-legend-h1">
-                <div className="fomc-ai-line-demo fomc-ai-line-h1" /> H1
-              </div>
+              {compareOn && compareAiMidD && (
+                <div className="fomc-chart-legend-ai fomc-legend-h1">
+                  <div className="fomc-ai-line-demo fomc-ai-line-dashed" style={{ background: compareModelCfg.color }} />
+                  <span style={{ color: compareModelCfg.color }}>{compareModelCfg.sub}</span>
+                </div>
+              )}
+              {selectedModel === 'gpt_5min_news' && ai1MidD && !compareOn && (
+                <div className="fomc-chart-legend-ai fomc-legend-h1">
+                  <div className="fomc-ai-line-demo fomc-ai-line-h1" /> H1
+                </div>
+              )}
             </div>
           </div>
           {chartSvg}
@@ -1318,6 +1641,70 @@ export default function FOMCDashboard() {
           </div>
         </div>
       )}
+
+      {/* ── ROW 5-6: Evaluation + API Access (70/30) ─────────────────────── */}
+      <div className="fomc-dev-grid">
+        <div className="fomc-panel fomc-ew-panel">
+          <div className="fomc-panel-hd">
+            <span className="fomc-panel-ttl">Model Evaluation — Per FOMC Session</span>
+            <span className="fomc-tl-accuracy">Held-out test results per session. POS/NEG = predicted direction counts from h0 nowcast.</span>
+          </div>
+          <div className="fomc-ew-table-wrap">
+            <table className="fomc-ew-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>TEST DATE</th>
+                  <th>RATE DECISION</th>
+                  <th>INTERVALS</th>
+                  <th>PRED POS</th>
+                  <th>PRED NEG</th>
+                  <th>DIRECTIONAL<br/>ACCURACY</th>
+                  <th>MAE</th>
+                  <th>MEAN<br/>SIGNED ERR</th>
+                </tr>
+              </thead>
+              <tbody>
+                {evaluationLoading ? (
+                  <tr>
+                    <td colSpan={9} className="fomc-loading-msg" style={{ textAlign: 'center', padding: '14px 10px' }}>
+                      Loading model evaluation…
+                    </td>
+                  </tr>
+                ) : evaluationRows.map((row) => {
+                  const hasIntervals = row.totalIntervals != null;
+                  const hasPos = row.pos != null;
+                  const hasNeg = row.neg != null;
+                  const hasAcc = row.accuracy != null;
+                  const hasMae = row.mae != null;
+                  const hasMse = row.mse != null;
+                  const accColor = !hasAcc
+                    ? 'rgba(255,255,255,0.45)'
+                    : row.accuracy >= 65 ? '#3fb68b' : row.accuracy >= 55 ? '#e8c34a' : '#e05d5d';
+                  const mseColor = !hasMse
+                    ? 'rgba(255,255,255,0.45)'
+                    : row.mse >= 0 ? '#3fb68b' : '#e05d5d';
+                  return (
+                    <tr key={row.testDate}>
+                      <td className="fomc-ew-num">{row.num}</td>
+                      <td className="fomc-ew-date">{row.testDate}</td>
+                      <td className="fomc-ew-range">{row.rate}</td>
+                      <td className="fomc-ew-num">{hasIntervals ? row.totalIntervals : '—'}</td>
+                      <td className="fomc-ew-pos">{hasPos ? row.pos : '—'}</td>
+                      <td className="fomc-ew-neg">{hasNeg ? row.neg : '—'}</td>
+                      <td className="fomc-ew-acc" style={{ color: accColor }}>{hasAcc ? `${row.accuracy.toFixed(2)}%` : '—'}</td>
+                      <td className="fomc-ew-cyan">{hasMae ? row.mae.toFixed(4) : '—'}</td>
+                      <td style={{ color: mseColor, textAlign: 'right', padding: '9px 10px' }}>{hasMse ? row.mse.toFixed(4) : '—'}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <FOMCApiAccessPanel />
+      </div>
 
     </div>
   );

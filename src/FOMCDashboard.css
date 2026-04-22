@@ -198,6 +198,137 @@
 }
 
 /* ── Date selector ──────────────────────────────────────────── */
+/* ── Model selector bar ──────────────────────────────────────────── */
+.fomc-model-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+
+.fomc-model-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fomc-model-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.fomc-model-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  gap: 1px;
+}
+.fomc-model-pill:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+}
+.fomc-model-pill.active {
+  background: rgba(255,255,255,0.06);
+}
+.fomc-model-pill-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.78);
+  letter-spacing: 0.2px;
+}
+.fomc-model-pill.active .fomc-model-pill-name {
+  color: inherit;
+}
+.fomc-model-pill-sub {
+  font-size: 9px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+}
+.fomc-model-pill.active .fomc-model-pill-sub {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.fomc-compare-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.fomc-compare-toggle {
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.fomc-compare-toggle:hover {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.7);
+}
+.fomc-compare-toggle.on {
+  background: rgba(168,139,250,0.12);
+  border-color: rgba(168,139,250,0.4);
+  color: rgba(168,139,250,0.9);
+}
+
+.fomc-compare-select {
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  font-size: 10px;
+  cursor: pointer;
+  outline: none;
+}
+.fomc-compare-select option {
+  background: #1a1f2e;
+}
+
+.fomc-compare-legend {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* ── Chart legend dashed line ────────────────────────────────────── */
+.fomc-ai-line-dashed {
+  height: 2px;
+  width: 18px;
+  border-radius: 1px;
+  opacity: 0.8;
+  background-image: repeating-linear-gradient(
+    to right, currentColor 0, currentColor 5px, transparent 5px, transparent 8px
+  );
+  background-color: transparent !important;
+}
+
 .fomc-date-bar {
   display: flex;
   align-items: center;
@@ -1806,4 +1937,265 @@ mark.fomc-kw-key {
 .fomc-reason-sec-first {
   border-top: none;
   padding-top: 0;
+}
+
+/* ── Expanding Window Table ──────────────────────────────────── */
+.fomc-dev-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(320px, 3fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.fomc-ew-panel {
+  margin-top: 16px;
+}
+
+.fomc-ew-table-wrap {
+  overflow-x: auto;
+  padding: 0 2px 4px;
+}
+
+.fomc-ew-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  min-width: 860px;
+}
+
+.fomc-ew-table thead tr {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.fomc-ew-table th {
+  padding: 8px 10px;
+  text-align: right;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: rgba(255,255,255,0.38);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.35;
+}
+
+.fomc-ew-table th:nth-child(1),
+.fomc-ew-table th:nth-child(2),
+.fomc-ew-table th:nth-child(3) {
+  text-align: left;
+}
+
+.fomc-ew-sub {
+  font-size: 9px;
+  opacity: 0.7;
+  display: block;
+}
+
+.fomc-ew-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.12s;
+}
+
+.fomc-ew-table tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.fomc-ew-table td {
+  padding: 9px 10px;
+  text-align: right;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+
+.fomc-ew-table td:nth-child(1),
+.fomc-ew-table td:nth-child(2),
+.fomc-ew-table td:nth-child(3) {
+  text-align: left;
+}
+
+.fomc-ew-num {
+  color: rgba(255,255,255,0.55) !important;
+}
+
+.fomc-ew-date {
+  color: #a78bfa !important;
+  font-weight: 600;
+}
+
+.fomc-ew-range {
+  color: rgba(255,255,255,0.38) !important;
+  font-size: 11px;
+}
+
+.fomc-ew-cyan {
+  color: #3fbfcf !important;
+}
+
+.fomc-ew-pos {
+  color: #e05d5d !important;
+}
+
+.fomc-ew-neg {
+  color: #e05d5d !important;
+}
+
+.fomc-ew-acc {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ── API Access Panel ───────────────────────────────────────────── */
+.fomc-api-panel {
+  margin-top: 16px;
+}
+
+.fomc-dev-grid .fomc-ew-panel,
+.fomc-dev-grid .fomc-api-panel {
+  margin-top: 0;
+}
+
+.fomc-api-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: auto;
+}
+
+.fomc-api-body {
+  padding: 14px 16px 18px;
+}
+
+.fomc-api-copy {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.72);
+}
+
+.fomc-api-copy a,
+.fomc-api-docs-link {
+  color: rgba(125, 204, 255, 0.95);
+  text-decoration: none;
+}
+
+.fomc-api-docs-link {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.fomc-api-form {
+  display: grid;
+  gap: 10px;
+}
+
+.fomc-api-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.9);
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  outline: none;
+}
+
+.fomc-api-input:focus {
+  border-color: rgba(125, 204, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(125, 204, 255, 0.12);
+}
+
+.fomc-api-textarea {
+  min-height: 74px;
+  resize: vertical;
+}
+
+.fomc-api-agree {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.72);
+}
+
+.fomc-api-btn {
+  border: 1px solid rgba(125, 204, 255, 0.6);
+  background: rgba(125, 204, 255, 0.14);
+  color: rgba(215, 241, 255, 0.98);
+  border-radius: 7px;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.fomc-api-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fomc-api-error {
+  margin-top: 10px;
+  font-size: 11px;
+  color: rgba(255, 120, 120, 0.95);
+}
+
+.fomc-api-result {
+  margin-top: 12px;
+  border: 1px solid rgba(95, 220, 170, 0.42);
+  border-radius: 7px;
+  background: rgba(95, 220, 170, 0.08);
+  padding: 10px;
+}
+
+.fomc-api-result-ttl {
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  margin-bottom: 7px;
+  color: rgba(198, 251, 227, 0.95);
+  text-transform: uppercase;
+}
+
+.fomc-api-key {
+  display: block;
+  word-break: break-all;
+  font-size: 11px;
+  color: rgba(225,255,241,0.95);
+  line-height: 1.45;
+}
+
+.fomc-api-result-sub {
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(205, 245, 226, 0.88);
+}
+
+.fomc-api-mini-body {
+  padding: 10px 12px;
+}
+
+.fomc-api-mini-code {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: rgba(136, 223, 255, 0.95);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+@media (max-width: 1240px) {
+  .fomc-dev-grid {
+    grid-template-columns: 1fr;
+  }
+  .fomc-api-col {
+    height: auto;
+  }
 }
