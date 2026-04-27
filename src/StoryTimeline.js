@@ -5,66 +5,45 @@ import img1 from './assets/Symbiosis-Indore-Auditorium-Front-View.jpg';
 
 const stories = [
   {
-    image: 'https://myfox8.com/wp-content/uploads/sites/17/2016/07/promo293230600.jpg?w=640',
-    date: '2025',
-    role: 'AI & ML Research',
-    title: 'Atrium Health Wake Forest',
-    tag: 'Research'
-  },
-  {
     image: 'https://sbmatters.stonybrook.edu/wp-content/uploads/2023/08/Umbilic-Torus.jpeg',
-    date: '2024–2025',
-    role: 'Research Assistant',
+    date: 'Nov 2024 – Present',
+    role: 'Software Engineer – Research',
     title: 'Stony Brook University',
     tag: 'Research'
   },
   {
+    image: 'https://myfox8.com/wp-content/uploads/sites/17/2016/07/promo293230600.jpg?w=640',
+    date: 'May – Aug 2025',
+    role: 'SWE Intern · ML / Clinical AI',
+    title: 'Wake Forest – CAIR',
+    tag: 'Research'
+  },
+  {
     image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
-    date: '2023–2024',
+    date: 'Aug 2021 – Aug 2024',
     role: 'Senior Software Engineer',
-    title: 'Accolite / Fidelity',
-    tag: 'Industry'
-  },
-  {
-    image: 'https://i.pinimg.com/736x/08/2c/54/082c54bd155c8d7de77d51ffd8678156.jpg',
-    date: '2021–2023',
-    role: 'Software Engineer',
-    title: 'Accolite Digital',
-    tag: 'Industry'
-  },
-  {
-    image: 'https://i.pinimg.com/1200x/61/35/08/613508200fbe2933660602aebdd5ba38.jpg',
-    date: '2021',
-    role: 'Software Engineering Intern',
     title: 'Accolite Digital',
     tag: 'Industry'
   },
   {
     image: 'https://i.pinimg.com/1200x/9f/3f/23/9f3f231ea5c491d8e13f6c3a3971a50a.jpg',
-    date: '2020',
-    role: 'Backend Developer',
-    title: 'Broadcastt.co',
-    tag: 'Industry'
-  },
-  {
-    image: 'https://i.pinimg.com/736x/15/bb/b9/15bbb97130b2971626b24f77d614a385.jpg',
-    date: '2019–2020',
-    role: 'Web Application Developer',
-    title: 'N-TIER Pvt Ltd',
+    date: 'Aug 2020 – Jul 2021',
+    role: 'Software Engineer – Intern',
+    title: 'Shriffle',
     tag: 'Industry'
   },
   {
     image: 'https://www.stonybrook.edu/commcms/studentaffairs/for/images/dvtn.jpg',
-    date: '2024–2026',
+    date: 'Aug 2024 – May 2026',
     role: 'MS in Data Science',
     title: 'Stony Brook University',
     tag: 'Education'
   },
   {
     image: img1,
-    date: '2018–2022',
+    date: 'Aug 2018 – May 2022',
     role: 'B.Tech in Computer Science',
-    title: 'Symbiosis University',
+    title: 'Symbiosis University of Applied Sciences',
     tag: 'Education'
   },
 ];

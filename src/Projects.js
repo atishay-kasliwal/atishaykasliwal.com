@@ -53,24 +53,6 @@ const slugify = (value) =>
 // Projects data - you can customize these with your actual projects
 export const projectsData = [
   {
-    id: 1,
-    title: 'Healthcare AI Research',
-    description: 'Machine learning research and healthcare data analytics at Atrium Health Wake Forest',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
-    link: `/highlights/${slugify('Healthcare AI Research')}`,
-    uuid: 'a1b2c3d4-e5f6-4789-a012-bcdef0123456',
-    category: 'Research',
-    size: 'tall',
-    span: 2, // Row 1: Normal width
-    layout: 'two-squares', // Two equal square images
-    squareImages: [
-      conference,
-      MRIimage
-    ],
-    textOverlay: true,
-    noLink: true,
-  },
-  {
     id: 3,
     title: 'FOMC Intelligence Dashboard',
     description: 'NLP pipeline surfacing rate signals and sentiment shifts from Federal Reserve transcripts.',
@@ -82,6 +64,24 @@ export const projectsData = [
     category: 'NLP',
     size: 'medium',
     span: 2,
+  },
+  {
+    id: 1,
+    title: 'Healthcare AI Research',
+    description: 'Machine learning research and healthcare data analytics at Atrium Health Wake Forest',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=800&auto=format&fit=crop',
+    link: `/highlights/${slugify('Healthcare AI Research')}`,
+    uuid: 'a1b2c3d4-e5f6-4789-a012-bcdef0123456',
+    category: 'Research',
+    size: 'tall',
+    span: 2,
+    layout: 'two-squares',
+    squareImages: [
+      conference,
+      MRIimage
+    ],
+    textOverlay: true,
+    noLink: true,
   },
   {
     id: 6,

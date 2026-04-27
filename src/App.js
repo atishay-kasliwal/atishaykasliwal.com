@@ -188,17 +188,193 @@ function PopupChatBot() {
 
 
 
+const TERMINAL_COMMANDS = {
+  help: [
+    { t: 'kv', k: 'whoami',      v: 'identity, role & availability',       cmd: 'whoami' },
+    { t: 'kv', k: 'skills',      v: 'tech stack by category',              cmd: 'skills' },
+    { t: 'kv', k: 'experience',  v: 'work history & companies',            cmd: 'experience' },
+    { t: 'kv', k: 'projects',    v: 'shipped projects & domains',          cmd: 'projects' },
+    { t: 'kv', k: 'contact',     v: 'contact info & open to work status',  cmd: 'contact' },
+  ],
+  whoami: [
+    { t: 'kv', k: 'name',        v: 'Atishay Kasliwal' },
+    { t: 'kv', k: 'role',        v: 'Software Engineer' },
+    { t: 'kv', k: 'experience',  v: '4+ years · Research + Industry' },
+    { t: 'kv', k: 'industries',  v: 'Fintech · Healthcare · Telecom · Research' },
+    { t: 'kv', k: 'education',   v: 'MS Data Science, Stony Brook University' },
+    { t: 'kv', k: 'status',      v: 'Open to full-time roles · NYC / Remote' },
+  ],
+  skills: [
+    { t: 'kv', k: 'languages',  v: 'Java  Python  Node.js  TypeScript  JavaScript  SQL' },
+    { t: 'kv', k: 'backend',    v: 'FastAPI  Spring Boot  Kafka  GraphQL  Microservices' },
+    { t: 'kv', k: 'systems',    v: 'Distributed Systems  Event-Driven  Caching  MQ' },
+    { t: 'kv', k: 'data',       v: 'PostgreSQL  MySQL  MongoDB  Redis  Elasticsearch' },
+    { t: 'kv', k: 'cloud',      v: 'AWS  GCP  Docker  Kubernetes  Terraform  Jenkins' },
+  ],
+  experience: [
+    { t: 'kv', k: '2024–present', v: 'Stony Brook University   SWE Research' },
+    { t: 'kv', k: 'Summer 2025',  v: 'Wake Forest – CAIR      SWE Intern (ML)' },
+    { t: 'kv', k: '2021–2024',    v: 'Accolite Digital         Senior SWE' },
+    { t: 'kv', k: '2020–2021',    v: 'Shriffle                 SWE Intern' },
+  ],
+  projects: [
+    { t: 'kv', k: 'Atriveo',         v: 'Job platform · 100+ users · 2K+ daily queries' },
+    { t: 'kv', k: 'FOMC Dashboard',  v: 'NLP · Fed policy sentiment analysis' },
+    { t: 'kv', k: 'Legal RAG',       v: 'LLM · Ask your documents anything' },
+    { t: 'kv', k: 'MRI Viewer',      v: 'CV · Brain tumor detection (CNN · 90% acc)' },
+    { t: 'kv', k: 'PolicyFabric',    v: 'Systems · Data contracts at scale' },
+  ],
+  contact: [
+    { t: 'kv', k: 'status',    v: 'available' },
+    { t: 'kv', k: 'location',  v: 'NYC / Remote' },
+    { t: 'kv', k: 'email',     v: 'katishay@gmail.com',                  href: 'mailto:katishay@gmail.com' },
+    { t: 'kv', k: 'linkedin',  v: 'linkedin.com/in/atishay-kasliwal',    href: 'https://www.linkedin.com/in/atishay-kasliwal/' },
+    { t: 'kv', k: 'github',    v: 'github.com/atishay-kasliwal',         href: 'https://github.com/atishay-kasliwal' },
+  ],
+};
+
+
+function HeroTerminal() {
+  const [history, setHistory] = useState([
+    { cmd: null, responses: [
+      { t: 'kv', k: '', v: "Hey there 👋  Welcome to Atishay's portfolio terminal." },
+      { t: 'kv', k: '', v: 'Click any command below to explore.' },
+      { t: 'kv', k: '', v: '' },
+      { t: 'text', v: '→ Currently building Atriveo (100+ users)', href: 'https://atriveo.com' },
+      { t: 'text', v: '→ Latest research: Trading Bot with NLP signals', href: 'https://atishaykasliwal.com/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01' },
+      { t: 'text', v: '→ Atishay Kasliwal Resume  (Open to Work)', href: '/Atishay_Kasliwal.pdf' },
+      { t: 'kv', k: '', v: '' },
+    ]},
+    { cmd: 'help', responses: TERMINAL_COMMANDS['help'] }
+  ]);
+  const [typing, setTyping] = useState('');
+  const [running, setRunning] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const bodyRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (bodyRef.current) {
+      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+    }
+  }, [history, typing, inputValue]);
+
+  const runCommand = (cmd) => {
+    if (running) return;
+    const trimmed = cmd.trim();
+    if (!trimmed) return;
+    setRunning(true);
+    setInputValue('');
+
+    let i = 0;
+    const typeNext = () => {
+      i++;
+      setTyping(trimmed.slice(0, i));
+      if (i < trimmed.length) {
+        setTimeout(typeNext, 55);
+      } else {
+        setTimeout(() => {
+          const responses = TERMINAL_COMMANDS[trimmed] || [
+            { t: 'kv', k: 'error', v: `command not found: ${trimmed}  (try: help)` },
+          ];
+          setHistory(prev => [...prev, { cmd: trimmed, responses }]);
+          setTyping('');
+          setRunning(false);
+          setTimeout(() => inputRef.current?.focus(), 50);
+        }, 350);
+      }
+    };
+    setTimeout(typeNext, 55);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      runCommand(inputValue);
+    }
+  };
+
+  return (
+    <div className="hero-terminal-wrap" translate="no">
+      <div className="hero-terminal" translate="no">
+        <div className="hero-terminal__bar" translate="no">
+          <span className="hero-terminal__dot hero-terminal__dot--red" />
+          <span className="hero-terminal__dot hero-terminal__dot--yellow" />
+          <span className="hero-terminal__dot hero-terminal__dot--green" />
+          <span className="hero-terminal__title">atishay@portfolio ~</span>
+        </div>
+
+        <div className="hero-terminal__body" ref={bodyRef} translate="no" onClick={() => inputRef.current?.focus()}>
+          <div className="hero-terminal__spacer" />
+          {history.map((entry, idx) => (
+            <div key={idx} className="hero-terminal__entry">
+              {entry.cmd && (
+                <div className="hero-terminal__line">
+                  <span className="hero-terminal__prompt">$ </span>
+                  <span className="hero-terminal__cmd">{entry.cmd}</span>
+                </div>
+              )}
+              {entry.responses.map((r, i) => (
+                r.t === 'text'
+                  ? <div key={i} className="hero-terminal__line">
+                      {r.href
+                        ? <a href={r.href} target="_blank" rel="noopener noreferrer" className="hero-terminal__val hero-terminal__link" onClick={e => e.stopPropagation()}>{r.v}</a>
+                        : <span className="hero-terminal__val">{r.v}</span>
+                      }
+                    </div>
+                  : <div
+                      key={i}
+                      className={`hero-terminal__line hero-terminal__line--kv${r.cmd ? ' hero-terminal__line--clickable' : ''}`}
+                      onClick={() => r.cmd && runCommand(r.cmd)}
+                    >
+                      <span className="hero-terminal__key">{r.k}</span>
+                      {r.href
+                        ? <a href={r.href} target="_blank" rel="noopener noreferrer" className="hero-terminal__val hero-terminal__link" onClick={e => e.stopPropagation()}>{r.v}</a>
+                        : <span className="hero-terminal__val">{r.v}</span>
+                      }
+                    </div>
+              ))}
+              <div className="hero-terminal__blank" />
+            </div>
+          ))}
+          {typing && (
+            <div className="hero-terminal__line">
+              <span className="hero-terminal__prompt">$ </span>
+              <span className="hero-terminal__cmd">{typing}</span>
+              <span className="hero-terminal__cursor" />
+            </div>
+          )}
+          {!typing && !running && (
+            <div className="hero-terminal__line" onClick={() => inputRef.current?.focus()}>
+              <span className="hero-terminal__prompt">$ </span>
+              <span className="hero-terminal__input-wrap">
+                <span className="hero-terminal__cmd">{inputValue}</span>
+                <span className="hero-terminal__cursor" />
+              </span>
+              <input
+                ref={inputRef}
+                className="hero-terminal__input"
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoComplete="off"
+                spellCheck="false"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HomePage() {
   const gridImages = [
-    { src: img1,             company: 'Fidelity Investments',    role: 'Software Engineer',        impact: 'AI-powered equity research tools at scale' },
-    { src: img8, light: true, company: 'Atrium Health',           role: 'AI Research Intern',        impact: 'ML models for tumor detection & clinical workflows' },
-    { src: img2,             company: 'Bounteous',               role: 'Full-Stack Engineer',       impact: 'Digital platforms for Fortune 500 clients' },
-    { src: img4,             company: 'BT Group',                role: 'Software Engineer',        impact: 'Backend systems across telecom infrastructure' },
-    { src: img7, light: true, company: 'Accolite Digital',        role: 'Senior Software Engineer', impact: 'Led frontend delivery for enterprise clients' },
-    { src: img3,             company: 'T-Mobile',                role: 'Software Engineer',        impact: 'High-traffic mobile platform features' },
-    { src: img6,             company: 'Stony Brook University',  role: 'MS Data Science',          impact: 'Graduate research in AI, NLP & distributed systems' },
-    { src: img9, light: true, company: 'Shriffle Technologies',   role: 'Software Developer',       impact: 'Full-stack product development 0 → 1' },
-    { src: img5,             company: 'Accenture',               role: 'Software Engineer',        impact: 'Enterprise solutions across cloud & data platforms' },
+    { src: img6,             company: 'Stony Brook University',  role: 'SWE Research',             impact: 'Financial data pipelines · 27% portfolio return' },
+    { src: img8, light: true, company: 'Wake Forest – CAIR',     role: 'SWE Intern · ML',           impact: 'ML pipeline · 90% accuracy · 1,250+ patient cases' },
+    { src: img1,             company: 'Fidelity Investments',    role: 'Senior SWE (via Accolite)', impact: 'Event-driven ETL · 10+ enterprise systems · 99% uptime' },
+    { src: img4,             company: 'BT Group',                role: 'SWE (via Accolite)',        impact: 'GraphQL & REST APIs · 1K+ daily transactions at 200ms P99' },
+    { src: img7, light: true, company: 'Accolite Digital',        role: 'Senior Software Engineer', impact: 'Distributed systems · 100K+ users · 40% latency reduction' },
+    { src: img9, light: true, company: 'Shriffle',               role: 'SWE Intern',               impact: 'Secrets management microservice · 8+ microservices secured' },
   ];
 
   // Mobile menu state
@@ -268,20 +444,20 @@ function HomePage() {
     <>
       <Helmet>
         <html lang="en" translate="no" />
-        <title>Atishay Kasliwal - Full Stack Engineer | Portfolio & Resume</title>
+        <title>Atishay Kasliwal - Software Engineer | Portfolio & Resume</title>
         <link rel="canonical" href="https://atishaykasliwal.com/" />
         <meta name="google" content="notranslate" />
         <meta name="google-translate-customization" content="no" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Atishay Kasliwal - Full Stack Engineer" />
-        <meta property="og:description" content="Portfolio & resume of Atishay Kasliwal - React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
+        <meta property="og:title" content="Atishay Kasliwal - Software Engineer" />
+        <meta property="og:description" content="Portfolio & resume of Atishay Kasliwal - Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University." />
         <meta property="og:url" content="https://atishaykasliwal.com/" />
         <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Atishay Kasliwal - Full Stack Engineer" />
-        <meta name="twitter:description" content="Portfolio & resume of Atishay Kasliwal - React/Next.js, Node, Python, GCP, AI/ML engineer. Software engineer with 5+ years experience." />
-        <meta name="description" content="Atishay Kasliwal - Full Stack Engineer. Portfolio, resume, and projects. Software engineer with 5+ years experience at Fidelity Investments, currently pursuing MS in Data Science at Stony Brook University. React, Next.js, Node, Python, GCP, AI/ML." />
-        <meta name="keywords" content="Atishay Kasliwal, Atishay Kasliwal portfolio, Atishay Kasliwal resume, data scientist, software engineer, full-stack engineer, React developer, Python developer, Stony Brook University, Fidelity Investments, Atrium Health Wake Forest" />
+        <meta name="twitter:title" content="Atishay Kasliwal - Software Engineer" />
+        <meta name="twitter:description" content="Portfolio & resume of Atishay Kasliwal - Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University." />
+        <meta name="description" content="Atishay Kasliwal - Software Engineer. Portfolio, resume, and projects. 4+ years building scalable distributed systems across fintech, healthcare, and research. MS Data Science at Stony Brook University. Python, Java, FastAPI, Spring Boot, AWS, GCP." />
+        <meta name="keywords" content="Atishay Kasliwal, Atishay Kasliwal portfolio, Atishay Kasliwal resume, software engineer, distributed systems, machine learning, Python developer, Java developer, FastAPI, Spring Boot, Stony Brook University, Accolite Digital, Wake Forest CAIR, Atriveo" />
         <meta name="author" content="Atishay Kasliwal" />
         <script type="application/ld+json">
           {`
@@ -292,8 +468,8 @@ function HomePage() {
               "name": "Atishay Kasliwal",
               "url": "https://atishaykasliwal.com/",
               "image": "https://atishaykasliwal.com/atishaylogo.png",
-              "description": "Full Stack Engineer. React / Next.js, Node, Python, GCP, AI/ML.",
-              "jobTitle": "Full Stack Engineer",
+              "description": "Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University.",
+              "jobTitle": "Software Engineer",
               "email": "katishay@gmail.com",
               "alumniOf": [
                 {
@@ -308,13 +484,13 @@ function HomePage() {
               "worksFor": [
                 {
                   "@type": "Organization",
-                  "name": "Atrium Health Wake Forest",
-                  "jobTitle": "AI/ML Research & Analytics"
+                  "name": "Stony Brook University",
+                  "jobTitle": "Software Engineer - Research"
                 },
                 {
                   "@type": "Organization",
-                  "name": "Stony Brook University",
-                  "jobTitle": "Research Assistant"
+                  "name": "Wake Forest - CAIR",
+                  "jobTitle": "Software Engineer - Summer Intern"
                 }
               ],
               "hasOccupation": {
@@ -355,7 +531,7 @@ function HomePage() {
             <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
               <Link to="/highlights">Work</Link>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
+              <a href="/Atishay_Kasliwal.pdf" className="nav-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
             </nav>
           </div>
         </div>
@@ -365,10 +541,10 @@ function HomePage() {
           {/* Two-column Main Content */}
           <div className="landing-two-col" data-analytics-section="hero" translate="no">
             <div className="landing-left-text" translate="no">
-              <p className="hero-eyebrow" translate="no">Software Engineer · Full-Stack · Machine Learning</p>
+              <p className="hero-eyebrow" translate="no">Software Engineer · Distributed Systems · Machine Learning</p>
               <h1 className="hero-name" translate="no">Atishay Kasliwal</h1>
               <p className="hero-description" translate="no">
-                Full-stack engineer with 5 years of experience shipping production software across fintech, healthcare, and enterprise. I work across the stack and have built AI-powered features into real products used at scale.
+                Software engineer with 4+ years building scalable distributed systems and ML pipelines across fintech, healthcare, and research. Currently pursuing MS in Data Science at Stony Brook University.
               </p>
               <div className="button-group-theme hero-ctas" translate="no">
                 <Link to="/highlights" className="btn-theme btn-primary-action btn-lg" data-cta-position="hero_view_work">
@@ -377,7 +553,7 @@ function HomePage() {
                     <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </span>
                 </Link>
-                <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="btn-theme btn-secondary btn-lg" target="_blank" rel="noopener noreferrer" data-cta-position="hero_resume">
+                <a href="/Atishay_Kasliwal.pdf" className="btn-theme btn-secondary btn-lg" target="_blank" rel="noopener noreferrer" data-cta-position="hero_resume">
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6em' }}>
                     Resume
                   </span>
@@ -411,23 +587,7 @@ function HomePage() {
                 </div>
               </div>
             </div>
-            <div className="landing-right-images" translate="no">
-              <p className="grid-worked-with" translate="no">Worked with</p>
-              <div className="landing-grid-3x3" translate="no">
-                {gridImages.map(({ src, light, company, role, impact }, idx) => (
-                  <div key={idx} className={`logo-tile${light ? ' logo-tile-light' : ''}`} translate="no">
-                    <img src={src} alt={company || `Company ${idx + 1}`} translate="no" />
-                    {company && (
-                      <div className="logo-tile-info" translate="no">
-                        <span className="logo-tile-company">{company}</span>
-                        <span className="logo-tile-role">{role}</span>
-                        <span className="logo-tile-impact">→ {impact}</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <HeroTerminal />
           </div>
 
         </div>
@@ -651,7 +811,7 @@ function ArtPage() {
             <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
               <Link to="/highlights" translate="no">Work</Link>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LinkedIn</a>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer" translate="no">Resume</a>
+              <a href="/Atishay_Kasliwal.pdf" className="nav-resume-btn" target="_blank" rel="noopener noreferrer" translate="no">Resume</a>
             </nav>
           </div>
         </div>
@@ -804,7 +964,7 @@ function Footer() {
   return (
     <footer className="site-footer" translate="no">
       <div className="footer-content" translate="no">
-        <span translate="no">© {new Date().getFullYear()} <strong>Atishay Kasliwal</strong> - Full Stack Engineer</span>
+        <span translate="no">© {new Date().getFullYear()} <strong>Atishay Kasliwal</strong> - Software Engineer</span>
         <span className="footer-socials" translate="no">
           <Link to="/art" aria-label="Photography" translate="no">
             <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M9 3l-1.83 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
