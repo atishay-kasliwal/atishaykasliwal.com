@@ -35,6 +35,8 @@ const getArticleMeta = (projectUuid) => {
       return { date: '19 Mar 2025', readingTime: '5 min read' };
     case 'd4e5f6a7-b8c9-4012-d345-6789abcdef01':
       return { date: '11 Feb 2025', readingTime: '8 min read' };
+    case 'c7d8e9f0-a1b2-4345-c678-9abcdef01234':
+      return { date: '29 Apr 2026', readingTime: '6 min read' };
     default:
       return { date: '2025', readingTime: '5 min read' };
   }
