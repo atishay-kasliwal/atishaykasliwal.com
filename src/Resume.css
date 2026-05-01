@@ -1,0 +1,589 @@
+.resume-page {
+  min-height: 100vh;
+}
+
+.resume-content {
+  position: relative;
+  z-index: 1;
+  width: min(90vw, 1080px);
+  margin: 0 auto;
+  padding-top: 96px;
+  padding-bottom: 112px;
+}
+
+/* ── Hero ─────────────────────────────────────────── */
+.rp-hero {
+  padding: 64px 0 52px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+
+.rp-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -120px;
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(99, 179, 237, 0.05) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rp-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.rp-eyebrow {
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(99, 179, 237, 0.65);
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rp-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: rgba(99, 179, 237, 0.45);
+  flex-shrink: 0;
+}
+
+.rp-name {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 20px;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+
+.rp-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.44);
+  max-width: 580px;
+  line-height: 1.72;
+  margin: 0 0 22px;
+}
+
+.rp-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.rp-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.rp-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.6);
+  flex-shrink: 0;
+}
+
+.rp-meta-link {
+  color: rgba(255, 255, 255, 0.38);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.rp-meta-link:hover {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rp-meta-dot {
+  color: rgba(255, 255, 255, 0.14);
+  font-size: 0.75rem;
+}
+
+.rp-cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.rp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.83rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.16s ease;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+}
+
+.rp-btn--primary {
+  background: #fff;
+  color: #080c18;
+  border: 1px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.rp-btn--primary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.rp-btn--ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rp-btn--ghost:hover {
+  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-1px);
+}
+
+/* ── Stats bar ───────────────────────────────────── */
+.rp-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  margin: 40px 0 68px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.rp-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 22px 22px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.16s;
+}
+
+.rp-stat-item:last-child {
+  border-right: none;
+}
+
+.rp-stat-item:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.rp-stat-label {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.rp-stat-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ── Section ─────────────────────────────────────── */
+.rp-section {
+  margin-bottom: 68px;
+}
+
+.rp-section-title {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(99, 179, 237, 0.5);
+  margin: 0 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rp-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(99, 179, 237, 0.15) 0%, transparent 60%);
+}
+
+/* ── Cards ───────────────────────────────────────── */
+.rp-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rp-card {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.038);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  position: relative;
+}
+
+.rp-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.rp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.052);
+}
+
+.rp-card--project {
+  border-color: rgba(99, 179, 237, 0.14);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 179, 237, 0.06);
+}
+
+.rp-card--project:hover {
+  border-color: rgba(99, 179, 237, 0.28);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 179, 237, 0.06);
+}
+
+.rp-card-rail {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.rp-card-period {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  font-size: 0.63rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+.rp-card-company {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.3;
+  margin-top: 4px;
+}
+
+.rp-card-location {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  font-size: 0.59rem;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.rp-card-stack {
+  color: rgba(99, 179, 237, 0.45);
+  font-size: 0.57rem;
+  line-height: 1.6;
+}
+
+.rp-card-badge {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.rp-card-badge--full {
+  background: rgba(74, 222, 128, 0.08);
+  color: rgba(74, 222, 128, 0.8);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.rp-card-badge--intern {
+  background: rgba(147, 197, 253, 0.07);
+  color: rgba(147, 197, 253, 0.7);
+  border: 1px solid rgba(147, 197, 253, 0.16);
+}
+
+.rp-card-badge--research {
+  background: rgba(196, 155, 255, 0.08);
+  color: rgba(196, 155, 255, 0.75);
+  border: 1px solid rgba(196, 155, 255, 0.18);
+}
+
+.rp-card-body {
+  padding: 24px 28px;
+}
+
+.rp-card-body--edu {
+  display: flex;
+  align-items: center;
+}
+
+.rp-card-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 14px;
+  letter-spacing: -0.015em;
+}
+
+.rp-card-body--edu .rp-card-role {
+  margin: 0;
+}
+
+.rp-card-bullets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rp-card-bullets li {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.52);
+  line-height: 1.68;
+  padding-left: 15px;
+  position: relative;
+}
+
+.rp-card-bullets li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+
+/* ── Skills ──────────────────────────────────────── */
+.rp-skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rp-skill-group {
+  padding: 22px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.032);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.rp-skill-group:hover {
+  background: rgba(255, 255, 255, 0.048);
+  border-color: rgba(255, 255, 255, 0.11);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.rp-skill-category {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(99, 179, 237, 0.55);
+}
+
+.rp-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rp-skill-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.77rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 11px;
+  border-radius: 5px;
+  letter-spacing: 0.01em;
+  transition: all 0.14s;
+}
+
+.rp-skill-tag:hover {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* ── Footer CTA ──────────────────────────────────── */
+.rp-footer-cta {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 56px;
+}
+
+.rp-footer-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.rp-footer-cta-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 5px;
+  letter-spacing: -0.01em;
+}
+
+.rp-footer-cta-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 900px) {
+  .rp-stats-bar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .rp-stat-item:nth-child(3) {
+    border-right: none;
+  }
+
+  .rp-stat-item:nth-child(n+4) {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .rp-skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rp-footer-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .resume-content {
+    padding-top: 80px;
+  }
+
+  .rp-card {
+    grid-template-columns: 1fr;
+  }
+
+  .rp-card-rail {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 14px 18px;
+  }
+
+  .rp-card-body {
+    padding: 16px 18px;
+  }
+
+  .rp-stats-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rp-stat-item:nth-child(3) {
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .rp-stat-item:nth-child(2n) {
+    border-right: none;
+  }
+
+  .rp-stat-item:nth-child(n+3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+}
+
+@media (max-width: 480px) {
+  .rp-name {
+    font-size: 2rem;
+  }
+
+  .rp-stats-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .rp-stat-item {
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .rp-stat-item:last-child {
+    border-bottom: none;
+  }
+
+  .rp-meta-dot {
+    display: none;
+  }
+
+  .rp-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}

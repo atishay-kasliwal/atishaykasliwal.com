@@ -21,6 +21,7 @@ import gunjanPhoto from './assets/gunjanjain.jpg';
 import StoryTimeline from './StoryTimeline';
 import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
+import Resume from './Resume';
 import { loadQAExamples, findBestMatch } from './knowledgeRetrieval';
 
 const img5 = '/1ed668f5-0d8d-46c3-ad9a-c585b625d869.png';
@@ -531,7 +532,7 @@ function HomePage() {
             <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
               <Link to="/highlights">Work</Link>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <a href="/Atishay_Kasliwal.pdf" className="nav-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
+              <Link to="/resume" className="nav-resume-btn">Resume</Link>
             </nav>
           </div>
         </div>
@@ -667,16 +668,6 @@ function HomePage() {
                 </div>
               </a>
 
-              {/* 7 — Classical Cipher Toolkit */}
-              <Link to="/highlights/c7d8e9f0-a1b2-4345-c678-9abcdef01234" className="editorial-card editorial-card--medium editorial-card--has-bg" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&h=500&auto=format&fit=crop)' }} aria-label="View project: Classical Cipher Toolkit" data-feature-name="Classical Cipher Toolkit" translate="no">
-                <span className="editorial-tag" translate="no">C++</span>
-                <div className="editorial-card-body" translate="no">
-                  <span className="editorial-subtitle">C++17 · Cryptography · Systems</span>
-                  <h3>Ten Ciphers, One Toolkit</h3>
-                  <p className="editorial-desc">Affine, Vigenère, Rail-Fence, Route, XOR, Morse, Polybius, Atbash, Baconian, and Simple Substitution — each with full encrypt/decrypt, zero warnings, and CI on Ubuntu and macOS.</p>
-                  <span className="editorial-cta">Explore the code <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg></span>
-                </div>
-              </Link>
 
             </div>
           </div>
@@ -822,7 +813,7 @@ function ArtPage() {
             <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
               <Link to="/highlights" translate="no">Work</Link>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LinkedIn</a>
-              <a href="/Atishay_Kasliwal.pdf" className="nav-resume-btn" target="_blank" rel="noopener noreferrer" translate="no">Resume</a>
+              <Link to="/resume" className="nav-resume-btn" translate="no">Resume</Link>
             </nav>
           </div>
         </div>
@@ -1045,6 +1036,7 @@ function App() {
         <Route path="/highlights/:id" element={<HighlightDetail />} />
         {/* Legacy UUID endpoint (kept for backward compatibility) */}
         <Route path="/Highlights/:uuid" element={<HighlightDetail />} />
+        <Route path="/resume" element={<Resume />} />
       </Routes>
       <Footer />
     </Router>
