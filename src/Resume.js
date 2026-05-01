@@ -10,10 +10,10 @@ const EXPERIENCE = [
     role: 'Software Engineer – Research',
     type: 'Research',
     bullets: [
-      'Built a scalable real-time data pipeline in Python, FastAPI, and AWS, processing 200K+ financial records with event-driven architecture. Achieved 27% portfolio return and $2.6K profit.',
-      'Designed a distributed data processing system on AWS Lambda and S3, ingesting financial news and transcripts across 3.7K+ time intervals with structured schema validation.',
-      'Architected RESTful APIs in FastAPI with DynamoDB to expose structured financial data across distributed microservices, maintaining 300ms P99 with 99.9% uptime.',
-      'Implemented Docker-based CI/CD pipelines with Jenkins on AWS, reducing deployment time by 97% and enabling production monitoring with Prometheus and CloudWatch.',
+      'Built a fault-tolerant, event-driven data pipeline in Python, FastAPI, and AWS processing 200K+ financial data points in real time — achieving 27% portfolio return and $2.6K profit with zero data loss under variable load.',
+      'Designed a distributed ingestion system on AWS Lambda and S3, processing financial news and transcripts across 3.7K+ time-series intervals with structured schema validation and 99.9% availability.',
+      'Architected RESTful APIs in FastAPI and DynamoDB exposing structured financial data across distributed microservices — maintaining sub-300ms P99 latency at production scale.',
+      'Implemented Docker-based CI/CD pipelines on AWS with Jenkins, cutting deployment time by 97%; built production observability via Prometheus and CloudWatch to catch defects before customers are impacted.',
     ],
   },
   {
@@ -23,8 +23,8 @@ const EXPERIENCE = [
     role: 'Software Engineer – Summer Intern',
     type: 'Internship',
     bullets: [
-      'Developed a scalable ML pipeline using Python, PyTorch, and GCP, achieving 90% accuracy and reducing clinical processing time from 20+ minutes to under 5 minutes across 1,250+ patient cases.',
-      'Provisioned backend infrastructure on GCP using Terraform and Firebase, processing 50K+ scans (10TB+) with RESTful APIs and reliable real-time inference at scale.',
+      'Built an end-to-end ML pipeline in Python and PyTorch on GCP, achieving 90% classification accuracy and reducing clinical processing time from 20+ minutes to under 5 minutes — enabling 4x throughput improvement across 1,250+ patient cases.',
+      'Provisioned fault-tolerant cloud infrastructure on GCP using Terraform and Firebase, enabling real-time ML inference at scale across 50K+ scans (10TB+) with durable, zero-loss data handling.',
     ],
   },
   {
@@ -34,10 +34,10 @@ const EXPERIENCE = [
     role: 'Senior Software Engineer',
     type: 'Full-time',
     bullets: [
-      'Architected an event-driven ETL system for Fidelity in Kafka, Java, and Spring Boot, automating tool integration across 10+ enterprise systems with 99% uptime and 100% test coverage.',
-      'Built a serverless platform in Python, Node.js, AWS Lambda, and Firebase, processing async workflows and automating onboarding for 3K+ users via REST API integrations.',
-      'Optimized distributed system performance for 100K+ users by rearchitecting Redis caching and Elasticsearch layers, cutting P99 latency by 40% with zero Sev1s post-deployment.',
-      'Delivered production RESTful and GraphQL APIs in Java, Spring Boot, and MySQL for BT Telecom, processing 1,000+ daily transactions at 200ms P99 with 99% uptime.',
+      'Architected an event-driven ETL system for Fidelity in Java, Spring Boot, and Kafka — automating integration across 10+ enterprise systems with 99% uptime and 100% test coverage across all production paths.',
+      'Owned a serverless platform in Python, Node.js, and AWS Lambda processing async workflows and onboarding 3K+ customers via REST API integrations — responsible for reliability, on-call response, and production health end-to-end.',
+      'Eliminated 40% P99 latency and achieved zero Sev1 incidents post-deployment by rearchitecting Redis caching and Elasticsearch layers for a distributed system serving 100K+ customers.',
+      'Delivered production REST and GraphQL APIs in Java, Spring Boot, and MySQL for BT Telecom — processing 1,000+ daily transactions at sub-200ms P99 with 99% uptime.',
     ],
   },
   {
@@ -47,8 +47,8 @@ const EXPERIENCE = [
     role: 'Software Engineer – Intern',
     type: 'Internship',
     bullets: [
-      'Engineered a centralized secrets management microservice in Java, Spring Boot, and MongoDB on AWS, implementing OAuth and JWT to secure service-to-service communication across 8+ microservices.',
-      'Implemented telecom microservices in Java and Spring Boot, processing 10K+ transactions with JUnit coverage.',
+      'Designed and owned a centralized secrets management microservice in Java, Spring Boot, and MongoDB on AWS — implementing OAuth 2.0 and JWT to secure cross-service authentication across 8+ microservices with zero credential breaches in production.',
+      'Built telecom microservices in Java and Spring Boot processing 10K+ daily transactions with comprehensive JUnit coverage and zero production regressions.',
     ],
   },
 ];
@@ -59,8 +59,8 @@ const PROJECTS = [
     stack: 'Python · React · FastAPI · PostgreSQL · Docker',
     period: 'Jan 2026 – Present',
     bullets: [
-      'Own and architect Atriveo end to end. It is a multi-service job search platform in Python, FastAPI, Node.js, React, and PostgreSQL serving 100+ active users at 2K+ daily queries with 99.9% uptime.',
-      'Shipped a Chrome extension with 5.0 stars on the Chrome Web Store, leveraging AI tools throughout the development lifecycle to maintain high-quality standards across a fast-paced solo build.',
+      'Own and operate Atriveo end-to-end — a full-stack job search platform in Python, FastAPI, React, TypeScript, and PostgreSQL serving 100+ active customers at 2K+ daily queries with 99.9% uptime.',
+      'Shipped a Chrome extension rated 5.0/5.0 stars on the Chrome Web Store — the highest possible bar — by working backwards from customer needs and iterating rapidly without sacrificing quality.',
     ],
   },
 ];
@@ -81,11 +81,12 @@ const EDUCATION = [
 ];
 
 const SKILLS = [
-  { category: 'Languages', items: ['Java', 'Python', 'Node.js', 'TypeScript', 'JavaScript', 'SQL'] },
-  { category: 'Backend', items: ['FastAPI', 'Spring Boot', 'Kafka', 'REST APIs', 'GraphQL', 'Microservices', 'OAuth', 'JWT'] },
-  { category: 'Systems', items: ['Distributed Systems', 'System Design', 'Caching Strategies', 'Message Queues', 'Event-Driven Architecture'] },
-  { category: 'Data & Storage', items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Elasticsearch', 'ETL/ELT', 'NoSQL'] },
-  { category: 'Cloud & Infrastructure', items: ['AWS', 'GCP', 'Docker', 'Kubernetes', 'Terraform', 'Jenkins CI/CD', 'Git'] },
+  { category: 'Languages', items: ['Java', 'Python', 'TypeScript', 'JavaScript', 'Node.js', 'SQL'] },
+  { category: 'Backend', items: ['Spring Boot', 'FastAPI', 'Kafka', 'REST APIs', 'GraphQL', 'Microservices', 'OAuth 2.0', 'JWT'] },
+  { category: 'Systems', items: ['Distributed Systems', 'Event-Driven Architecture', 'CI/CD', 'Release Engineering', 'System Design', 'Caching', 'Message Queues'] },
+  { category: 'Data & Storage', items: ['PostgreSQL', 'MySQL', 'DynamoDB', 'MongoDB', 'Redis', 'Elasticsearch', 'ETL/ELT', 'NoSQL'] },
+  { category: 'Cloud & Infrastructure', items: ['AWS (Lambda, S3, ECS, SQS, DynamoDB, CloudWatch)', 'GCP', 'Docker', 'Kubernetes', 'Terraform', 'Jenkins', 'Git'] },
+  { category: 'ML / AI', items: ['PyTorch', 'scikit-learn', 'NLP', 'Deep Learning', 'A/B Experimentation', 'LangChain', 'RAG'] },
 ];
 
 const STATS = [
@@ -136,7 +137,7 @@ export default function Resume() {
           <p className="rp-eyebrow">Software Engineer · AI / ML · Data Science · Distributed Systems</p>
           <h1 className="rp-name">Atishay Kasliwal</h1>
           <p className="rp-tagline">
-            Software Engineer focused on AI/ML, distributed systems, and data engineering. Building at the intersection of scalable backend infrastructure and machine learning. Currently pursuing MS in Data Science at Stony Brook University.
+            Software Engineer with 4+ years building distributed systems, high-availability services, and ML pipelines at scale. Deep experience in event-driven architecture, CI/CD, and consumer-facing APIs in Java, Python, and AWS. Currently pursuing MS in Data Science at Stony Brook University.
           </p>
           <div className="rp-meta-row">
             <span className="rp-meta-item">
