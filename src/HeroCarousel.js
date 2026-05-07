@@ -57,7 +57,7 @@ const PROJECTS = [
 ];
 
 const N = PROJECTS.length;
-const START = 2; // start on middle card (PolicyFabric)
+const START = 0; // start on FOMC Intelligence Dashboard
 
 function wrap(idx) {
   return ((idx % N) + N) % N;
