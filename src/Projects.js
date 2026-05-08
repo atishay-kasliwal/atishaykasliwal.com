@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import HeroCarousel from './HeroCarousel';
+import SiteHeader from './SiteHeader';
 import './Projects.css';
 import { Helmet } from 'react-helmet';
 import wakeforeststudent from './assets/WakeForsetstudent.JPG';
@@ -262,10 +263,6 @@ export const projectsData = [
 
 // Projects page with grid layout
 export default function Projects() {
-  // Mobile menu state
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-
   return (
     <div className="projects-page" translate="no">
       <Helmet>
@@ -275,28 +272,8 @@ export default function Projects() {
         <meta name="google" content="notranslate" />
         <meta name="google-translate-customization" content="no" />
       </Helmet>
-      <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
-        <div className="header" translate="no">
-          <div className="header-inner">
-            <Link to="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)} translate="no">
-              Atishay Kasliwal
-            </Link>
-            <button
-              className="mobile-menu-toggle"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              translate="no"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-              <Link to="/highlights" className="active" translate="no">Work</Link>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LinkedIn</a>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer" translate="no">Resume</a>
-            </nav>
-          </div>
-        </div>
+        <SiteHeader />
 
         <div className="projects-container" translate="no">
               <div className="projects-banner-container" translate="no">

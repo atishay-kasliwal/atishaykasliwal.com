@@ -18,6 +18,8 @@ import nehaPhoto from './assets/Neha gupta.jpeg';
 import goldyPhoto from './assets/goldey.jpeg';
 import daMaPhoto from './assets/da ma.jpeg';
 import gunjanPhoto from './assets/gunjanjain.jpg';
+import StarBackground from './StarBackground';
+import SiteHeader from './SiteHeader';
 import StoryTimeline from './StoryTimeline';
 import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
@@ -378,9 +380,6 @@ function HomePage() {
     { src: img9, light: true, company: 'Shriffle',               role: 'SWE Intern',               impact: 'Secrets management microservice · 8+ microservices secured' },
   ];
 
-  // Mobile menu state
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
   // Testimonials
   const testimonials = [
     {
@@ -512,30 +511,8 @@ function HomePage() {
           `}
         </script>
       </Helmet>
-      {/* Artistic Background */}
-      <div className="bg-art" translate="no" />
       <div className="page-content page-content--landing" translate="no">
-        {/* Header */}
-        <div className="header" translate="no">
-          <div className="header-inner">
-            <Link to="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)}>
-              Atishay Kasliwal
-            </Link>
-            <button
-              className="mobile-menu-toggle"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              translate="no"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-              <Link to="/highlights">Work</Link>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <Link to="/resume" className="nav-resume-btn">Resume</Link>
-            </nav>
-          </div>
-        </div>
+        <SiteHeader />
 
         <div className="landing-hero-wrap" translate="no">
         <div className="landing-hero-stack" translate="no">
@@ -554,11 +531,11 @@ function HomePage() {
                     <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </span>
                 </Link>
-                <a href="/Atishay_Kasliwal.pdf" className="btn-theme btn-secondary btn-lg" target="_blank" rel="noopener noreferrer" data-cta-position="hero_resume">
+                <Link to="/resume" className="btn-theme btn-secondary btn-lg" data-cta-position="hero_resume">
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6em' }}>
                     Resume
                   </span>
-                </a>
+                </Link>
                 <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="btn-theme btn-icon btn-lg" aria-label="LinkedIn">
                   <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z" fill="currentColor"/></svg>
                 </a>
@@ -730,9 +707,6 @@ function HomePage() {
 }
 
 function ArtPage() {
-  // Mobile menu state
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const images = [
     'https://i.pinimg.com/736x/bd/87/b4/bd87b4569684fe1a7819c96a9ab0e843.jpg', //Stranger Things
     'https://i.pinimg.com/736x/a9/0c/64/a90c643c914751ab8143afd6fc845f07.jpg', //New York
@@ -795,28 +769,8 @@ function ArtPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Helmet>
-      <div className="bg-art" translate="no" />
       <div className="page-content page-content--art" translate="no">
-        <div className="header" translate="no">
-          <div className="header-inner">
-            <Link to="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)} translate="no">
-              Atishay Kasliwal
-            </Link>
-            <button
-              className="mobile-menu-toggle"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              translate="no"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)} translate="no">
-              <Link to="/highlights" translate="no">Work</Link>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" translate="no">LinkedIn</a>
-              <Link to="/resume" className="nav-resume-btn" translate="no">Resume</Link>
-            </nav>
-          </div>
-        </div>
+        <SiteHeader />
 
         <div className="art-intro" translate="no">
           <h2 className="art-title" translate="no">Welcome! Discover moments through my lens, where each photo tells a story.</h2>
@@ -1026,6 +980,9 @@ function App() {
     <Router>
       <ScrollToTop />
       <AnalyticsTracker />
+      {/* Global starry background — same on every page */}
+      <StarBackground />
+      <div className="bg-overlay" />
       {/* Global chat bot, visible on all pages */}
       <PopupChatBot />
       <Routes>

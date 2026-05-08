@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import SiteHeader from './SiteHeader';
 import './Resume.css';
 
 const EXPERIENCE = [
@@ -106,29 +106,9 @@ function highlightMetrics(text) {
 }
 
 export default function Resume() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   return (
     <div className="resume-page">
-      <div className="bg-art" />
-
-      <div className="header">
-        <div className="header-inner">
-          <Link to="/" className="nav-logo">Atishay Kasliwal</Link>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-            <Link to="/highlights">Work</Link>
-            <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="/Atishay_Kasliwal.pdf" className="nav-resume-btn" download>↓ PDF</a>
-          </nav>
-        </div>
-      </div>
+      <SiteHeader />
 
       <div className="resume-content">
 
