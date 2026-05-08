@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './HighlightDetail.css';
+import SiteHeader from './SiteHeader';
 
 // Import project data
 import { projectsData } from './Projects';
@@ -160,9 +161,6 @@ export default function HighlightDetail() {
   const articleMeta = articleFromFile
     ? { date: articleFromFile.date, readingTime: articleFromFile.readingTime }
     : getArticleMeta(projectUuid);
-
-  // Mobile menu state
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // State to control iframe loading - delay iframe loading until after scroll-to-top
   const [shouldLoadIframes, setShouldLoadIframes] = useState(false);
@@ -430,35 +428,8 @@ export default function HighlightDetail() {
   if (!project) {
     return (
       <div className="highlight-detail-page">
-        <div className="bg-art" translate="no" />
         <div className="page-content" translate="no">
-          <div className="header" translate="no">
-            <div className="header-inner">
-              <Link
-                to="/"
-                className="nav-logo"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Atishay Kasliwal
-              </Link>
-              <button
-                className="mobile-menu-toggle"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle menu"
-                translate="no"
-              >
-                {isMobileMenuOpen ? '✕' : '☰'}
-              </button>
-              <nav
-                className={`nav ${isMobileMenuOpen ? 'open' : ''}`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Link to="/highlights" className="active">Work</Link>
-                <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
-              </nav>
-            </div>
-          </div>
+          <SiteHeader />
           <div className="highlight-not-found">
             <h1>Highlight Not Found</h1>
             <p>The highlight you're looking for doesn't exist.</p>
@@ -533,37 +504,8 @@ export default function HighlightDetail() {
         })}</script>
       </Helmet>
 
-      <div className="bg-art" translate="no" />
       <div className="page-content" translate="no">
-        {/* Navbar */}
-        <div className="header" translate="no">
-          <div className="header-inner">
-            <Link
-              to="/"
-              className="nav-logo"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Atishay Kasliwal
-            </Link>
-            <button
-              className="mobile-menu-toggle"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              translate="no"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <nav
-              className={`nav ${isMobileMenuOpen ? 'open' : ''}`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <Link to="/highlights" className="active">Work</Link>
-              <Link to="/art">Photography</Link>
-              <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <a href="/Atishay-Kasliwal-Resume.pdf?v=2" className="nav-resume-btn" target="_blank" rel="noopener noreferrer">Resume</a>
-            </nav>
-          </div>
-        </div>
+        <SiteHeader />
 
         {/* FOMC Dashboard — rendered for the healthcare/FOMC project */}
         {projectUuid === FOMC_UUID && <FOMCDashboard project={project} />}
