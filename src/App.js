@@ -197,7 +197,7 @@ const TERMINAL_COMMANDS = {
     { t: 'kv', k: 'skills',      v: 'tech stack by category',              cmd: 'skills' },
     { t: 'kv', k: 'experience',  v: 'work history & companies',            cmd: 'experience' },
     { t: 'kv', k: 'projects',    v: 'shipped projects & domains',          cmd: 'projects' },
-    { t: 'kv', k: 'contact',     v: 'contact info & open to work status',  cmd: 'contact' },
+    { t: 'kv', k: 'contact',     v: 'contact info & links',                cmd: 'contact' },
   ],
   whoami: [
     { t: 'kv', k: 'name',        v: 'Atishay Kasliwal' },
@@ -245,10 +245,9 @@ function HeroTerminal() {
       { t: 'kv', k: '', v: '' },
       { t: 'text', v: '→ Currently building Atriveo (100+ users)', href: 'https://atriveo.com' },
       { t: 'text', v: '→ Latest research: Trading Bot with NLP signals', href: 'https://atishaykasliwal.com/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01' },
-      { t: 'text', v: '→ Atishay Kasliwal Resume  (Open to Work)', href: '/Atishay_Kasliwal.pdf' },
+      { t: 'text', v: '→ Atishay Kasliwal Resume', href: '/Atishay_Kasliwal.pdf' },
       { t: 'kv', k: '', v: '' },
     ]},
-    { cmd: 'help', responses: TERMINAL_COMMANDS['help'] }
   ]);
   const [typing, setTyping] = useState('');
   const [running, setRunning] = useState(false);
