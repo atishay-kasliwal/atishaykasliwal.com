@@ -5,6 +5,10 @@ import SiteHeader from '../SiteHeader';
 import StoryTimeline from '../StoryTimeline';
 import SkillsSection from '../components/SkillsSection';
 import FinalProductGrid from '../components/FinalProductGrid';
+import '../styles/hero.css';
+import '../styles/editorial.css';
+import '../styles/testimonials.css';
+import '../styles/buttons.css';
 
 import img1 from '../assets/FidelityLogo.png';
 import img4 from '../assets/bt-logo-redesign-sq-1.jpg';
@@ -209,6 +213,23 @@ function HomePage() {
                   </div>
                 </div>
               </div>
+
+              <div className="landing-right-images" translate="no">
+                <p className="grid-worked-with" translate="no">Worked with</p>
+                <div className="landing-grid-3x3" translate="no">
+                  {gridImages.map((item, i) => (
+                    <div key={i} className={`logo-tile${item.light ? ' logo-tile-light' : ''}`} translate="no">
+                      <img src={item.src} alt={item.company} loading="lazy" />
+                      <div className="logo-tile-info" translate="no">
+                        <span className="logo-tile-company" translate="no">{item.company}</span>
+                        <span className="logo-tile-role" translate="no">{item.role}</span>
+                        <span className="logo-tile-impact" translate="no">{item.impact}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
