@@ -216,14 +216,13 @@ function HomePage() {
 
               <div className="landing-right-images" translate="no">
                 <p className="grid-worked-with" translate="no">Worked with</p>
-                <div className="landing-grid-3x3" translate="no">
+                <div className="exp-list" translate="no">
                   {gridImages.map((item, i) => (
-                    <div key={i} className={`logo-tile${item.light ? ' logo-tile-light' : ''}`} translate="no">
-                      <img src={item.src} alt={item.company} loading="lazy" />
-                      <div className="logo-tile-info" translate="no">
-                        <span className="logo-tile-company" translate="no">{item.company}</span>
-                        <span className="logo-tile-role" translate="no">{item.role}</span>
-                        <span className="logo-tile-impact" translate="no">{item.impact}</span>
+                    <div key={i} className="exp-list-item" translate="no">
+                      <img src={item.src} alt={item.company} className="exp-list-logo" loading="lazy" />
+                      <div className="exp-list-text" translate="no">
+                        <span className="exp-list-company" translate="no">{item.company}</span>
+                        <span className="exp-list-role" translate="no">{item.role}</span>
                       </div>
                     </div>
                   ))}
@@ -398,7 +397,7 @@ function HomePage() {
           </div>
         </section>
 
-        <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
+        <div id="skills-section" data-analytics-section="skills" className="section-wrap skills-section-wrap" translate="no">
           <SkillsSection />
         </div>
 
