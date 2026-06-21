@@ -70,36 +70,12 @@
   animation-delay: 0.3s;
 }
 
-.landing-grid-3x3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  width: 100%;
-  border-radius: 18px;
-}
 
-.landing-right-images img, .landing-grid-3x3 img {
-  border: none;
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
-  padding: 0;
-  margin-bottom: 0;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  display: block;
-  object-fit: contain;
-}
-
-.landing-right-images, .landing-grid-3x3 {
+.landing-right-images {
   background: none;
   border: none;
   box-shadow: none;
   padding: 0;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hero-eyebrow {
