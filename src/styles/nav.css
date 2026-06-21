@@ -1,0 +1,240 @@
+.header, .art-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: none;
+  z-index: 10;
+  background: rgba(8, 12, 24, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.header-inner {
+  width: min(90vw, 1400px);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9) !important;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.nav-logo:hover {
+  color: #fff !important;
+  opacity: 1;
+}
+
+.nav, .nav.black {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin-top: 0;
+  color: #fff;
+}
+
+.nav a, .nav.black a {
+  color: rgba(255, 255, 255, 0.5) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 400;
+  padding: 3px 12px;
+  border-radius: 4px;
+  position: relative;
+  letter-spacing: 0.06em;
+}
+
+.nav a:hover, .nav.black a:hover, .nav .active, .nav.black .active {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav a::after, .nav.black a::after {
+  display: none;
+}
+
+.nav-resume-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 4px !important;
+  padding: 3px 12px !important;
+  font-weight: 400 !important;
+  transition: all 0.2s ease !important;
+  margin-left: 8px;
+}
+
+.nav-resume-btn:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu-toggle.black {
+  color: #111;
+}
+
+.art-header {
+  background: rgba(8, 12, 24, 0.85);
+}
+
+.art-header .nav-logo { color: #fff !important; }
+
+.art-header .nav a,
+.art-header .nav.black a {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.art-header .nav a:hover,
+.art-header .nav.black a:hover,
+.art-header .nav .active,
+.art-header .nav.black .active {
+  color: #fff !important;
+}
+
+.header .logo, .header .nav a, .header .nav .active {
+  color: #fff !important;
+}
+
+.art-header .logo, .art-header .nav a, .art-header .nav .active,
+.nav.black a, .nav.black .active {
+  color: #111 !important;
+}
+
+@media (max-width: 768px) {
+  .nav-home-link { display: flex; }
+
+  .header, .art-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    position: fixed;
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+  }
+
+  .header-inner {
+    padding: 0;
+    justify-content: center;
+  }
+
+  .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
+    display: none;
+  }
+
+  .mobile-menu-toggle { display: none; }
+
+  .nav, .nav.black {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    top: auto;
+    right: auto;
+    transform: translateX(-50%);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    gap: 1.1rem;
+    font-size: 0.7rem;
+    z-index: 1000;
+    transition: all 0.2s ease;
+    overflow-x: auto;
+    background: rgba(10, 15, 30, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    backdrop-filter: blur(14px);
+    width: max-content;
+    max-width: calc(100% - 24px);
+  }
+
+  .nav.black {
+    background: rgba(245, 245, 245, 0.9);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .nav.open, .nav.black.open {
+    transform: translateX(-50%);
+  }
+
+  .nav a, .nav.black a {
+    padding: 0.3rem 0.45rem;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    width: auto;
+    border-bottom: none;
+    font-size: 0.68rem;
+  }
+
+  .nav.black a { color: #111 !important; }
+
+  .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
+    font-size: 1.2rem;
+    z-index: 1001;
+  }
+}
+
+@media (max-width: 480px) {
+  .header, .art-header {
+    padding: 0.75rem 1rem 0.5rem 1rem;
+  }
+
+  .nav, .nav.black {
+    padding: 0.5rem 0.7rem;
+    gap: 0.85rem;
+  }
+
+  .nav a, .nav.black a {
+    font-size: 0.64rem;
+    padding: 0.28rem 0.4rem;
+  }
+
+  .logo, .logo.libertinus-mono, .art-header .logo.libertinus-mono {
+    font-size: 1.1rem;
+  }
+
+  .mobile-menu-toggle {
+    font-size: 1.3rem;
+    padding: 0.4rem;
+  }
+}

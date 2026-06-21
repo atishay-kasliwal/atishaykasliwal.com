@@ -1,0 +1,91 @@
+.art-page {
+  min-height: 100vh;
+  background: #000;
+  padding-top: 80px;
+  padding-bottom: 4rem;
+}
+
+.art-page-inner {
+  width: 90vw;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.art-page-header {
+  margin-bottom: 2rem;
+}
+
+.art-page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem 0;
+}
+
+.art-page-header p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 480px;
+}
+
+.art-grid-fixed {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+@media (min-width: 1200px) {
+  .art-grid-fixed {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}
+
+.art-tile-fixed {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.art-tile-fixed img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.art-tile-fixed:hover img {
+  transform: scale(1.06);
+}
+
+.art-tile-fixed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.25s ease;
+  border-radius: 6px;
+}
+
+.art-tile-fixed:hover::after {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 768px) {
+  .art-page { padding-top: 60px; }
+  .art-page-inner { width: 100%; padding: 0 0.75rem; box-sizing: border-box; }
+  .art-page-header h1 { font-size: 1.8rem; }
+  .art-grid-fixed { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+}
+
+@media (max-width: 480px) {
+  .art-page { padding-top: 48px; }
+  .art-page-header h1 { font-size: 1.5rem; }
+  .art-grid-fixed { gap: 3px; }
+}
