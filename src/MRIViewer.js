@@ -3,7 +3,7 @@ import './MRIViewer.css';
 
 // ── Config ─────────────────────────────────────────────────────────────────────
 
-const BASE_URL = process.env.REACT_APP_MRI_CDN || '';
+const BASE_URL = import.meta.env.VITE_MRI_CDN || '';
 
 const MODALITIES = ['T1', 'T2', 'FLAIR', 'DWI', 'ADC', 'OVERLAY'];
 

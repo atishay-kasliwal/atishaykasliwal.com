@@ -3,7 +3,7 @@ import './LegalRAGChat.css';
 
 // ── Config ─────────────────────────────────────────────────────────────────────
 
-const API_BASE = process.env.REACT_APP_API_URL || 'https://legal-rag-api.katishay.workers.dev';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://legal-rag-api.katishay.workers.dev';
 
 const MOCK_STATS = {
   dataset: 'Income Tax Act 1961',

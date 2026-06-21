@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-const API_BASE = process.env.REACT_APP_FOMC_API_BASE || 'https://legal-rag-api.katishay.workers.dev';
+const API_BASE = import.meta.env.VITE_FOMC_API_BASE || 'https://legal-rag-api.katishay.workers.dev';
 
 export default function FOMCApiAccessPanel() {
   const [name, setName] = useState('');
