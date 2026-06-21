@@ -9,7 +9,11 @@ aibot-logger/node_modules/
 
 # production
 /build
+/dist
 /out
+
+# vite
+/.vite/
 
 # next.js
 /.next/

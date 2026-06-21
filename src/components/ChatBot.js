@@ -69,7 +69,7 @@ function ChatBot() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         inputRef.current?.focus();
       }, 100);
-      fetch(process.env.REACT_APP_LOG_ENDPOINT, {
+      fetch(import.meta.env.VITE_LOG_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

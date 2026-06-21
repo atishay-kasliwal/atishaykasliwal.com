@@ -51,7 +51,7 @@ const MODELS = [
 ];
 
 const FOMC_API_BASE =
-  process.env.REACT_APP_FOMC_API_BASE || 'https://legal-rag-api.katishay.workers.dev';
+  import.meta.env.VITE_FOMC_API_BASE || 'https://legal-rag-api.katishay.workers.dev';
 
 const STATIC_EVAL_BY_DATE = Object.fromEntries(
   EXPANDING_WINDOW_DATA.map((r) => [r.testDate, r])
