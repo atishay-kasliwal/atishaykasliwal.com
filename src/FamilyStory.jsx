@@ -850,7 +850,7 @@ function InfiniteCanvas({ focusedId, hoveredId, onHover, onSelect, flyToRef, onC
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const zoom = Math.min(rect.width / WORLD_W, rect.height / WORLD_H) * 0.85;
+    const zoom = Math.min(rect.width / WORLD_W, rect.height / WORLD_H) * 0.95;
     camRef.current = { x: WORLD_W / 2, y: WORLD_H / 2, zoom };
     applyCamera();
   }, [applyCamera]);
@@ -939,7 +939,7 @@ function InfiniteCanvas({ focusedId, hoveredId, onHover, onSelect, flyToRef, onC
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const zoom = Math.min(rect.width / WORLD_W, rect.height / WORLD_H) * 0.85;
+    const zoom = Math.min(rect.width / WORLD_W, rect.height / WORLD_H) * 0.95;
     flyTo(WORLD_W / 2, WORLD_H / 2, zoom);
   };
 
@@ -1100,7 +1100,7 @@ function FamilyTreeSVG({ focusedId, hoveredId, activeIds, onHover, onNodeClick }
         const isFocus = focusedId === p.id;
         const isHover = hoveredId === p.id;
         const isSelf = p.id === 'atishay';
-        const r = isFocus ? 52 : isHover ? 44 : 36;
+        const r = isFocus ? 70 : isHover ? 58 : 46;
         return (
           <g key={p.id}
             style={{ cursor: 'pointer', opacity: isActive ? 1 : 0.18 }}
@@ -1110,21 +1110,21 @@ function FamilyTreeSVG({ focusedId, hoveredId, activeIds, onHover, onNodeClick }
           >
             <circle cx={pos.x} cy={pos.y} r={r} fill={`url(#fc-glow-${branch})`}
               style={{ transition: 'r 300ms ease' }} />
-            <circle cx={pos.x} cy={pos.y} r={12} fill={accent} opacity={0} filter="url(#fc-soft-glow)">
-              <animate attributeName="r" values="8;20;8" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
+            <circle cx={pos.x} cy={pos.y} r={16} fill={accent} opacity={0} filter="url(#fc-soft-glow)">
+              <animate attributeName="r" values="10;26;10" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
               <animate attributeName="opacity" values="0;0.3;0" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
             </circle>
-            <circle cx={pos.x} cy={pos.y} r={isFocus || isHover ? 8 : 5} fill={accent}
-              stroke={isSelf ? 'rgba(255,255,255,0.9)' : 'none'} strokeWidth={isSelf ? 1.5 : 0}
+            <circle cx={pos.x} cy={pos.y} r={isFocus || isHover ? 11 : 7} fill={accent}
+              stroke={isSelf ? 'rgba(255,255,255,0.9)' : 'none'} strokeWidth={isSelf ? 2 : 0}
               style={{ transition: 'all 250ms ease' }} />
-            <text x={pos.x} y={pos.y + 42} textAnchor="middle"
-              fill={isActive ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.3)'}
-              fontSize={13} letterSpacing="0.2em"
-              style={{ textTransform: 'uppercase', fontWeight: 300, pointerEvents: 'none' }}>
+            <text x={pos.x} y={pos.y + 58} textAnchor="middle"
+              fill={isActive ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.3)'}
+              fontSize={22} letterSpacing="0.18em"
+              style={{ textTransform: 'uppercase', fontWeight: 400, pointerEvents: 'none' }}>
               {p.name.split(' ')[0]}{isSelf && ' ●'}
             </text>
-            <text x={pos.x} y={pos.y + 60} textAnchor="middle"
-              fill={accent} opacity={0.5} fontSize={10} letterSpacing="0.15em"
+            <text x={pos.x} y={pos.y + 82} textAnchor="middle"
+              fill={accent} opacity={0.6} fontSize={16} letterSpacing="0.12em"
               style={{ pointerEvents: 'none' }}>
               {p.birth}{p.death ? `–${p.death}` : ''}
             </text>
