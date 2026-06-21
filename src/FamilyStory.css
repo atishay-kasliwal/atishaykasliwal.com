@@ -510,7 +510,7 @@
 .fs-lens-btn--active {
   border-color: var(--lens-color);
   color: var(--lens-color);
-  background: color-mix(in srgb, var(--lens-color) 10%, transparent);
+  background: rgba(200, 169, 110, 0.1);
 }
 
 /* Explorer body */
