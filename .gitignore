@@ -82,3 +82,13 @@ VERIFY_CLOUDFLARE_SETUP.md
 VERIFY_OWNERSHIP.md
 cloudflare-pages-setup.md
 ADD_CUSTOM_DOMAIN.md
+
+# local asset stashes (not part of the web app)
+/_assets/
+/_reference/
+/docs/
+/static/
+/aibot-logger/
+/final product/
+/filter_n4_and_masks.py
+/env-template.txt
