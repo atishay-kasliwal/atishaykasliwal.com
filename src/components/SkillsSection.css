@@ -1,15 +1,11 @@
-#skills-section {
+.skills-section {
   width: 90vw;
   max-width: 1400px;
   margin: 0 auto;
   padding: 3rem 0;
 }
 
-.skills-section-header {
-  margin-bottom: 2.5rem;
-}
-
-.skills-section-header h2 {
+.skills-section h2 {
   font-size: 2.25rem;
   font-weight: 700;
   color: #fff;
@@ -17,10 +13,10 @@
   letter-spacing: -0.02em;
 }
 
-.skills-section-header p {
+.skills-section > p {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.5);
-  margin: 0;
+  margin: 0 0 2.5rem 0;
   line-height: 1.6;
   max-width: 560px;
 }
@@ -31,7 +27,7 @@
   gap: 1.25rem;
 }
 
-.skill-category {
+.skills-category {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
@@ -39,12 +35,12 @@
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.skill-category:hover {
+.skills-category:hover {
   border-color: rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.06);
 }
 
-.skill-category-title {
+.skills-category h3 {
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -53,7 +49,7 @@
   margin: 0 0 1rem 0;
 }
 
-.skill-tags {
+.skills-list {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
@@ -80,24 +76,24 @@
 }
 
 @media (max-width: 900px) {
-  #skills-section { width: 92vw; }
+  .skills-section { width: 92vw; }
   .skills-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
 }
 
 @media (max-width: 640px) {
-  #skills-section { width: 100%; padding: 2.5rem 1rem; box-sizing: border-box; }
-  .skills-section-header h2 { font-size: 1.8rem; }
+  .skills-section { width: 100%; padding: 2.5rem 1rem; box-sizing: border-box; }
+  .skills-section h2 { font-size: 1.8rem; }
   .skills-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-  .skill-category { padding: 1rem; }
+  .skills-category { padding: 1rem; }
   .skill-tag { font-size: 0.68rem; padding: 0.3rem 0.6rem; }
 }
 
 @media (max-width: 480px) {
-  #skills-section { padding: 2rem 1rem; }
-  .skills-section-header h2 { font-size: 1.6rem; }
+  .skills-section { padding: 2rem 1rem; }
+  .skills-section h2 { font-size: 1.6rem; }
   .skills-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-  .skill-category { padding: 0.9rem 0.85rem 0.8rem; }
-  .skill-category-title { font-size: 0.58rem; margin-bottom: 0.75rem; }
+  .skills-category { padding: 0.9rem 0.85rem 0.8rem; }
+  .skills-category h3 { font-size: 0.58rem; margin-bottom: 0.75rem; }
   .skill-tag { font-size: 0.64rem; padding: 0.28rem 0.55rem; }
 }
 
