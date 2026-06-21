@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import './FamilyStory.css';
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -643,14 +643,16 @@ export default function FamilyStory() {
   const [openPersonId, setOpenPersonId] = useState(null);
   const [branchPickerId, setBranchPickerId] = useState(null);
   const [lens, setLens] = useState('Family');
+  const flyToRef = useRef(null);
 
   function handleNodeSelect(id) {
+    if (flyToRef.current) flyToRef.current(id);
     setFocusedId(id);
     const children = getChildren(id);
     if (children.length >= 2) {
-      setBranchPickerId(id);
+      setTimeout(() => setBranchPickerId(id), 600);
     } else {
-      setOpenPersonId(id);
+      setTimeout(() => setOpenPersonId(id), 600);
     }
   }
 
@@ -670,20 +672,14 @@ export default function FamilyStory() {
           }}
         >
           {lens === 'Family' && (
-            <div className="fc-graph-wrap">
-              <FamilyTree
-                focusedId={focusedId}
-                hoveredId={hoveredId}
-                onHover={setHoveredId}
-                onSelect={handleNodeSelect}
-              />
-              {focusedId && (
-                <div className="fc-branch-badge">
-                  Exploring · {PEOPLE_BY_ID[focusedId].name} branch
-                  <button onClick={() => setFocusedId(null)} className="fc-branch-clear">Clear</button>
-                </div>
-              )}
-            </div>
+            <InfiniteCanvas
+              focusedId={focusedId}
+              hoveredId={hoveredId}
+              onHover={setHoveredId}
+              onSelect={handleNodeSelect}
+              flyToRef={flyToRef}
+              onClearFocus={() => setFocusedId(null)}
+            />
           )}
           {lens === 'Occupation' && <OccupationView />}
           {lens === 'Timeline' && <TimelineView />}
@@ -702,7 +698,7 @@ export default function FamilyStory() {
         <PersonDetail
           person={PEOPLE_BY_ID[openPersonId]}
           onClose={() => setOpenPersonId(null)}
-          onSelect={(id) => { setOpenPersonId(id); setFocusedId(id); }}
+          onSelect={(id) => { setOpenPersonId(id); setFocusedId(id); if (flyToRef.current) flyToRef.current(id); }}
         />
       )}
     </div>
@@ -765,21 +761,17 @@ function ExperienceShell({ children, lens, setLens, onExit }) {
   );
 }
 
-// ─── Family Tree (Neural Graph SVG) ──────────────────────────────────────────
+// ─── World layout (computed once outside components) ─────────────────────────
 
-function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
-  const W = 1800;
-  const H = 1400;
-  const BANDS = {
-    paternal: [0.04, 0.40],
-    self:     [0.42, 0.58],
-    maternal: [0.60, 0.96],
-  };
+const WORLD_W = 2400;
+const WORLD_H = 1800;
+const BANDS = { paternal: [0.04, 0.40], self: [0.41, 0.59], maternal: [0.60, 0.96] };
 
+function computePositions() {
   const positions = new Map();
   for (let gi = 0; gi < 4; gi++) {
     const g = gi + 1;
-    const y = 110 + (gi * (H - 220)) / 3;
+    const y = 160 + (gi * (WORLD_H - 320)) / 3;
     const byBranch = { paternal: [], self: [], maternal: [] };
     for (const p of PEOPLE) {
       if (p.generation === g) byBranch[getBranch(p.id)].push(p);
@@ -788,7 +780,7 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
       const row = byBranch[br];
       if (!row.length) return;
       const [a, b] = BANDS[br];
-      const left = a * W, right = b * W;
+      const left = a * WORLD_W, right = b * WORLD_W;
       if (row.length === 1) {
         positions.set(row[0].id, { x: (left + right) / 2, y });
       } else {
@@ -798,9 +790,213 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
       }
     });
   }
+  return positions;
+}
+
+const POSITIONS = computePositions();
+
+// ─── Infinite Canvas ──────────────────────────────────────────────────────────
+
+const MIN_ZOOM = 0.25;
+const MAX_ZOOM = 3.0;
+const FLY_DURATION = 700;
+
+function easeInOut(t) {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
+
+function InfiniteCanvas({ focusedId, hoveredId, onHover, onSelect, flyToRef, onClearFocus }) {
+  const containerRef = useRef(null);
+  const camRef = useRef({ x: WORLD_W / 2, y: WORLD_H / 2, zoom: 0.55 });
+  const flyRef = useRef(null);
+  const dragRef = useRef(null);
+  const lastTouchRef = useRef(null);
+
+  const applyCamera = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const { x, y, zoom } = camRef.current;
+    const rect = el.getBoundingClientRect();
+    const tx = rect.width / 2 - x * zoom;
+    const ty = rect.height / 2 - y * zoom;
+    const world = el.querySelector('.fc-world');
+    if (world) world.style.transform = `translate(${tx}px, ${ty}px) scale(${zoom})`;
+  }, []);
+
+  const flyTo = useCallback((wx, wy, targetZoom) => {
+    const start = { ...camRef.current };
+    const startTime = performance.now();
+    if (flyRef.current) cancelAnimationFrame(flyRef.current);
+    const animate = (now) => {
+      const t = Math.min((now - startTime) / FLY_DURATION, 1);
+      const e = easeInOut(t);
+      camRef.current.x = start.x + (wx - start.x) * e;
+      camRef.current.y = start.y + (wy - start.y) * e;
+      camRef.current.zoom = start.zoom + (targetZoom - start.zoom) * e;
+      applyCamera();
+      if (t < 1) flyRef.current = requestAnimationFrame(animate);
+    };
+    flyRef.current = requestAnimationFrame(animate);
+  }, [applyCamera]);
+
+  useEffect(() => {
+    flyToRef.current = (id) => {
+      const pos = POSITIONS.get(id);
+      if (pos) flyTo(pos.x, pos.y, 1.4);
+    };
+  }, [flyTo, flyToRef]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const zoom = Math.min(rect.width / WORLD_W, rect.height / WORLD_H) * 0.85;
+    camRef.current = { x: WORLD_W / 2, y: WORLD_H / 2, zoom };
+    applyCamera();
+  }, [applyCamera]);
+
+  const onWheel = useCallback((e) => {
+    e.preventDefault();
+    if (flyRef.current) { cancelAnimationFrame(flyRef.current); flyRef.current = null; }
+    const el = containerRef.current;
+    const rect = el.getBoundingClientRect();
+    const { zoom, x, y } = camRef.current;
+    const factor = e.deltaY < 0 ? 1.1 : 0.9;
+    const newZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom * factor));
+    const cx = (e.clientX - rect.left - rect.width / 2) / zoom + x;
+    const cy = (e.clientY - rect.top - rect.height / 2) / zoom + y;
+    camRef.current.x = cx - (e.clientX - rect.left - rect.width / 2) / newZoom;
+    camRef.current.y = cy - (e.clientY - rect.top - rect.height / 2) / newZoom;
+    camRef.current.zoom = newZoom;
+    applyCamera();
+  }, [applyCamera]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [onWheel]);
+
+  const onPointerDown = useCallback((e) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    if (flyRef.current) { cancelAnimationFrame(flyRef.current); flyRef.current = null; }
+    dragRef.current = { startX: e.clientX, startY: e.clientY, camX: camRef.current.x, camY: camRef.current.y, moved: false };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }, []);
+
+  const onPointerMove = useCallback((e) => {
+    if (!dragRef.current) return;
+    const dx = e.clientX - dragRef.current.startX;
+    const dy = e.clientY - dragRef.current.startY;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragRef.current.moved = true;
+    if (!dragRef.current.moved) return;
+    camRef.current.x = dragRef.current.camX - dx / camRef.current.zoom;
+    camRef.current.y = dragRef.current.camY - dy / camRef.current.zoom;
+    applyCamera();
+  }, [applyCamera]);
+
+  const onPointerUp = useCallback(() => { dragRef.current = null; }, []);
+
+  const onTouchStart = useCallback((e) => {
+    if (e.touches.length === 2) {
+      lastTouchRef.current = {
+        dist: Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY),
+        zoom: camRef.current.zoom,
+      };
+    }
+  }, []);
+
+  const onTouchMove = useCallback((e) => {
+    if (e.touches.length === 2 && lastTouchRef.current) {
+      e.preventDefault();
+      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      camRef.current.zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, lastTouchRef.current.zoom * (dist / lastTouchRef.current.dist)));
+      applyCamera();
+    }
+  }, [applyCamera]);
+
+  const onTouchEnd = useCallback(() => { lastTouchRef.current = null; }, []);
+
+  const onDoubleClick = useCallback((e) => {
+    const el = containerRef.current;
+    const rect = el.getBoundingClientRect();
+    const { zoom, x, y } = camRef.current;
+    const wx = (e.clientX - rect.left - rect.width / 2) / zoom + x;
+    const wy = (e.clientY - rect.top - rect.height / 2) / zoom + y;
+    flyTo(wx, wy, Math.min(MAX_ZOOM, zoom * 1.6));
+  }, [flyTo]);
+
+  const handleNodeClick = useCallback((e, id) => {
+    if (dragRef.current && dragRef.current.moved) return;
+    e.stopPropagation();
+    onSelect(id);
+  }, [onSelect]);
+
+  const zoomBy = (factor) => flyTo(camRef.current.x, camRef.current.y, Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, camRef.current.zoom * factor)));
+
+  const fitAll = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const zoom = Math.min(rect.width / WORLD_W, rect.height / WORLD_H) * 0.85;
+    flyTo(WORLD_W / 2, WORLD_H / 2, zoom);
+  };
 
   const activeIds = focusedId ? getBranchIds(focusedId) : new Set(PEOPLE.map((p) => p.id));
 
+  return (
+    <div className="fc-canvas-root"
+      ref={containerRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onDoubleClick={onDoubleClick}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      <div className="fc-world">
+        <FamilyTreeSVG
+          focusedId={focusedId}
+          hoveredId={hoveredId}
+          activeIds={activeIds}
+          onHover={onHover}
+          onNodeClick={handleNodeClick}
+        />
+      </div>
+
+      <div className="fc-hud">
+        <button className="fc-hud-btn" onClick={() => zoomBy(1.3)} title="Zoom in">+</button>
+        <button className="fc-hud-btn" onClick={() => zoomBy(0.7)} title="Zoom out">−</button>
+        <button className="fc-hud-btn" onClick={fitAll} title="Fit all">⊡</button>
+      </div>
+
+      <div className="fc-legend">
+        {Object.keys(BRANCH_COLORS).map((br) => (
+          <div key={br} className="fc-legend-row">
+            <span className="fc-legend-dot" style={{ background: BRANCH_COLORS[br].core }} />
+            <span className="fc-legend-label">{BRANCH_COLORS[br].label}</span>
+          </div>
+        ))}
+      </div>
+
+      {focusedId && (
+        <div className="fc-branch-badge">
+          {PEOPLE_BY_ID[focusedId].name} line
+          <button onClick={onClearFocus} className="fc-branch-clear">Clear</button>
+        </div>
+      )}
+
+      <div className="fc-canvas-hint">Drag to pan · Scroll to zoom · Click a node to explore</div>
+    </div>
+  );
+}
+
+// ─── Family Tree SVG (pure render, no camera logic) ──────────────────────────
+
+function FamilyTreeSVG({ focusedId, hoveredId, activeIds, onHover, onNodeClick }) {
   const edges = [];
   for (const p of PEOPLE) {
     for (const child of getChildren(p.id)) {
@@ -817,16 +1013,16 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
       if (!seenPair.has(key)) { seenPair.add(key); partnerPairs.push({ a, b }); }
     }
   }
-  const implicitPairs = [['devraj', 'sushila']];
-  for (const [a, b] of implicitPairs) {
+  for (const [a, b] of [['devraj', 'sushila']]) {
     const key = [a, b].sort().join('|');
-    if (!seenPair.has(key) && positions.has(a) && positions.has(b)) {
+    if (!seenPair.has(key) && POSITIONS.has(a) && POSITIONS.has(b)) {
       seenPair.add(key); partnerPairs.push({ a, b });
     }
   }
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="fc-svg" preserveAspectRatio="xMidYMid meet">
+    <svg width={WORLD_W} height={WORLD_H} viewBox={`0 0 ${WORLD_W} ${WORLD_H}`}
+      style={{ display: 'block', overflow: 'visible' }}>
       <defs>
         {Object.keys(BRANCH_COLORS).map((br) => (
           <radialGradient key={br} id={`fc-glow-${br}`} cx="50%" cy="50%" r="50%">
@@ -835,38 +1031,47 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
             <stop offset="100%" stopColor={BRANCH_COLORS[br].glow} stopOpacity={0} />
           </radialGradient>
         ))}
-        <filter id="fc-neural-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="1.4" result="b" />
+        <filter id="fc-neural-glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="2" result="b" />
           <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
-        <filter id="fc-soft-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" />
+        <filter id="fc-soft-glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="5" />
         </filter>
       </defs>
 
+      {[0, 1, 2, 3].map((i) => {
+        const y = 160 + (i * (WORLD_H - 320)) / 3;
+        return <line key={i} x1={60} x2={WORLD_W - 60} y1={y} y2={y}
+          stroke="rgba(255,255,255,0.04)" strokeDasharray="3 10" />;
+      })}
+
       {[1, 2, 3, 4].map((g, i) => {
-        const y = 110 + (i * (H - 220)) / 3;
+        const y = 160 + (i * (WORLD_H - 320)) / 3;
         return (
-          <line key={g} x1={40} x2={W - 40} y1={y} y2={y}
-            stroke="rgba(255,255,255,0.04)" strokeDasharray="2 8" />
+          <text key={g} x={30} y={y - 18} fill="rgba(255,255,255,0.18)"
+            fontSize={10} letterSpacing="0.3em" style={{ textTransform: 'uppercase' }}>
+            Gen {g}
+          </text>
         );
       })}
 
       {partnerPairs.map(({ a, b }, i) => {
-        const pa = positions.get(a), pb = positions.get(b);
+        const pa = POSITIONS.get(a), pb = POSITIONS.get(b);
         if (!pa || !pb) return null;
-        const midX = (pa.x + pb.x) / 2, midY = (pa.y + pb.y) / 2 - 18;
+        const midX = (pa.x + pb.x) / 2, midY = (pa.y + pb.y) / 2 - 24;
         const d = `M ${pa.x} ${pa.y} Q ${midX} ${midY} ${pb.x} ${pb.y}`;
         const active = activeIds.has(a) && activeIds.has(b);
         return (
           <path key={`pair-${i}`} d={d} fill="none"
-            stroke="rgba(245,220,150,0.9)" strokeWidth={0.8} strokeDasharray="3 5"
-            filter="url(#fc-neural-glow)" opacity={active ? 0.55 : 0.18} />
+            stroke="rgba(245,220,150,0.9)" strokeWidth={1}
+            strokeDasharray="4 7" filter="url(#fc-neural-glow)"
+            opacity={active ? 0.55 : 0.12} />
         );
       })}
 
       {edges.map((e, idx) => {
-        const a = positions.get(e.from), b = positions.get(e.to);
+        const a = POSITIONS.get(e.from), b = POSITIONS.get(e.to);
         if (!a || !b) return null;
         const active = activeIds.has(e.from) && activeIds.has(e.to);
         const color = BRANCH_COLORS[getBranch(e.to)].core;
@@ -874,12 +1079,11 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
         const d = `M ${a.x} ${a.y} C ${a.x} ${midY}, ${b.x} ${midY}, ${b.x} ${b.y}`;
         return (
           <g key={idx}>
-            <path d={d} fill="none" stroke={color} strokeWidth={0.9}
-              filter="url(#fc-neural-glow)" opacity={active ? 0.6 : 0.14} />
+            <path d={d} fill="none" stroke={color} strokeWidth={1.1}
+              filter="url(#fc-neural-glow)" opacity={active ? 0.65 : 0.1} />
             {active && (
-              <circle r={1.8} fill={color} filter="url(#fc-neural-glow)">
-                <animateMotion
-                  dur={`${3 + (idx % 3)}s`} repeatCount="indefinite"
+              <circle r={2.2} fill={color} filter="url(#fc-neural-glow)">
+                <animateMotion dur={`${3 + (idx % 3)}s`} repeatCount="indefinite"
                   begin={`${(idx % 5) * 0.4}s`} path={d} />
               </circle>
             )}
@@ -888,7 +1092,7 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
       })}
 
       {PEOPLE.map((p) => {
-        const pos = positions.get(p.id);
+        const pos = POSITIONS.get(p.id);
         if (!pos) return null;
         const branch = getBranch(p.id);
         const accent = getNodeAccent(p.id);
@@ -896,51 +1100,37 @@ function FamilyTree({ focusedId, hoveredId, onHover, onSelect }) {
         const isFocus = focusedId === p.id;
         const isHover = hoveredId === p.id;
         const isSelf = p.id === 'atishay';
+        const r = isFocus ? 52 : isHover ? 44 : 36;
         return (
           <g key={p.id}
-            style={{ cursor: 'pointer', opacity: isActive ? 1 : 0.22 }}
+            style={{ cursor: 'pointer', opacity: isActive ? 1 : 0.18 }}
             onMouseEnter={() => onHover(p.id)}
             onMouseLeave={() => onHover(null)}
-            onClick={() => onSelect(p.id)}
+            onClick={(e) => onNodeClick(e, p.id)}
           >
-            <circle cx={pos.x} cy={pos.y} r={isFocus ? 46 : 32}
-              fill={`url(#fc-glow-${branch})`}
-              style={{ transition: 'r 400ms ease' }} />
-            <circle cx={pos.x} cy={pos.y} r={10} fill={accent} opacity={0} filter="url(#fc-soft-glow)">
-              <animate attributeName="r" values="6;16;6" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0;0.35;0" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
+            <circle cx={pos.x} cy={pos.y} r={r} fill={`url(#fc-glow-${branch})`}
+              style={{ transition: 'r 300ms ease' }} />
+            <circle cx={pos.x} cy={pos.y} r={12} fill={accent} opacity={0} filter="url(#fc-soft-glow)">
+              <animate attributeName="r" values="8;20;8" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0;0.3;0" dur={`${4 + (p.birth % 3)}s`} repeatCount="indefinite" />
             </circle>
-            <circle cx={pos.x} cy={pos.y}
-              r={isFocus || isHover ? 6.5 : 4.5}
-              fill={accent}
-              stroke={isSelf ? 'white' : 'none'}
-              strokeWidth={isSelf ? 1 : 0}
-              style={{ transition: 'all 300ms ease' }} />
-            <text x={pos.x} y={pos.y + 32} textAnchor="middle"
-              fill={isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)'}
-              fontSize={11.5} letterSpacing="0.18em"
-              style={{ textTransform: 'uppercase', fontWeight: 300 }}>
+            <circle cx={pos.x} cy={pos.y} r={isFocus || isHover ? 8 : 5} fill={accent}
+              stroke={isSelf ? 'rgba(255,255,255,0.9)' : 'none'} strokeWidth={isSelf ? 1.5 : 0}
+              style={{ transition: 'all 250ms ease' }} />
+            <text x={pos.x} y={pos.y + 42} textAnchor="middle"
+              fill={isActive ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.3)'}
+              fontSize={13} letterSpacing="0.2em"
+              style={{ textTransform: 'uppercase', fontWeight: 300, pointerEvents: 'none' }}>
               {p.name.split(' ')[0]}{isSelf && ' ●'}
             </text>
-            <text x={pos.x} y={pos.y + 48} textAnchor="middle"
-              fill={accent} opacity={0.55} fontSize={9.5} letterSpacing="0.15em">
+            <text x={pos.x} y={pos.y + 60} textAnchor="middle"
+              fill={accent} opacity={0.5} fontSize={10} letterSpacing="0.15em"
+              style={{ pointerEvents: 'none' }}>
               {p.birth}{p.death ? `–${p.death}` : ''}
             </text>
           </g>
         );
       })}
-
-      <g transform={`translate(${W - 240}, 30)`}>
-        {Object.keys(BRANCH_COLORS).map((br, i) => (
-          <g key={br} transform={`translate(0, ${i * 22})`}>
-            <circle cx={0} cy={0} r={4} fill={BRANCH_COLORS[br].core} filter="url(#fc-neural-glow)" />
-            <text x={14} y={4} fill="rgba(255,255,255,0.55)" fontSize={9.5} letterSpacing="0.25em"
-              style={{ textTransform: 'uppercase' }}>
-              {BRANCH_COLORS[br].label}
-            </text>
-          </g>
-        ))}
-      </g>
     </svg>
   );
 }
