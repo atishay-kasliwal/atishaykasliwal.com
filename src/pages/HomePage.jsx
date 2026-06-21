@@ -383,7 +383,7 @@ function HomePage() {
           </div>
         </section>
 
-        <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
+        <div id="skills-section" data-analytics-section="skills" translate="no">
           <SkillsSection />
         </div>
 

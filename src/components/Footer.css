@@ -19,6 +19,8 @@
   width: 100%;
   max-width: none;
   margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
 }
 
 .footer-brand {
