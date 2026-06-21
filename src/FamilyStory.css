@@ -6,20 +6,20 @@
 
 :root {
   --fs-gold:        #c8a96e;
-  --fs-gold-dim:    rgba(200, 169, 110, 0.15);
-  --fs-gold-glow:   rgba(200, 169, 110, 0.08);
-  --fs-white:       #f5f3ef;
-  --fs-white-80:    rgba(245, 243, 239, 0.8);
-  --fs-white-50:    rgba(245, 243, 239, 0.5);
-  --fs-white-20:    rgba(245, 243, 239, 0.2);
-  --fs-white-08:    rgba(245, 243, 239, 0.08);
-  --fs-white-04:    rgba(245, 243, 239, 0.04);
-  --fs-surface:     #0a0a0a;
-  --fs-surface-1:   #111111;
-  --fs-surface-2:   #181818;
-  --fs-surface-3:   #212121;
-  --fs-border:      rgba(245, 243, 239, 0.08);
-  --fs-border-gold: rgba(200, 169, 110, 0.2);
+  --fs-gold-dim:    rgba(200, 169, 110, 0.12);
+  --fs-gold-glow:   rgba(200, 169, 110, 0.05);
+  --fs-white:       rgba(255, 255, 255, 0.92);
+  --fs-white-80:    rgba(255, 255, 255, 0.7);
+  --fs-white-50:    rgba(255, 255, 255, 0.45);
+  --fs-white-20:    rgba(255, 255, 255, 0.15);
+  --fs-white-08:    rgba(255, 255, 255, 0.06);
+  --fs-white-04:    rgba(255, 255, 255, 0.03);
+  --fs-surface:     transparent;
+  --fs-surface-1:   rgba(255, 255, 255, 0.03);
+  --fs-surface-2:   rgba(255, 255, 255, 0.04);
+  --fs-surface-3:   rgba(255, 255, 255, 0.07);
+  --fs-border:      rgba(255, 255, 255, 0.08);
+  --fs-border-gold: rgba(200, 169, 110, 0.18);
 
   --fs-font-display: 'Montserrat', 'Inter', sans-serif;
   --fs-font-body:    'Inter', -apple-system, sans-serif;
@@ -38,7 +38,7 @@
    ────────────────────────────────────────────────────────────────────────── */
 .fs-page {
   min-height: 100vh;
-  background: var(--fs-surface);
+  background: transparent;
   color: var(--fs-white);
   font-family: var(--fs-font-body);
   overflow-x: hidden;
@@ -59,7 +59,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,169,110,0.06) 0%, transparent 70%);
+  background: transparent;
 }
 
 .fs-landing--revealed .fs-landing-inner > * {
@@ -96,8 +96,9 @@
   border: 1px solid var(--fs-border-gold);
   border-radius: 100px;
   padding: 0.6rem 2rem;
-  background: var(--fs-gold-glow);
-  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -216,8 +217,8 @@
 
 .fs-particle {
   position: absolute;
-  width: 2px;
-  height: 2px;
+  width: 1px;
+  height: 1px;
   background: var(--fs-gold);
   border-radius: 50%;
   animation: fs-float linear infinite;
@@ -412,7 +413,7 @@
   flex-direction: column;
   height: calc(100vh - 60px);
   overflow: hidden;
-  background: var(--fs-surface);
+  background: transparent;
 }
 
 .fs-explorer-topbar {
@@ -422,8 +423,9 @@
   gap: 1rem;
   padding: 0 1.5rem;
   border-bottom: 1px solid var(--fs-border);
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(16px);
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   flex-shrink: 0;
   z-index: 10;
   overflow-x: auto;
@@ -487,7 +489,9 @@
   gap: 0.5rem;
   padding: 0 1.5rem;
   border-bottom: 1px solid var(--fs-border);
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   flex-shrink: 0;
 }
 
@@ -585,7 +589,9 @@
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
-  background: var(--fs-surface-1);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid var(--fs-border);
   padding: 1.5rem;
   position: relative;
@@ -950,7 +956,7 @@
   align-items: center;
   gap: 0.85rem;
   padding: 0.75rem 1rem;
-  background: var(--fs-surface-2);
+  background: rgba(0,0,0,0.3);
   border: 1px solid var(--fs-border);
   border-radius: 10px;
   cursor: pointer;
@@ -960,7 +966,7 @@
   width: 100%;
   border-left: 2px solid var(--accent, var(--fs-gold));
 }
-.fs-timeline-person-card:hover { border-color: var(--accent, var(--fs-gold)); background: var(--fs-surface-3); }
+.fs-timeline-person-card:hover { border-color: var(--accent, var(--fs-gold)); background: rgba(0,0,0,0.45); }
 
 .fs-timeline-person-info { flex: 1; min-width: 0; }
 .fs-timeline-person-name {
@@ -1049,7 +1055,7 @@
 
 .fs-lineage-card {
   flex: 1;
-  background: var(--fs-surface-2);
+  background: rgba(0,0,0,0.3);
   border: 1px solid var(--fs-border);
   border-left: 2px solid var(--accent, var(--fs-gold));
   border-radius: 8px;
@@ -1064,7 +1070,7 @@
   flex-direction: column;
   gap: 0.15rem;
 }
-.fs-lineage-card:hover { border-color: var(--accent, var(--fs-gold)); background: var(--fs-surface-3); }
+.fs-lineage-card:hover { border-color: var(--accent, var(--fs-gold)); background: rgba(0,0,0,0.45); }
 
 .fs-lineage-era {
   font-size: 0.65rem;
@@ -1091,7 +1097,7 @@
 }
 
 .fs-edu-card {
-  background: var(--fs-surface-2);
+  background: rgba(0,0,0,0.3);
   border: 1px solid var(--fs-border);
   border-top: 2px solid var(--accent, #9b8fd4);
   border-radius: 8px;
@@ -1104,7 +1110,7 @@
   gap: 0.2rem;
   transition: all 0.2s;
 }
-.fs-edu-card:hover { border-color: var(--accent, #9b8fd4); background: var(--fs-surface-3); transform: translateY(-2px); }
+.fs-edu-card:hover { border-color: var(--accent, #9b8fd4); background: rgba(0,0,0,0.45); transform: translateY(-2px); }
 
 .fs-edu-era {
   font-size: 0.65rem;
@@ -1124,7 +1130,7 @@
 }
 
 .fs-business-card {
-  background: var(--fs-surface-2);
+  background: rgba(0,0,0,0.3);
   border: 1px solid var(--fs-border);
   border-radius: 10px;
   padding: 1rem;
@@ -1280,7 +1286,7 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: var(--fs-surface-2);
+  background: rgba(0,0,0,0.3);
   border: 1px solid var(--fs-border);
   border-radius: 10px;
   cursor: pointer;
@@ -1290,7 +1296,7 @@
   width: 100%;
   border-left: 2px solid var(--accent, var(--fs-gold));
 }
-.fs-legacy-card:hover { border-color: var(--accent, var(--fs-gold)); background: var(--fs-surface-3); }
+.fs-legacy-card:hover { border-color: var(--accent, var(--fs-gold)); background: rgba(0,0,0,0.45); }
 
 .fs-legacy-card__content { flex: 1; min-width: 0; }
 .fs-legacy-card__name { display: block; font-weight: 600; font-size: 0.9rem; color: var(--fs-white); }
@@ -1335,8 +1341,9 @@
 .fs-search-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   z-index: 100;
   display: flex;
   align-items: flex-start;
@@ -1353,7 +1360,9 @@
 .fs-search-box {
   width: 100%;
   max-width: 560px;
-  background: var(--fs-surface-1);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--fs-border-gold);
   border-radius: 14px;
   overflow: hidden;
@@ -1458,7 +1467,7 @@
   min-height: calc(100vh - 60px);
   display: flex;
   align-items: flex-start;
-  background: var(--fs-surface);
+  background: transparent;
   overflow: hidden;
   transition: opacity 0.4s var(--fs-ease-out);
 }
@@ -1601,7 +1610,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: var(--fs-surface-2);
+  background: rgba(0,0,0,0.3);
   border: 1px solid var(--fs-border);
   border-left: 2px solid var(--accent, var(--fs-gold));
   border-radius: 10px;
@@ -1613,7 +1622,7 @@
 }
 .fs-story-branch-card:hover {
   border-color: var(--accent, var(--fs-gold));
-  background: var(--fs-surface-3);
+  background: rgba(0,0,0,0.45);
   transform: translateX(4px);
 }
 
