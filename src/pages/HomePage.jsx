@@ -214,20 +214,6 @@ function HomePage() {
                 </div>
               </div>
 
-              <div className="landing-right-images" translate="no">
-                <p className="grid-worked-with" translate="no">Worked with</p>
-                <div className="exp-list" translate="no">
-                  {gridImages.map((item, i) => (
-                    <div key={i} className="exp-list-item" translate="no">
-                      <img src={item.src} alt={item.company} className="exp-list-logo" loading="lazy" />
-                      <div className="exp-list-text" translate="no">
-                        <span className="exp-list-company" translate="no">{item.company}</span>
-                        <span className="exp-list-role" translate="no">{item.role}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
             </div>
           </div>
