@@ -41,15 +41,12 @@ function AnalyticsTracker() {
   return null;
 }
 
-function App() {
-  useEffect(() => {
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-  }, []);
+function AppInner() {
+  const location = useLocation();
+  const isFamily = location.pathname === '/family';
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <AnalyticsTracker />
       <StarBackground />
@@ -66,7 +63,21 @@ function App() {
           <Route path="/family" element={<FamilyStory />} />
         </Routes>
       </ErrorBoundary>
-      <Footer />
+      {!isFamily && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  return (
+    <Router>
+      <AppInner />
     </Router>
   );
 }

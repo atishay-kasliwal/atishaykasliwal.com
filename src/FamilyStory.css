@@ -153,15 +153,19 @@
 /* ── Experience Shell ─────────────────────────────────────────────────────── */
 
 .fc-shell {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: transparent;
+  overflow: hidden;
 }
 
 .fc-shell-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 3rem;
+  padding: 0.75rem 2rem;
+  flex-shrink: 0;
 }
 
 .fc-shell-wordmark {
@@ -202,14 +206,21 @@
   color: rgba(255, 255, 255, 0.35);
 }
 
-.fc-shell-body { padding: 0 0.5rem; }
+.fc-shell-body {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
 
 /* ── Infinite Canvas ─────────────────────────────────────────────────────── */
 
 .fc-canvas-root {
   position: relative;
   width: 100%;
-  height: calc(100vh - 120px);
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
   cursor: grab;
   user-select: none;
