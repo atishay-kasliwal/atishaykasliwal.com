@@ -2,4 +2,6 @@
 /highlights /index.html 200
 /highlights/* /index.html 200
 /Highlights/* /index.html 200
+/resume /index.html 200
+/family /index.html 200
 /* /index.html 200
