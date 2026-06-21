@@ -1,26 +1,80 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+aibot-logger/node_modules/
 
 # testing
 /coverage
 
 # production
 /build
+/out
+
+# next.js
+/.next/
+/out/
 
 # misc
 .DS_Store
+._*
 .env
-**/serviceAccountKey.json
-**/serviceAccountKey*.json
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+**/serviceAccountKey.json
+**/serviceAccountKey*.json
 
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# deployment artifacts
+*.sh
+_redirects
+CNAME.backup
+asset-manifest.json
+404.html
+humans.txt
+
+# junk docs (deployment guides, setup notes)
+ADD_CUSTOM_DOMAIN.md
+AUTOMATED_DEPLOYMENT_GUIDE.md
+BANNER_BLOCKS_IDEAS.md
+BANNER_IMAGES_GUIDE.md
+CLI_DEPLOYMENT_GUIDE.md
+CLOUDFLARE_PROJECT_SETUP.md
+CLOUDFLARE_QUICK_START.md
+COMPLETE_DEPLOYMENT_OPTIONS.md
+CURRENT_STATUS.md
+DEPLOYMENT_CHECKLIST.md
+DEPLOYMENT_STATUS.md
+DEPLOYMENT_VERIFICATION.md
+DEPLOY_CLOUDFLARE.md
+DEPLOY_STEPS.md
+DEV.md
+DIAGNOSIS_REPORT.md
+EMAILJS_SETUP.md
+FINAL_STEP.md
+FIND_CLOUDFLARE_PAGES.md
+FIND_PAGES_SECTION.md
+FIX_DEPLOYMENT.md
+GITHUB_ACTIONS_SETUP.md
+GOOGLE_SEARCH_SETUP.md
+HIGHLIGHTS_SETUP.md
+MANUAL_HEIGHT_GUIDE.md
+PRE_LAUNCH_CHECKLIST.md
+QA_EXAMPLES_GUIDE.md
+QUICK_DEPLOY.md
+QUICK_FIX.md
+README_DEPLOYMENT.md
+README_SEO.md
+SETUP_GITHUB_ACTIONS.md
+TOKEN_SETUP_GUIDE.md
+UPDATE_NAMESERVERS.md
+VERIFY_CLOUDFLARE_SETUP.md
+VERIFY_OWNERSHIP.md
+cloudflare-pages-setup.md
+ADD_CUSTOM_DOMAIN.md
