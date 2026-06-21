@@ -217,7 +217,16 @@
   display: block;
   position: relative;
   z-index: 1;
-  transition: opacity 0.3s ease;
+  mix-blend-mode: luminosity;
+  opacity: 0.55;
+  filter: grayscale(1);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.logo-tile:hover img {
+  mix-blend-mode: normal;
+  opacity: 1;
+  filter: grayscale(0);
 }
 
 .logo-tile-info {
