@@ -9,6 +9,7 @@ export default function SiteHeader() {
 
   const isWork    = pathname.startsWith('/highlights');
   const isResume  = pathname.startsWith('/resume');
+  const isFamily  = pathname.startsWith('/family');
 
   return (
     <div className="header" translate="no">
@@ -30,6 +31,7 @@ export default function SiteHeader() {
           translate="no"
         >
           <Link to="/highlights" className={isWork ? 'active' : ''}>Work</Link>
+          <Link to="/family" className={isFamily ? 'active' : ''} style={{ color: isFamily ? '#c8a96e' : undefined }}>Family</Link>
           <a
             href="https://www.linkedin.com/in/atishay-kasliwal/"
             target="_blank"
