@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body, #root, .App {
+  min-height: 100vh;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: #000000;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  html, body, #root, .App {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body, #root, .App {
+    font-size: 0.9rem;
+  }
+}
+
+/* Keep "notranslate" hints but allow copy/select */
+html.notranslate, html[translate="no"],
+body.notranslate, body[translate="no"],
+#root, #root *, .notranslate, [translate="no"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Hide all Google Translate elements */
+.skiptranslate, .goog-te-banner-frame, .goog-te-balloon-frame,
+.goog-te-menu-value, .goog-te-menu-frame, .goog-te-ftab,
+.goog-te-gadget, .goog-te-combo, #google_translate_element, #google_translate_element2 {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+iframe[src*="translate.google"],
+iframe[src*="translate.googleapis"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0 !important;
+  position: relative !important;
+}
+
+.page-content, .landing-two-col, .center-content, .footer-content, .site-footer {
+  width: 90vw;
+  max-width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 70% at 50% 40%,
+    rgba(0,0,0,0.72) 0%,
+    rgba(0,0,0,0.45) 55%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 768px) {
+  .bg-overlay {
+    background: rgba(0, 0, 0, 0.70);
+  }
+}
+
+.page-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content.page-content--landing {
+  padding-top: 0;
+}
+
+.page-content.page-content--art {
+  padding-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .page-content.page-content--landing {
+    padding-top: 32px;
+  }
+  .page-content {
+    padding-bottom: 96px;
+  }
+}
+
+.section-wrap {
+  padding: 3rem 0;
+}
+
+@media (max-width: 900px) {
+  .section-wrap { padding: 2.5rem 0; }
+}
+
+@media (max-width: 640px) {
+  .section-wrap { padding: 2rem 0; }
+}
+
+.fade-in {
+  opacity: 1 !important;
+  transition: opacity 0.5s;
+}
+
+.fade-out {
+  opacity: 0 !important;
+  transition: opacity 0.5s;
+}
+
+@font-face {
+  font-family: 'Libertinus Mono';
+  src: local('Libertinus Mono'), local('LibertinusMono-Regular');
+  font-style: normal;
+  font-weight: 400;
+}
+
+.libertinus-mono {
+  font-family: 'Libertinus Mono', 'Fira Mono', 'Consolas', 'Liberation Mono', monospace;
+  font-size: 2.2rem;
+  letter-spacing: 0.1em;
+}
+
+.stonybrook-gradient {
+  background: linear-gradient(to right, #b00302 0%, #b00302 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  display: inline-block;
+}

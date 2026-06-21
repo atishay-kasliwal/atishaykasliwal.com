@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { loadQAExamples, findBestMatch } from '../knowledgeRetrieval';
+import './ChatBot.css';
 
 const suggestionChips = [
   { emoji: '💼', label: "Give me a quick overview of Atishay's experience" },
