@@ -2,7 +2,7 @@
 
 .bp-root {
   position: relative;
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.032);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 1.4rem 1.5rem 1.1rem;
@@ -25,10 +25,8 @@
 
 .bp-glow {
   position: absolute;
-  top: -80px;
-  right: -60px;
-  width: 320px;
-  height: 320px;
+  top: -80px; right: -60px;
+  width: 320px; height: 320px;
   background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.06) 45%, transparent 70%);
   pointer-events: none;
   z-index: 0;
@@ -36,31 +34,65 @@
 
 .bp-root > *:not(.bp-glow) { position: relative; z-index: 1; }
 
-/* ── Header ─────────────────────────────────────────────────────────────── */
+/* ── Profile row ─────────────────────────────────────────────────────────── */
 
-.bp-header {
+.bp-profile-row {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.9rem;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.bp-header-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(99,102,241,0.18);
-  border: 1px solid rgba(99,102,241,0.28);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(165,180,252,0.95);
+/* Avatar */
+.bp-avatar-wrap {
+  position: relative;
   flex-shrink: 0;
 }
 
-.bp-header-text { flex: 1; min-width: 0; }
+.bp-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  object-fit: cover;
+  object-position: top center;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  display: block;
+}
 
-.bp-header-title {
+.bp-avatar-badge {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(8,8,18,0.9);
+  border: 2px solid rgba(8,8,18,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bp-avatar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: bp-pulse 2s ease-in-out infinite;
+}
+
+@keyframes bp-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* Profile info */
+.bp-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.bp-profile-name {
   font-size: 1rem;
   font-weight: 650;
   color: rgba(255,255,255,0.95);
@@ -68,16 +100,35 @@
   line-height: 1.2;
 }
 
-.bp-header-sub {
+.bp-profile-role {
   font-size: 0.7rem;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.38);
   margin-top: 2px;
+  margin-bottom: 0.5rem;
 }
 
-.bp-header-right {
+.bp-profile-tags {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.bp-tag {
+  font-size: 0.62rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 9999px;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+}
+
+/* Controls column */
+.bp-header-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
   flex-shrink: 0;
 }
 
@@ -95,14 +146,14 @@
   background: none;
   border: none;
   border-radius: 5px;
-  padding: 3px 9px;
+  padding: 3px 10px;
   font-size: 0.68rem;
   font-weight: 500;
   color: rgba(255,255,255,0.38);
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
   font-family: inherit;
+  white-space: nowrap;
 }
 
 .bp-dur-btn.is-active {
@@ -110,6 +161,7 @@
   color: rgba(165,180,252,1);
 }
 
+/* Meet pill */
 .bp-meet-pill {
   display: flex;
   align-items: center;
@@ -118,59 +170,40 @@
   background: rgba(34,197,94,0.1);
   border: 1px solid rgba(34,197,94,0.22);
   border-radius: 9999px;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 500;
   color: rgba(74,222,128,0.85);
-  flex-shrink: 0;
 }
 
-/* ── Topics ─────────────────────────────────────────────────────────────── */
-
-.bp-topics {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
+/* Divider */
+.bp-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
   margin-bottom: 1rem;
 }
 
-.bp-topic-chip {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.3rem 0.7rem;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 9999px;
-  font-size: 0.7rem;
-  font-weight: 450;
-  color: rgba(255,255,255,0.6);
-  transition: border-color 0.2s, color 0.2s;
-  cursor: default;
-}
-
-.bp-topic-chip:hover {
-  border-color: rgba(99,102,241,0.4);
-  color: rgba(255,255,255,0.88);
-}
-
-/* ── Cal.com iframe wrapper ──────────────────────────────────────────────── */
+/* ── Calendar clip — hides Cal.com's internal profile header ─────────────── */
 
 .bp-cal-wrap {
   position: relative;
   width: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(8,8,18,0.6);
-  min-height: 500px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(8,8,18,0.5);
+  height: 520px;
+}
+
+.bp-cal-clip {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .bp-cal-iframe {
   width: 100%;
-  height: 500px;
   border: none;
   display: block;
-  border-radius: 14px;
   color-scheme: dark;
   transition: opacity 0.3s ease;
 }
@@ -186,6 +219,7 @@
   font-size: 0.72rem;
   color: rgba(255,255,255,0.3);
   pointer-events: none;
+  z-index: 2;
 }
 
 .bp-cal-spinner {
@@ -208,8 +242,8 @@
   margin-top: 0.9rem;
   padding-top: 0.8rem;
   border-top: 1px solid rgba(255,255,255,0.06);
-  font-size: 0.66rem;
-  color: rgba(255,255,255,0.32);
+  font-size: 0.64rem;
+  color: rgba(255,255,255,0.3);
   flex-wrap: wrap;
 }
 
@@ -221,33 +255,22 @@
 
 .bp-footer-cal {
   margin-left: auto;
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.2);
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.18);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .bp-footer-cal:hover { color: rgba(255,255,255,0.5); }
 
-/* ── Layout integration ──────────────────────────────────────────────────── */
-
-/* Right column: fill available space, vertically centered */
-.landing-right-images {
-  align-self: center !important;
-}
-
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1000px) {
-  .bp-root { max-width: 100%; }
-  .bp-cal-iframe { height: 460px; }
-  .bp-cal-wrap { min-height: 460px; }
+  .bp-cal-wrap { height: 480px; }
 }
 
 @media (max-width: 640px) {
   .bp-root { padding: 1.1rem 1rem 0.9rem; border-radius: 16px; }
-  .bp-topics { display: none; }
-  .bp-dur-toggle { display: none; }
-  .bp-cal-iframe { height: 420px; }
-  .bp-cal-wrap { min-height: 420px; }
+  .bp-profile-tags { display: none; }
+  .bp-cal-wrap { height: 440px; }
 }
