@@ -191,7 +191,7 @@
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(8,8,18,0.5);
-  height: 380px;
+  height: 480px;
 }
 
 .bp-cal-clip {
@@ -266,11 +266,11 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1000px) {
-  .bp-cal-wrap { height: 360px; }
+  .bp-cal-wrap { height: 460px; }
 }
 
 @media (max-width: 640px) {
   .bp-root { padding: 1rem 0.9rem 0.85rem; border-radius: 16px; }
   .bp-profile-tags { display: none; }
-  .bp-cal-wrap { height: 340px; }
+  .bp-cal-wrap { height: 440px; }
 }
