@@ -5,7 +5,7 @@
   background: rgba(255, 255, 255, 0.032);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 1.4rem 1.5rem 1.1rem;
+  padding: 1.25rem 1.35rem 1rem;
   backdrop-filter: blur(32px) saturate(160%);
   -webkit-backdrop-filter: blur(32px) saturate(160%);
   box-shadow:
@@ -39,8 +39,8 @@
 .bp-profile-row {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
 }
 
 /* Avatar */
@@ -50,9 +50,9 @@
 }
 
 .bp-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
   object-fit: cover;
   object-position: top center;
   border: 1.5px solid rgba(255,255,255,0.12);
@@ -179,7 +179,7 @@
 .bp-divider {
   height: 1px;
   background: rgba(255,255,255,0.07);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 /* ── Calendar clip — hides Cal.com's internal profile header ─────────────── */
@@ -191,7 +191,7 @@
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(8,8,18,0.5);
-  height: 520px;
+  height: 380px;
 }
 
 .bp-cal-clip {
@@ -238,11 +238,11 @@
 .bp-footer {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
-  margin-top: 0.9rem;
-  padding-top: 0.8rem;
+  gap: 1rem;
+  margin-top: 0.7rem;
+  padding-top: 0.65rem;
   border-top: 1px solid rgba(255,255,255,0.06);
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   color: rgba(255,255,255,0.3);
   flex-wrap: wrap;
 }
@@ -266,11 +266,11 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1000px) {
-  .bp-cal-wrap { height: 480px; }
+  .bp-cal-wrap { height: 360px; }
 }
 
 @media (max-width: 640px) {
-  .bp-root { padding: 1.1rem 1rem 0.9rem; border-radius: 16px; }
+  .bp-root { padding: 1rem 0.9rem 0.85rem; border-radius: 16px; }
   .bp-profile-tags { display: none; }
-  .bp-cal-wrap { height: 440px; }
+  .bp-cal-wrap { height: 340px; }
 }

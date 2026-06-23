@@ -12,9 +12,9 @@ export default function BookingPanel() {
   const [duration, setDuration] = useState('30min');
   const [loaded, setLoaded] = useState(false);
 
-  // Cal.com renders a ~210px profile header before the calendar.
+  // Cal.com renders a ~200px profile header before the calendar.
   // We clip it off via overflow+negative margin so only the calendar shows.
-  const CAL_HEADER_OFFSET = 210;
+  const CAL_HEADER_OFFSET = 200;
 
   const calSrc = `https://cal.com/${CAL_USERNAME}/${duration}?embed=true&theme=dark&layout=month_view`;
 
@@ -82,7 +82,7 @@ export default function BookingPanel() {
             style={{
               opacity: loaded ? 1 : 0,
               marginTop: `-${CAL_HEADER_OFFSET}px`,
-              height: `calc(520px + ${CAL_HEADER_OFFSET}px)`,
+              height: `calc(380px + ${CAL_HEADER_OFFSET}px)`,
             }}
             frameBorder="0"
             title="Book a call with Atishay Kasliwal"
