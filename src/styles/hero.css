@@ -29,25 +29,23 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 4rem;
+  align-items: center;
+  gap: 3.5rem;
   width: min(90vw, 1400px);
   max-width: 1400px;
   margin: 0 auto;
   margin-top: 2rem;
   margin-bottom: 2.5rem;
-  height: 100%;
 }
 
 .landing-left-text {
   flex: 1;
-  max-width: 600px;
+  max-width: 580px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   z-index: 1;
-  padding-top: 1.5rem;
 }
 
 .landing-left-text::before {
@@ -64,10 +62,11 @@
 
 .landing-right-images {
   flex: 1;
-  max-width: 540px;
+  max-width: 520px;
+  min-width: 0;
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  align-items: stretch;
+  justify-content: stretch;
   animation: hero-fade-up 0.8s cubic-bezier(0.22,1,0.36,1) both;
   animation-delay: 0.3s;
   background: none;
@@ -75,6 +74,8 @@
   box-shadow: none;
   padding: 0;
 }
+
+.landing-right-images > * { width: 100%; }
 
 .hero-eyebrow {
   font-family: 'Inter', sans-serif;
