@@ -196,7 +196,7 @@
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(8,8,18,0.5);
   flex: 1;
-  min-height: 380px;
+  min-height: 420px;
 }
 
 .bp-cal-clip {
@@ -206,14 +206,11 @@
 }
 
 .bp-cal-iframe {
-  /* Scale down to 80% so the calendar fits fully — compensate width so it fills horizontally */
-  width: 125%;
+  width: 100%;
   border: none;
   display: block;
   color-scheme: dark;
   transition: opacity 0.3s ease;
-  transform: scale(0.8);
-  transform-origin: top left;
 }
 
 .bp-cal-loading {
