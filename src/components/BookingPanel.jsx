@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import '../styles/booking.css';
 
-// Cal.com username — update once confirmed in Cal.com dashboard under Settings → Profile
 const CAL_USERNAME = 'atishay-kasliwal-eeug6h';
+
+const DURATIONS = [
+  { label: '15 min', slug: '15min' },
+  { label: '30 min', slug: '30min' },
+];
 
 const TOPICS = [
   { icon: '⚡', label: 'AI & ML' },
@@ -12,21 +16,10 @@ const TOPICS = [
 ];
 
 export default function BookingPanel() {
+  const [duration, setDuration] = useState('30min');
   const [loaded, setLoaded] = useState(false);
-  const iframeRef = useRef(null);
 
-  // Load Cal.com embed script once
-  useEffect(() => {
-    if (window.Cal) { setLoaded(true); return; }
-    const script = document.createElement('script');
-    script.src = 'https://app.cal.com/embed/embed.js';
-    script.async = true;
-    script.onload = () => {
-      window.Cal('init', { origin: 'https://cal.com' });
-      setLoaded(true);
-    };
-    document.head.appendChild(script);
-  }, []);
+  const calSrc = `https://cal.com/${CAL_USERNAME}/${duration}?embed=true&theme=dark&layout=month_view&hideEventTypeDetails=true`;
 
   return (
     <div className="bp-root">
@@ -44,14 +37,27 @@ export default function BookingPanel() {
         </div>
         <div className="bp-header-text">
           <div className="bp-header-title">Book a Call</div>
-          <div className="bp-header-sub">Syncs with Google Meet · instant confirmation</div>
+          <div className="bp-header-sub">Google Meet · instant confirmation</div>
         </div>
-        <div className="bp-meet-pill">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="23 7 16 12 23 17 23 7"/>
-            <rect x="1" y="5" width="15" height="14" rx="2"/>
-          </svg>
-          Meet
+        <div className="bp-header-right">
+          <div className="bp-dur-toggle">
+            {DURATIONS.map(d => (
+              <button
+                key={d.slug}
+                className={`bp-dur-btn${duration === d.slug ? ' is-active' : ''}`}
+                onClick={() => { setDuration(d.slug); setLoaded(false); }}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
+          <div className="bp-meet-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"/>
+              <rect x="1" y="5" width="15" height="14" rx="2"/>
+            </svg>
+            Meet
+          </div>
         </div>
       </div>
 
@@ -65,23 +71,23 @@ export default function BookingPanel() {
         ))}
       </div>
 
-      {/* Cal.com inline embed */}
+      {/* Cal.com embed — direct to event type, skips profile page */}
       <div className="bp-cal-wrap">
-        <iframe
-          ref={iframeRef}
-          src={`https://cal.com/${CAL_USERNAME}?embed=true&theme=dark&hideEventTypeDetails=false&layout=month_view`}
-          className="bp-cal-iframe"
-          frameBorder="0"
-          title="Book a call with Atishay Kasliwal"
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-        />
         {!loaded && (
           <div className="bp-cal-loading">
             <div className="bp-cal-spinner" />
             <span>Loading calendar…</span>
           </div>
         )}
+        <iframe
+          key={duration}
+          src={calSrc}
+          className="bp-cal-iframe"
+          style={{ opacity: loaded ? 1 : 0 }}
+          frameBorder="0"
+          title="Book a call with Atishay Kasliwal"
+          onLoad={() => setLoaded(true)}
+        />
       </div>
 
       {/* Footer */}
