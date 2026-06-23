@@ -5,6 +5,7 @@ import SiteHeader from '../SiteHeader';
 import StoryTimeline from '../StoryTimeline';
 import SkillsSection from '../components/SkillsSection';
 import FinalProductGrid from '../components/FinalProductGrid';
+import BookingPanel from '../components/BookingPanel';
 import '../styles/hero.css';
 import '../styles/editorial.css';
 import '../styles/testimonials.css';
@@ -214,6 +215,10 @@ function HomePage() {
                 </div>
               </div>
 
+              {/* Right side — booking panel */}
+              <div className="landing-right-images">
+                <BookingPanel />
+              </div>
 
             </div>
           </div>
