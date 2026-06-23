@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/booking.css';
 
 // Cal.com username — update once confirmed in Cal.com dashboard under Settings → Profile
-const CAL_USERNAME = 'atishay-kasliwal';
+const CAL_USERNAME = 'atishay-kasliwal-eeug6h';
 
 const TOPICS = [
   { icon: '⚡', label: 'AI & ML' },
