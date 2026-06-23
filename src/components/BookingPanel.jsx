@@ -12,9 +12,8 @@ export default function BookingPanel() {
   const [duration, setDuration] = useState('30min');
   const [loaded, setLoaded] = useState(false);
 
-  // Cal.com renders a ~270px profile block (avatar/name/event/meet/timezone) before the calendar.
-  // We clip that block but keep the month nav + day headers visible.
-  const CAL_HEADER_OFFSET = 270;
+  // Cal.com profile block is ~270px at full size; scaled to 80% = 216px visual offset.
+  const CAL_HEADER_OFFSET = 216;
 
   const calSrc = `https://cal.com/${CAL_USERNAME}/${duration}?embed=true&theme=dark&layout=month_view`;
 
