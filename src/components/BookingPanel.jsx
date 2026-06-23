@@ -25,7 +25,7 @@ export default function BookingPanel() {
       {/* ── Profile + booking header ── */}
       <div className="bp-profile-row">
         <div className="bp-avatar-wrap">
-          <img src="/AtishayKasliwal.JPG" alt="Atishay Kasliwal" className="bp-avatar" />
+          <img src="/atishaylogo.png" alt="Atishay Kasliwal" className="bp-avatar" />
           <span className="bp-avatar-badge" title="Available">
             <span className="bp-avatar-dot" />
           </span>
