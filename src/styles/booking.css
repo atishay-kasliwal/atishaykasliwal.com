@@ -16,6 +16,10 @@
   animation: bp-rise 0.75s cubic-bezier(0.22,1,0.36,1) both;
   animation-delay: 0.35s;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 @keyframes bp-rise {
@@ -191,7 +195,8 @@
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(8,8,18,0.5);
-  height: 520px;
+  flex: 1;
+  min-height: 0;
 }
 
 .bp-cal-clip {
@@ -266,11 +271,10 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1000px) {
-  .bp-cal-wrap { height: 460px; }
+  .bp-root { min-height: 540px; }
 }
 
 @media (max-width: 640px) {
-  .bp-root { padding: 1rem 0.9rem 0.85rem; border-radius: 16px; }
+  .bp-root { padding: 1rem 0.9rem 0.85rem; border-radius: 16px; min-height: 500px; }
   .bp-profile-tags { display: none; }
-  .bp-cal-wrap { height: 440px; }
 }

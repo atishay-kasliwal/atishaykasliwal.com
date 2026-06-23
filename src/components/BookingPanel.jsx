@@ -82,7 +82,7 @@ export default function BookingPanel() {
             style={{
               opacity: loaded ? 1 : 0,
               marginTop: `-${CAL_HEADER_OFFSET}px`,
-              height: `calc(520px + ${CAL_HEADER_OFFSET}px)`,
+              height: `calc(100% + ${CAL_HEADER_OFFSET}px)`,
             }}
             frameBorder="0"
             title="Book a call with Atishay Kasliwal"
