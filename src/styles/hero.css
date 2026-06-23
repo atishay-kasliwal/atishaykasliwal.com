@@ -1,9 +1,9 @@
 .landing-hero-wrap {
-  min-height: 85vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
-  padding-top: 60px;
-  padding-bottom: 2rem;
+  padding-top: 72px;
+  padding-bottom: 3rem;
 }
 
 .landing-hero-stack {
@@ -30,12 +30,10 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 3.5rem;
-  width: min(90vw, 1400px);
-  max-width: 1400px;
+  gap: 3rem;
+  width: min(88vw, 1320px);
+  max-width: 1320px;
   margin: 0 auto;
-  margin-top: 2rem;
-  margin-bottom: 2.5rem;
 }
 
 .landing-left-text {
@@ -127,9 +125,9 @@
 .hero-stats {
   display: flex;
   align-items: flex-start;
-  gap: 1.5rem;
+  gap: 1.25rem;
   margin-top: 2rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   animation: hero-fade-up 0.7s cubic-bezier(0.22,1,0.36,1) both;
   animation-delay: 0.54s;
 }
@@ -141,7 +139,7 @@
 }
 
 .hero-stat-num {
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.02em;
