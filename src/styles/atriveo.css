@@ -1,0 +1,732 @@
+/* ─── Atriveo page ───────────────────────────────────────────────────────────
+   Prefix: atv-  ·  Accent: indigo/violet, consistent with booking panel
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Hero ── */
+
+.atv-hero {
+  min-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 1.5rem 3rem;
+}
+
+.atv-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: 1.75rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.atv-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: atv-pulse 2s ease-in-out infinite;
+}
+
+@keyframes atv-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.82); }
+}
+
+.atv-wordmark {
+  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 0 0 1.25rem;
+  background: linear-gradient(120deg, #ffffff 20%, #a5b4fc 55%, #8b5cf6 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.atv-tagline {
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 2.75rem;
+  font-weight: 450;
+}
+
+.atv-tagline-dim {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.atv-stats {
+  display: flex;
+  gap: 2.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.atv-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.atv-stat-num {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.atv-stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+/* ── Problem ── */
+
+.atv-problem {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  text-align: center;
+}
+
+.atv-problem p {
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.atv-problem-em {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 550;
+}
+
+/* ── Section heads ── */
+
+.atv-section-head {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.atv-eyebrow {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(139, 92, 246, 0.85);
+  margin-bottom: 0.75rem;
+}
+
+.atv-section-head h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.atv-section-sub {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── System map ── */
+
+.atv-map-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.atv-map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 560;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99, 102, 241, 0.07) 0%, transparent 70%),
+    radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1.5px),
+    rgba(8, 8, 18, 0.55);
+  background-size: auto, 24px 24px, auto;
+  overflow: hidden;
+}
+
+.atv-map-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.atv-edge {
+  fill: none;
+  stroke: rgba(139, 92, 246, 0.22);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.atv-edge-dot {
+  fill: #a5b4fc;
+  opacity: 0.85;
+}
+
+.atv-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 138px;
+  padding: 0.7rem 2rem 0.7rem 0.95rem;
+  background: rgba(15, 15, 30, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.atv-node:hover {
+  border-color: rgba(165, 180, 252, 0.45);
+  background: rgba(22, 22, 42, 0.95);
+  transform: translate(-50%, -50%) translateY(-2px);
+}
+
+.atv-node-gh {
+  position: absolute;
+  bottom: 8px;
+  right: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.28);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.atv-node-gh:hover {
+  color: #fff;
+  transform: scale(1.15);
+}
+
+.atv-node.is-active {
+  border-color: rgba(139, 92, 246, 0.8);
+  box-shadow: 0 0 24px rgba(99, 102, 241, 0.25);
+  background: rgba(24, 22, 48, 0.97);
+}
+
+.atv-node-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.atv-node-status--live { background: #22c55e; }
+.atv-node-status--dev { background: #eab308; }
+.atv-node-status--research { background: #818cf8; }
+
+.atv-node-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: -0.01em;
+  padding-right: 12px;
+  white-space: nowrap;
+}
+
+.atv-node-sub {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.36);
+  white-space: nowrap;
+}
+
+/* ── Detail panel ── */
+
+.atv-detail {
+  margin-top: 1.25rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.028);
+  animation: atv-detail-in 0.3s ease;
+}
+
+@keyframes atv-detail-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.atv-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.atv-detail-head h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.atv-badge {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.6rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.atv-badge--live {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.atv-badge--dev {
+  color: #facc15;
+  background: rgba(234, 179, 8, 0.09);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+.atv-badge--research {
+  color: #a5b4fc;
+  background: rgba(129, 140, 248, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.28);
+}
+
+.atv-detail-desc {
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 760px;
+}
+
+.atv-detail-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.atv-tech-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.atv-tech {
+  font-size: 0.68rem;
+  padding: 0.24rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.atv-detail-link {
+  font-size: 0.8rem;
+  font-weight: 550;
+  color: rgba(165, 180, 252, 0.9);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.atv-detail-link:hover {
+  color: #c7d2fe;
+}
+
+/* ── Compiler deep-dive ── */
+
+.atv-compiler {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.atv-compiler-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+}
+
+.atv-compiler-card {
+  padding: 1.5rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.atv-compiler-card:hover {
+  border-color: rgba(139, 92, 246, 0.35);
+  transform: translateY(-3px);
+}
+
+.atv-compiler-num {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(139, 92, 246, 0.75);
+  margin-bottom: 0.9rem;
+}
+
+.atv-compiler-card h4 {
+  margin: 0 0 0.55rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.atv-compiler-card p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Compile stage stepper ── */
+
+.atv-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0 auto 2.5rem;
+  max-width: 860px;
+}
+
+.atv-step {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  white-space: nowrap;
+  animation: atv-step-glow 5.4s ease-in-out infinite;
+}
+
+.atv-step-link {
+  width: 26px;
+  height: 1px;
+  background: rgba(139, 92, 246, 0.25);
+  animation: atv-link-glow 5.4s ease-in-out infinite;
+}
+
+@keyframes atv-step-glow {
+  0%, 22%, 100% {
+    color: rgba(255, 255, 255, 0.45);
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: none;
+  }
+  7%, 13% {
+    color: #e0e7ff;
+    border-color: rgba(139, 92, 246, 0.75);
+    background: rgba(99, 102, 241, 0.14);
+    box-shadow: 0 0 18px rgba(99, 102, 241, 0.3);
+  }
+}
+
+@keyframes atv-link-glow {
+  0%, 22%, 100% { background: rgba(139, 92, 246, 0.25); }
+  7%, 13% { background: rgba(165, 180, 252, 0.9); }
+}
+
+/* ── Pipeline terminal ── */
+
+.atv-terminal-section {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.atv-terminal {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(6, 6, 14, 0.92);
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 80px rgba(99, 102, 241, 0.06);
+}
+
+.atv-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.atv-term-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.atv-terminal-title {
+  margin-left: 0.6rem;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.32);
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+}
+
+.atv-terminal-body {
+  padding: 1rem 1.1rem 1.2rem;
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 0.76rem;
+  line-height: 1.9;
+  min-height: 260px;
+}
+
+.atv-term-line {
+  display: flex;
+  gap: 0.8rem;
+  align-items: baseline;
+  animation: atv-term-in 0.25s ease both;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@keyframes atv-term-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.atv-term-time {
+  color: rgba(139, 92, 246, 0.65);
+  flex-shrink: 0;
+}
+
+.atv-term-text {
+  color: rgba(255, 255, 255, 0.68);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.atv-term-tail {
+  color: rgba(74, 222, 128, 0.75);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.atv-term-cursor {
+  width: 8px;
+  height: 15px;
+  background: rgba(165, 180, 252, 0.8);
+  margin-top: 4px;
+  animation: atv-blink 1s steps(2) infinite;
+}
+
+@keyframes atv-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  .atv-term-tail { display: none; }
+  .atv-terminal-body { font-size: 0.68rem; }
+}
+
+/* ── Timeline ── */
+
+.atv-timeline-section {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.atv-timeline {
+  position: relative;
+  padding-left: 1.6rem;
+}
+
+.atv-timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.05));
+}
+
+.atv-tl-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.atv-tl-item:last-child {
+  padding-bottom: 0;
+}
+
+.atv-tl-marker {
+  position: absolute;
+  left: -1.6rem;
+  top: 6px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #0a0a16;
+  border: 2px solid rgba(139, 92, 246, 0.8);
+}
+
+.atv-tl-item:last-child .atv-tl-marker {
+  background: #8b5cf6;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+.atv-tl-period {
+  display: block;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(165, 180, 252, 0.7);
+  margin-bottom: 0.3rem;
+}
+
+.atv-tl-body h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.atv-tl-body p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+/* ── CTA ── */
+
+.atv-cta {
+  text-align: center;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.atv-cta h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 1.75rem;
+}
+
+.atv-cta-row {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.atv-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 550;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.2s ease;
+}
+
+.atv-btn:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+.atv-btn--primary {
+  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: #fff;
+}
+
+.atv-btn--primary:hover {
+  filter: brightness(1.12);
+  border-color: transparent;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 860px) {
+  .atv-compiler-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Map becomes a stacked list on small screens */
+  .atv-map {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem;
+  }
+
+  .atv-map-lines {
+    display: none;
+  }
+
+  .atv-node {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+
+  .atv-node:hover {
+    transform: none;
+  }
+
+  .atv-stats {
+    gap: 1.75rem;
+  }
+
+  .atv-stat-num {
+    font-size: 1.35rem;
+  }
+
+  .atv-hero {
+    padding-top: 96px;
+    min-height: 0;
+  }
+}

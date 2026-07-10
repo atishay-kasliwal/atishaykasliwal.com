@@ -131,6 +131,29 @@ body {
   padding: 3rem 0;
 }
 
+/* ── Shared heading gradient — matches the hero name / Atriveo wordmark ── */
+.editorial-grid-header h2,
+.skills-heading,
+.story-title,
+.testimonials-title,
+.art-title,
+.rp-name,
+.atv-section-head h2,
+.atv-cta h2 {
+  background: linear-gradient(120deg, #ffffff 20%, #a5b4fc 55%, #8b5cf6 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: fit-content;
+}
+
+/* Centered heading contexts keep their centering despite fit-content */
+.atv-section-head h2,
+.atv-cta h2 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media (max-width: 900px) {
   .section-wrap { padding: 2.5rem 0; }
 }

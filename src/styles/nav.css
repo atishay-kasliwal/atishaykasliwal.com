@@ -6,10 +6,10 @@
   width: 100%;
   max-width: none;
   z-index: 10;
-  background: rgba(8, 12, 24, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: linear-gradient(to bottom, rgba(4, 6, 14, 0.85) 0%, rgba(4, 6, 14, 0.35) 60%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: none;
   border-radius: 0;
   color: #fff;
   transition: background 0.3s ease;
@@ -38,7 +38,10 @@
 }
 
 .nav-logo:hover {
-  color: #fff !important;
+  background: linear-gradient(120deg, #ffffff 30%, #a5b4fc 65%, #8b5cf6 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   opacity: 1;
 }
 
@@ -57,17 +60,24 @@
 .nav a, .nav.black a {
   color: rgba(255, 255, 255, 0.5) !important;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease;
   font-weight: 400;
-  padding: 3px 12px;
-  border-radius: 4px;
+  padding: 5px 13px;
+  border-radius: 9999px;
   position: relative;
   letter-spacing: 0.06em;
 }
 
-.nav a:hover, .nav.black a:hover, .nav .active, .nav.black .active {
+.nav a:hover, .nav.black a:hover {
   color: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(255, 255, 255, 0.05);
 }
+
+.nav .active, .nav.black .active {
+  color: #e0e7ff !important;
+  background: rgba(99, 102, 241, 0.14);
+}
+
 
 .nav a::after, .nav.black a::after {
   display: none;

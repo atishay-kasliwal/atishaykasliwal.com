@@ -8,6 +8,7 @@ export default function SiteHeader() {
   useEffect(() => { setIsOpen(false); }, [pathname]);
 
   const isWork    = pathname.startsWith('/highlights');
+  const isAtriveo = pathname.startsWith('/atriveo');
   const isResume  = pathname.startsWith('/resume');
 
   return (
@@ -30,6 +31,7 @@ export default function SiteHeader() {
           translate="no"
         >
           <Link to="/highlights" className={isWork ? 'active' : ''}>Work</Link>
+          <Link to="/atriveo" className={isAtriveo ? 'active' : ''}>Atriveo</Link>
           <a
             href="https://www.linkedin.com/in/atishay-kasliwal/"
             target="_blank"
