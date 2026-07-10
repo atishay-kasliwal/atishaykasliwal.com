@@ -146,7 +146,7 @@ function HomePage() {
                 <h1 className="hero-name" translate="no">Atishay Kasliwal</h1>
                 <p className="hero-description" translate="no">
                   Software engineer with 4+ years building scalable distributed systems and ML pipelines
-                  across fintech, healthcare, and research. Currently pursuing MS in Data Science at Stony
+                  across fintech, healthcare, and research. With Masters in Data Science at Stony
                   Brook University.
                 </p>
                 <div className="button-group-theme hero-ctas" translate="no">

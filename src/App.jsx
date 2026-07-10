@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import './App.css';
 import { initAnalytics } from './lib/analytics';
 import ErrorBoundary from './ErrorBoundary';
-import StarBackground from './StarBackground';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -11,7 +10,6 @@ import ArtPage from './pages/ArtPage';
 import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
 import Resume from './Resume';
-import FamilyStory from './FamilyStory';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,14 +40,10 @@ function AnalyticsTracker() {
 }
 
 function AppInner() {
-  const location = useLocation();
-  const isFamily = location.pathname === '/family';
-
   return (
     <>
       <ScrollToTop />
       <AnalyticsTracker />
-      <StarBackground />
       <div className="bg-overlay" />
       <ChatBot />
       <ErrorBoundary>
@@ -60,10 +54,9 @@ function AppInner() {
           <Route path="/highlights/:id" element={<HighlightDetail />} />
           <Route path="/Highlights/:uuid" element={<HighlightDetail />} />
           <Route path="/resume" element={<Resume />} />
-          <Route path="/family" element={<FamilyStory />} />
         </Routes>
       </ErrorBoundary>
-      {!isFamily && <Footer />}
+      <Footer />
     </>
   );
 }

@@ -186,7 +186,7 @@
   margin-bottom: 0.75rem;
 }
 
-/* ── Calendar clip — hides Cal.com's internal profile header ─────────────── */
+/* ── Calendar — Cal.com's own header is hidden via hideEventTypeDetails=true ── */
 
 .bp-cal-wrap {
   position: relative;
@@ -195,22 +195,28 @@
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(8,8,18,0.5);
-  flex: 1;
-  min-height: 420px;
+  height: 420px;
+  flex: none;
 }
 
 .bp-cal-clip {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  transition: opacity 0.3s ease;
 }
 
 .bp-cal-iframe {
   width: 100%;
-  border: none;
+  height: 100%;
   display: block;
   color-scheme: dark;
-  transition: opacity 0.3s ease;
+}
+
+.bp-cal-iframe iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
 }
 
 .bp-cal-loading {
@@ -244,7 +250,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.7rem;
+  margin-top: auto;
   padding-top: 0.65rem;
   border-top: 1px solid rgba(255,255,255,0.06);
   font-size: 0.62rem;
