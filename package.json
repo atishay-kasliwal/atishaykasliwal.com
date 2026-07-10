@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "@emailjs/browser": "^4.4.1",
     "@mlc-ai/web-llm": "^0.2.80",
     "@testing-library/dom": "^10.4.0",

@@ -117,7 +117,7 @@ export default function Resume() {
           <p className="rp-eyebrow">Software Engineer · AI / ML · Data Science · Distributed Systems</p>
           <h1 className="rp-name">Atishay Kasliwal</h1>
           <p className="rp-tagline">
-            Software Engineer with 4+ years building distributed systems, high-availability services, and ML pipelines at scale. Deep experience in event-driven architecture, CI/CD, and consumer-facing APIs in Java, Python, and AWS. Currently pursuing MS in Data Science at Stony Brook University.
+            Software Engineer with 4+ years building distributed systems, high-availability services, and ML pipelines at scale. Deep experience in event-driven architecture, CI/CD, and consumer-facing APIs in Java, Python, and AWS. Holds an MS in Data Science from Stony Brook University.
           </p>
           <div className="rp-meta-row">
             <span className="rp-meta-item">
