@@ -7,6 +7,7 @@ import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import ArtPage from './pages/ArtPage';
+import AtriveoPage from './pages/AtriveoPage';
 import Projects from './Projects';
 import HighlightDetail from './HighlightDetail';
 import Resume from './Resume';
@@ -50,6 +51,7 @@ function AppInner() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/art" element={<ArtPage />} />
+          <Route path="/atriveo" element={<AtriveoPage />} />
           <Route path="/highlights" element={<Projects />} />
           <Route path="/highlights/:id" element={<HighlightDetail />} />
           <Route path="/Highlights/:uuid" element={<HighlightDetail />} />
