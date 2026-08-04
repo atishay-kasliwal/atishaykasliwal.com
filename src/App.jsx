@@ -1,69 +1,37 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import './styles/tokens.css';
+import './styles/base.css';
 import './App.css';
 import { initAnalytics } from './lib/analytics';
-import ErrorBoundary from './ErrorBoundary';
-import ChatBot from './components/ChatBot';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import ArtPage from './pages/ArtPage';
-import AtriveoPage from './pages/AtriveoPage';
-import Projects from './Projects';
-import HighlightDetail from './HighlightDetail';
-import Resume from './Resume';
+import AppRoutes from './AppRoutes';
 
-function ScrollToTop() {
+/**
+ * Resets scroll on navigation and moves focus to <main>.
+ *
+ * The focus move is the part that matters for accessibility: without it a
+ * keyboard or screen-reader user stays parked wherever the previous page left
+ * them, so a "navigation" is silent and their next Tab continues from the old
+ * position. preventScroll stops focusing from fighting the scroll reset.
+ */
+function RouteChangeEffects() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      if (document.documentElement) document.documentElement.scrollTop = 0;
-      if (document.body) document.body.scrollTop = 0;
-    };
-    scrollToTop();
-    const t = setTimeout(scrollToTop, 100);
-    return () => clearTimeout(t);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    const main = document.getElementById('main');
+    if (main) main.focus({ preventScroll: true });
   }, [pathname]);
 
   return null;
 }
 
 function AnalyticsTracker() {
-  useEffect(() => {
-    const cleanup = initAnalytics();
-    return () => {
-      if (cleanup) cleanup();
-    };
-  }, []);
-
+  useEffect(() => initAnalytics(), []);
   return null;
 }
 
-function AppInner() {
-  return (
-    <>
-      <ScrollToTop />
-      <AnalyticsTracker />
-      <div className="bg-overlay" />
-      <ChatBot />
-      <ErrorBoundary>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/art" element={<ArtPage />} />
-          <Route path="/atriveo" element={<AtriveoPage />} />
-          <Route path="/highlights" element={<Projects />} />
-          <Route path="/highlights/:id" element={<HighlightDetail />} />
-          <Route path="/Highlights/:uuid" element={<HighlightDetail />} />
-          <Route path="/resume" element={<Resume />} />
-        </Routes>
-      </ErrorBoundary>
-      <Footer />
-    </>
-  );
-}
-
-function App() {
+export default function App() {
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -72,9 +40,9 @@ function App() {
 
   return (
     <Router>
-      <AppInner />
+      <RouteChangeEffects />
+      <AnalyticsTracker />
+      <AppRoutes />
     </Router>
   );
 }
-
-export default App;

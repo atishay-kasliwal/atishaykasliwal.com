@@ -25,7 +25,7 @@
   left: -120px;
   width: 700px;
   height: 500px;
-  background: radial-gradient(ellipse at center, rgba(99, 179, 237, 0.05) 0%, transparent 65%);
+  background: radial-gradient(ellipse at center, rgba(165, 180, 252, 0.05) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
 }
@@ -40,7 +40,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(99, 179, 237, 0.65);
+  color: rgba(165, 180, 252, 0.65);
   margin: 0 0 18px;
   display: flex;
   align-items: center;
@@ -52,7 +52,7 @@
   display: inline-block;
   width: 24px;
   height: 1px;
-  background: rgba(99, 179, 237, 0.45);
+  background: rgba(165, 180, 252, 0.45);
   flex-shrink: 0;
 }
 
@@ -132,7 +132,7 @@
   font-size: 0.83rem;
   font-weight: 500;
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 0;
   text-decoration: none;
   transition: all 0.16s ease;
   cursor: pointer;
@@ -170,7 +170,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  border-radius: 0;
   margin: 40px 0 68px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.03);
@@ -223,7 +223,7 @@
   font-size: 0.6rem;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: rgba(99, 179, 237, 0.5);
+  color: rgba(165, 180, 252, 0.5);
   margin: 0 0 20px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -236,7 +236,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, rgba(99, 179, 237, 0.15) 0%, transparent 60%);
+  background: linear-gradient(90deg, rgba(165, 180, 252, 0.15) 0%, transparent 60%);
 }
 
 /* ── Cards ───────────────────────────────────────── */
@@ -250,7 +250,7 @@
   display: grid;
   grid-template-columns: 200px 1fr;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.038);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   overflow: hidden;
@@ -262,7 +262,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 10px;
+  border-radius: 0;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
   pointer-events: none;
 }
@@ -275,13 +275,13 @@
 }
 
 .rp-card--project {
-  border-color: rgba(99, 179, 237, 0.14);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 179, 237, 0.06);
+  border-color: rgba(165, 180, 252, 0.14);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(165, 180, 252, 0.06);
 }
 
 .rp-card--project:hover {
-  border-color: rgba(99, 179, 237, 0.28);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 179, 237, 0.06);
+  border-color: rgba(165, 180, 252, 0.28);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(165, 180, 252, 0.06);
 }
 
 .rp-card-rail {
@@ -319,7 +319,7 @@
 }
 
 .rp-card-stack {
-  color: rgba(99, 179, 237, 0.45);
+  color: rgba(165, 180, 252, 0.45);
   font-size: 0.57rem;
   line-height: 1.6;
 }
@@ -332,7 +332,7 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: 0;
   width: fit-content;
 }
 
@@ -413,7 +413,7 @@
 .rp-skill-group {
   padding: 22px 22px;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.032);
   display: flex;
   flex-direction: column;
@@ -434,7 +434,7 @@
   font-size: 0.58rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(99, 179, 237, 0.55);
+  color: rgba(165, 180, 252, 0.55);
 }
 
 .rp-skill-tags {
@@ -450,7 +450,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 4px 11px;
-  border-radius: 5px;
+  border-radius: 0;
   letter-spacing: 0.01em;
   transition: all 0.14s;
 }
@@ -586,4 +586,86 @@
     align-items: flex-start;
     gap: 5px;
   }
+}
+
+/* ── Spec-sheet alignment ────────────────────────────────────────────────
+   Brings the résumé into the same document language as the landing page:
+   blueprint ground, a doc header, a two-tone display name, numbered sections. */
+
+.resume-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.resume-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, #000 30%, transparent 100%);
+}
+
+.rp-doc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--spec-line);
+}
+
+.rp-doc-mark {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 0.7rem;
+  vertical-align: 0.08em;
+  background: var(--accent-soft);
+}
+
+/* globals sets .rp-name to the display serif; the gradient moves onto the
+   surname so the two lines read like the hero */
+.rp-name {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--spec-ink);
+  width: auto;
+}
+
+.rp-name em {
+  font-style: italic;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-right: 0.06em;
+}
+
+/* Numbered sections */
+.resume-content { counter-reset: rp-section; }
+
+.rp-section-title {
+  counter-increment: rp-section;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.rp-section-title::before {
+  content: counter(rp-section, decimal-leading-zero);
+  color: var(--accent-soft);
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .rp-doc-row { margin-bottom: 1.35rem; }
+  .rp-doc-row .spec-label { font-size: 0.52rem; letter-spacing: 0.13em; }
 }

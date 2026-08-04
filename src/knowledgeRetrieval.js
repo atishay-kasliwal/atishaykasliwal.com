@@ -47,7 +47,7 @@ export function findBestMatch(qaExamples, query, threshold = 0.05) {
     if (/^(hi|hey|hello|yo|hola|sup|heyy?|hii+)[!.?,\s]*$/.test(t)) {
       return { answer: "Hey — happy to answer anything about Atishay's work, skills, or background.", score: 1 };
     }
-    return { answer: "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.", score: 0 };
+    return { answer: "I don't have a specific answer for that. You can reach Atishay at hire@atishaykasliwal.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.", score: 0 };
   }
 
   let best = null, bestScore = -1;
@@ -64,7 +64,7 @@ export function findBestMatch(qaExamples, query, threshold = 0.05) {
   });
 
   if (!best || bestScore < threshold) {
-    return { answer: "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.", score: 0 };
+    return { answer: "I don't have a specific answer for that. You can reach Atishay at hire@atishaykasliwal.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.", score: 0 };
   }
   return best;
 }

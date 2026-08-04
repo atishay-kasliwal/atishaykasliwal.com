@@ -1,91 +1,301 @@
+/* ── /contact_sheet.doc ──────────────────────────────────────────────────
+   A photo wall in the same spec-sheet language as the rest of the site:
+   blueprint ground, mono annotations, numbered plates, serif display head. */
+
 .art-page {
+  position: relative;
   min-height: 100vh;
   background: #000;
-  padding-top: 80px;
-  padding-bottom: 4rem;
+  padding-top: 76px;
+  padding-bottom: 5rem;
+  isolation: isolate;
 }
 
-.art-page-inner {
-  width: 90vw;
-  max-width: 1400px;
-  margin: 0 auto;
+.art-grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, #000 30%, transparent 100%);
 }
 
-.art-page-header {
-  margin-bottom: 2rem;
+/* ── Masthead ── */
+.art-intro {
+  margin: 2.5rem 0 3rem;
 }
 
-.art-page-header h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.03em;
-  margin: 0 0 0.5rem 0;
+.art-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--spec-ink-dim);
 }
 
-.art-page-header p {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.45);
-  line-height: 1.6;
+.art-doc-mark {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--accent-soft);
+}
+
+.art-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 5.5vw, 4.4rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  color: var(--spec-ink);
+  /* the shared heading gradient in globals targets .art-title; this page puts
+     the gradient on the italic run instead, so opt the block out */
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  width: auto;
+}
+
+.art-title em {
+  font-style: italic;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-right: 0.06em;
+}
+
+.art-lede {
+  max-width: 52ch;
+  margin: 0 0 2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--spec-ink-dim);
+}
+
+.art-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
   margin: 0;
-  max-width: 480px;
+  border-top: 1px solid var(--spec-line);
+  border-bottom: 1px solid var(--spec-line);
 }
 
-.art-grid-fixed {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+.art-meta-cell {
+  padding: 0.9rem 1.6rem 0.95rem;
+  border-left: 1px solid var(--spec-line);
 }
 
-@media (min-width: 1200px) {
-  .art-grid-fixed {
-    grid-template-columns: repeat(10, 1fr);
-  }
+.art-meta-cell:first-child { border-left: 0; padding-left: 0; }
+
+.art-meta-cell dt { margin: 0 0 0.4rem; font-size: 0.53rem; letter-spacing: 0.16em; }
+
+.art-meta-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.86);
 }
 
-.art-tile-fixed {
+/* ── The wall ──
+   CSS columns keep every frame at its native crop. The old grid forced 1:1 on
+   42 photos and centre-cropped every one of them into a thumbnail. */
+.art-wall {
+  columns: 5;
+  column-gap: 10px;
+}
+
+.art-plate {
   position: relative;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-radius: 6px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.art-tile-fixed img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   display: block;
-  transition: transform 0.35s ease;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: zoom-in;
+  overflow: hidden;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  line-height: 0;
+  appearance: none;
 }
 
-.art-tile-fixed:hover img {
-  transform: scale(1.06);
+.art-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* frames sit back until you look at one */
+  opacity: 0.82;
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.art-tile-fixed::after {
+.art-plate::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0);
-  transition: background 0.25s ease;
-  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease;
+  pointer-events: none;
 }
 
-.art-tile-fixed:hover::after {
-  background: rgba(0, 0, 0, 0.18);
+.art-plate:hover img,
+.art-plate:focus-visible img {
+  opacity: 1;
+  transform: scale(1.035);
 }
+
+.art-plate:hover::after,
+.art-plate:focus-visible::after {
+  border-color: rgba(165, 180, 252, 0.45);
+}
+
+.art-plate-num {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.art-plate:hover .art-plate-num,
+.art-plate:focus-visible .art-plate-num {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Lightbox ── */
+.art-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 4.5rem 3rem;
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: art-fade 0.22s ease both;
+  cursor: zoom-out;
+}
+
+.art-lb-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--spec-line);
+}
+
+.art-lb-close {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--spec-line-strong);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.art-lb-close:hover { border-color: var(--accent-soft); color: #fff; }
+
+.art-lb-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: default;
+  animation: art-pop 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.art-lb-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 62px;
+  border: 1px solid var(--spec-line);
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.art-lb-nav:hover {
+  border-color: var(--accent-soft);
+  color: #fff;
+  background: rgba(139, 92, 246, 0.14);
+}
+
+.art-lb-nav--prev { left: 0.75rem; }
+.art-lb-nav--next { right: 0.75rem; }
+
+@keyframes art-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes art-pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-plate img,
+  .art-plate-num,
+  .art-plate::after { transition: none; }
+  .art-plate:hover img { transform: none; }
+  .art-lightbox, .art-lb-img { animation: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1400px) { .art-wall { columns: 4; } }
+@media (max-width: 1024px) { .art-wall { columns: 3; } }
 
 @media (max-width: 768px) {
-  .art-page { padding-top: 60px; }
-  .art-page-inner { width: 100%; padding: 0 0.75rem; box-sizing: border-box; }
-  .art-page-header h1 { font-size: 1.8rem; }
-  .art-grid-fixed { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .art-page { padding-top: 56px; padding-bottom: 7rem; }
+  .art-intro { margin: 1.5rem 0 2rem; }
+  .art-lede { font-size: 0.94rem; margin-bottom: 1.5rem; }
+  .art-meta-cell { padding: 0.75rem 1.1rem 0.8rem; }
+  .art-meta-value { font-size: 0.7rem; }
+  .art-wall { columns: 2; column-gap: 7px; }
+  .art-plate { margin-bottom: 7px; }
+  /* touch has no hover, so the plate number stays put */
+  .art-plate-num { opacity: 0.75; transform: none; }
+  .art-lightbox { padding: 4rem 0.75rem 4.5rem; }
+  .art-lb-nav { top: auto; bottom: 1rem; transform: none; width: 56px; height: 44px; }
+  .art-lb-nav--prev { left: 25%; }
+  .art-lb-nav--next { right: 25%; }
 }
 
-@media (max-width: 480px) {
-  .art-page { padding-top: 48px; }
-  .art-page-header h1 { font-size: 1.5rem; }
-  .art-grid-fixed { gap: 3px; }
+@media (max-width: 420px) {
+  .art-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .art-meta-cell { padding: 0.7rem 0.6rem; }
+  .art-meta-cell:first-child { padding-left: 0.6rem; }
+  .art-meta-value { font-size: 0.62rem; }
 }

@@ -20,7 +20,7 @@
   --pdp-text-dim: rgba(255, 255, 255, 0.58);
   --pdp-text-strong: rgba(255, 255, 255, 0.96);
   --pdp-header-offset: 72px;
-  --pdp-radius-card: 16px;
+  --pdp-radius-card: 0;
   --pdp-sidebar-bg: rgba(255, 255, 255, 0.03);
   --rag-accent: #6366f1;
   --rag-accent-dim: rgba(99, 102, 241, 0.18);
@@ -72,7 +72,7 @@
   color: var(--pdp-text-dim);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--pdp-border);
-  border-radius: 20px;
+  border-radius: 0;
   padding: 0.3rem 0.75rem;
   white-space: nowrap;
 }
@@ -99,7 +99,7 @@
   flex-direction: column;
   background: var(--pdp-sidebar-bg);
   border: 1px solid var(--pdp-border);
-  border-radius: var(--pdp-radius-card);
+  border-radius: 0;
   overflow: hidden;
   height: calc(100vh - var(--pdp-header-offset) - 4rem);
   backdrop-filter: blur(24px);
@@ -123,7 +123,7 @@
 
 .rag-messages::-webkit-scrollbar { width: 4px; }
 .rag-messages::-webkit-scrollbar-track { background: transparent; }
-.rag-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+.rag-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 0; }
 
 /* ── Message rows ─────────────────────────────────────────── */
 .rag-msg {
@@ -178,7 +178,7 @@
   color: var(--pdp-text);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--pdp-border);
-  border-radius: 12px;
+  border-radius: 0;
   padding: 0.6rem 0.9rem;
   max-width: 100%;
 }
@@ -197,7 +197,7 @@
   background: #a5b4fc;
   margin-left: 2px;
   vertical-align: middle;
-  border-radius: 1px;
+  border-radius: 0;
   animation: rag-blink 0.8s step-end infinite;
 }
 
@@ -233,7 +233,7 @@
   gap: 0.15rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--pdp-border);
-  border-radius: 10px;
+  border-radius: 0;
   padding: 0.55rem 0.75rem;
   min-width: 140px;
   transition: border-color 0.2s, background 0.2s;
@@ -290,7 +290,7 @@
   color: var(--pdp-text-dim);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--pdp-border);
-  border-radius: 20px;
+  border-radius: 0;
   padding: 0.25rem 0.7rem;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -318,7 +318,7 @@
   flex: 1;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--pdp-border);
-  border-radius: 10px;
+  border-radius: 0;
   padding: 0.6rem 0.85rem;
   font-size: 0.85rem;
   color: var(--pdp-text-strong);
@@ -345,7 +345,7 @@
   flex-shrink: 0;
   width: 38px;
   height: 38px;
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--rag-accent);
   border: none;
   cursor: pointer;
@@ -404,7 +404,7 @@
   flex-direction: column;
   background: var(--pdp-sidebar-bg);
   border: 1px solid var(--pdp-border);
-  border-radius: var(--pdp-radius-card);
+  border-radius: 0;
   padding: 1rem 1rem 0.875rem;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -454,7 +454,7 @@
   padding: 0.4rem 0.6rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--pdp-border);
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 .rag-insight-section-id {
@@ -497,14 +497,14 @@
   flex: 1;
   height: 6px;
   background: rgba(255, 255, 255, 0.06);
-  border-radius: 3px;
+  border-radius: 0;
   overflow: hidden;
 }
 
 .rag-sim-fill {
   height: 100%;
   background: linear-gradient(90deg, #6366f1, #a5b4fc);
-  border-radius: 3px;
+  border-radius: 0;
   transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 

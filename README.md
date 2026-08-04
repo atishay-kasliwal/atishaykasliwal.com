@@ -174,4 +174,4 @@ uvicorn main:app --reload
 ## Author
 
 **Atishay Kasliwal**
-[atishaykasliwal.com](https://atishaykasliwal.com) · [LinkedIn](https://linkedin.com/in/atishaykasliwal) · [katishay@gmail.com](mailto:katishay@gmail.com)
+[atishaykasliwal.com](https://atishaykasliwal.com) · [LinkedIn](https://linkedin.com/in/atishaykasliwal) · [hire@atishaykasliwal.com](mailto:hire@atishaykasliwal.com)

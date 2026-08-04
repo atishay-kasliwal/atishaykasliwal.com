@@ -1,7 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+/* Montserrat now ships in the single combined font <link> in index.html — an
+   @import here forced a second round trip that couldn't start until this
+   stylesheet had already downloaded. */
 
 * {
   box-sizing: border-box;
+}
+
+/* ── Spec-sheet design tokens ────────────────────────────────────────────
+   Shared by the landing hero, the About figure, and the footer. The accent
+   stays on the site's existing white → indigo → violet gradient. */
+:root {
+  --font-display: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Mono', Consolas, monospace;
+
+  --accent: #8b5cf6;
+  --accent-soft: #a5b4fc;
+  --accent-gradient: linear-gradient(120deg, #ffffff 20%, #a5b4fc 55%, #8b5cf6 85%);
+
+  --spec-ink: #ece9e4;
+  /* dim/faint were 0.55 / 0.32 — the faint tier measured 2.68:1 on black and
+     failed AA for the mono annotations it carries. Raised to clear 4.5:1 while
+     staying quiet enough to read as annotation rather than body copy. */
+  --spec-ink-dim: rgba(255, 255, 255, 0.66);
+  --spec-ink-faint: rgba(255, 255, 255, 0.5);
+  --spec-line: rgba(255, 255, 255, 0.11);
+  --spec-line-strong: rgba(255, 255, 255, 0.19);
+
+  /* corner registration ticks, shared by every plate on the site */
+  --tick: rgba(255, 255, 255, 0.16);
+  --tick-len: 9px;
+}
+
+/* Keyboard focus was invisible site-wide. One ring, drawn in the accent, on
+   every interactive element — and only for keyboard users. */
+:where(a, button, [role='button'], input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+  border-radius: 0;
+}
+
+/* Mono micro-label used for every spec annotation on the page */
+.spec-label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--spec-ink-faint);
+  line-height: 1.6;
+}
+
+.spec-label b,
+.spec-label strong {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.spec-label--accent {
+  color: var(--accent-soft);
 }
 
 html {
@@ -108,6 +164,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* the hero and About plates break out to 100vw; clipping here would crop them
+     back to the 90vw column. Horizontal overflow is already contained by body. */
+  overflow-x: visible;
 }
 
 .page-content.page-content--landing {
@@ -129,6 +188,52 @@ body {
 
 .section-wrap {
   padding: 3rem 0;
+}
+
+/* ── Site-wide type system ───────────────────────────────────────────────
+   Display serif for every heading, mono for every annotation/eyebrow, Inter
+   for running text. Keeps the whole site reading as one spec document. */
+.editorial-grid-header h2,
+.editorial-card h3,
+.skills-heading,
+.story-title,
+.story-card-role,
+.testimonials-title,
+.testimonial-card__name,
+.art-title,
+.rp-name,
+.atv-wordmark,
+.atv-section-head h2,
+.atv-cta h2,
+.project-text-title,
+.project-card-title,
+.spec-about-title,
+.spec-dataplate-value {
+  font-family: var(--font-display) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.012em;
+}
+
+/* Numerals in display type read better lining than Playfair's default */
+.spec-dataplate-value,
+.rp-stat-value {
+  font-variant-numeric: lining-nums;
+  font-feature-settings: 'lnum' 1;
+}
+
+/* Annotations: tags, eyebrows, kickers */
+.editorial-tag,
+.editorial-subtitle,
+.editorial-cta,
+.grid-worked-with,
+.skills-section h3,
+.story-date,
+.testimonial-card__role,
+.rp-eyebrow {
+  font-family: var(--font-mono) !important;
+  font-weight: 400 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
 }
 
 /* ── Shared heading gradient — matches the hero name / Atriveo wordmark ── */
@@ -194,4 +299,82 @@ body {
   color: transparent;
   font-weight: 700;
   display: inline-block;
+}
+
+/* Holds the page height while a split route chunk downloads, so the footer
+   doesn't jump up and then back down. */
+.route-loading {
+  min-height: 100vh;
+}
+
+/* ── Registration brackets ───────────────────────────────────────────────
+   The corner ticks from the portrait plate, reused on every card surface so
+   the whole site reads as one set of measured plates. Deliberately quiet:
+   9px arms at 16% white, brightening slightly on hover.
+
+   Painted with eight 1px gradient slivers on a single box, so no element
+   needs extra markup. Attached to whichever pseudo-element each component
+   had free (.editorial-card and .testimonial-card already use ::after), and
+   .spec-brackets is the span-based fallback for anything with both taken. */
+.story-card::before,
+.rp-card::after,
+.hsp-plate::before,
+.project-card-grid::before,
+.spec-brackets {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  /* above each card's own gradient/content layers (story cards stack to 3);
+     they are 1px corner slivers with pointer-events off, so sitting on top
+     is correct for a frame */
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 0.28s ease;
+  /* story cards are photo tiles — without a halo the white ticks disappear
+     against a bright frame */
+  filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.85));
+  background:
+    linear-gradient(var(--tick), var(--tick)) 0 0 / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 0 0 / 1px var(--tick-len) no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 0 / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 0 / 1px var(--tick-len) no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 0 100% / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 0 100% / 1px var(--tick-len) no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 100% / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 100% / 1px var(--tick-len) no-repeat;
+}
+
+.editorial-card,
+.story-card,
+.rp-card,
+.hsp-plate,
+.project-card-grid {
+  position: relative;
+}
+
+.story-card:hover::before,
+.rp-card:hover::after,
+.hsp-plate:hover::before,
+.project-card-grid:hover::before,
+:hover > .spec-brackets {
+  opacity: 1;
+  --tick: rgba(165, 180, 252, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .story-card::before,
+  .rp-card::after,
+  .hsp-plate::before,
+  .project-card-grid::before,
+  .spec-brackets { transition: none; }
+}
+
+/* the ticks shrink with the plate so they never dominate a small card */
+@media (max-width: 768px) {
+    .story-card::before,
+  .rp-card::after,
+  .hsp-plate::before,
+  .project-card-grid::before,
+  .spec-brackets { inset: 4px; --tick-len: 7px; }
 }

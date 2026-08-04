@@ -66,7 +66,7 @@ export default function FOMCApiAccessPanel() {
         <div className="fomc-api-body">
           <p className="fomc-api-copy">
             Get a key for raw transcript/speech/news metadata and model reasoning. Free tier includes
-            100 calls per month. Need more? Contact <a href="mailto:katishay@gmail.com">katishay@gmail.com</a>.
+            100 calls per month. Need more? Contact <a href="mailto:hire@atishaykasliwal.com">hire@atishaykasliwal.com</a>.
           </p>
 
           <form className="fomc-api-form" onSubmit={onSubmit}>

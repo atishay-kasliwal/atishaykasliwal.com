@@ -14,7 +14,7 @@
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.04em;
-  border-radius: 8px;
+  border-radius: 0;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -89,7 +89,7 @@
   min-height: 48px;
   font-size: 0.88rem;
   padding: 0 1.75rem;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 .btn-lg.btn-icon {

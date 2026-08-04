@@ -1,0 +1,308 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--d-base) var(--ease-out),
+    border-color var(--d-base) var(--ease-out);
+}
+
+/* backdrop-filter is applied only where supported — without the guard,
+   unsupported browsers get a fully transparent bar over scrolling text. */
+@supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
+  .site-header {
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    backdrop-filter: saturate(180%) blur(14px);
+  }
+}
+
+.site-header.is-scrolled {
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  border-bottom-color: var(--border);
+}
+
+.site-header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--s-6);
+  max-width: var(--max-w-wide);
+  margin-inline: auto;
+  padding: var(--s-4) var(--gutter);
+}
+
+/* ── Brand ────────────────────────────────────────────────────────────── */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  color: var(--fg);
+  transition: border-color var(--d-fast) var(--ease-out);
+}
+
+.brand:hover .brand-mark {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.brand-name {
+  font-size: var(--t-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+/* ── Desktop nav ──────────────────────────────────────────────────────── */
+.site-nav {
+  display: none;
+  align-items: center;
+  gap: var(--s-1);
+  margin-inline: auto;
+}
+
+.site-nav-link {
+  position: relative;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-sm);
+  font-size: var(--t-sm);
+  font-weight: var(--fw-medium);
+  color: var(--fg-muted);
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.site-nav-link:hover {
+  color: var(--fg);
+}
+
+.site-nav-link.is-active {
+  color: var(--fg);
+}
+
+/* Active indicator is a 3px dot rather than an underline — it survives on a
+   translucent bar where a hairline underline disappears against content. */
+.site-nav-link.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+}
+
+/* ── Actions ──────────────────────────────────────────────────────────── */
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-left: auto;
+}
+
+.header-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2);
+  min-width: 34px;
+  min-height: 34px;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    background-color var(--d-fast) var(--ease-out);
+}
+
+.header-icon-btn:hover {
+  color: var(--fg);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.header-search-btn {
+  display: none;
+  padding-inline: var(--s-3);
+}
+
+.header-kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-wide);
+  color: var(--fg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.header-resume-btn {
+  display: none;
+  align-items: center;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--r-full);
+  background: var(--fg);
+  color: var(--bg);
+  font-size: var(--t-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-normal);
+  transition: opacity var(--d-fast) var(--ease-out);
+}
+
+.header-resume-btn:hover {
+  opacity: 0.85;
+}
+
+/* ── Burger ───────────────────────────────────────────────────────────── */
+.header-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.burger {
+  position: relative;
+  display: block;
+  width: 15px;
+  height: 9px;
+}
+
+.burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform var(--d-base) var(--ease-out), top var(--d-base) var(--ease-out);
+}
+
+.burger span:first-child {
+  top: 0;
+}
+
+.burger span:last-child {
+  top: 7.5px;
+}
+
+.burger.is-open span:first-child {
+  top: 4px;
+  transform: rotate(45deg);
+}
+
+.burger.is-open span:last-child {
+  top: 4px;
+  transform: rotate(-45deg);
+}
+
+/* ── Mobile drawer ────────────────────────────────────────────────────── */
+.mobile-nav {
+  overflow: hidden;
+  max-height: 0;
+  border-top: 1px solid transparent;
+  background: var(--bg);
+  transition:
+    max-height var(--d-slow) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out);
+}
+
+.mobile-nav.is-open {
+  max-height: 70svh;
+  border-top-color: var(--border);
+}
+
+.mobile-nav nav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-4) var(--gutter) var(--s-8);
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--t-lg);
+  font-weight: var(--fw-medium);
+  color: var(--fg);
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.mobile-nav.is-open .mobile-nav-link {
+  animation: mobile-nav-in var(--d-base) var(--ease-out) forwards;
+  /* Stagger keyed off --i, set inline per item. */
+  animation-delay: calc(var(--i) * 40ms + 60ms);
+}
+
+@keyframes mobile-nav-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-link.is-active {
+  color: var(--accent);
+}
+
+.mobile-nav-num {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}
+
+.mobile-nav-resume {
+  color: var(--accent);
+  border-bottom: none;
+}
+
+/* ── Breakpoints ──────────────────────────────────────────────────────── */
+@media (min-width: 900px) {
+  .site-nav,
+  .header-search-btn,
+  .header-resume-btn {
+    display: flex;
+  }
+
+  .header-menu-btn {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav.is-open .mobile-nav-link {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -743,7 +743,7 @@ export default function HighlightDetail() {
                       <SyntaxHighlighter
                         language={s.codeBlock.language || 'python'}
                         style={oneDark}
-                        customStyle={{ margin: 0, borderRadius: '0 0 10px 10px', fontSize: '0.85rem' }}
+                        customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem' }}
                         showLineNumbers={s.codeBlock.showLineNumbers !== false}
                       >
                         {s.codeBlock.code}

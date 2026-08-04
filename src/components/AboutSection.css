@@ -1,0 +1,492 @@
+/* ── /about_me.doc ───────────────────────────────────────────────────────
+   Left: the claim, its measured values, the story, and how to reach me.
+   Right: a bracketed portrait plate with the vitals a recruiter scans for. */
+
+/* full-bleed out of the 90vw .page-content column so the plates can rule
+   edge to edge on phones */
+.spec-about {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  /* the masthead is fixed, so an anchor jump here would land under it */
+  scroll-margin-top: 84px;
+}
+
+@media (max-width: 768px) {
+  /* nav is a floating pill at the bottom on phones — nothing to clear up top */
+  .spec-about { scroll-margin-top: 16px; }
+}
+
+.spec-about-inner {
+  width: min(90vw, 1440px);
+  margin: 0 auto;
+}
+
+/* ── Document header ── */
+.spec-about-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--spec-ink-dim);
+}
+
+.spec-about-doc-mark {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--accent-soft);
+}
+
+.spec-about-title {
+  margin: 0 0 1.9rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--spec-ink);
+}
+
+.spec-about-title em {
+  font-style: italic;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* italic descenders get clipped by background-clip without breathing room */
+  padding-right: 0.06em;
+}
+
+/* ── Two columns ── */
+/* The portrait column is capped rather than fluid: at a proportional width the
+   square frame grew to ~550px and it, not the prose, decided the section
+   height. A fixed cap keeps the whole plate inside one screen. */
+.spec-about-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: start;
+}
+
+.spec-about-main { min-width: 0; }
+
+/* ── Claim ── */
+.spec-about-claim {
+  margin: 0 0 1.35rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--accent);
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Measured values ── */
+.spec-about-stats {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 1.45rem;
+  border-top: 1px solid var(--spec-line);
+  border-bottom: 1px solid var(--spec-line);
+}
+
+.spec-about-stat {
+  padding: 1rem 0.6rem 1.05rem;
+  border-left: 1px solid var(--spec-line);
+  min-width: 0;
+}
+
+.spec-about-stat:first-child { border-left: 0; padding-left: 0; }
+
+.spec-about-stat-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  margin-bottom: 0.7rem;
+  color: var(--accent-soft);
+}
+
+.spec-about-stat-icon svg { width: 100%; height: 100%; }
+
+.spec-about-stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  margin: 0 0 0.4rem;
+  font-family: var(--font-mono);
+  font-size: clamp(1.05rem, 1.5vw, 1.38rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--spec-ink);
+  font-variant-numeric: lining-nums;
+}
+
+.spec-about-stat-mark {
+  font-size: 0.72em;
+  color: var(--accent);
+}
+
+.spec-about-stat-label {
+  margin: 0;
+  /* the labels carry their own line break so the columns stay aligned */
+  white-space: pre-line;
+  font-size: 0.53rem;
+  letter-spacing: 0.13em;
+  line-height: 1.7;
+}
+
+/* ── Story ──────────────────────────────────────────────────────────────
+   Set in two columns: as a single stack the seven points ran taller than the
+   portrait plate and pushed the section past one screen. Each point is a
+   numbered, ruled item so it still reads as a spec list rather than a blog. */
+.spec-about-prose {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 2.25rem;
+  counter-reset: about-point;
+  margin-bottom: 1.25rem;
+}
+
+.spec-about-prose p {
+  position: relative;
+  counter-increment: about-point;
+  margin: 0;
+  padding: 0.1rem 0 0.1rem 2.1rem;
+  border-left: 1px solid var(--spec-line);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.68;
+  color: var(--spec-ink-dim);
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.spec-about-prose p::before {
+  content: counter(about-point, decimal-leading-zero);
+  position: absolute;
+  left: 0.85rem;
+  top: 0.28em;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-soft);
+  opacity: 0.85;
+}
+
+.spec-about-prose p:hover {
+  border-left-color: var(--accent);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.spec-about-prose strong {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+/* ── Contact line ── */
+.spec-about-contact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--spec-line);
+}
+
+.spec-about-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  color: var(--spec-ink-faint);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.spec-about-contact-link:hover { color: var(--accent-soft); }
+
+/* ── Portrait plate ── */
+.spec-about-side {
+  position: sticky;
+  top: 92px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.spec-portrait {
+  position: relative;
+  margin: 0;
+  padding: 0.6rem;
+  border: 1px solid var(--spec-line-strong);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.spec-portrait-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem 0.75rem;
+}
+
+.spec-portrait-frame {
+  position: relative;
+  /* 4:5 rather than square — a 1:1 crop cuts a portrait headshot down to a face */
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.spec-portrait-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* the headshot sits high in frame, so bias the crop toward the face */
+  object-position: 50% 20%;
+  /* the studio backdrop is a bright flat grey that punched a hole in the page;
+     knocking it back seats the plate in the document instead */
+  filter: saturate(0.82) contrast(1.06) brightness(0.84);
+  transition: filter 0.45s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.spec-portrait:hover .spec-portrait-frame img {
+  filter: saturate(1) contrast(1.02) brightness(1);
+  transform: scale(1.02);
+}
+
+/* Scrim so the photo dissolves into the plate instead of ending on a hard edge */
+.spec-portrait-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 42%),
+    linear-gradient(to right, rgba(139, 92, 246, 0.09), rgba(0, 0, 0, 0) 60%);
+}
+
+/* Calibration ticks down the left edge — reads as a measured plate */
+.spec-portrait-ticks {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 7px;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.34) 0 1px,
+    transparent 1px 14px
+  );
+  opacity: 0.7;
+}
+
+/* Reads as a ruled plate awaiting its plate photo, not as a broken image */
+.spec-portrait-empty {
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── Vitals ── */
+/* Stacked key/value rows rather than a 2x2 grid: at a 300px plate the grid
+   wrapped every value onto three lines and became the tallest thing here. */
+.spec-vitals {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0.85rem 0.5rem 0.35rem;
+}
+
+.spec-vital {
+  display: grid;
+  grid-template-columns: 15px 68px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.42rem 0;
+  border-top: 1px solid var(--spec-line);
+  min-width: 0;
+}
+
+.spec-vital:first-child { border-top: 0; }
+
+.spec-vital-icon {
+  width: 13px;
+  height: 13px;
+  align-self: center;
+  color: var(--accent-soft);
+}
+
+.spec-vital-icon svg { width: 100%; height: 100%; display: block; }
+
+.spec-vital-key {
+  margin: 0;
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+}
+
+.spec-vital-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+/* ── Status plate ── */
+.spec-about-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1.1rem;
+  border: 1px solid var(--spec-line-strong);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.spec-about-status-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.58rem;
+}
+
+.spec-about-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+  animation: spec-status-pulse 2.6s ease-in-out infinite;
+}
+
+.spec-about-status-value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: right;
+}
+
+.spec-about-status-sub {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--spec-ink-faint);
+}
+
+@keyframes spec-status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spec-about-status-dot { animation: none; }
+}
+
+/* Short laptop windows — shave the rhythm rather than spill onto a second screen */
+@media (min-width: 1001px) and (max-height: 880px) {
+  .spec-about.section-wrap { padding: 1.6rem 0; }
+  .spec-about-title { margin-bottom: 1.4rem; }
+  .spec-about-claim { margin-bottom: 1.25rem; }
+  .spec-about-stats { margin-bottom: 1.35rem; }
+  .spec-about-stat { padding: 0.8rem 0.6rem 0.85rem; }
+  .spec-about-stat-icon { margin-bottom: 0.55rem; }
+  .spec-about-prose { margin-bottom: 1.15rem; gap: 0.9rem 2rem; }
+  .spec-about-prose p { font-size: 0.85rem; line-height: 1.6; }
+  .spec-about-body { grid-template-columns: minmax(0, 1fr) minmax(0, 268px); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1180px) {
+  .spec-about-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .spec-about-stat:nth-child(4) { border-left: 0; padding-left: 0; }
+  .spec-about-stat:nth-child(n + 4) { border-top: 1px solid var(--spec-line); }
+}
+
+@media (max-width: 1000px) {
+  .spec-about-body {
+    grid-template-columns: 1fr;
+    gap: 2.75rem;
+  }
+
+  .spec-about-side {
+    position: static;
+    max-width: 380px;
+  }
+}
+
+/* ── Phone: portrait leads, plates rule edge to edge ── */
+@media (max-width: 768px) {
+  .spec-about-inner { width: 100%; padding: 0 1.25rem; }
+
+  .spec-about-doc { margin-bottom: 0.75rem; }
+  .spec-about-title { margin-bottom: 1.75rem; }
+
+  .spec-about-body { gap: 2rem; }
+
+  /* the photo earns its place above the fold on a phone */
+  .spec-about-side { order: -1; max-width: none; }
+
+  .spec-portrait { margin: 0 -1.25rem; border-left: 0; border-right: 0; padding: 0.6rem; }
+  .spec-portrait::before, .spec-portrait::after { display: none; }
+  .spec-portrait-cap { padding: 0.5rem 0.65rem 0.75rem; }
+  /* keep the desktop 4:5 — a squarer frame crops the headshot down to a face */
+  .spec-portrait-frame { aspect-ratio: 4 / 5; }
+
+  .spec-vitals {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+    padding: 1.2rem 0.65rem 0.5rem;
+  }
+
+  .spec-about-status { margin: 0 -1.25rem; border-left: 0; border-right: 0; }
+
+  .spec-about-claim {
+    margin-bottom: 1.75rem;
+    padding-left: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .spec-about-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 -1.25rem 2rem;
+    padding: 0 1.25rem;
+    border-top: 1px solid var(--spec-line-strong);
+    border-bottom: 1px solid var(--spec-line-strong);
+  }
+
+  .spec-about-stat { padding: 1.1rem 0.6rem 1.15rem; }
+  .spec-about-stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .spec-about-stat:nth-child(even) { border-left: 1px solid var(--spec-line); }
+  .spec-about-stat:nth-child(n + 3) { border-top: 1px solid var(--spec-line); }
+  .spec-about-stat-icon { width: 19px; height: 19px; margin-bottom: 0.75rem; }
+
+  /* one column on a phone; two would leave a 20-character measure */
+  .spec-about-prose { grid-template-columns: 1fr; gap: 1.1rem; }
+  .spec-about-prose p { font-size: 0.92rem; line-height: 1.75; padding-left: 1.9rem; }
+  .spec-about-prose p::before { left: 0.7rem; }
+
+  .spec-about-contact { gap: 1.1rem 1.35rem; }
+  .spec-about-contact-link { font-size: 0.62rem; }
+}
+
+@media (max-width: 380px) {
+  .spec-about-contact-link { font-size: 0.58rem; gap: 0.45rem; }
+}

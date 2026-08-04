@@ -94,7 +94,7 @@ const STATS = [
   { label: 'Focus', value: 'AI/ML · Data Science' },
   { label: 'Experience', value: '4+ years' },
   { label: 'Location', value: 'New York, NY' },
-  { label: 'Availability', value: 'Open to Relocation' },
+  { label: 'Availability', value: 'Open to roles · Will relocate' },
 ];
 
 function highlightMetrics(text) {
@@ -114,10 +114,22 @@ export default function Resume() {
 
         {/* Hero */}
         <section className="rp-hero">
+          <div className="rp-doc-row">
+            <span className="spec-label">
+              <span className="rp-doc-mark" aria-hidden="true" />
+              /resume.doc · AK-2026 / Rev. A
+            </span>
+            <span className="spec-label">New York, NY</span>
+          </div>
+
           <p className="rp-eyebrow">Software Engineer · AI / ML · Data Science · Distributed Systems</p>
-          <h1 className="rp-name">Atishay Kasliwal</h1>
+          <h1 className="rp-name">
+            Atishay <em>Kasliwal</em>
+          </h1>
           <p className="rp-tagline">
-            Software Engineer with 4+ years building distributed systems, high-availability services, and ML pipelines at scale. Deep experience in event-driven architecture, CI/CD, and consumer-facing APIs in Java, Python, and AWS. Holds an MS in Data Science from Stony Brook University.
+            Four years building distributed systems, high-availability services and ML pipelines.
+            Event-driven architecture, CI/CD and customer-facing APIs in Java, Python and AWS, plus
+            an MS in Data Science from Stony Brook.
           </p>
           <div className="rp-meta-row">
             <span className="rp-meta-item">
@@ -125,7 +137,7 @@ export default function Resume() {
               New York, NY · Open to relocation
             </span>
             <span className="rp-meta-dot">·</span>
-            <a href="mailto:katishay@gmail.com" className="rp-meta-item rp-meta-link">katishay@gmail.com</a>
+            <a href="mailto:hire@atishaykasliwal.com" className="rp-meta-item rp-meta-link">hire@atishaykasliwal.com</a>
             <span className="rp-meta-dot">·</span>
             <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="rp-meta-item rp-meta-link">LinkedIn</a>
             <span className="rp-meta-dot">·</span>
@@ -142,7 +154,7 @@ export default function Resume() {
               </svg>
               Download Resume PDF
             </a>
-            <a href="mailto:katishay@gmail.com" className="rp-btn rp-btn--ghost">Get in touch</a>
+            <a href="mailto:hire@atishaykasliwal.com" className="rp-btn rp-btn--ghost">Get in touch</a>
           </div>
         </section>
 
@@ -254,7 +266,7 @@ export default function Resume() {
               <p className="rp-footer-cta-sub"><span className="rp-status-dot" />New York, NY · Remote · Open to relocation</p>
             </div>
             <div className="rp-cta-row">
-              <a href="mailto:katishay@gmail.com" className="rp-btn rp-btn--primary">katishay@gmail.com</a>
+              <a href="mailto:hire@atishaykasliwal.com" className="rp-btn rp-btn--primary">hire@atishaykasliwal.com</a>
               <a href="https://www.linkedin.com/in/atishay-kasliwal/" target="_blank" rel="noopener noreferrer" className="rp-btn rp-btn--ghost">LinkedIn</a>
               <a href="/Atishay_Kasliwal.pdf" className="rp-btn rp-btn--ghost" download>↓ PDF</a>
             </div>

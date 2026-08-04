@@ -1,37 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import SiteHeader from '../SiteHeader';
 import StoryTimeline from '../StoryTimeline';
 import SkillsSection from '../components/SkillsSection';
-import FinalProductGrid from '../components/FinalProductGrid';
-import BookingPanel from '../components/BookingPanel';
+import AboutSection from '../components/AboutSection';
+import HeroSystemPanel from '../components/HeroSystemPanel';
 import '../styles/hero.css';
 import '../styles/editorial.css';
 import '../styles/testimonials.css';
 import '../styles/buttons.css';
 
-import img1 from '../assets/FidelityLogo.png';
-import img4 from '../assets/bt-logo-redesign-sq-1.jpg';
-import img6 from '../assets/stony_brook_university_logo.jpeg';
-import img7 from '../assets/Accolite Digital_iduk-Sna9f_3.png';
-import img8 from '../assets/atrium_health_wake_forest_baptist_logo.jpeg';
-import img9 from '../assets/shriffle.png';
 import ankitPhoto from '../assets/Ankit Jain.jpeg';
 import wencuiPhoto from '../assets/Prof.jpeg';
 import nehaPhoto from '../assets/Neha gupta.jpeg';
 import goldyPhoto from '../assets/goldey.jpeg';
 import daMaPhoto from '../assets/da ma.jpeg';
 import gunjanPhoto from '../assets/gunjanjain.jpg';
-
-const gridImages = [
-  { src: img6, company: 'Stony Brook University', role: 'SWE Research', impact: 'Financial data pipelines · 27% portfolio return' },
-  { src: img8, light: true, company: 'Wake Forest – CAIR', role: 'SWE Intern · ML', impact: 'ML pipeline · 90% accuracy · 1,250+ patient cases' },
-  { src: img1, company: 'Fidelity Investments', role: 'Senior SWE (via Accolite)', impact: 'Event-driven ETL · 10+ enterprise systems · 99% uptime' },
-  { src: img4, company: 'BT Group', role: 'SWE (via Accolite)', impact: 'GraphQL & REST APIs · 1K+ daily transactions at 200ms P99' },
-  { src: img7, light: true, company: 'Accolite Digital', role: 'Senior Software Engineer', impact: 'Distributed systems · 100K+ users · 40% latency reduction' },
-  { src: img9, light: true, company: 'Shriffle', role: 'SWE Intern', impact: 'Secrets management microservice · 8+ microservices secured' },
-];
 
 const testimonials = [
   {
@@ -78,8 +63,68 @@ const testimonials = [
   },
 ];
 
+/* Every figure below traces to a specific line on the résumé. Anything that
+   couldn't be sourced (paper counts, project tallies) is deliberately absent —
+   a recruiter who checks should find the numbers hold. */
+const HERO_METRICS = [
+  { value: '4+', label: 'Years shipping production systems' },
+  { value: '100K+', label: 'Customers served at 99% uptime' },
+  { value: '10TB+', label: 'Medical imaging through ML' },
+  { value: '−40%', label: 'P99 latency · zero Sev1 after' },
+  { value: 'MS', label: 'Data Science · Stony Brook ’26' },
+];
+
+const CURRENTLY = [
+  { head: 'Building Atriveo', sub: 'AI job-search platform' },
+  { head: 'MS Data Science', sub: 'Stony Brook · May 2026' },
+  { head: 'Open to new roles', sub: 'SWE · AI/ML · Data' },
+  { head: 'Based in New York', sub: 'Open to relocation' },
+];
+
+/* Cursor light + grid parallax. Writes two custom properties per frame and
+   nothing else — the grid transform and the glow both stay on the compositor.
+   Sits out entirely on touch devices and under reduced-motion. */
+function useHeroPointer(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!fine.matches || still.matches) return undefined;
+
+    let frame = 0;
+    let pending = null;
+
+    const apply = () => {
+      frame = 0;
+      if (!pending) return;
+      const { x, y, w, h } = pending;
+      el.style.setProperty('--gx', `${x}px`);
+      el.style.setProperty('--gy', `${y}px`);
+      el.style.setProperty('--px', (x / w) * 2 - 1);
+      el.style.setProperty('--py', (y / h) * 2 - 1);
+    };
+
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      pending = { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height };
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+
+    el.addEventListener('pointermove', onMove, { passive: true });
+    return () => {
+      el.removeEventListener('pointermove', onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [ref]);
+}
+
 function HomePage() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const heroRef = useRef(null);
+
+  useHeroPointer(heroRef);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -118,7 +163,7 @@ function HomePage() {
             "image": "https://atishaykasliwal.com/atishaylogo.png",
             "description": "Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University.",
             "jobTitle": "Software Engineer",
-            "email": "katishay@gmail.com",
+            "email": "hire@atishaykasliwal.com",
             "alumniOf": [
               { "@type": "CollegeOrUniversity", "name": "Stony Brook University" },
               { "@type": "CollegeOrUniversity", "name": "Symbiosis University of Applied Sciences" }
@@ -136,93 +181,117 @@ function HomePage() {
       <div className="page-content page-content--landing" translate="no">
         <SiteHeader />
 
-        <div className="landing-hero-wrap" translate="no">
-          <div className="landing-hero-stack" translate="no">
-            <div className="landing-two-col" data-analytics-section="hero" translate="no">
-              <div className="landing-left-text" translate="no">
-                <p className="hero-eyebrow" translate="no">
-                  Software Engineer · Distributed Systems · Machine Learning
+        <header className="spec-hero" ref={heroRef} data-analytics-section="hero" translate="no">
+          <div className="spec-hero-grid" aria-hidden="true" />
+          <div className="spec-hero-glow" aria-hidden="true" />
+
+          <div className="spec-hero-inner" translate="no">
+            <div className="spec-hero-meta" translate="no">
+              <span className="spec-label">
+                <span className="spec-meta-prefix">Portfolio Document · </span>AK-2026 / Rev. A
+              </span>
+              <span className="spec-label spec-hero-loc">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                New York, NY
+              </span>
+            </div>
+
+            <div className="spec-hero-cols" translate="no">
+              {/* ── Left: who / what / proof / action ── */}
+              <div className="spec-hero-lead" translate="no">
+                <p className="spec-status" translate="no">
+                  <span className="spec-status-mark" aria-hidden="true" />
+                  Open to software, AI/ML and data roles · 2026
                 </p>
-                <h1 className="hero-name" translate="no">Atishay Kasliwal</h1>
-                <p className="hero-description" translate="no">
-                  Software engineer with 4+ years building scalable distributed systems and ML pipelines
-                  across fintech, healthcare, and research. With Masters in Data Science at Stony
-                  Brook University.
+
+                <h1 className="spec-display" translate="no">
+                  <span className="spec-display-line">Atishay</span>
+                  <span className="spec-display-line spec-display-line--accent">Kasliwal</span>
+                </h1>
+
+                <p className="spec-headline" translate="no">
+                  Building production AI systems that scale.
+                  <span className="spec-caret" aria-hidden="true" />
                 </p>
-                <div className="button-group-theme hero-ctas" translate="no">
+
+                <p className="spec-lede" translate="no">
+                  Event-driven backends in fintech, ML pipelines on 10TB of hospital imaging,
+                  research at Stony Brook, and a developer tool I run on my own.
+                </p>
+
+                <div className="spec-cta-row" translate="no">
                   <Link
                     to="/highlights"
-                    className="btn-theme btn-primary-action btn-lg"
-                    data-cta-position="hero_view_work"
+                    className="spec-btn spec-btn--primary"
+                    data-cta-position="hero_view_projects"
                   >
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.6em' }}>
-                      View Work
-                      <svg width="14" height="14" fill="none" viewBox="0 0 16 16">
-                        <path d="M3 8h10M9 4l4 4-4 4" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
+                    View Projects
+                    <svg width="13" height="13" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </Link>
-                  <Link to="/resume" className="btn-theme btn-secondary btn-lg" data-cta-position="hero_resume">
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.6em' }}>Resume</span>
+                  <Link to="/resume" className="spec-btn spec-btn--secondary" data-cta-position="hero_resume">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <path d="M14 2v6h6" />
+                    </svg>
+                    Résumé
                   </Link>
                   <a
-                    href="https://www.linkedin.com/in/atishay-kasliwal/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-theme btn-icon btn-lg"
-                    aria-label="LinkedIn"
+                    href="mailto:hire@atishaykasliwal.com"
+                    className="spec-btn spec-btn--tertiary"
+                    data-cta-position="hero_contact"
                   >
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.034 0 3.595 1.997 3.595 4.59v5.606z" fill="currentColor" />
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <path d="m2 7 10 6 10-6" />
                     </svg>
-                  </a>
-                  <a
-                    href="https://github.com/atishay-kasliwal"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-theme btn-icon btn-lg"
-                    aria-label="GitHub"
-                  >
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" fill="currentColor" />
-                    </svg>
+                    Contact
                   </a>
                 </div>
-                <div className="hero-stats" translate="no">
-                  <div className="hero-stat">
-                    <span className="hero-stat-num">5+</span>
-                    <span className="hero-stat-label">Years Experience</span>
-                  </div>
-                  <div className="hero-stat-divider" />
-                  <div className="hero-stat">
-                    <span className="hero-stat-num">10+</span>
-                    <span className="hero-stat-label">Projects Shipped</span>
-                  </div>
-                  <div className="hero-stat-divider" />
-                  <div className="hero-stat">
-                    <span className="hero-stat-num">8+</span>
-                    <span className="hero-stat-label">Enterprise Clients</span>
-                  </div>
-                  <div className="hero-stat-divider" />
-                  <div className="hero-stat">
-                    <span className="hero-stat-num">MS</span>
-                    <span className="hero-stat-label">
-                      Data Science,
-                      <br />
-                      Stony Brook
-                    </span>
-                  </div>
-                </div>
+
+                {/* ── Measured values: every figure traces to the résumé ── */}
+                <dl className="spec-metrics" translate="no">
+                  {HERO_METRICS.map((m) => (
+                    <div className="spec-metric" key={m.value + m.label} translate="no">
+                      <dt className="spec-metric-value" translate="no">{m.value}</dt>
+                      <dd className="spec-metric-label spec-label" translate="no">{m.label}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
 
-              {/* Right side — booking panel */}
-              <div className="landing-right-images">
-                <BookingPanel />
-              </div>
+              {/* ── Right: the system, not a decoration ── */}
+              <HeroSystemPanel />
+            </div>
 
+            {/* ── Currently rail ── */}
+            <div className="spec-currently" translate="no">
+              <span className="spec-label spec-currently-key">Currently</span>
+              <ul className="spec-currently-list" translate="no">
+                {CURRENTLY.map((item) => (
+                  <li className="spec-currently-item" key={item.head} translate="no">
+                    <span className="spec-currently-head">{item.head}</span>
+                    <span className="spec-currently-sub">{item.sub}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="spec-note" translate="no">
+                Most of what I build is invisible when it works. That is the part I like.
+              </p>
             </div>
           </div>
-        </div>
+
+          <a href="#about-section" className="spec-scroll" translate="no">
+            <span className="spec-scroll-text">Scroll to explore</span>
+            <span className="spec-scroll-rule" aria-hidden="true">
+              <span className="spec-scroll-tick" />
+            </span>
+          </a>
+        </header>
 
         <section className="editorial-grid-section section-wrap" data-analytics-section="editorial" translate="no">
           <div className="editorial-grid-inner">
@@ -239,6 +308,7 @@ function HomePage() {
                 data-feature-name="FOMC Intelligence Dashboard"
                 translate="no"
               >
+                <span className="spec-brackets" aria-hidden="true" />
                 <span className="editorial-tag" translate="no">Research</span>
                 <div className="editorial-card-body" translate="no">
                   <span className="editorial-subtitle">NLP · Monetary Policy</span>
@@ -264,6 +334,7 @@ function HomePage() {
                 data-feature-name="Legal RAG System"
                 translate="no"
               >
+                <span className="spec-brackets" aria-hidden="true" />
                 <span className="editorial-tag" translate="no">AI</span>
                 <div className="editorial-card-body" translate="no">
                   <span className="editorial-subtitle">LLM · Document Intelligence</span>
@@ -289,6 +360,7 @@ function HomePage() {
                 data-feature-name="PolicyFabric"
                 translate="no"
               >
+                <span className="spec-brackets" aria-hidden="true" />
                 <span className="editorial-tag" translate="no">Systems</span>
                 <div className="editorial-card-body" translate="no">
                   <span className="editorial-subtitle">Systems Design · Data Contracts</span>
@@ -316,6 +388,7 @@ function HomePage() {
                 data-feature-name="Atriveo Chrome Extension"
                 translate="no"
               >
+                <span className="spec-brackets" aria-hidden="true" />
                 <span className="editorial-tag" translate="no">Product</span>
                 <div className="editorial-card-body" translate="no">
                   <span className="editorial-subtitle">AI Product · Hiring</span>
@@ -341,6 +414,7 @@ function HomePage() {
                 data-feature-name="MRI Brain Tumor Viewer"
                 translate="no"
               >
+                <span className="spec-brackets" aria-hidden="true" />
                 <span className="editorial-tag" translate="no">Medical AI</span>
                 <div className="editorial-card-body" translate="no">
                   <span className="editorial-subtitle">Computer Vision · Radiology</span>
@@ -363,11 +437,12 @@ function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="editorial-card editorial-card--wide editorial-card--has-bg"
-                style={{ backgroundImage: 'url(/Atriveo6th.png)' }}
+                style={{ backgroundImage: 'url(/Atriveo6th.jpg)' }}
                 aria-label="Visit Atriveo"
                 data-feature-name="Atriveo Platform"
                 translate="no"
               >
+                <span className="spec-brackets" aria-hidden="true" />
                 <span className="editorial-tag" translate="no">Product</span>
                 <div className="editorial-card-body" translate="no">
                   <span className="editorial-subtitle">AI Recruiting Platform</span>
@@ -388,6 +463,8 @@ function HomePage() {
           </div>
         </section>
 
+        <AboutSection />
+
         <div id="skills-section" data-analytics-section="skills" translate="no">
           <SkillsSection />
         </div>
@@ -404,6 +481,7 @@ function HomePage() {
                 const displayName = String(t.name || '').replace('⭐⭐⭐⭐⭐', '').trim();
                 return (
                   <article className="testimonial-card" key={idx} translate="no">
+                    <span className="spec-brackets" aria-hidden="true" />
                     <header className="testimonial-card__head" translate="no">
                       <div className="testimonial-card__person" translate="no">
                         <span className="testimonial-card__avatar-ring" aria-hidden="true" translate="no">
@@ -419,7 +497,7 @@ function HomePage() {
                         <div className="testimonial-card__meta" translate="no">
                           <div className="testimonial-card__name" translate="no">{displayName}</div>
                           <div className="testimonial-card__role" translate="no">
-                            {t.company} — {t.post}
+                            {t.company} · {t.post}
                           </div>
                         </div>
                       </div>
@@ -436,7 +514,6 @@ function HomePage() {
         </div>
 
         <div id="final-product-section" data-analytics-section="gallery" className="section-wrap" translate="no">
-          <FinalProductGrid />
         </div>
       </div>
     </>

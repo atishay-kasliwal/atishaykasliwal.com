@@ -46,6 +46,8 @@
   "homepage": "https://atishaykasliwal.com",
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+    "marked": "^18.0.9",
+    "shiki": "^4.4.1",
     "vite": "^6.3.5",
     "wrangler": "^4.45.3"
   }

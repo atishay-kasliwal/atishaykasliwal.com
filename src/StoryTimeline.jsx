@@ -56,7 +56,14 @@ export default function StoryTimeline() {
         <div className="story-cards-container" translate="no">
           {stories.map((story, idx) => (
             <div className="story-card" key={idx} translate="no">
-              <img src={story.image} alt={story.title} className="story-img" translate="no" />
+              <img
+                src={story.image}
+                alt={story.title}
+                className="story-img"
+                loading="lazy"
+                decoding="async"
+                translate="no"
+              />
               <div className="story-card-gradient" />
               <div className="story-card-content" translate="no">
                 <div className="story-card-body" translate="no">

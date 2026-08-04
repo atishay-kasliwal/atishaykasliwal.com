@@ -26,56 +26,95 @@
   align-items: center;
 }
 
+/* ── Masthead: monogram plate + mono document nav ── */
 .nav-logo {
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.9) !important;
   opacity: 1;
   flex-shrink: 0;
 }
 
-.nav-logo:hover {
-  background: linear-gradient(120deg, #ffffff 30%, #a5b4fc 65%, #8b5cf6 95%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: 1;
+.nav-monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--spec-line-strong);
+  color: var(--spec-ink);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--spec-ink);
+  white-space: nowrap;
+}
+
+.nav-logo-sub {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.26);
+  white-space: nowrap;
+  padding-left: 0.7rem;
+  border-left: 1px solid var(--spec-line);
+}
+
+.nav-logo:hover .nav-monogram {
+  border-color: rgba(165, 180, 252, 0.6);
+  color: var(--accent-soft);
 }
 
 .nav, .nav.black {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   margin-top: 0;
   color: #fff;
 }
 
 .nav a, .nav.black a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   color: rgba(255, 255, 255, 0.5) !important;
   text-decoration: none;
   transition: color 0.2s ease, background 0.2s ease;
   font-weight: 400;
-  padding: 5px 13px;
-  border-radius: 9999px;
+  padding: 7px 13px;
+  border-radius: 0;
   position: relative;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.18em;
+}
+
+.nav-num {
+  font-size: 0.9em;
+  color: var(--accent-soft);
+  opacity: 0.75;
 }
 
 .nav a:hover, .nav.black a:hover {
   color: rgba(255, 255, 255, 0.9) !important;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .nav .active, .nav.black .active {
   color: #e0e7ff !important;
-  background: rgba(99, 102, 241, 0.14);
+  background: rgba(99, 102, 241, 0.12);
 }
 
 
@@ -85,12 +124,12 @@
 
 .nav-resume-btn {
   color: rgba(255, 255, 255, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 4px !important;
-  padding: 3px 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0 !important;
+  padding: 6px 14px !important;
   font-weight: 400 !important;
   transition: all 0.2s ease !important;
-  margin-left: 8px;
+  margin-left: 10px;
 }
 
 .nav-resume-btn:hover {
@@ -189,9 +228,9 @@
     z-index: 1000;
     transition: all 0.2s ease;
     overflow-x: auto;
-    background: rgba(10, 15, 30, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 999px;
+    background: rgba(10, 12, 20, 0.82);
+    border: 1px solid var(--spec-line-strong);
+    border-radius: 0;
     backdrop-filter: blur(14px);
     width: max-content;
     max-width: calc(100% - 24px);
@@ -213,8 +252,20 @@
     align-items: center;
     width: auto;
     border-bottom: none;
-    font-size: 0.68rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
   }
+
+  /* the document annotations don't survive the compact pill / centred masthead */
+  .nav-num, .nav-logo-sub { display: none; }
+  .nav-logo-text { font-size: 0.95rem; }
+
+  /* Five items overflow the pill at phone widths. About is a scroll away on the
+     landing page and Contact is a full-width row in the hero, so those two drop
+     out here rather than turning the pill into a horizontal scroller.
+     Scoped through .nav so it outranks the `.nav a { display: flex }` above. */
+  .nav .nav-about-link,
+  .nav .nav-contact-link { display: none; }
 
   .nav.black a { color: #111 !important; }
 
