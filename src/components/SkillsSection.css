@@ -16,7 +16,7 @@
 
 .skills-heading {
   font-family: 'Inter', sans-serif;
-  font-size: 2rem;
+  font-size: 2.7rem;
   font-weight: 700;
   margin-bottom: 2rem;
   color: #fff;
@@ -74,7 +74,7 @@
   padding: 0.3rem 0.7rem;
   background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
+  border-radius: 0;
   font-size: 0.78rem;
   font-weight: 450;
   font-family: 'Inter', sans-serif;

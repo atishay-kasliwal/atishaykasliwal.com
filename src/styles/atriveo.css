@@ -23,7 +23,7 @@
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
+  border-radius: 0;
   padding: 0.35rem 0.9rem;
   margin-bottom: 1.75rem;
   background: rgba(255, 255, 255, 0.03);
@@ -158,7 +158,7 @@
   width: 100%;
   aspect-ratio: 1000 / 560;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  border-radius: 0;
   background:
     radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99, 102, 241, 0.07) 0%, transparent 70%),
     radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1.5px),
@@ -197,7 +197,7 @@
   padding: 0.7rem 2rem 0.7rem 0.95rem;
   background: rgba(15, 15, 30, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 0;
   cursor: pointer;
   font-family: inherit;
   text-align: left;
@@ -268,7 +268,7 @@
   margin-top: 1.25rem;
   padding: 1.4rem 1.6rem;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 16px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.028);
   animation: atv-detail-in 0.3s ease;
 }
@@ -299,7 +299,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 0.22rem 0.6rem;
-  border-radius: 9999px;
+  border-radius: 0;
   font-weight: 600;
 }
 
@@ -346,7 +346,7 @@
 .atv-tech {
   font-size: 0.68rem;
   padding: 0.24rem 0.6rem;
-  border-radius: 6px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.09);
   color: rgba(255, 255, 255, 0.55);
@@ -382,7 +382,7 @@
 .atv-compiler-card {
   padding: 1.5rem 1.4rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.025);
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
@@ -433,7 +433,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.45rem 0.9rem;
-  border-radius: 9999px;
+  border-radius: 0;
   color: rgba(255, 255, 255, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.02);
@@ -478,7 +478,7 @@
 
 .atv-terminal {
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
+  border-radius: 0;
   background: rgba(6, 6, 14, 0.92);
   overflow: hidden;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 80px rgba(99, 102, 241, 0.06);
@@ -660,7 +660,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0.65rem 1.4rem;
-  border-radius: 10px;
+  border-radius: 0;
   font-size: 0.88rem;
   font-weight: 550;
   text-decoration: none;

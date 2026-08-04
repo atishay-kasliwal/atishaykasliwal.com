@@ -62,7 +62,7 @@ function ChatBot() {
       const match = findBestMatch(qaExamples, trimmed);
       const answer =
         match?.answer ||
-        "I don't have a specific answer for that. You can reach Atishay at katishay@gmail.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.";
+        "I don't have a specific answer for that. You can reach Atishay at hire@atishaykasliwal.com or on LinkedIn at linkedin.com/in/atishay-kasliwal.";
       setMessages((prev) => [...prev, { id: Date.now(), text: answer, sender: 'bot' }]);
       setIsLoading(false);
       setTimeout(() => {

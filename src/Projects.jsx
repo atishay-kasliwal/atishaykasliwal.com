@@ -408,7 +408,7 @@ export default function Projects() {
                           className="project-square-image"
                           translate="no"
                         >
-                          <img src={img} alt={`${project.title} - Square ${imgIndex + 1}`} translate="no" />
+                          <img src={img} alt={`${project.title} - Square ${imgIndex + 1}`} loading="lazy" decoding="async" translate="no" />
                         </div>
                       ))}
                     </div>
@@ -478,7 +478,7 @@ export default function Projects() {
                                 className="project-carousel-image"
                                 translate="no"
                               >
-                                <img src={img} alt={`${project.title} - ${imgIndex + 1}`} translate="no" />
+                                <img src={img} alt={`${project.title} - ${imgIndex + 1}`} loading="lazy" decoding="async" translate="no" />
                               </div>
                             ))}
                           </div>
@@ -513,13 +513,13 @@ export default function Projects() {
                           )}
                         </div>
                         <div className="project-card-split-image" translate="no">
-                          <img src={project.image} alt={project.title} translate="no" />
+                          <img src={project.image} alt={project.title} loading="lazy" decoding="async" translate="no" />
                         </div>
                       </div>
                     </>
                   ) : (
                     <>
-                      <img src={project.image} alt={project.title} translate="no" />
+                      <img src={project.image} alt={project.title} loading="lazy" decoding="async" translate="no" />
                       {project.textOverlay && (
                         <div className="project-card-overlay-content" translate="no">
                           <div className="project-card-number" translate="no">#{String(displayIndex + 1).padStart(2, '0')}</div>

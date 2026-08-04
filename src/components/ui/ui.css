@@ -1,0 +1,299 @@
+/**
+ * Styles for the shared UI primitives.
+ * Everything here reads from tokens.css — no literal colors, no magic numbers.
+ */
+
+/* ── Breadcrumbs ──────────────────────────────────────────────────────── */
+.crumbs {
+  margin-bottom: var(--s-6);
+}
+
+.crumbs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  color: var(--fg-subtle);
+}
+
+.crumbs-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.crumbs-item a {
+  color: var(--fg-subtle);
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.crumbs-item a:hover {
+  color: var(--fg);
+}
+
+.crumbs-item [aria-current='page'] {
+  color: var(--fg);
+}
+
+.crumbs-sep {
+  color: var(--fg-subtle);
+  opacity: 0.5;
+}
+
+/* ── Page header ──────────────────────────────────────────────────────── */
+.page-header {
+  padding-block: clamp(5rem, 11vw, 9rem) clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.page-header-eyebrow {
+  margin-bottom: var(--s-4);
+}
+
+.page-header-title {
+  font-size: var(--t-4xl);
+  max-width: 18ch;
+}
+
+.page-header-lede {
+  margin-top: var(--s-6);
+}
+
+.page-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-8);
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.btn {
+  --btn-py: 0.7rem;
+  --btn-px: 1.25rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  padding: var(--btn-py) var(--btn-px);
+  border: 1px solid transparent;
+  border-radius: var(--r-full);
+  font-size: var(--t-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-normal);
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  background: none;
+  transition:
+    background-color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    color var(--d-fast) var(--ease-out),
+    transform var(--d-fast) var(--ease-out);
+}
+
+/* Lift is 1px — enough to register as responsive, small enough not to read as
+   a bounce. Suppressed under reduced-motion via the global token override. */
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn--primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn--secondary {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.btn--secondary:hover {
+  opacity: 0.88;
+}
+
+.btn--ghost {
+  border-color: var(--border-strong);
+  color: var(--fg);
+}
+
+.btn--ghost:hover {
+  background: var(--surface-hover);
+  border-color: var(--fg-subtle);
+}
+
+.btn--quiet {
+  color: var(--fg-muted);
+  padding-inline: var(--s-2);
+}
+
+.btn--quiet:hover {
+  color: var(--fg);
+}
+
+.btn--sm {
+  --btn-py: 0.5rem;
+  --btn-px: 0.9rem;
+  font-size: var(--t-xs);
+}
+
+.btn--lg {
+  --btn-py: 0.9rem;
+  --btn-px: 1.6rem;
+  font-size: var(--t-base);
+}
+
+.btn-icon {
+  display: inline-flex;
+  transition: transform var(--d-fast) var(--ease-out);
+}
+
+.btn:hover .btn-icon {
+  transform: translateX(2px);
+}
+
+/* ── Tags ─────────────────────────────────────────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.32em 0.75em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  background: var(--bg-raised);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  color: var(--fg-muted);
+  white-space: nowrap;
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    background-color var(--d-fast) var(--ease-out);
+}
+
+button.tag,
+a.tag {
+  cursor: pointer;
+}
+
+button.tag:hover,
+a.tag:hover {
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+
+.tag--active {
+  background: var(--accent-surface);
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Metrics ──────────────────────────────────────────────────────────── */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--s-6);
+  margin: 0;
+  padding: 0;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.metric-value {
+  font-size: var(--t-2xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tighter);
+  color: var(--fg);
+  line-height: 1;
+  margin: 0;
+}
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-4);
+  padding: var(--s-16) var(--s-8);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-raised);
+}
+
+.empty-state-title {
+  font-size: var(--t-xl);
+}
+
+.empty-state-desc {
+  color: var(--fg-muted);
+  max-width: 52ch;
+}
+
+/* ── Cards (shared surface) ───────────────────────────────────────────── */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-raised);
+  transition:
+    border-color var(--d-base) var(--ease-out),
+    background-color var(--d-base) var(--ease-out),
+    transform var(--d-base) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-inset);
+}
+
+/* Whole-card link target. The <a> covers the card via ::after so the entire
+   surface is clickable while only the title is announced as the link text. */
+.card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.card:focus-within {
+  border-color: var(--border-accent);
+}

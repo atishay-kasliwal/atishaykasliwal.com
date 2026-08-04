@@ -1,22 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" translate="no" class="notranslate">
   <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5QZR9SWX');</script>
-    <!-- End Google Tag Manager -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RX5HTCRR3X"></script>
+    <meta charset="utf-8" />
+    <!-- Google Tag Manager + gtag.
+         ~440 KB of script between them. The dataLayer and gtag() shim exist from
+         the start so nothing that queues events is lost, but the tags themselves
+         are injected after load (or on the first interaction, whichever comes
+         first) so they don't compete with the page for bandwidth on a cold visit. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-RX5HTCRR3X');
+      (function (w, d) {
+        var loaded = false;
+        function load() {
+          if (loaded) return;
+          loaded = true;
+          w.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          ['https://www.googletagmanager.com/gtm.js?id=GTM-5QZR9SWX',
+           'https://www.googletagmanager.com/gtag/js?id=G-RX5HTCRR3X'].forEach(function (src) {
+            var s = d.createElement('script');
+            s.async = true;
+            s.src = src;
+            d.head.appendChild(s);
+          });
+        }
+        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (e) {
+          w.addEventListener(e, load, { once: true, passive: true });
+        });
+        if (d.readyState === 'complete') setTimeout(load, 1200);
+        else w.addEventListener('load', function () { setTimeout(load, 1200); });
+      })(window, document);
     </script>
-    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/atishaylogo.png" />
     <link rel="icon" type="image/x-icon" href="/atishaylogo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -146,7 +163,7 @@
     <meta name="twitter:image:alt" content="Atishay Kasliwal - Full Stack & AI/ML Engineer" />
 
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"Person","@id":"https://atishaykasliwal.com/#person","name":"Atishay Kasliwal","url":"https://atishaykasliwal.com/","image":"https://atishaykasliwal.com/AtishayKasliwal.JPG","description":"Full-stack engineer with 5+ years shipping production software across fintech, healthcare, and enterprise.","jobTitle":"Full Stack Engineer","email":"katishay@gmail.com","alumniOf":{"@type":"CollegeOrUniversity","name":"Stony Brook University"},"knowsAbout":["machine learning","data science","full-stack development","React","Next.js","Python","GCP","NLP","computer vision"],"sameAs":["https://www.linkedin.com/in/atishay-kasliwal/","https://github.com/atishay-kasliwal","https://x.com/AtiahayKasliwal","https://www.instagram.com/atishay_kasliwal/"]}
+      {"@context":"https://schema.org","@type":"Person","@id":"https://atishaykasliwal.com/#person","name":"Atishay Kasliwal","url":"https://atishaykasliwal.com/","image":"https://atishaykasliwal.com/AtishayKasliwal.JPG","description":"Full-stack engineer with 5+ years shipping production software across fintech, healthcare, and enterprise.","jobTitle":"Full Stack Engineer","email":"hire@atishaykasliwal.com","alumniOf":{"@type":"CollegeOrUniversity","name":"Stony Brook University"},"knowsAbout":["machine learning","data science","full-stack development","React","Next.js","Python","GCP","NLP","computer vision"],"sameAs":["https://www.linkedin.com/in/atishay-kasliwal/","https://github.com/atishay-kasliwal","https://x.com/AtiahayKasliwal","https://www.instagram.com/atishay_kasliwal/"]}
     </script>
     <script type="application/ld+json">
       {"@context":"https://schema.org","@type":"WebSite","@id":"https://atishaykasliwal.com/#website","name":"Atishay Kasliwal","url":"https://atishaykasliwal.com/","publisher":{"@id":"https://atishaykasliwal.com/#person"}}
@@ -174,7 +191,13 @@
     <link rel="icon" sizes="512x512" type="image/png" href="/atishaylogo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- One request for all three families as variable fonts. Montserrat used to
+         come in via an @import inside globals.css, which chained a whole extra
+         round trip behind the stylesheet download. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Montserrat:wght@400..600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="manifest" href="/manifest.json" />
     <title>Atishay Kasliwal - Full Stack Engineer | Portfolio & Resume</title>
   </head>
@@ -182,13 +205,16 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5QZR9SWX"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <h1 style="position:absolute;left:0;top:0;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;" translate="no">Atishay Kasliwal - Full Stack Engineer</h1>
+    <!-- Was a second visually-hidden <h1>, which gave every page two competing
+         top-level headings. The app renders the real <h1>; this only needs to
+         carry the same text for crawlers that see markup before hydration. -->
+    <p style="position:absolute;left:0;top:0;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;" translate="no">Atishay Kasliwal — Software Engineer, production AI and distributed systems.</p>
     <noscript>
       <div style="font-family:system-ui,Helvetica,Arial; padding:24px;">
         <h1>Atishay Kasliwal</h1>
         <p>Full Stack Engineer. React / Next.js / Node / Python / GCP</p>
         <p><a href="/Atishay-Kasliwal-Resume.pdf" rel="noopener" target="_blank">Download Resume (PDF)</a></p>
-        <p>Email: <a href="mailto:katishay@gmail.com">katishay@gmail.com</a></p>
+        <p>Email: <a href="mailto:hire@atishaykasliwal.com">hire@atishaykasliwal.com</a></p>
       </div>
     </noscript>
     <div id="root" translate="no"></div>

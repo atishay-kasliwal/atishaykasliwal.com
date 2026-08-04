@@ -1,0 +1,316 @@
+/* ── Fig. A — hero system panel ───────────────────────────────────────────
+   Reads as an instrument readout: ruled plates, mono annotations, one live
+   status. Same line/ink tokens as the rest of the spec sheet. */
+
+.hsp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+  animation: spec-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.34s;
+}
+
+.hsp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hsp-head-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--spec-ink-faint);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hsp-head-link:hover { color: var(--accent-soft); }
+
+.hsp-head-link svg { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
+.hsp-head-link:hover svg { transform: translateX(3px); }
+
+.hsp-head-mark {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.7rem;
+  vertical-align: 0.05em;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+}
+
+.hsp-plate {
+  border: 1px solid var(--spec-line-strong);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.hsp-plate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--spec-line);
+}
+
+/* ── Live status ── */
+.hsp-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6ee7a8;
+}
+
+.hsp-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+  animation: hsp-pulse 2.6s ease-in-out infinite;
+}
+
+/* ── Architecture diagram ── */
+.hsp-diagram {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding: 1.15rem 1.1rem 1.25rem;
+}
+
+.hsp-stage {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+/* Connector drawn in the gap to the left of this column. An earlier SVG
+   overlay put the runs underneath the node boxes, where they were invisible. */
+.hsp-wire {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 1.5rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--spec-line-strong);
+  pointer-events: none;
+}
+
+.hsp-packet {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 55%;
+  background: linear-gradient(to right, transparent, var(--accent-soft));
+  animation: hsp-flow 2.8s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+}
+
+.hsp-stage:last-child .hsp-packet { animation-delay: 1.4s; }
+
+.hsp-stage-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+}
+
+.hsp-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hsp-node {
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--spec-line);
+  background: rgba(0, 0, 0, 0.5);
+  min-width: 0;
+}
+
+.hsp-node-name {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.82);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hsp-node-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.06em;
+  color: var(--spec-ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Terminal readout ── */
+.hsp-readout {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.7rem 1.1rem;
+  border-top: 1px solid var(--spec-line);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+}
+
+.hsp-prompt { color: var(--accent-soft); }
+.hsp-cmd { color: rgba(255, 255, 255, 0.6); }
+.hsp-ok { color: #6ee7a8; margin-left: auto; }
+
+/* ── Featured project ── */
+.hsp-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  align-items: stretch;
+  gap: 0;
+  text-decoration: none;
+  overflow: hidden;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.hsp-featured:hover,
+.hsp-featured:focus-visible {
+  border-color: rgba(165, 180, 252, 0.42);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.hsp-featured-text {
+  padding: 1.1rem 1.15rem 1.15rem;
+  min-width: 0;
+}
+
+.hsp-featured-title {
+  margin: 0.55rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--spec-ink);
+}
+
+.hsp-featured-desc {
+  margin: 0 0 0.85rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--spec-ink-dim);
+}
+
+.hsp-featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+.hsp-featured-cta svg {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hsp-featured:hover .hsp-featured-cta svg { transform: translateX(4px); }
+
+.hsp-featured-shot {
+  position: relative;
+  overflow: hidden;
+  border-left: 1px solid var(--spec-line);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hsp-featured-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 0 0;
+  opacity: 0.55;
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hsp-featured:hover .hsp-featured-shot img {
+  opacity: 0.78;
+  transform: scale(1.03);
+}
+
+@keyframes hsp-flow {
+  0%       { transform: translateX(-100%); opacity: 0; }
+  15%      { opacity: 1; }
+  70%,100% { transform: translateX(220%); opacity: 0; }
+}
+
+@keyframes hsp-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hsp,
+  .hsp-packet,
+  .hsp-status-dot { animation: none; }
+  .hsp-packet { display: none; }
+  .hsp-featured-cta svg,
+  .hsp-featured-shot img { transition: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1180px) {
+  .hsp-node-name { font-size: 0.6rem; }
+  .hsp-node-meta { font-size: 0.52rem; }
+  .hsp-featured-title { font-size: 1.5rem; }
+  .hsp-featured-desc { font-size: 0.74rem; }
+}
+
+/* Below the two-column breakpoint the panel is full width, so the shot can go */
+@media (max-width: 1024px) {
+  .hsp { animation-delay: 0.2s; }
+  .hsp-featured { grid-template-columns: minmax(0, 1fr) minmax(0, 0.6fr); }
+}
+
+@media (max-width: 768px) {
+  .hsp-diagram { padding: 1rem 0.9rem 1.1rem; gap: 0.5rem; }
+  .hsp-wires { display: none; }
+  .hsp-node { padding: 0.45rem 0.5rem; }
+  .hsp-node-name { font-size: 0.56rem; }
+  .hsp-node-meta { font-size: 0.48rem; letter-spacing: 0.03em; }
+  .hsp-stage-label { font-size: 0.5rem; letter-spacing: 0.14em; }
+  .hsp-readout { font-size: 0.54rem; padding: 0.6rem 0.9rem; }
+  .hsp-ok { margin-left: 0; }
+
+  /* the dashboard shot is unreadable at phone width — the words carry it */
+  .hsp-featured { grid-template-columns: 1fr; }
+  .hsp-featured-shot { display: none; }
+  .hsp-featured-text { padding: 1rem 1.1rem 1.1rem; }
+  .hsp-featured-title { font-size: 1.55rem; }
+  .hsp-featured-desc { font-size: 0.8rem; }
+}

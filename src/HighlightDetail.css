@@ -28,7 +28,7 @@ html {
   /* Must sit below fixed header (≈ 56px header + 16px breathing room) */
   --pdp-header-offset: 72px;
   --pdp-sidebar-gap: 1.25rem;
-  --pdp-radius-card: 16px;
+  --pdp-radius-card: 0;
   --pdp-radius-sm: 10px;
 
   min-height: 100vh;
@@ -80,7 +80,7 @@ body.pdp-active .App {
   scrollbar-width: none;
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 20px;
+  border-radius: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -148,7 +148,7 @@ body.pdp-active .App {
   display: inline-flex;
   align-items: center;
   padding: 0.22rem 0.65rem;
-  border-radius: 999px;
+  border-radius: 0;
   font-size: 0.63rem;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -195,7 +195,7 @@ body.pdp-active .App {
   font-size: 0.78rem;
   color: var(--pdp-text-muted);
   text-decoration: none;
-  border-radius: 10px;
+  border-radius: 0;
   border-left: none;
   transition: color 0.18s, background 0.18s;
   white-space: nowrap;
@@ -265,7 +265,7 @@ body.pdp-active .App {
   color: rgba(255,255,255,0.72);
   background: rgba(255,255,255,0.045);
   border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 10px;
+  border-radius: 0;
   text-decoration: none;
   transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
 }
@@ -290,7 +290,7 @@ body.pdp-active .App {
   display: inline-flex;
   align-items: center;
   padding: 0.22rem 0.6rem;
-  border-radius: 999px;
+  border-radius: 0;
   font-size: 0.65rem;
   letter-spacing: 0.06em;
   font-weight: 600;
@@ -345,7 +345,7 @@ body.pdp-active .App {
 /* Hero image */
 .project-detail-hero {
   margin: 0 0 2.5rem;
-  border-radius: 14px;
+  border-radius: 0;
   overflow: hidden;
   position: relative;
   box-shadow:
@@ -409,7 +409,7 @@ body.pdp-active .App {
   width: 2rem;
   height: 2px;
   background: rgba(255,255,255,0.35);
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .project-detail-p {
@@ -446,7 +446,7 @@ body.pdp-active .App {
   padding: 1rem 1.25rem;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 8px 24px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.06);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -461,7 +461,7 @@ body.pdp-active .App {
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.20);
   padding: 0.22rem 0.6rem;
-  border-radius: 999px;
+  border-radius: 0;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -484,7 +484,7 @@ body.pdp-active .App {
 
 .project-detail-section-img {
   width: 100%;
-  border-radius: 10px;
+  border-radius: 0;
   display: block;
   box-shadow: 0 8px 32px rgba(0,0,0,0.40), 0 0 0 1px var(--pdp-border);
 }
@@ -532,7 +532,7 @@ body.pdp-active .App {
 .project-detail-frame-wrapper {
   background: rgba(0,0,0,0.28);
   border: 1px solid var(--pdp-border);
-  border-radius: 12px;
+  border-radius: 0;
   padding: 1rem;
   box-shadow: 0 24px 56px rgba(0,0,0,0.30);
   backdrop-filter: blur(12px);
@@ -547,7 +547,7 @@ body.pdp-active .App {
   justify-content: center;
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--pdp-border);
-  border-radius: 12px;
+  border-radius: 0;
   color: var(--pdp-text-muted);
   font-size: 0.85rem;
   letter-spacing: 0.05em;
@@ -625,7 +625,7 @@ body.pdp-active .App {
 .project-detail-other-card {
   display: block;
   padding: 0.9rem 1rem;
-  border-radius: 12px;
+  border-radius: 0;
   border: 1px solid var(--pdp-border);
   background: rgba(255,255,255,0.025);
   text-decoration: none;
@@ -675,7 +675,7 @@ body.pdp-active .App {
   display: inline-flex;
   align-items: center;
   padding: 0.17rem 0.5rem;
-  border-radius: 999px;
+  border-radius: 0;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -916,7 +916,7 @@ body.pdp-active .App {
 /* ── Code Block ─────────────────────────────────────────────────── */
 .project-detail-code-block {
   margin: 1.8rem 0;
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.10);
   box-shadow: 0 8px 32px rgba(0,0,0,0.40);
@@ -948,7 +948,7 @@ body.pdp-active .App {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   padding: 0.2rem 0.7rem;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
   letter-spacing: 0.04em;
@@ -963,7 +963,7 @@ body.pdp-active .App {
 .project-detail-table-wrap {
   margin: 1.8rem 0;
   overflow-x: auto;
-  border-radius: 10px;
+  border-radius: 0;
   border: 1px solid rgba(255,255,255,0.10);
   box-shadow: 0 8px 32px rgba(0,0,0,0.30);
 }
@@ -1054,7 +1054,7 @@ body.pdp-active .App {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     padding: 0.35rem 0.65rem;
-    border-radius: 8px;
+    border-radius: 0;
     cursor: pointer;
     white-space: nowrap;
     max-width: 110px;
