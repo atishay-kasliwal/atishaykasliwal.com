@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
-import SiteHeader from './components/SiteHeader';
 import Footer from './components/Footer';
+import PageShell from './components/PageShell';
 import CommandPalette from './components/CommandPalette';
 
 /**
@@ -10,14 +10,18 @@ import CommandPalette from './components/CommandPalette';
  *
  * The client wraps this in BrowserRouter (App.jsx); the prerenderer wraps it in
  * StaticRouter (entry-server.jsx). Keeping the router out of here is what lets
- * the identical tree render in both places.
+ * the identical tree render in both places — which is what makes build-time
+ * prerendering possible at all.
  *
- * Splitting policy — this is a hydration correctness decision, not just a size
- * one. Content pages are imported eagerly: they are mostly static markup over
- * the data layer (a few KB each), and eager imports mean the prerendered HTML
- * hydrates in one pass with no Suspense flash and no layout shift. The heavy
- * legacy routes below — in-browser ML, dashboards, embeds — stay lazy because
- * they are hundreds of KB and are not the pages search traffic lands on.
+ * The existing pages own their own headers (HomePage renders SiteHeader itself),
+ * so no header is imposed here. The new routes render the same SiteHeader for
+ * consistency.
+ *
+ * Splitting policy is a hydration-correctness decision, not only a size one.
+ * The new content routes are imported eagerly: they are static markup over the
+ * data layer (a few KB each), and eager imports let the prerendered HTML hydrate
+ * in one pass with no Suspense flash. The heavy legacy routes stay lazy —
+ * in-browser ML, dashboards, embeds, hundreds of KB each.
  */
 
 import HomePage from './pages/HomePage';
@@ -40,11 +44,29 @@ const AtriveoPage = lazy(() => import('./pages/AtriveoPage'));
 const LegacyProjects = lazy(() => import('./Projects'));
 const HighlightDetail = lazy(() => import('./HighlightDetail'));
 
-/* Reserves vertical space while a chunk loads so the swap-in doesn't shift
+/* Reserves vertical space while a chunk loads so the swap-in does not shift
    layout. aria-busy lets assistive tech announce the pending state. */
 function RouteFallback() {
   return <div className="route-loading" aria-busy="true" style={{ minHeight: '60svh' }} />;
 }
+
+/**
+ * Suspense wrapper for the lazily-loaded legacy routes only.
+ *
+ * A single <Suspense> around the whole <Routes> block looked harmless and was
+ * not. During prerendering React treats any Suspense boundary as potentially
+ * client-resolved: it emits the FALLBACK into the shell and parks the real
+ * markup in a hidden block that an inline script swaps in at hydration. Every
+ * page therefore first painted an empty `.route-loading` div and then jumped to
+ * full height — a 0.268 layout shift on every route, and the loss of the LCP
+ * benefit prerendering exists to provide, since the visible first paint
+ * contained no content at all.
+ *
+ * Scoping the boundary to the routes that actually need it lets every eagerly
+ * imported page prerender as plain static HTML with no boundary, no fallback,
+ * and no swap.
+ */
+const Lazy = ({ children }) => <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
 
 export default function AppRoutes() {
   return (
@@ -52,36 +74,35 @@ export default function AppRoutes() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <SiteHeader />
+      <div className="bg-overlay" />
       <ErrorBoundary>
         <main id="main" tabIndex={-1}>
-          <Suspense fallback={<RouteFallback />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-              <Route path="/experience" element={<ExperiencePage />} />
-              <Route path="/research" element={<ResearchPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:slug" element={<BlogPostPage />} />
-              <Route path="/speaking" element={<SpeakingPage />} />
-              <Route path="/open-source" element={<OpenSourcePage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
 
-              <Route path="/resume" element={<Resume />} />
+            {/* New routes — eagerly imported, so no Suspense boundary. */}
+            <Route path="/about" element={<PageShell><AboutPage /></PageShell>} />
+            <Route path="/projects" element={<PageShell><ProjectsPage /></PageShell>} />
+            <Route path="/projects/:slug" element={<PageShell><ProjectDetailPage /></PageShell>} />
+            <Route path="/experience" element={<PageShell><ExperiencePage /></PageShell>} />
+            <Route path="/research" element={<PageShell><ResearchPage /></PageShell>} />
+            <Route path="/blog" element={<PageShell><BlogPage /></PageShell>} />
+            <Route path="/blog/:slug" element={<PageShell><BlogPostPage /></PageShell>} />
+            <Route path="/speaking" element={<PageShell><SpeakingPage /></PageShell>} />
+            <Route path="/open-source" element={<PageShell><OpenSourcePage /></PageShell>} />
+            <Route path="/contact" element={<PageShell><ContactPage /></PageShell>} />
+            <Route path="/privacy" element={<PageShell><PrivacyPage /></PageShell>} />
 
-              {/* Existing URLs kept live so nothing already indexed 404s. */}
-              <Route path="/art" element={<ArtPage />} />
-              <Route path="/atriveo" element={<AtriveoPage />} />
-              <Route path="/highlights" element={<LegacyProjects />} />
-              <Route path="/highlights/:id" element={<HighlightDetail />} />
-              <Route path="/Highlights/:uuid" element={<HighlightDetail />} />
+            {/* Existing routes — code-split, so each carries its own boundary. */}
+            <Route path="/resume" element={<Lazy><Resume /></Lazy>} />
+            <Route path="/art" element={<Lazy><ArtPage /></Lazy>} />
+            <Route path="/atriveo" element={<Lazy><AtriveoPage /></Lazy>} />
+            <Route path="/highlights" element={<Lazy><LegacyProjects /></Lazy>} />
+            <Route path="/highlights/:id" element={<Lazy><HighlightDetail /></Lazy>} />
+            <Route path="/Highlights/:uuid" element={<Lazy><HighlightDetail /></Lazy>} />
 
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Suspense>
+            <Route path="*" element={<PageShell><NotFoundPage /></PageShell>} />
+          </Routes>
         </main>
       </ErrorBoundary>
       <Footer />
