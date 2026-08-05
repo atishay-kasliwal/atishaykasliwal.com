@@ -13,16 +13,22 @@
     "firebase": "^12.10.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.30.1",
     "react-syntax-highlighter": "^16.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "vite",
-    "build": "vite build && cp build/index.html build/404.html && (cp public/_redirects build/_redirects 2>/dev/null || true) && (cp public/_headers build/_headers 2>/dev/null || true)",
-    "preview": "vite preview",
-    "test": "react-scripts test",
+    "start": "npm run content && vite",
+    "content": "node scripts/build-content.mjs",
+    "github": "node scripts/fetch-github.mjs",
+    "build:client": "vite build",
+    "build:ssr": "vite build --ssr src/entry-server.jsx --outDir .ssr",
+    "prerender": "node scripts/prerender.mjs",
+    "feeds": "node scripts/generate-feeds.mjs",
+    "postbuild": "(cp public/_redirects build/_redirects 2>/dev/null || true) && (cp public/_headers build/_headers 2>/dev/null || true)",
+    "images": "node scripts/build-images.mjs",
+    "build": "npm run images && npm run content && npm run github && npm run build:client && npm run build:ssr && npm run prerender && npm run feeds && npm run postbuild",
+    "preview": "node scripts/preview.mjs",
     "format": "prettier --write src/**/*.{js,jsx,css}"
   },
   "eslintConfig": {
@@ -47,6 +53,8 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
     "marked": "^18.0.9",
+    "playwright": "^1.62.1",
+    "sharp": "^0.35.3",
     "shiki": "^4.4.1",
     "vite": "^6.3.5",
     "wrangler": "^4.45.3"

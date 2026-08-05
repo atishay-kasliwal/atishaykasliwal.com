@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" role="img" aria-label="Atishay Kasliwal">
+  <!--
+    width and height are required, not optional. Without intrinsic dimensions
+    several browsers refuse to rasterise an SVG favicon and fall back to a blank
+    tab icon, which is exactly what was happening here.
+  -->
   <rect width="100" height="100" rx="18" fill="#22201d"/>
   <g fill="#f6f3ec" transform="translate(6 4) scale(0.88)">
     <path d="M47 8 C55 26 60 36 63 44 C58 60 55 72 50 80 C45 88 38 92 26 92 L8 92 Z"/>
