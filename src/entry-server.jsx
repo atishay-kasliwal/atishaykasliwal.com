@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { prerenderToNodeStream } from 'react-dom/static';
 import { StaticRouter } from 'react-router-dom/server';
 import AppRoutes from './AppRoutes';
 import { resolveMeta } from './seo/routes.js';
@@ -8,8 +8,20 @@ import {
   serializeJsonLd,
   projectSchema,
   blogPostingSchema,
+  webPageSchema,
+  contactPageSchema,
+  collectionPageSchema,
+  publicationSchema,
+  talkSchema,
+  conferencePaperSchema,
+  faqSchema,
 } from './seo/schema.js';
 import { TWITTER_HANDLE, SITE, abs } from './data/site.js';
+import { ABOUT_FAQS } from './data/faqs.js';
+import { PROJECTS } from './data/projects.js';
+import { BLOG_POSTS } from './content/posts.js';
+import { PUBLICATIONS, TALKS, CONFERENCES } from './data/authority.js';
+import githubData from './data/generated/github.json';
 
 /**
  * Server entry used only at build time by scripts/prerender.mjs.
@@ -98,22 +110,93 @@ export function renderHead(url, overrides = {}, schema = []) {
  * Throws on failure so the caller can fall back to head-only output for that
  * route rather than shipping a broken page.
  */
-export function render(url) {
-  const html = renderToString(
+/**
+ * Render a route to static markup.
+ *
+ * Uses `prerenderToNodeStream` from react-dom/static rather than
+ * `renderToString`. This is not a style preference — renderToString cannot
+ * handle Suspense, so every route behind a React.lazy() boundary (/resume,
+ * /highlights, /art, /atriveo) silently degraded to "Switched to client
+ * rendering" and shipped an empty body. prerenderToNodeStream is React 19's
+ * static-generation API: it waits for suspended boundaries to resolve and
+ * returns the complete HTML.
+ *
+ * Errors are collected rather than thrown, because React reports render errors
+ * through onError while still producing partial output. The caller must treat a
+ * non-empty `errors` array as a failed route — see scripts/prerender.mjs.
+ */
+async function renderOnce(url, errors) {
+  const { prelude } = await prerenderToNodeStream(
     <StaticRouter location={url}>
       <AppRoutes />
-    </StaticRouter>
+    </StaticRouter>,
+    {
+      onError(error) {
+        errors.push(error?.message || String(error));
+      },
+    }
   );
-  return { html };
+
+  return new Promise((resolve, reject) => {
+    let out = '';
+    prelude.setEncoding('utf8');
+    prelude.on('data', (chunk) => {
+      out += chunk;
+    });
+    prelude.on('end', () => resolve(out));
+    prelude.on('error', reject);
+  });
+}
+
+export async function render(url) {
+  const errors = [];
+
+  /**
+   * Rendered twice, deliberately.
+   *
+   * React.lazy suspends on its FIRST render even when the underlying module is
+   * already in memory — the component only records its resolved state after
+   * that first attempt. A suspended boundary makes React emit the fallback into
+   * the shell and defer the real markup to a hydration-time swap, so the routes
+   * behind lazy() (/resume, /highlights, /atriveo, /art) were prerendering an
+   * empty `.route-loading` div and shifting ~1.0 CLS when the content appeared.
+   *
+   * The first pass is a warm-up whose output is discarded; by the second pass
+   * every lazy component resolves synchronously and the markup is fully inlined.
+   * Cost is a few seconds of build time, which is the right trade for the pages
+   * actually being present at first paint.
+   */
+  await warmLazyModules();
+  await renderOnce(url, []);
+  const html = await renderOnce(url, errors);
+
+  return { html, errors };
+}
+
+/**
+ * Pre-imports the code-split route modules so React.lazy's factory resolves
+ * from cache rather than from a pending network/disk read. Combined with the
+ * warm-up render above, this is what lets the lazy routes inline during
+ * prerender instead of emitting a fallback.
+ */
+let warmed;
+function warmLazyModules() {
+  warmed ||= Promise.all([
+    import('./Resume'),
+    import('./pages/ArtPage'),
+    import('./pages/AtriveoPage'),
+    import('./Projects'),
+    import('./HighlightDetail'),
+  ]).catch(() => {});
+  return warmed;
 }
 
 /**
  * Re-exported so scripts/prerender.mjs can enumerate routes without importing
  * app source directly — it only ever loads this one compiled SSR bundle.
  */
-export { ROUTES } from './seo/routes.js';
-export { PROJECTS } from './data/projects.js';
-export { BLOG_POSTS } from './content/posts.js';
+export { ROUTES, seoTitle, seoDescription } from './seo/routes.js';
+export { PROJECTS, BLOG_POSTS };
 
 /**
  * Build the extra JSON-LD nodes for a dynamic route. Kept here rather than in
@@ -124,4 +207,64 @@ export function schemaFor(spec) {
   if (spec.type === 'project') return [projectSchema(spec.data)];
   if (spec.type === 'post') return [blogPostingSchema(spec.data)];
   return [];
+}
+
+/**
+ * Page-level schema for the static routes.
+ *
+ * These have to be emitted here, not just by the runtime <Seo> component:
+ * Google will not award an FAQ rich result for structured data that only
+ * appears after hydration, and the ProfilePage/CollectionPage types are what
+ * tell it whether a URL is a person, a list, or a contact point.
+ */
+export function staticSchemaFor(routePath) {
+  const meta = resolveMeta(routePath);
+
+  switch (routePath) {
+    case '/':
+      return [webPageSchema(meta, 'ProfilePage')];
+
+    case '/about':
+      return [webPageSchema(meta, 'ProfilePage'), faqSchema(ABOUT_FAQS)];
+
+    case '/contact':
+      return [contactPageSchema(meta)];
+
+    case '/projects':
+      return [
+        collectionPageSchema(
+          meta,
+          PROJECTS.map((p) => ({ url: abs(`/projects/${p.slug}`), name: p.name }))
+        ),
+      ];
+
+    case '/blog':
+      return [
+        collectionPageSchema(
+          meta,
+          BLOG_POSTS.map((p) => ({ url: abs(`/blog/${p.slug}`), name: p.title }))
+        ),
+      ];
+
+    case '/open-source':
+      return [
+        collectionPageSchema(
+          meta,
+          (githubData.repos || []).map((r) => ({ url: r.url, name: r.name }))
+        ),
+      ];
+
+    case '/research':
+      return [
+        webPageSchema(meta),
+        ...PUBLICATIONS.map(publicationSchema),
+        ...CONFERENCES.map(conferencePaperSchema),
+      ];
+
+    case '/speaking':
+      return [webPageSchema(meta), ...TALKS.map(talkSchema)];
+
+    default:
+      return [webPageSchema(meta)];
+  }
 }

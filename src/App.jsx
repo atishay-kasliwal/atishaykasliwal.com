@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+/* tokens.css only declares custom properties on :root plus a reduced-motion
+   block — it defines no appearance on its own, so it is safe globally and the
+   existing design is untouched by it. base.css and patterns.css are NOT loaded
+   here: they carry global element resets that would restyle the current site.
+   They are scoped to the new routes instead, via styles/page-scope.css. */
 import './styles/tokens.css';
-import './styles/base.css';
+import './styles/a11y.css';
 import './App.css';
 import { initAnalytics } from './lib/analytics';
 import AppRoutes from './AppRoutes';

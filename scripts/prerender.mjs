@@ -26,7 +26,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const BUILD = path.join(ROOT, 'build');
-const SSR = path.join(ROOT, '.ssr', 'entry-server.js');
+const SSR = path.join(ROOT, '.ssr', 'entry-server.mjs');
 
 const GREEN = '\x1b[32m';
 const YELLOW = '\x1b[33m';
@@ -38,14 +38,20 @@ async function main() {
   const template = await fs.readFile(path.join(BUILD, 'index.html'), 'utf-8');
   const server = await import(pathToFileURL(SSR).href);
 
-  const { render, renderHead, ROUTES, PROJECTS, BLOG_POSTS } = server;
+  const { render, renderHead, ROUTES, PROJECTS, BLOG_POSTS, staticSchemaFor, seoTitle, seoDescription } = server;
 
   /* ── Assemble the full route list ──────────────────────────────────── */
   const targets = [];
 
   for (const route of Object.values(ROUTES)) {
     if (route.path === '/404') continue; // handled separately below
-    targets.push({ url: route.path, overrides: {}, schema: [] });
+    targets.push({
+      url: route.path,
+      overrides: {},
+      // ProfilePage / FAQPage / CollectionPage per route — these must be in the
+      // static HTML to be eligible for rich results.
+      staticSchema: staticSchemaFor(route.path),
+    });
   }
 
   for (const project of PROJECTS) {
@@ -53,8 +59,8 @@ async function main() {
       url: `/projects/${project.slug}`,
       overrides: {
         path: `/projects/${project.slug}`,
-        title: `${project.name} — ${project.tagline.replace(/\.$/, '')} | Atishay Kasliwal`.slice(0, 70),
-        description: project.problem.slice(0, 158),
+        title: seoTitle(`${project.name} Case Study`),
+        description: seoDescription(project.problem),
         breadcrumbs: [
           { name: 'Projects', path: '/projects' },
           { name: project.name, path: `/projects/${project.slug}` },
@@ -77,8 +83,8 @@ async function main() {
       url: `/blog/${post.slug}`,
       overrides: {
         path: `/blog/${post.slug}`,
-        title: `${post.title} — Atishay Kasliwal`,
-        description: post.description,
+        title: seoTitle(post.title),
+        description: seoDescription(post.description),
         ogType: 'article',
         datePublished: post.date,
         dateModified: post.updated || post.date,
@@ -101,16 +107,37 @@ async function main() {
 
     // Extra JSON-LD nodes are built inside the SSR bundle, which owns the
     // schema generators.
-    const schema = server.schemaFor ? server.schemaFor(target.schemaFor) : [];
+    const schema = target.staticSchema ?? server.schemaFor(target.schemaFor);
 
     let appHtml = '';
     let prerendered = true;
 
     try {
-      appHtml = render(url).html;
+      const result = await render(url);
+      appHtml = result.html;
+
+      /**
+       * A thrown error is the easy case. The dangerous one is a route that
+       * "succeeds" while React quietly swallows the error inside a Suspense
+       * boundary and emits a client-rendering fallback marker instead of
+       * content. That produces an empty page that reports as a success — which
+       * is exactly what this script did before, claiming 20/20 while shipping
+       * blank bodies. Both signals are checked.
+       */
+      if (result.errors?.length) {
+        throw new Error(result.errors.join('; '));
+      }
+      if (appHtml.includes('Switched to client rendering')) {
+        const detail = /data-msg="([^"]*)"/.exec(appHtml)?.[1] || 'unknown';
+        throw new Error(`client-render fallback — ${detail.slice(0, 120)}`);
+      }
+      if (!appHtml.trim()) {
+        throw new Error('rendered empty output');
+      }
     } catch (err) {
       prerendered = false;
-      failures.push({ url, message: err.message });
+      appHtml = '';
+      failures.push({ url, message: err.message.replace(/\s+/g, ' ').trim() });
     }
 
     const head = renderHead(url, overrides, schema);
@@ -124,7 +151,10 @@ async function main() {
   const notFoundHead = renderHead('/404', {}, []);
   let notFoundHtml = '';
   try {
-    notFoundHtml = render('/this-route-does-not-exist').html;
+    const r = await render('/this-route-does-not-exist');
+    if (!r.errors?.length && !r.html.includes('Switched to client rendering')) {
+      notFoundHtml = r.html;
+    }
   } catch {
     /* fall through to head-only */
   }

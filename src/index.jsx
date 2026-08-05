@@ -2,10 +2,6 @@ import React from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { initTheme } from './lib/theme';
-
-initTheme();
-
 const container = document.getElementById('root');
 
 /**
@@ -18,7 +14,7 @@ const container = document.getElementById('root');
  * head-only output are mounted normally.
  *
  * StrictMode is intentionally not used around hydration — its double-invoke
- * defeats the reuse this is built for. It stays on in dev via vite's HMR entry.
+ * defeats the reuse this is built for.
  */
 if (container.dataset.prerendered === 'true') {
   hydrateRoot(container, <App />);

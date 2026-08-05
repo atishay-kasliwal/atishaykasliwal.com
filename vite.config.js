@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react()],
 
   esbuild: {
@@ -20,13 +20,24 @@ export default defineConfig({
     outDir: 'build',
     // Source maps stay out of production: extra weight, and they expose source.
     sourcemap: false,
+    // The SSR pass would otherwise copy all of public/ into .ssr/ — hundreds of
+    // images duplicated for a bundle that is only ever imported by Node.
+    copyPublicDir: !isSsrBuild,
     cssCodeSplit: true,
     // Inline anything under 4KB as a data URI — too small to justify a request.
     assetsInlineLimit: 4096,
     reportCompressedSize: false,
     chunkSizeWarningLimit: 600,
 
-    rollupOptions: {
+    /**
+     * The SSR bundle is consumed by scripts/prerender.mjs as a single module,
+     * so it keeps rollup's defaults — a predictable `.ssr/entry-server.js`
+     * entry point. Chunk splitting and content hashing exist for browser
+     * caching and are meaningless (and actively unhelpful) here.
+     */
+    rollupOptions: isSsrBuild
+      ? {}
+      : {
       output: {
         /**
          * Manual chunking exists to stop one enormous vendor blob.
@@ -49,14 +60,22 @@ export default defineConfig({
           )
             return 'vendor-highlight';
           if (id.includes('@calcom')) return 'vendor-cal';
-          if (
-            id.includes('/react/') ||
-            id.includes('/react-dom/') ||
-            id.includes('react-router') ||
-            id.includes('scheduler')
-          )
-            return 'vendor-react';
 
+          /**
+           * React is deliberately NOT manually chunked.
+           *
+           * Forcing react, react-dom, scheduler, and react-router into one
+           * chunk broke module initialisation order: react-dom evaluated
+           * before react's export object existed, throwing "Cannot set
+           * properties of undefined (setting 'Activity')" at runtime. That
+           * killed hydration, so React discarded the prerendered HTML and
+           * re-rendered the whole page from scratch — a ~0.27 CLS on every
+           * route and the loss of every benefit prerendering was there to buy.
+           *
+           * Rollup already resolves this ordering correctly on its own. The
+           * chunks above are safe because those libraries are leaves, imported
+           * only by lazy routes; React is not.
+           */
           return 'vendor';
         },
 
@@ -72,4 +91,4 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
-});
+}));
