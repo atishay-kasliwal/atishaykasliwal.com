@@ -1,7 +1,20 @@
-/art /index.html 200
-/highlights /index.html 200
-/highlights/* /index.html 200
-/Highlights/* /index.html 200
-/resume /index.html 200
-/family /index.html 200
-/* /index.html 200
+# Cloudflare Pages routing.
+#
+# Every static route now ships a real prerendered index.html, and Pages serves a
+# matching file before it ever consults this list. So these rules only cover
+# what is genuinely dynamic, plus the fallback.
+#
+# The fallback is the important line. It used to be `/* /index.html 200`, which
+# answered EVERY unknown URL with the homepage under a 200 status. To a crawler
+# that means "this page exists" — so typos, dead links, and scraped junk URLs
+# all become indexable duplicates of the homepage (a soft-404 farm, and a
+# duplicate-content problem against the real homepage). Returning a true 404
+# keeps them out of the index entirely.
+
+# Highlight detail pages are addressed by UUID and are rendered client-side,
+# so they still need the SPA fallback.
+/highlights/*  /index.html  200
+/Highlights/*  /index.html  200
+
+# Everything unmatched is genuinely missing.
+/*  /404.html  404

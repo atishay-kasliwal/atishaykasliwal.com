@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch();
+const p = await b.newPage();
+const hits=[];
+p.on('response', r => { if (/favicon|icons\//.test(r.url())) hits.push(r.status()+'  '+r.url().replace('http://localhost:4173','')); });
+await p.goto('http://localhost:4173/', {waitUntil:'networkidle'});
+await p.waitForTimeout(1200);
+const links = await p.evaluate(()=>[...document.querySelectorAll('link[rel*="icon"]')].map(l=>l.rel+' '+(l.sizes?.value||'')+' -> '+l.getAttribute('href')));
+console.log('declared:'); links.forEach(l=>console.log('   '+l));
+console.log('fetched :'); hits.forEach(h=>console.log('   '+h));
+await b.close();
