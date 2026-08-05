@@ -293,19 +293,103 @@ export function blogPostingSchema(post) {
 
 /* ── ScholarlyArticle (publications) ───────────────────────────────────── */
 export function publicationSchema(pub) {
+  /**
+   * Full citation metadata, not just a title.
+   *
+   * The `author` array maps Atishay Kasliwal to the Person @id rather than to a
+   * loose name string — that is the edge that connects an independently
+   * verifiable published record back to the site's entity, which is the whole
+   * reason a publication is worth more to the Knowledge Graph than anything
+   * the site can assert about itself.
+   *
+   * isPartOf nests PublicationIssue inside PublicationVolume inside Periodical,
+   * which is the structure Google Scholar and Rich Results expect for a
+   * journal article.
+   */
+  const periodical = pub.venue
+    ? compact({
+        '@type': 'Periodical',
+        name: pub.venue,
+        alternateName: pub.venueShort,
+        issn: pub.issn,
+        publisher: pub.publisher ? { '@type': 'Organization', name: pub.publisher } : undefined,
+      })
+    : undefined;
+
+  const issue =
+    periodical && pub.issue
+      ? {
+          '@type': 'PublicationIssue',
+          issueNumber: pub.issue,
+          isPartOf: pub.volume
+            ? {
+                '@type': 'PublicationVolume',
+                volumeNumber: pub.volume,
+                isPartOf: periodical,
+              }
+            : periodical,
+        }
+      : periodical;
+
+  const [pageStart, pageEnd] = String(pub.pages || '').split('-').map((p) => p.trim());
+
   return compact({
     '@type': 'ScholarlyArticle',
+    '@id': pub.url ? `${pub.url}#article` : undefined,
     headline: pub.title,
     name: pub.title,
     author: pub.authors?.map((a) =>
       a === FULL_NAME ? { '@id': ID.person } : { '@type': 'Person', name: a }
     ),
     datePublished: pub.date,
-    publisher: pub.venue ? { '@type': 'Organization', name: pub.venue } : undefined,
+    publisher: pub.publisher ? { '@type': 'Organization', name: pub.publisher } : undefined,
+    isPartOf: issue,
+    pagination: pub.pages,
+    pageStart: pageStart || undefined,
+    pageEnd: pageEnd || undefined,
     url: pub.url,
-    identifier: pub.doi ? `https://doi.org/${pub.doi}` : undefined,
+    identifier: pub.doi ? `https://doi.org/${pub.doi}` : pub.paperId,
+    sameAs: pub.pdf,
     abstract: pub.abstract,
+    keywords: pub.keywords?.join(', '),
     inLanguage: 'en-US',
+    isAccessibleForFree: true,
+  });
+}
+
+/* ── Conference paper ──────────────────────────────────────────────────── */
+/**
+ * Modelled as a ScholarlyArticle attached to an Event rather than as a plain
+ * Event: the artefact is the paper, and the conference is where it was
+ * delivered. Same author→Person @id edge as the journal publications, which is
+ * what connects an external academic record back to this site's entity.
+ */
+export function conferencePaperSchema(paper) {
+  return compact({
+    '@type': 'ScholarlyArticle',
+    headline: paper.title,
+    name: paper.title,
+    author: paper.authors?.map((a) =>
+      a === FULL_NAME ? { '@id': ID.person } : { '@type': 'Person', name: a }
+    ),
+    datePublished: paper.date,
+    abstract: paper.description,
+    inLanguage: 'en-US',
+    url: paper.url,
+    isPartOf: compact({
+      '@type': 'Event',
+      name: paper.event,
+      startDate: paper.date,
+      location: paper.location
+        ? { '@type': 'Place', name: paper.location }
+        : undefined,
+      // Who actually delivered it. Only set when the paper was presented, so
+      // an accepted-but-not-delivered entry never implies a speaking slot.
+      performer:
+        paper.role === 'Presented' && paper.presentedBy === FULL_NAME
+          ? { '@id': ID.person }
+          : undefined,
+    }),
   });
 }
 
