@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Helmet } from 'react-helmet';
 import SiteHeader from '../SiteHeader';
 import './ArtPage.css';
 
@@ -136,20 +135,6 @@ function ArtPage() {
 
   return (
     <div className="art-page" translate="no">
-      <Helmet>
-        <html lang="en" translate="no" />
-        <title>Photography | Atishay Kasliwal</title>
-        <link rel="canonical" href="https://atishaykasliwal.com/art" />
-        <meta name="google" content="notranslate" />
-        <meta name="google-translate-customization" content="no" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Art | Atishay Kasliwal" />
-        <meta property="og:description" content="Photo stories and visual moments by Atishay Kasliwal." />
-        <meta property="og:url" content="https://atishaykasliwal.com/art" />
-        <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <link rel="icon" type="image/png" href="/favicon.png" />
-      </Helmet>
       <div className="art-grid-bg" aria-hidden="true" />
 
       <div className="page-content page-content--art" translate="no">

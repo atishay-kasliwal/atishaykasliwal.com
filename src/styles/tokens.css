@@ -1,14 +1,13 @@
 /**
  * Design tokens.
  *
- * The whole system is black, white, and one accent — electric blue. Everything
+ * The whole system is black, white, and one accent — the site's indigo/violet.
+ * Everything
  * else is a neutral step or an alpha of those. Restricting the palette this
  * hard is what makes a portfolio read as designed rather than assembled: when
  * only one color can carry emphasis, emphasis lands where it is meant to.
  *
- * Themes are driven by [data-theme] on <html>, with a prefers-color-scheme
- * fallback so the first paint is right before any script runs. Dark is the
- * default here because the site's identity is dark.
+ * The site is dark-only, so there is no theme switch and no light variant.
  */
 
 :root {
@@ -29,13 +28,13 @@
   --n-950: #0a0c0e;
   --n-1000: #000000;
 
-  /* ── Accent: electric blue ──────────────────────────────────────────── */
-  --accent-100: #dbe7fe;
-  --accent-300: #93b4fd;
-  --accent-400: #5b8def;
-  --accent-500: #2563eb;
-  --accent-600: #1d4fd7;
-  --accent-700: #1a3fae;
+  /* ── Accent: the site's indigo → violet, matching globals.css ───────── */
+  --accent-100: #ede9fe;
+  --accent-300: #c4b5fd;
+  --accent-400: #a5b4fc;
+  --accent-500: #8b5cf6;
+  --accent-600: #7c3aed;
+  --accent-700: #6d28d9;
 
   /* Semantic support colors — used only for status, never decoration. */
   --ok-500: #059669;
@@ -129,9 +128,9 @@
   --z-toast: 1100;
 }
 
-/* ── Dark theme (default) ─────────────────────────────────────────────── */
-:root,
-:root[data-theme='dark'] {
+/* ── Theme. The site is dark-only; there is no light variant and no toggle,
+      so these are unconditional defaults rather than a themed block. ────── */
+:root {
   color-scheme: dark;
 
   --bg: var(--n-950);
@@ -146,12 +145,12 @@
 
   --border: rgba(255, 255, 255, 0.09);
   --border-strong: rgba(255, 255, 255, 0.17);
-  --border-accent: rgba(37, 99, 235, 0.45);
+  --border-accent: rgba(165, 180, 252, 0.42);
 
   --accent: var(--accent-400);
   --accent-hover: var(--accent-300);
   --accent-contrast: #ffffff;
-  --accent-surface: rgba(37, 99, 235, 0.13);
+  --accent-surface: rgba(139, 92, 246, 0.13);
 
   --surface-hover: rgba(255, 255, 255, 0.045);
   --surface-active: rgba(255, 255, 255, 0.075);
@@ -161,64 +160,6 @@
   --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.6);
 
   --grid-line: rgba(255, 255, 255, 0.035);
-}
-
-/* ── Light theme ──────────────────────────────────────────────────────── */
-:root[data-theme='light'] {
-  color-scheme: light;
-
-  --bg: var(--n-0);
-  --bg-raised: var(--n-25);
-  --bg-sunken: var(--n-50);
-  --bg-inset: var(--n-100);
-
-  --fg: var(--n-950);
-  --fg-muted: var(--n-600);
-  --fg-subtle: var(--n-500);
-  --fg-inverse: var(--n-0);
-
-  --border: rgba(10, 12, 14, 0.1);
-  --border-strong: rgba(10, 12, 14, 0.2);
-  --border-accent: rgba(37, 99, 235, 0.4);
-
-  /* accent-600 rather than 500 on light: 500 lands at 4.4:1 on white, which
-     misses WCAG AA for body text. 600 clears it. */
-  --accent: var(--accent-600);
-  --accent-hover: var(--accent-700);
-  --accent-contrast: #ffffff;
-  --accent-surface: rgba(37, 99, 235, 0.08);
-
-  --surface-hover: rgba(10, 12, 14, 0.035);
-  --surface-active: rgba(10, 12, 14, 0.06);
-
-  --shadow-sm: 0 1px 2px rgba(10, 12, 14, 0.06);
-  --shadow-md: 0 4px 16px rgba(10, 12, 14, 0.08);
-  --shadow-lg: 0 18px 48px rgba(10, 12, 14, 0.12);
-
-  --grid-line: rgba(10, 12, 14, 0.045);
-}
-
-/* Respect the OS when the user has expressed no explicit preference. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
-    --bg: var(--n-0);
-    --bg-raised: var(--n-25);
-    --bg-sunken: var(--n-50);
-    --bg-inset: var(--n-100);
-    --fg: var(--n-950);
-    --fg-muted: var(--n-600);
-    --fg-subtle: var(--n-500);
-    --fg-inverse: var(--n-0);
-    --border: rgba(10, 12, 14, 0.1);
-    --border-strong: rgba(10, 12, 14, 0.2);
-    --accent: var(--accent-600);
-    --accent-hover: var(--accent-700);
-    --accent-surface: rgba(37, 99, 235, 0.08);
-    --surface-hover: rgba(10, 12, 14, 0.035);
-    --surface-active: rgba(10, 12, 14, 0.06);
-    --grid-line: rgba(10, 12, 14, 0.045);
-  }
 }
 
 /* ── Reduced motion ───────────────────────────────────────────────────── */

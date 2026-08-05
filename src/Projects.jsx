@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import HeroCarousel from './HeroCarousel';
 import SiteHeader from './SiteHeader';
 import './Projects.css';
-import { Helmet } from 'react-helmet';
 import wakeforeststudent from './assets/WakeForsetstudent.JPG';
 import conference from './assets/confremce.JPG';
 import MRIimage from './assets/atrium health.jpg';
@@ -265,15 +264,13 @@ export const projectsData = [
 export default function Projects() {
   return (
     <div className="projects-page" translate="no">
-      <Helmet>
-        <html lang="en" translate="no" />
-        <title>Highlights | Atishay Kasliwal</title>
-        <meta name="description" content="Portfolio of highlights by Atishay Kasliwal - AI/ML, Data Science, Software Engineering, and Full-Stack Development" />
-        <meta name="google" content="notranslate" />
-        <meta name="google-translate-customization" content="no" />
-      </Helmet>
       <div className="page-content" translate="no">
         <SiteHeader />
+
+        {/* The page opened at <h2>, leaving it with no <h1> — an accessibility
+            failure and a wasted ranking signal. Visually hidden so the banner
+            design is untouched; screen readers and crawlers both read it. */}
+        <h1 className="sr-only">Projects by Atishay Kasliwal — AI and distributed systems engineering</h1>
 
         <div className="projects-container" translate="no">
               <div className="projects-banner-container" translate="no">

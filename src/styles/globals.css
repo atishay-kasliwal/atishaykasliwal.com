@@ -2,6 +2,42 @@
    @import here forced a second round trip that couldn't start until this
    stylesheet had already downloaded. */
 
+/* ── Metric-matched fallback for Playfair Display ────────────────────────
+   Playfair loads from Google Fonts with display=swap, so headings first paint
+   in the fallback and then reflow when the real font arrives. The old stack put
+   'Times New Roman' first, which measures 6.8% narrower than Playfair — enough
+   to re-wrap a large heading and produce a visible jump (CLS 0.32 on /about).
+
+   Georgia measures within 0.3% of Playfair, so it is promoted ahead of Times
+   and wrapped in a size-adjusted @font-face for the remaining difference.
+   Nothing changes once Playfair has loaded; this only governs the swap window. */
+/* ── Metric-matched fallback for Inter ───────────────────────────────────
+   Inter loads with display=swap, so body text first paints in the fallback and
+   reflows when the real font arrives. Arial/Helvetica measure 6% narrower than
+   Inter (and -apple-system a full 14.4% narrower), which changed the height of
+   every page enough to move the footer — measured at 0.268 CLS on every route,
+   the single largest layout-shift source on the site.
+
+   size-adjust closes that gap so the swap is near-invisible. Once Inter has
+   loaded nothing here applies; this governs only the swap window. */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 106%;
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Playfair Fallback';
+  src: local('Georgia'), local('Times New Roman');
+  size-adjust: 99.7%;
+  ascent-override: 92%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,7 +46,7 @@
    Shared by the landing hero, the About figure, and the footer. The accent
    stays on the site's existing white → indigo → violet gradient. */
 :root {
-  --font-display: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --font-display: 'Playfair Display', 'Playfair Fallback', Georgia, 'Times New Roman', serif;
   --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Mono', Consolas, monospace;
 
   --accent: #8b5cf6;
@@ -74,7 +110,7 @@ body, #root, .App {
   height: auto;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', 'Inter Fallback', Arial, sans-serif;
   background: #000000;
   font-size: 1rem;
   width: 100%;
@@ -187,7 +223,7 @@ body {
 }
 
 .section-wrap {
-  padding: 3rem 0;
+  padding: 2rem 0;
 }
 
 /* ── Site-wide type system ───────────────────────────────────────────────
@@ -252,19 +288,19 @@ body {
   width: fit-content;
 }
 
-/* Centered heading contexts keep their centering despite fit-content */
-.atv-section-head h2,
+/* The Atriveo CTA stays centred (it is a full-width closing panel); its section
+   heads now sit left with every other heading on the site. */
 .atv-cta h2 {
   margin-left: auto;
   margin-right: auto;
 }
 
 @media (max-width: 900px) {
-  .section-wrap { padding: 2.5rem 0; }
+  .section-wrap { padding: 1.75rem 0; }
 }
 
 @media (max-width: 640px) {
-  .section-wrap { padding: 2rem 0; }
+  .section-wrap { padding: 1.5rem 0; }
 }
 
 
@@ -320,6 +356,7 @@ body {
 .rp-card::after,
 .hsp-plate::before,
 .project-card-grid::before,
+.atv-compiler-card::before,
 .spec-brackets {
   content: '';
   position: absolute;
@@ -349,7 +386,8 @@ body {
 .story-card,
 .rp-card,
 .hsp-plate,
-.project-card-grid {
+.project-card-grid,
+.atv-compiler-card {
   position: relative;
 }
 
@@ -357,6 +395,7 @@ body {
 .rp-card:hover::after,
 .hsp-plate:hover::before,
 .project-card-grid:hover::before,
+.atv-compiler-card:hover::before,
 :hover > .spec-brackets {
   opacity: 1;
   --tick: rgba(165, 180, 252, 0.5);
@@ -367,6 +406,7 @@ body {
   .rp-card::after,
   .hsp-plate::before,
   .project-card-grid::before,
+  .atv-compiler-card::before,
   .spec-brackets { transition: none; }
 }
 
@@ -376,5 +416,6 @@ body {
   .rp-card::after,
   .hsp-plate::before,
   .project-card-grid::before,
+  .atv-compiler-card::before,
   .spec-brackets { inset: 4px; --tick-len: 7px; }
 }

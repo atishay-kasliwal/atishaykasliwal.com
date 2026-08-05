@@ -110,7 +110,7 @@ export function Button({
     <>
       {children}
       {icon && (
-        <span className="btn-icon" aria-hidden="true">
+        <span className="ak-btn-icon" aria-hidden="true">
           {icon}
         </span>
       )}

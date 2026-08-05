@@ -1,32 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import BrandMark from './components/BrandMark';
 
 export default function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => { setIsOpen(false); }, [pathname]);
 
-  const isWork    = pathname.startsWith('/highlights');
+  /* Header nav is unchanged from the original: Projects still opens the
+     existing /highlights page. Only About and Contact changed destination —
+     they were an in-page anchor and a raw mailto, which are dead ends from any
+     non-home route. The new /projects, /blog, /experience, and /open-source
+     pages are linked from the footer sitemap instead. */
+  const isWork    = pathname.startsWith('/highlights') || pathname.startsWith('/projects');
   const isAtriveo = pathname.startsWith('/atriveo');
+  const isAbout   = pathname.startsWith('/about') || pathname.startsWith('/experience');
   const isResume  = pathname.startsWith('/resume');
-  const isHome    = pathname === '/';
-
-  /* About lives on the landing page. From home that's a plain in-page scroll;
-     from anywhere else we route home first, then scroll once it has painted. */
-  const goToAbout = (e) => {
-    e.preventDefault();
-    const scroll = () =>
-      document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    if (isHome) {
-      scroll();
-    } else {
-      navigate('/');
-      requestAnimationFrame(() => setTimeout(scroll, 120));
-    }
-  };
 
   return (
     <div className="header" translate="no">
@@ -54,18 +44,19 @@ export default function SiteHeader() {
           aria-label="Primary"
           translate="no"
         >
+          {/* Contact lives in the footer now, not here. The header carries
+              the three places worth browsing plus the résumé; contact is a
+              destination people go to when they have already decided, which is
+              the bottom of the page. */}
           <Link to="/highlights" className={isWork ? 'active' : ''}>
             <span className="nav-num" aria-hidden="true">01</span>Projects
           </Link>
           <Link to="/atriveo" className={isAtriveo ? 'active' : ''}>
             <span className="nav-num" aria-hidden="true">02</span>Atriveo
           </Link>
-          <a href="/#about-section" className="nav-about-link" onClick={goToAbout}>
+          <Link to="/about" className={isAbout ? 'active' : ''}>
             <span className="nav-num" aria-hidden="true">03</span>About
-          </a>
-          <a href="mailto:hire@atishaykasliwal.com" className="nav-contact-link">
-            <span className="nav-num" aria-hidden="true">04</span>Contact
-          </a>
+          </Link>
           <Link
             to="/resume"
             className={`nav-resume-btn${isResume ? ' active' : ''}`}

@@ -1,0 +1,386 @@
+/* ── Reading progress ─────────────────────────────────────────────────── */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: calc(var(--z-header) + 1);
+  pointer-events: none;
+}
+
+.read-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: 0 50%;
+  /* transform rather than width: stays on the compositor, so scrolling a long
+     article never triggers layout. */
+  will-change: transform;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+.post-header {
+  padding-block: clamp(2.75rem, 5.5vw, 4.5rem) var(--s-5);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-5);
+}
+
+.post-title {
+  font-size: var(--t-3xl);
+  letter-spacing: var(--ls-tighter);
+  margin-bottom: var(--s-5);
+}
+
+.post-desc {
+  max-width: 62ch;
+}
+
+.post-tags {
+  margin-top: var(--s-6);
+}
+
+/* ── Layout ───────────────────────────────────────────────────────────── */
+.post-columns {
+  display: grid;
+  gap: var(--s-10);
+}
+
+@media (min-width: 1040px) {
+  .post-columns {
+    grid-template-columns: 14rem minmax(0, 42rem);
+    justify-content: center;
+    gap: var(--s-16);
+    align-items: start;
+  }
+}
+
+/* ── TOC ──────────────────────────────────────────────────────────────── */
+.post-toc {
+  position: sticky;
+  top: 6rem;
+  align-self: start;
+  max-height: calc(100svh - 8rem);
+  overflow-y: auto;
+  display: none;
+}
+
+@media (min-width: 1040px) {
+  .post-toc {
+    display: block;
+  }
+}
+
+.post-toc-title {
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-toc-item a {
+  display: block;
+  padding: var(--s-2) 0 var(--s-2) var(--s-3);
+  border-left: 1px solid var(--border);
+  font-size: var(--t-sm);
+  line-height: var(--lh-snug);
+  color: var(--fg-subtle);
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out);
+}
+
+.post-toc-item a:hover {
+  color: var(--fg);
+}
+
+.post-toc-item a.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+.post-toc-item--h3 a {
+  padding-left: var(--s-6);
+  font-size: var(--t-xs);
+}
+
+/* ── Article body ─────────────────────────────────────────────────────── */
+.post-body {
+  font-size: var(--t-lg);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-muted);
+}
+
+.post-body > * + * {
+  margin-top: var(--s-5);
+}
+
+.post-body h2 {
+  font-size: var(--t-xl);
+  color: var(--fg);
+  margin-top: var(--s-10);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.post-body h3 {
+  font-size: var(--t-lg);
+  color: var(--fg);
+  margin-top: var(--s-10);
+  position: relative;
+}
+
+/* Heading anchor: hidden until the heading is hovered or the link itself is
+   focused, so keyboard users can still reach it. */
+.heading-anchor {
+  position: absolute;
+  left: -1.1em;
+  color: var(--accent);
+  opacity: 0;
+  text-decoration: none;
+  transition: opacity var(--d-fast) var(--ease-out);
+}
+
+.post-body h2:hover .heading-anchor,
+.post-body h3:hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+.post-body strong {
+  color: var(--fg);
+  font-weight: var(--fw-semibold);
+}
+
+.post-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: var(--s-6);
+}
+
+.post-body li + li {
+  margin-top: var(--s-3);
+}
+
+.post-body blockquote {
+  padding-left: var(--s-5);
+  border-left: 2px solid var(--accent);
+  color: var(--fg);
+  font-style: italic;
+}
+
+.post-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-block: var(--s-12);
+}
+
+.post-body img {
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+}
+
+.post-body :not(pre) > code {
+  padding: 0.15em 0.4em;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-inset);
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  color: var(--fg);
+}
+
+/* ── Code blocks ──────────────────────────────────────────────────────── */
+.code-block {
+  position: relative;
+  margin: var(--s-8) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  overflow: hidden;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--s-5);
+  overflow-x: auto;
+  font-size: var(--t-sm);
+  line-height: 1.65;
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-block code {
+  font-family: var(--font-mono);
+}
+
+/* Shiki emits both themes; these variables pick the right one per theme
+   without a second render or a flash on load. */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+:root[data-theme='dark'] .shiki,
+:root[data-theme='dark'] .shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .shiki,
+  :root:not([data-theme]) .shiki span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
+}
+
+.code-block[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  pointer-events: none;
+}
+
+.code-copy {
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-2);
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-raised);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--d-fast) var(--ease-out);
+}
+
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+
+.code-copy.is-copied {
+  color: var(--ok-500);
+  border-color: color-mix(in srgb, var(--ok-500) 45%, transparent);
+}
+
+/* Language label would collide with the copy button. */
+.code-block:hover::before {
+  opacity: 0;
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+.post-footer {
+  padding-block: var(--s-10);
+  margin-top: var(--s-10);
+  border-top: 1px solid var(--border);
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding-bottom: var(--s-10);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-author-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-full);
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.post-author-name {
+  font-weight: var(--fw-semibold);
+  color: var(--fg);
+}
+
+.post-author-bio {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+}
+
+.post-author-bio a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-related {
+  margin-top: var(--s-10);
+}
+
+.post-related-title {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-4);
+}
+
+.post-related ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-related a {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--border);
+  color: var(--fg-muted);
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.post-related a:hover {
+  color: var(--accent);
+}
+
+.post-related-name {
+  flex: 1;
+  font-size: var(--t-base);
+  color: var(--fg);
+}
+
+.post-related-meta {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}

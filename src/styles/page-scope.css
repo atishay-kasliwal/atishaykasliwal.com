@@ -1,0 +1,646 @@
+/**
+ * Design system for the added routes (/about, /projects, /blog, …), scoped to
+ * `.ak-page`.
+ *
+ * This file makes the new pages read as part of the existing site rather than
+ * as a separate product. It does that in two layers:
+ *
+ *   1. Token remap. Every new page's CSS is written against tokens
+ *      (--bg, --fg, --accent, --r-md …). Rebinding those inside `.ak-page` to
+ *      the site's spec-sheet values — pure black, Playfair display serif,
+ *      violet accent, square corners — restyles all eleven pages at once
+ *      without touching a line of their markup.
+ *
+ *   2. Primitive overrides. The shared components (.btn, .card, .tag,
+ *      .page-header) then get the specific spec-sheet treatment: 0 radius,
+ *      hairline rules, registration tick brackets, gradient headings.
+ *
+ * Everything is nested under `.ak-page`, which only PageShell applies, so none
+ * of it can reach the landing page, résumé, Atriveo, highlights, or art pages.
+ * Those keep their appearance exactly.
+ */
+
+.ak-page {
+  /* ── Surfaces ───────────────────────────────────────────────────────── */
+  --bg: #000000;
+  --bg-raised: rgba(255, 255, 255, 0.028);
+  --bg-sunken: #000000;
+  --bg-inset: rgba(255, 255, 255, 0.05);
+
+  /* ── Ink. Matches globals.css, including the dim/faint tiers that were
+        already raised to clear AA on black. ─────────────────────────────── */
+  --fg: var(--spec-ink, #ece9e4);
+  --fg-muted: var(--spec-ink-dim, rgba(255, 255, 255, 0.66));
+  --fg-subtle: var(--spec-ink-faint, rgba(255, 255, 255, 0.5));
+  --fg-inverse: #0a0c14;
+
+  --border: var(--spec-line, rgba(255, 255, 255, 0.11));
+  --border-strong: var(--spec-line-strong, rgba(255, 255, 255, 0.19));
+  --border-accent: rgba(165, 180, 252, 0.42);
+
+  /* Accent text uses --accent-soft (#a5b4fc), not the violet (#8b5cf6).
+     The violet measures ~4.1:1 on black — under AA for body-size text. The
+     indigo clears 9:1. Violet is kept for fills and decoration only. */
+  --accent: var(--accent-soft, #a5b4fc);
+  --accent-hover: #ffffff;
+  --accent-solid: #8b5cf6;
+  --accent-contrast: #0a0c14;
+  --accent-surface: rgba(139, 92, 246, 0.13);
+
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  --surface-active: rgba(255, 255, 255, 0.08);
+
+  --ok-500: #6ee7b7;
+
+  /* ── Type ───────────────────────────────────────────────────────────── */
+  --font-sans: 'Inter', 'Inter Fallback', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Mono', Consolas, monospace;
+  --font-display: 'Playfair Display', 'Playfair Fallback', Georgia, 'Times New Roman', serif;
+
+  /* ── Square corners. The site has no rounded geometry anywhere; the only
+        exception is --r-full, which pills the status dot. ───────────────── */
+  --r-sm: 0;
+  --r-md: 0;
+  --r-lg: 0;
+  --r-xl: 0;
+
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--t-base);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100svh;
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ak-page) *,
+:where(.ak-page) *::before,
+:where(.ak-page) *::after {
+  box-sizing: border-box;
+}
+
+/**
+ * Margin reset, wrapped in :where() so it contributes ZERO specificity.
+ *
+ * Written plainly as `.ak-page p { margin: 0 }` this scores (0,1,1) and beats
+ * every component rule that sets spacing on a paragraph — `.page-header-lede`,
+ * `.post-body > * + *` — because those score (0,1,0). The result was every
+ * paragraph gap on the new pages silently collapsing to zero, with the reset
+ * winning on specificity regardless of source order.
+ *
+ * :where() has no specificity, so this becomes a true baseline that any
+ * component rule overrides normally.
+ */
+:where(.ak-page) :where(p, h1, h2, h3, h4, h5, h6, figure, blockquote, dl, dd, ul, ol) {
+  margin: 0;
+}
+
+:where(.ak-page) :where(img, picture, video, svg) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.ak-page input,
+.ak-page button,
+.ak-page textarea,
+.ak-page select {
+  font: inherit;
+  color: inherit;
+}
+
+:where(.ak-page) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Headings: display serif, matching the landing page ───────────────── */
+:where(.ak-page) :where(h1, h2, h3, h4) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+:where(.ak-page) h1 {
+  font-size: clamp(2.4rem, 1.9rem + 2.6vw, 4rem);
+  line-height: 1.04;
+}
+
+:where(.ak-page) h2 {
+  font-size: clamp(1.75rem, 1.5rem + 1.2vw, 2.6rem);
+}
+
+:where(.ak-page) h3 {
+  font-size: clamp(1.15rem, 1.08rem + 0.35vw, 1.4rem);
+}
+
+:where(.ak-page) h4 {
+  font-size: 1.05rem;
+}
+
+/* Lining numerals — Playfair defaults to old-style figures, which look wrong
+   in a metric. */
+.ak-page h1,
+.ak-page h2,
+.ak-page .metric-value,
+.ak-page .tabular {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: 'lnum' 1;
+}
+
+/* The site's shared heading gradient. Applied to page titles and section
+   titles only — the same places the landing page uses it. */
+.ak-page .page-header-title,
+.ak-page .section-title,
+.ak-page .cta-title,
+.ak-page .post-title,
+.ak-page .case-title {
+  background: var(--accent-gradient, linear-gradient(120deg, #ffffff 20%, #a5b4fc 55%, #8b5cf6 85%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: fit-content;
+}
+
+.ak-page p {
+  text-wrap: pretty;
+}
+
+/* ── Focus: same accent ring as the rest of the site ──────────────────── */
+.ak-page :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 0;
+}
+
+@media (forced-colors: active) {
+  .ak-page :focus-visible {
+    outline: 3px solid CanvasText;
+  }
+}
+
+/* ── Layout. Matches the site's 90vw measure. ─────────────────────────── */
+.ak-page .container {
+  width: 90vw;
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+.ak-page .container--wide {
+  max-width: 1360px;
+}
+
+.ak-page .container--prose {
+  max-width: 68ch;
+}
+
+.ak-page .section {
+  padding-block: clamp(2.5rem, 4.5vw, 4.25rem);
+}
+
+/* ── Spec annotations ─────────────────────────────────────────────────── */
+.ak-page .eyebrow,
+.ak-page .spec-label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  line-height: 1.6;
+}
+
+.ak-page .lede {
+  font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.18rem);
+  line-height: 1.72;
+  color: var(--fg-muted);
+  max-width: 68ch;
+}
+
+.ak-page .mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.ak-page .tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Page header ──────────────────────────────────────────────────────── */
+.ak-page .page-header {
+  padding-block: clamp(2.75rem, 5.5vw, 4.5rem) clamp(1.5rem, 2.5vw, 2.25rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.ak-page .page-header-title {
+  max-width: 20ch;
+}
+
+/* ── Section headers ──────────────────────────────────────────────────── */
+.ak-page .section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-6);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-6);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.ak-page .section-title {
+  margin-top: var(--s-1);
+}
+
+.ak-page .section > .container > .section-title {
+  margin-bottom: var(--s-6);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.ak-page .section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.ak-page .section-link:hover {
+  color: var(--accent);
+}
+
+/* ── Buttons: square, matching .btn-theme from buttons.css ────────────── */
+.ak-page .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 40px;
+  padding: 0 1.25rem;
+  border-radius: 0;
+  border: 1px solid transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  transition: all 0.2s ease;
+}
+
+.ak-page .btn--primary {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0c14;
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.ak-page .btn--primary:hover {
+  background: #fff;
+  border-color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+}
+
+.ak-page .btn--ghost,
+.ak-page .btn--secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.ak-page .btn--ghost:hover,
+.ak-page .btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.9);
+  transform: none;
+}
+
+.ak-page .btn--quiet {
+  padding-inline: 0.5rem;
+  color: var(--fg-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.ak-page .btn--quiet:hover {
+  color: var(--accent);
+}
+
+.ak-page .btn--lg {
+  height: 48px;
+  padding: 0 1.75rem;
+  font-size: 0.88rem;
+}
+
+.ak-page .btn--sm {
+  height: 34px;
+  padding: 0 0.9rem;
+  font-size: 0.74rem;
+}
+
+/* ── Cards: hairline plates with the site's registration ticks ────────── */
+.ak-page .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--bg-raised);
+  transition:
+    border-color 0.28s ease,
+    background-color 0.28s ease;
+}
+
+.ak-page .card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-inset);
+}
+
+/* Corner brackets, matching globals.css. Eight 1px gradient slivers on one
+   pseudo-element, so no card needs extra markup. */
+.ak-page .card::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 0.28s ease;
+  background:
+    linear-gradient(var(--tick), var(--tick)) 0 0 / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 0 0 / 1px var(--tick-len) no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 0 / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 0 / 1px var(--tick-len) no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 0 100% / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 0 100% / 1px var(--tick-len) no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 100% / var(--tick-len) 1px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 100% 100% / 1px var(--tick-len) no-repeat;
+}
+
+.ak-page .card:hover::before {
+  opacity: 1;
+  --tick: rgba(165, 180, 252, 0.5);
+}
+
+@media (max-width: 768px) {
+  .ak-page .card::before {
+    inset: 4px;
+    --tick-len: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-page .card::before {
+    transition: none;
+  }
+}
+
+.ak-page .card:focus-within {
+  border-color: var(--border-accent);
+}
+
+/* ── Tags: square mono chips ──────────────────────────────────────────── */
+.ak-page .tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ak-page button.tag,
+.ak-page a.tag {
+  cursor: pointer;
+}
+
+.ak-page button.tag:hover,
+.ak-page a.tag:hover {
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+
+.ak-page .tag--active {
+  background: var(--accent-surface);
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+/* ── Metrics ──────────────────────────────────────────────────────────── */
+.ak-page .metric-value,
+.ak-page .proj-card-metric-value,
+.ak-page .case-metric-value,
+.ak-page .xp-metric-value {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+}
+
+.ak-page .metric-label,
+.ak-page .proj-card-metric-label,
+.ak-page .case-metric-label,
+.ak-page .xp-metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ── Status dot ───────────────────────────────────────────────────────── */
+.ak-page .status-dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--ok-500);
+}
+
+.ak-page .status-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1px solid var(--ok-500);
+  opacity: 0;
+  animation: ak-status-pulse 2.4s ease-out infinite;
+}
+
+@keyframes ak-status-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-page .status-dot::after {
+    animation: none;
+  }
+}
+
+/* ── CTA panel ────────────────────────────────────────────────────────── */
+.ak-page .cta-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-4);
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--bg-raised);
+  position: relative;
+  overflow: hidden;
+}
+
+.ak-page .cta-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-gradient, linear-gradient(120deg, #ffffff 20%, #a5b4fc 55%, #8b5cf6 85%));
+  opacity: 0.7;
+}
+
+.ak-page .cta-panel--lg {
+  padding: clamp(2rem, 5vw, 3.5rem);
+}
+
+.ak-page .cta-title {
+  max-width: 24ch;
+}
+
+.ak-page .cta-body {
+  color: var(--fg-muted);
+  max-width: 56ch;
+}
+
+.ak-page .cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+}
+
+/* ── Breadcrumbs ──────────────────────────────────────────────────────── */
+.ak-page .crumbs-list {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────── */
+.ak-page .empty-state {
+  border: 1px dashed var(--border-strong);
+  border-radius: 0;
+  background: var(--bg-raised);
+}
+
+/* ── Long-form prose ──────────────────────────────────────────────────── */
+.ak-page .legal h2 {
+  margin-top: var(--s-10);
+  margin-bottom: var(--s-3);
+}
+
+.ak-page .legal p,
+.ak-page .legal li {
+  color: var(--fg-muted);
+  line-height: 1.72;
+  margin-bottom: var(--s-4);
+}
+
+.ak-page .legal ul {
+  padding-left: var(--s-5);
+}
+
+.ak-page .legal a,
+.ak-page .post-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ak-page .legal-updated {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ── Article body: serif headings, square code plates ─────────────────── */
+.ak-page .post-body h2,
+.ak-page .post-body h3 {
+  font-family: var(--font-display);
+  color: var(--fg);
+}
+
+.ak-page .code-block {
+  border-radius: 0;
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.ak-page .post-body :not(pre) > code {
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+}
+
+.ak-page .code-copy {
+  border-radius: 0;
+}
+
+/* Shiki ships both themes; the site is dark-only, so pin the dark one. */
+.ak-page .shiki,
+.ak-page .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+}
+
+/* ── Screen-reader utility, needed inside the scope too ───────────────── */
+.ak-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

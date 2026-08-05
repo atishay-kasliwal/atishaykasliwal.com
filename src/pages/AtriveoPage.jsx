@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet';
 import SiteHeader from '../SiteHeader';
+import useHeroPointer from '../lib/useHeroPointer';
 import '../styles/atriveo.css';
 
 // ─── Pipeline terminal ───────────────────────────────────────────────────────
@@ -202,8 +202,11 @@ export default function AtriveoPage() {
   const [active, setActive] = useState('platform');
   const node = NODES.find(n => n.id === active);
 
+  const heroRef = useRef(null);
   const mapRef = useRef(null);
   const nodeEls = useRef({});
+
+  useHeroPointer(heroRef);
   const [edgePaths, setEdgePaths] = useState([]);
 
   useEffect(() => {
@@ -266,37 +269,110 @@ export default function AtriveoPage() {
 
   return (
     <>
-      <Helmet>
-        <title>Atriveo — A Job Search Operating System | Atishay Kasliwal</title>
-        <meta
-          name="description"
-          content="Atriveo: a job search operating system built end-to-end by one engineer. Chrome extension, edge platform, hourly scraping pipeline, and a resume compiler — 100+ active users."
-        />
-        <link rel="canonical" href="https://atishaykasliwal.com/atriveo" />
-      </Helmet>
 
       <div className="page-content" translate="no">
         <SiteHeader />
 
-        {/* ── Hero ── */}
-        <section className="atv-hero">
-          <div className="atv-hero-badge">
-            <span className="atv-live-dot" /> Live product
-          </div>
-          <h1 className="atv-wordmark">Atriveo</h1>
-          <p className="atv-tagline">
-            A job search operating system.
-            <br />
-            <span className="atv-tagline-dim">Built end-to-end by one engineer.</span>
-          </p>
+        {/* ── Hero ──
+            Built on the same chassis as the landing hero: an edge-to-edge grid
+            plane, a cursor-tracked glow, a document meta row, and left-aligned
+            type. Previously this was a centred column with no spec-sheet
+            chrome, which is what made the page read as a different site. */}
+        <section className="atv-hero" ref={heroRef}>
+          <div className="atv-hero-grid" aria-hidden="true" />
+          <div className="atv-hero-glow" aria-hidden="true" />
 
-          <div className="atv-stats">
-            {STATS.map(s => (
-              <div className="atv-stat" key={s.label}>
-                <span className="atv-stat-num">{s.num}</span>
-                <span className="atv-stat-label">{s.label}</span>
+          <div className="atv-hero-inner">
+            <div className="atv-hero-meta">
+              <span className="spec-label">
+                <span className="atv-meta-prefix">Product Document · </span>ATRIVEO / Rev. A
+              </span>
+              <span className="spec-label">
+                <a href="https://www.atriveo.com/" target="_blank" rel="noopener noreferrer">
+                  atriveo.com ↗
+                </a>
+              </span>
+            </div>
+
+            <div className="atv-hero-cols">
+              <div className="atv-hero-lead">
+            <p className="atv-status">
+              <span className="atv-status-mark" aria-hidden="true" />
+              Live product · 2026
+            </p>
+
+            <h1 className="atv-wordmark">Atriveo</h1>
+
+            <p className="atv-tagline">
+              A job search operating system.
+              <br />
+              <span className="atv-tagline-dim">Built end-to-end by one engineer.</span>
+            </p>
+
+            <div className="atv-stats">
+              {STATS.map(s => (
+                <div className="atv-stat" key={s.label}>
+                  <span className="atv-stat-num">{s.num}</span>
+                  <span className="atv-stat-label">{s.label}</span>
+                </div>
+              ))}
+            </div>
               </div>
-            ))}
+
+              {/* Right column: the system map, lifted out of its own section so
+                  the first view shows what Atriveo actually is rather than
+                  requiring a scroll. Mirrors the landing hero, which pairs the
+                  display type with the architecture panel. */}
+              <div className="atv-hero-figure">
+                <div className="atv-figure-head">
+                  <span className="spec-label spec-label--accent">Fig. A / System architecture</span>
+                  <span className="spec-label">Click any node</span>
+                </div>
+              <div className="atv-map" role="group" aria-label="Atriveo system architecture map" ref={mapRef}>
+                <svg className="atv-map-lines" aria-hidden="true">
+                  {edgePaths.map(e => (
+                    <g key={e.id}>
+                      <path className="atv-edge" d={e.d} />
+                      <circle className="atv-edge-dot" r="3.5">
+                        <animateMotion dur={e.dur} repeatCount="indefinite" path={e.d} />
+                      </circle>
+                    </g>
+                  ))}
+                </svg>
+
+                {NODES.map(n => (
+                  <div
+                    key={n.id}
+                    ref={el => { nodeEls.current[n.id] = el; }}
+                    role="button"
+                    tabIndex={0}
+                    className={`atv-node${active === n.id ? ' is-active' : ''}`}
+                    style={{ left: `${n.x}%`, top: `${n.y}%` }}
+                    onClick={() => setActive(n.id)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(n.id); }
+                    }}
+                  >
+                    <span className={`atv-node-status atv-node-status--${n.statusKind}`} />
+                    <span className="atv-node-label">{n.label}</span>
+                    <span className="atv-node-sub">{n.sub}</span>
+                    <a
+                      className="atv-node-gh"
+                      href={n.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${n.label} on GitHub`}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                    </a>
+                  </div>
+                ))}
+              </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -309,56 +385,14 @@ export default function AtriveoPage() {
           </p>
         </section>
 
-        {/* ── System map ── */}
+        {/* ── Selected node detail ──
+            The map itself now lives in the hero; this section holds the panel
+            that expands when a node is chosen. */}
         <section className="atv-map-section">
           <div className="atv-section-head">
             <span className="atv-eyebrow">The system</span>
             <h2>One platform, seven moving parts</h2>
-            <p className="atv-section-sub">Click any node to explore it.</p>
-          </div>
-
-          <div className="atv-map" role="group" aria-label="Atriveo system architecture map" ref={mapRef}>
-            <svg className="atv-map-lines" aria-hidden="true">
-              {edgePaths.map(e => (
-                <g key={e.id}>
-                  <path className="atv-edge" d={e.d} />
-                  <circle className="atv-edge-dot" r="3.5">
-                    <animateMotion dur={e.dur} repeatCount="indefinite" path={e.d} />
-                  </circle>
-                </g>
-              ))}
-            </svg>
-
-            {NODES.map(n => (
-              <div
-                key={n.id}
-                ref={el => { nodeEls.current[n.id] = el; }}
-                role="button"
-                tabIndex={0}
-                className={`atv-node${active === n.id ? ' is-active' : ''}`}
-                style={{ left: `${n.x}%`, top: `${n.y}%` }}
-                onClick={() => setActive(n.id)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(n.id); }
-                }}
-              >
-                <span className={`atv-node-status atv-node-status--${n.statusKind}`} />
-                <span className="atv-node-label">{n.label}</span>
-                <span className="atv-node-sub">{n.sub}</span>
-                <a
-                  className="atv-node-gh"
-                  href={n.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${n.label} on GitHub`}
-                  onClick={e => e.stopPropagation()}
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576 4.765-1.588 8.199-6.084 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
-                </a>
-              </div>
-            ))}
+            <p className="atv-section-sub">Select a node in the map above.</p>
           </div>
 
           {/* Detail panel */}
@@ -404,7 +438,7 @@ export default function AtriveoPage() {
           <div className="atv-compiler-grid">
             <div className="atv-compiler-card">
               <span className="atv-compiler-num">01</span>
-              <h4>Evidence graph</h4>
+              <h3>Evidence graph</h3>
               <p>
                 161 accomplishment cards — each a proof-backed unit of work with metrics, tech,
                 and a wow score. No free-form text generation, no hallucinated claims.
@@ -412,7 +446,7 @@ export default function AtriveoPage() {
             </div>
             <div className="atv-compiler-card">
               <span className="atv-compiler-num">02</span>
-              <h4>Global optimizer</h4>
+              <h3>Global optimizer</h3>
               <p>
                 A job description gates in, then a 15-bullet hill climb jointly optimizes
                 information gain across the whole page — not bullet by bullet.
@@ -420,7 +454,7 @@ export default function AtriveoPage() {
             </div>
             <div className="atv-compiler-card">
               <span className="atv-compiler-num">03</span>
-              <h4>Deterministic output</h4>
+              <h3>Deterministic output</h3>
               <p>
                 LaTeX → ATS-safe PDF with a compile fingerprint. Same inputs, same resume —
                 every build is replayable and diffable.
@@ -441,7 +475,7 @@ export default function AtriveoPage() {
                 <div className="atv-tl-marker" />
                 <div className="atv-tl-body">
                   <span className="atv-tl-period">{t.period}</span>
-                  <h4>{t.title}</h4>
+                  <h3>{t.title}</h3>
                   <p>{t.desc}</p>
                 </div>
               </div>

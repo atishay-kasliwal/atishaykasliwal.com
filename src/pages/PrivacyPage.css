@@ -1,0 +1,11 @@
+/* Long-form legal prose uses the shared .legal pattern from patterns.css.
+   This file exists so the page owns its own stylesheet boundary and can grow
+   without reaching into the shared layer. */
+
+.legal {
+  padding-bottom: var(--s-10);
+}
+
+.legal h2:first-of-type {
+  margin-top: var(--s-8);
+}
