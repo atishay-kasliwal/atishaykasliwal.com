@@ -1,0 +1,115 @@
+.proj-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-10);
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: var(--s-5);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.proj-card {
+  gap: var(--s-4);
+}
+
+.proj-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.proj-card-cat {
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.proj-card-status {
+  padding: 0.2em 0.6em;
+  border-radius: var(--r-full);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.proj-card-status--live {
+  border-color: color-mix(in srgb, var(--ok-500) 45%, transparent);
+  color: var(--ok-500);
+}
+
+.proj-card-status--research {
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+.proj-card-title {
+  font-size: var(--t-xl);
+}
+
+.proj-card-title a {
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.proj-card:hover .proj-card-title a {
+  color: var(--accent);
+}
+
+.proj-card-tagline {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+}
+
+.proj-card-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: var(--s-4);
+  margin: 0;
+  padding-block: var(--s-4);
+  border-block: 1px solid var(--border);
+}
+
+.proj-card-metric-value {
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  color: var(--accent);
+  line-height: 1;
+}
+
+.proj-card-metric-label {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-subtle);
+}
+
+.proj-card-stack {
+  margin-top: auto;
+}
+
+.proj-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-xs);
+  font-weight: var(--fw-medium);
+  color: var(--fg-subtle);
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.proj-card:hover .proj-card-cta {
+  color: var(--accent);
+}

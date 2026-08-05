@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Seo from '../seo/Seo';
 import { projectSchema, webPageSchema } from '../seo/schema.js';
-import { resolveMeta } from '../seo/routes.js';
+import { resolveMeta, seoTitle, seoDescription } from '../seo/routes.js';
 import { Container, Section, Breadcrumbs, Button, TagList, ArrowIcon, ExternalIcon } from '../components/ui';
 import { getProject, PROJECTS } from '../data/projects.js';
 import NotFoundPage from './NotFoundPage';
@@ -25,8 +25,8 @@ export default function ProjectDetailPage() {
   const path = `/projects/${project.slug}`;
   const meta = resolveMeta(path, {
     path,
-    title: `${project.name} — ${project.tagline.replace(/\.$/, '')}`,
-    description: project.problem.slice(0, 158),
+    title: seoTitle(`${project.name} Case Study`),
+    description: seoDescription(project.problem),
     breadcrumbs: [
       { name: 'Projects', path: '/projects' },
       { name: project.name, path },

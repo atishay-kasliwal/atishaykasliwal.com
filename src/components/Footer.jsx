@@ -15,6 +15,29 @@ function Footer() {
         <FinalProductGrid />
       </div>
 
+      {/* Sitemap row. The header carries only five items, which left several
+          real pages reachable solely by typing the URL — dead weight for both
+          visitors and crawlers, since internal links are how PageRank and
+          discovery flow. Styled with the existing .spec-label mono treatment so
+          it reads as part of the same document. */}
+      <nav className="footer-content spec-footer-nav" aria-label="Footer" translate="no">
+        <Link to="/contact" className="spec-label spec-footer-contact">
+          <span className="spec-footer-contact-dot" aria-hidden="true" />
+          Contact
+        </Link>
+        <Link to="/projects" className="spec-label">Projects</Link>
+        <Link to="/highlights" className="spec-label">Live demos</Link>
+        <Link to="/atriveo" className="spec-label">Atriveo</Link>
+        <Link to="/experience" className="spec-label">Experience</Link>
+        <Link to="/open-source" className="spec-label">Open source</Link>
+        <Link to="/blog" className="spec-label">Writing</Link>
+        <Link to="/about" className="spec-label">About</Link>
+        <Link to="/resume" className="spec-label">Résumé</Link>
+        <Link to="/art" className="spec-label">Photography</Link>
+        <Link to="/privacy" className="spec-label">Privacy</Link>
+        <a className="spec-label" href="/rss.xml">RSS</a>
+      </nav>
+
       <div className="footer-content spec-footer-row" translate="no">
         <span className="spec-label spec-footer-colophon" translate="no">
           © {new Date().getFullYear()} Atishay Kasliwal · React / Vite / Cloudflare

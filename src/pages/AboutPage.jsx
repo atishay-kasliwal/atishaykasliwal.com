@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Seo from '../seo/Seo';
 import { webPageSchema, faqSchema } from '../seo/schema.js';
 import { resolveMeta } from '../seo/routes.js';
-import { Container, Section, PageHeader, Button, ArrowIcon, DownloadIcon } from '../components/ui';
+import { Container, Section, Button, ArrowIcon, DownloadIcon, ExternalIcon } from '../components/ui';
 import {
   FULL_NAME,
   BIO_LONG,
@@ -10,54 +11,35 @@ import {
   AVAILABILITY,
   IMAGES,
   RESUME_PDF,
+  EMAIL,
+  PROFILES,
   FOCUS_AREAS,
 } from '../data/site.js';
-import { EXPERIENCE, yearsOfExperience } from '../data/experience.js';
+import { EXPERIENCE, yearsOfExperience, NOTABLE_ORGS } from '../data/experience.js';
 import { EDUCATION, SKILLS } from '../data/education.js';
+import { ABOUT_FAQS as FAQS } from '../data/faqs.js';
+import { FEATURED_PROJECTS } from '../data/projects.js';
 import './AboutPage.css';
 
 /**
- * /about — the page that answers "who is this person" for both a recruiter and
- * a crawler. Emits ProfilePage + FAQPage: the FAQ entries target the questions
- * people literally type into Google about a named person, which is what makes
- * a name query resolve to this site rather than to LinkedIn.
+ * /about — the page that answers "who is this person" for a recruiter and for a
+ * crawler at the same time.
+ *
+ * Structured the way the page is actually read: identity and status first, then
+ * the narrative, then proof, then depth. The FAQ at the end is not filler — the
+ * questions are phrased the way people literally search a name, and they are
+ * emitted as FAQPage structured data, which is what can win an expanded search
+ * result for "who is Atishay Kasliwal".
  */
-
-const FAQS = [
-  {
-    question: 'Who is Atishay Kasliwal?',
-    answer:
-      'Atishay Kasliwal is an AI Engineer based in New York who builds production large language model systems, retrieval-augmented generation pipelines, and the distributed infrastructure they run on. He holds a Master of Science in Data Science from Stony Brook University.',
-  },
-  {
-    question: 'What does Atishay Kasliwal specialize in?',
-    answer:
-      'Large language model systems, retrieval-augmented generation, AI agents, event-driven distributed architecture, and cloud infrastructure on AWS and GCP. His primary languages are Python, TypeScript, and Java.',
-  },
-  {
-    question: 'Where did Atishay Kasliwal study?',
-    answer:
-      'Atishay Kasliwal earned a Master of Science in Data Science from Stony Brook University and a Bachelor of Technology in Computer Science and Information Technology from Symbiosis University of Applied Sciences in Indore, India.',
-  },
-  {
-    question: 'Where has Atishay Kasliwal worked?',
-    answer:
-      'He is a Graduate Research Assistant at Stony Brook University, previously a machine learning intern at the Wake Forest University Center for Artificial Intelligence Research, and spent three years as a Senior Software Engineer at Accolite Digital building systems for Fidelity Investments and BT Group.',
-  },
-  {
-    question: 'Is Atishay Kasliwal available for hire?',
-    answer: `${AVAILABILITY.label}. ${AVAILABILITY.detail}. He can be reached at hire@atishaykasliwal.com.`,
-  },
-];
 
 const PRINCIPLES = [
   {
     title: 'The model is the easy part',
-    body: 'Most of the difficulty in an AI system is upstream and downstream of inference — data correctness, retrieval quality, latency budgets, failure modes. That is where the work actually is, and where I spend my time.',
+    body: 'Most of the difficulty in an AI system sits upstream and downstream of inference — data correctness, retrieval quality, latency budgets, failure modes. That is where the work actually is.',
   },
   {
     title: 'Measure the thing you claim',
-    body: 'A number without a definition is decoration. P99 under what load, accuracy on which split, cost per query at what volume. If I cannot say how it was measured, I do not put it on a slide.',
+    body: 'A number without a definition is decoration. P99 under what load, accuracy on which split, cost per query at what volume. If I cannot say how it was measured, it does not go on the slide.',
   },
   {
     title: 'Build for the failure case',
@@ -65,47 +47,70 @@ const PRINCIPLES = [
   },
   {
     title: 'Ship, then earn the complexity',
-    body: 'Every abstraction should be paid for by a problem that already exists. I would rather ship something plain and add structure when the pressure is real than build for a scale that never arrives.',
+    body: 'Every abstraction should be paid for by a problem that already exists. I would rather ship something plain and add structure under real pressure than build for a scale that never arrives.',
   },
+];
+
+/** Mirrors the CURRENTLY strip on the landing page. */
+const CURRENTLY = [
+  { head: 'Building Atriveo', sub: 'Job-search platform · 100+ users', to: '/atriveo' },
+  { head: 'MS Data Science', sub: 'Stony Brook · May 2026', to: null },
+  { head: 'Financial NLP research', sub: 'Stony Brook University', to: '/research' },
+  { head: 'Open to new roles', sub: 'AI/ML · SWE · Data', to: '/contact' },
+];
+
+const BEYOND = [
+  { label: 'Photography', body: 'Street and travel work, shot on a Nikon.', to: '/art' },
+  { label: 'Writing', body: 'Notes on what breaks in production ML.', to: '/blog' },
+  { label: 'Open source', body: 'Public repositories, pulled live from GitHub.', to: '/open-source' },
 ];
 
 export default function AboutPage() {
   const meta = resolveMeta('/about');
   const years = yearsOfExperience();
+  const current = EXPERIENCE.find((e) => e.current);
 
   return (
     <>
-      <Seo
-        path="/about"
-        schema={[webPageSchema(meta, 'ProfilePage'), faqSchema(FAQS)]}
-      />
+      <Seo path="/about" schema={[webPageSchema(meta, 'ProfilePage'), faqSchema(FAQS)]} />
 
-      <PageHeader
-        eyebrow="About"
-        title={`${FULL_NAME} builds AI systems that hold up in production.`}
-        lede={`${years} years of engineering across research, healthcare, and financial infrastructure — most of it on the parts of a system that decide whether a model is actually useful.`}
-        breadcrumbs={meta.breadcrumbs}
-      >
-        <Button href={RESUME_PDF} download icon={<DownloadIcon />}>
-          Download résumé
-        </Button>
-        <Button to="/contact" variant="ghost" icon={<ArrowIcon />}>
-          Get in touch
-        </Button>
-      </PageHeader>
-
-      <Section className="about-intro">
+      {/* ── Hero: identity, status, portrait ─────────────────────────── */}
+      <header className="ab-hero">
         <Container>
-          <div className="about-grid">
-            <div className="about-bio">
-              {BIO_LONG.split('\n\n').map((para) => (
-                <p key={para.slice(0, 40)}>{para}</p>
-              ))}
+          <div className="ab-hero-meta">
+            <span className="spec-label">Profile · AK-2026 / Rev. A</span>
+            <span className="spec-label">{LOCATION.display}</span>
+          </div>
+
+          <div className="ab-hero-cols">
+            <div className="ab-hero-lead">
+              <p className="ab-status">
+                <span className="ab-status-mark" aria-hidden="true" />
+                {AVAILABILITY.label}
+              </p>
+
+              <h1 className="ab-title">
+                I build AI systems that <em>hold up</em> in production.
+              </h1>
+
+              <p className="ab-lede">
+                {years} years across research, healthcare, and financial infrastructure — most of
+                it on the parts of a system that decide whether a model is actually useful.
+              </p>
+
+              <div className="ab-actions">
+                <Button href={RESUME_PDF} download icon={<DownloadIcon />}>
+                  Download résumé
+                </Button>
+                <Button to="/projects" variant="ghost" icon={<ArrowIcon />}>
+                  See the work
+                </Button>
+              </div>
             </div>
 
-            <aside className="about-aside" aria-label="Quick facts">
+            <figure className="ab-portrait-plate">
               <img
-                className="about-portrait"
+                className="ab-portrait"
                 src={IMAGES.headshot.src}
                 width={IMAGES.headshot.width}
                 height={IMAGES.headshot.height}
@@ -114,38 +119,88 @@ export default function AboutPage() {
                 fetchPriority="high"
                 decoding="async"
               />
-              <dl className="about-facts">
-                <div>
-                  <dt>Location</dt>
-                  <dd>{LOCATION.display}</dd>
-                </div>
-                <div>
-                  <dt>Focus</dt>
-                  <dd>LLM systems, RAG, distributed infrastructure</dd>
-                </div>
-                <div>
-                  <dt>Education</dt>
-                  <dd>MS Data Science, Stony Brook University</dd>
-                </div>
-                <div>
-                  <dt>Status</dt>
-                  <dd>
-                    <span className="status-dot" aria-hidden="true" />
-                    {AVAILABILITY.label}
-                  </dd>
-                </div>
-              </dl>
-            </aside>
+              <figcaption className="spec-label ab-portrait-cap">
+                {FULL_NAME} · {LOCATION.display}
+              </figcaption>
+            </figure>
+          </div>
+        </Container>
+      </header>
+
+      {/* ── Currently ────────────────────────────────────────────────── */}
+      <section className="ab-currently" aria-label="Currently">
+        <Container>
+          <ul className="ab-currently-list">
+            {CURRENTLY.map((item) => (
+              <li key={item.head} className="ab-currently-item">
+                {item.to ? (
+                  <Link to={item.to}>
+                    <span className="ab-currently-head">{item.head}</span>
+                    <span className="ab-currently-sub">{item.sub}</span>
+                  </Link>
+                ) : (
+                  <>
+                    <span className="ab-currently-head">{item.head}</span>
+                    <span className="ab-currently-sub">{item.sub}</span>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* ── Narrative ────────────────────────────────────────────────── */}
+      <Section className="ab-bio">
+        <Container>
+          <div className="ab-bio-grid">
+            <p className="spec-label ab-bio-label">The short version</p>
+            <div className="ab-bio-body">
+              {BIO_LONG.split('\n\n').map((para) => (
+                <p key={para.slice(0, 40)}>{para}</p>
+              ))}
+
+              <p className="ab-bio-more">
+                The long version is on <Link to="/experience">the experience page</Link>, role by
+                role, with the numbers attached. Peer-reviewed work is listed under{' '}
+                <Link to="/research">research</Link>.
+              </p>
+            </div>
           </div>
         </Container>
       </Section>
 
-      <Section className="about-focus">
+      {/* ── Where the work has run ───────────────────────────────────── */}
+      <section className="ab-orgs" aria-label="Organizations">
         <Container>
-          <h2 className="section-title">What I work on</h2>
-          <ul className="focus-list">
-            {FOCUS_AREAS.map((area) => (
-              <li key={area} className="focus-item">
+          <p className="spec-label ab-orgs-label">Work has run at</p>
+          <ul className="ab-orgs-list">
+            {NOTABLE_ORGS.map((org) => (
+              <li key={org.name}>{org.name}</li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* ── Focus ────────────────────────────────────────────────────── */}
+      <Section className="ab-focus">
+        <Container>
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">Focus</p>
+              <h2 className="section-title">What I work on</h2>
+            </div>
+            <Link className="section-link" to="/projects">
+              See it applied <ArrowIcon />
+            </Link>
+          </header>
+
+          <ul className="ab-focus-grid">
+            {FOCUS_AREAS.map((area, i) => (
+              <li key={area} className="ab-focus-item">
+                <span className="ab-focus-num mono" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
                 {area}
               </li>
             ))}
@@ -153,31 +208,87 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <Section className="about-principles">
+      {/* ── Principles ───────────────────────────────────────────────── */}
+      <Section className="ab-principles">
         <Container>
-          <h2 className="section-title">How I work</h2>
-          <div className="principles-grid">
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">Method</p>
+              <h2 className="section-title">How I work</h2>
+            </div>
+          </header>
+
+          <div className="ab-principles-grid">
             {PRINCIPLES.map((p, i) => (
-              <article key={p.title} className="principle">
-                <span className="principle-num mono" aria-hidden="true">
+              <article key={p.title} className="ab-principle card">
+                <span className="ab-principle-num mono" aria-hidden="true">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <h3 className="principle-title">{p.title}</h3>
-                <p className="principle-body">{p.body}</p>
+                <h3 className="ab-principle-title">{p.title}</h3>
+                <p className="ab-principle-body">{p.body}</p>
               </article>
             ))}
           </div>
         </Container>
       </Section>
 
-      <Section className="about-skills">
+      {/* ── Selected work ────────────────────────────────────────────── */}
+      <Section className="ab-work">
         <Container>
-          <h2 className="section-title">Technical depth</h2>
-          <div className="skills-grid">
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">Selected work</p>
+              <h2 className="section-title">Things I have shipped</h2>
+            </div>
+            <Link className="section-link" to="/projects">
+              All projects <ArrowIcon />
+            </Link>
+          </header>
+
+          <ul className="ab-work-list">
+            {FEATURED_PROJECTS.slice(0, 3).map((p) => (
+              <li key={p.slug} className="ab-work-item card">
+                <span className="mono ab-work-cat">{p.category}</span>
+                <h3 className="ab-work-title">
+                  <Link to={`/projects/${p.slug}`} className="card-link">
+                    {p.name}
+                  </Link>
+                </h3>
+                <p className="ab-work-tagline">{p.tagline}</p>
+                {p.metrics?.length > 0 && (
+                  <dl className="ab-work-metrics">
+                    {p.metrics.slice(0, 2).map((m) => (
+                      <div key={m.label}>
+                        <dd className="tabular">{m.value}</dd>
+                        <dt>{m.label}</dt>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* ── Skills ───────────────────────────────────────────────────── */}
+      <Section className="ab-skills">
+        <Container>
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">Depth</p>
+              <h2 className="section-title">Technical range</h2>
+            </div>
+          </header>
+
+          <div className="ak-skills-grid">
             {SKILLS.map((group) => (
-              <div key={group.category} className={`skill-group${group.primary ? ' is-primary' : ''}`}>
-                <h3 className="skill-category">{group.category}</h3>
-                <ul className="skill-items">
+              <div
+                key={group.category}
+                className={`ab-skill-group${group.primary ? ' is-primary' : ''}`}
+              >
+                <h3 className="ab-skill-category">{group.category}</h3>
+                <ul className="ab-skill-items">
                   {group.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
@@ -188,61 +299,112 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <Section className="about-education">
+      {/* ── Education ────────────────────────────────────────────────── */}
+      <Section className="ab-education">
         <Container>
-          <h2 className="section-title">Education</h2>
-          <ul className="edu-list">
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">Education</p>
+              <h2 className="section-title">Where I studied</h2>
+            </div>
+          </header>
+
+          <ul className="ab-edu-list">
             {EDUCATION.map((e) => (
-              <li key={e.id} className="edu-item">
-                <div className="edu-head">
-                  <h3 className="edu-degree">{e.degree}</h3>
-                  <span className="edu-period mono">{e.period}</span>
+              <li key={e.id} className="ab-edu-item">
+                <div className="ab-edu-main">
+                  <h3 className="ab-edu-degree">{e.degree}</h3>
+                  <p className="ab-edu-school">
+                    {e.schoolUrl ? (
+                      <a href={e.schoolUrl} target="_blank" rel="noopener noreferrer">
+                        {e.school} <ExternalIcon />
+                      </a>
+                    ) : (
+                      e.school
+                    )}
+                    <span className="ab-edu-loc"> · {e.location}</span>
+                  </p>
+                  <p className="ab-edu-courses">{e.coursework.join(' · ')}</p>
                 </div>
-                <p className="edu-school">
-                  {e.schoolUrl ? (
-                    <a href={e.schoolUrl} target="_blank" rel="noopener noreferrer">
-                      {e.school}
-                    </a>
-                  ) : (
-                    e.school
-                  )}{' '}
-                  · {e.location}
-                </p>
-                <p className="edu-meta">GPA {e.gpa}</p>
-                <p className="edu-courses">{e.coursework.join(' · ')}</p>
+                <div className="ab-edu-meta">
+                  <span className="mono">{e.period}</span>
+                  <span className="mono ab-edu-gpa">GPA {e.gpa}</span>
+                </div>
               </li>
             ))}
           </ul>
         </Container>
       </Section>
 
-      {/* Rendered visibly as well as in JSON-LD. Google will not show an FAQ
+      {/* ── Beyond work ──────────────────────────────────────────────── */}
+      <Section className="ab-beyond">
+        <Container>
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">Elsewhere</p>
+              <h2 className="section-title">Outside the terminal</h2>
+            </div>
+          </header>
+
+          <ul className="ab-beyond-grid">
+            {BEYOND.map((b) => (
+              <li key={b.label} className="ab-beyond-item card">
+                <h3 className="ab-beyond-label">
+                  <Link to={b.to} className="card-link">
+                    {b.label}
+                  </Link>
+                </h3>
+                <p className="ab-beyond-body">{b.body}</p>
+                <span className="ab-beyond-cta" aria-hidden="true">
+                  Open <ArrowIcon />
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────
+          Rendered visibly as well as in JSON-LD. Google will not award an FAQ
           rich result for content that exists only in structured data. */}
-      <Section className="about-faq">
+      <Section className="ab-faq">
         <Container width="prose">
-          <h2 className="section-title">Common questions</h2>
-          <div className="faq-list">
+          <header className="section-head">
+            <div>
+              <p className="eyebrow">FAQ</p>
+              <h2 className="section-title">Common questions</h2>
+            </div>
+          </header>
+
+          <div className="ab-faq-list">
             {FAQS.map((f) => (
-              <details key={f.question} className="faq-item">
-                <summary className="faq-q">{f.question}</summary>
-                <p className="faq-a">{f.answer}</p>
+              <details key={f.question} className="ab-faq-item">
+                <summary className="ab-faq-q">{f.question}</summary>
+                <p className="ab-faq-a">{f.answer}</p>
               </details>
             ))}
           </div>
         </Container>
       </Section>
 
-      <Section className="about-cta">
+      {/* ── CTA ──────────────────────────────────────────────────────── */}
+      <Section className="ab-cta">
         <Container>
-          <div className="cta-panel">
-            <h2 className="cta-title">Currently open to new roles.</h2>
+          <div className="cta-panel cta-panel--lg">
+            <p className="eyebrow">Open to work</p>
+            <h2 className="cta-title">
+              Currently at {current?.company}, and open to what is next.
+            </h2>
             <p className="cta-body">{AVAILABILITY.detail}</p>
             <div className="cta-actions">
-              <Button to="/contact" icon={<ArrowIcon />}>
-                Get in touch
+              <Button href={`mailto:${EMAIL}`} icon={<ArrowIcon />}>
+                {EMAIL}
               </Button>
-              <Button href={RESUME_PDF} download variant="ghost" icon={<DownloadIcon />}>
-                Résumé
+              <Button href={PROFILES.cal} variant="ghost" icon={<ExternalIcon />}>
+                Book 30 minutes
+              </Button>
+              <Button to="/contact" variant="quiet">
+                Other ways to reach me
               </Button>
             </div>
           </div>

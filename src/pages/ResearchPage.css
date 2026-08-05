@@ -1,0 +1,344 @@
+.research-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+  gap: var(--s-5);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.research-item {
+  gap: var(--s-3);
+}
+
+.research-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-2);
+}
+
+.research-status {
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.research-status--active {
+  border-color: color-mix(in srgb, var(--ok-500) 45%, transparent);
+  color: var(--ok-500);
+}
+
+.research-period {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}
+
+.research-title {
+  font-size: var(--t-lg);
+}
+
+.research-affil {
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  color: var(--fg-subtle);
+}
+
+.research-summary {
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+  flex: 1;
+}
+
+.research-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+  font-size: var(--t-sm);
+  font-weight: var(--fw-medium);
+  color: var(--accent);
+}
+
+.research-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Publications ─────────────────────────────────────────────────────── */
+.pub-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: pub;
+}
+
+.pub-item {
+  padding-block: var(--s-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.pub-title {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-2);
+}
+
+.pub-title a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--fg);
+}
+
+.pub-title a:hover {
+  color: var(--accent);
+}
+
+.pub-authors {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  margin-bottom: var(--s-1);
+}
+
+.pub-venue {
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  color: var(--fg-subtle);
+}
+
+.pub-abstract {
+  margin-top: var(--s-3);
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+  max-width: 68ch;
+}
+
+/* ── Conferences ──────────────────────────────────────────────────────── */
+.conf-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.conf-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.conf-name {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-2);
+}
+
+.conf-name a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--fg);
+}
+
+.conf-name a:hover {
+  color: var(--accent);
+}
+
+.conf-topic {
+  color: var(--fg-muted);
+  max-width: 60ch;
+}
+
+.conf-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  white-space: nowrap;
+}
+
+.conf-role {
+  color: var(--accent);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+/* The site owner's name is emphasised within the author list rather than moved
+   to the front — author order in a citation is meaningful and must not change. */
+.pub-author-self {
+  color: var(--fg);
+  font-weight: var(--fw-semibold);
+}
+
+.pub-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.pub-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pub-keywords li {
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.pub-links {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  font-size: var(--t-xs);
+}
+
+.pub-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--accent);
+  font-weight: var(--fw-medium);
+}
+
+.pub-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pub-issn {
+  color: var(--fg-subtle);
+  letter-spacing: 0.1em;
+}
+
+.conf-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: var(--s-3);
+}
+
+.conf-role {
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--border-accent);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.conf-role--presented {
+  border-color: color-mix(in srgb, var(--ok-500) 45%, transparent);
+  color: var(--ok-500);
+}
+
+.conf-year {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  letter-spacing: 0.1em;
+}
+
+/* ── Graduate coursework ──────────────────────────────────────────────────
+   Visually quieter than the publications above: no card surface, smaller type,
+   a single hairline per row. The hierarchy is the point — peer-reviewed work
+   should not have to compete with class projects for attention. */
+.cw-note {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  letter-spacing: 0.1em;
+}
+
+.cw-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.cw-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.cw-main {
+  flex: 1;
+  min-width: min(22rem, 100%);
+}
+
+.cw-title {
+  font-size: var(--t-base);
+  font-weight: var(--fw-medium);
+  font-family: var(--font-sans);
+  margin-bottom: var(--s-2);
+  color: var(--fg);
+}
+
+.cw-course {
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: var(--s-2);
+}
+
+.cw-summary {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  line-height: 1.65;
+  max-width: 64ch;
+}
+
+.cw-collab {
+  margin-top: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}
+
+.cw-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 16rem;
+}
+
+.cw-topics li {
+  padding: 0.18em 0.5em;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect, useRef, useCallback } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import Seo from './seo/Seo';
+import { seoTitle, seoDescription } from './seo/routes.js';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './HighlightDetail.css';
@@ -478,31 +479,40 @@ export default function HighlightDetail() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <Helmet>
-        <title>{project.seoTitle || project.title} | Atishay Kasliwal</title>
-        <meta name="description" content={project.seoDescription || project.description} />
-        <meta property="og:type"        content="article" />
-        <meta property="og:site_name"   content="Atishay Kasliwal" />
-        <meta property="og:title"       content={`${project.seoTitle || project.title} | Atishay Kasliwal`} />
-        <meta property="og:description" content={project.seoDescription || project.description} />
-        <meta property="og:url"         content={`https://atishaykasliwal.com/highlights/${project.uuid}`} />
-        <meta property="og:image"       content={project.image?.startsWith('http') ? project.image : `https://atishaykasliwal.com${project.image}`} />
-        <meta name="twitter:card"        content="summary_large_image" />
-        <meta name="twitter:title"       content={`${project.seoTitle || project.title} | Atishay Kasliwal`} />
-        <meta name="twitter:description" content={project.seoDescription || project.description} />
-        <meta name="twitter:image"       content={project.image?.startsWith('http') ? project.image : `https://atishaykasliwal.com${project.image}`} />
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": project.title,
-          "description": project.seoDescription || project.description,
-          "url": `https://atishaykasliwal.com/highlights/${project.uuid}`,
-          "image": project.image?.startsWith('http') ? project.image : `https://atishaykasliwal.com${project.image}`,
-          "author": { "@id": "https://atishaykasliwal.com/#person" },
-          "applicationCategory": project.category,
-          "datePublished": getArticleMeta(project.uuid).date,
-        })}</script>
-      </Helmet>
+      <Seo
+        path={`/highlights/${project.uuid}`}
+        overrides={{
+          path: `/highlights/${project.uuid}`,
+          title: seoTitle(project.seoTitle || project.title),
+          description: seoDescription(project.seoDescription || project.description),
+          ogType: 'article',
+          breadcrumbs: [
+            { name: 'Demos', path: '/highlights' },
+            { name: project.title, path: `/highlights/${project.uuid}` },
+          ],
+          image: project.image
+            ? {
+                url: project.image.startsWith('http')
+                  ? project.image
+                  : `https://atishaykasliwal.com${project.image}`,
+                width: 1200,
+                height: 630,
+                alt: project.title,
+              }
+            : undefined,
+        }}
+        schema={[
+          {
+            '@type': 'SoftwareApplication',
+            name: project.title,
+            description: project.seoDescription || project.description,
+            url: `https://atishaykasliwal.com/highlights/${project.uuid}`,
+            applicationCategory: 'DeveloperApplication',
+            operatingSystem: 'Web',
+            author: { '@id': 'https://atishaykasliwal.com/#person' },
+          },
+        ]}
+      />
 
       <div className="page-content" translate="no">
         <SiteHeader />

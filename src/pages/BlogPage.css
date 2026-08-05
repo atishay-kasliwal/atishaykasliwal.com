@@ -1,0 +1,118 @@
+.blog-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  margin-bottom: var(--s-6);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.blog-search {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  color: var(--fg-subtle);
+  max-width: 26rem;
+  transition: border-color var(--d-fast) var(--ease-out);
+}
+
+.blog-search:focus-within {
+  border-color: var(--accent);
+}
+
+.blog-search input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: var(--t-sm);
+  color: var(--fg);
+  min-width: 0;
+}
+
+/* Safari renders its own clear button on type=search; removing it keeps the
+   control consistent across browsers. */
+.blog-search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.blog-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.blog-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.blog-item article {
+  padding-block: var(--s-5);
+}
+
+.blog-item-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-3);
+}
+
+.blog-item-title {
+  font-size: var(--t-2xl);
+  letter-spacing: var(--ls-tighter);
+  margin-bottom: var(--s-3);
+  max-width: 24ch;
+}
+
+.blog-item-title a {
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.blog-item-title a:hover {
+  color: var(--accent);
+}
+
+.blog-item-desc {
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+  max-width: 66ch;
+  margin-bottom: var(--s-5);
+}
+
+.blog-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+}
+
+.blog-item-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}
+
+.blog-item:hover .blog-item-cta {
+  color: var(--accent);
+}
+
+.blog-noresults {
+  padding-block: var(--s-16);
+  color: var(--fg-muted);
+  text-align: center;
+}

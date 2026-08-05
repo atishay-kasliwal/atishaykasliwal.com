@@ -5,8 +5,8 @@
   position: relative;
   width: 90vw;
   max-width: 1400px;
-  margin: 6rem auto 0;
-  padding: 4rem 0 2.5rem;
+  margin: 2.5rem auto 0;
+  padding: 2rem 0 1.75rem;
   border-top: 1px solid var(--spec-line);
   overflow: hidden;
   color: var(--spec-ink-faint);
@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.75rem;
 }
 
 .spec-footer-wordmark {
@@ -60,6 +60,18 @@
   min-width: 0;
 }
 
+/* <picture> is an inline wrapper. Introducing it put a non-flex, auto-sized box
+   between .spec-pin (display:flex) and the <img>, so `width/height: 100%` on the
+   image resolved against a box that had no size of its own — the pin grid ended
+   up sized by the loaded image instead of by its reserved aspect-ratio, which
+   moved the whole footer once the images arrived. Making the picture a
+   pass-through flex box restores the original sizing chain. */
+.spec-pin picture {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
 .spec-pin img {
   width: 100%;
   height: 100%;
@@ -71,7 +83,19 @@
 .spec-pin:hover img { transform: translateY(-3px) scale(1.06); }
 
 @media (prefers-reduced-motion: reduce) {
-  .spec-pin img { transition: none; }
+  /* <picture> is an inline wrapper. Introducing it put a non-flex, auto-sized box
+   between .spec-pin (display:flex) and the <img>, so `width/height: 100%` on the
+   image resolved against a box that had no size of its own — the pin grid ended
+   up sized by the loaded image instead of by its reserved aspect-ratio, which
+   moved the whole footer once the images arrived. Making the picture a
+   pass-through flex box restores the original sizing chain. */
+.spec-pin picture {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.spec-pin img { transition: none; }
   .spec-pin:hover img { transform: none; }
 }
 
@@ -87,7 +111,7 @@
   width: 100%;
   max-width: none;
   margin: 0;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--spec-line);
 }
 
@@ -140,8 +164,8 @@
 @media (max-width: 768px) {
   .spec-footer {
     width: 100%;
-    margin-top: 4rem;
-    padding: 2.5rem 0 7rem;
+    margin-top: 2rem;
+    padding: 1.75rem 0 6rem;
   }
 
   .spec-footer-band { margin-bottom: 2rem; }
@@ -193,4 +217,72 @@
 @media (max-width: 480px) {
   .spec-footer { padding: 2rem 0 6.5rem; }
   .spec-pins { gap: 0.85rem 0.7rem; }
+}
+
+/* ── Footer sitemap ──────────────────────────────────────────────────────
+   A single wrapping row of mono labels above the colophon. Uses the existing
+   .spec-label treatment, so it inherits the site's annotation type rather than
+   introducing a new style. */
+.spec-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  /* space-between so the row spans the full measure, matching the pin grid
+     above and the colophon row below. Left-packed it bunched into about 80% of
+     the width and left an obvious dead gap on the right, which read as a
+     mistake rather than as spacing. The gap below is the MINIMUM separation —
+     space-between distributes whatever is left over. */
+  justify-content: space-between;
+  gap: 0.6rem 1.25rem;
+  /* No border-bottom and no margin here on purpose. .spec-footer-row below
+     already draws a border-top and adds its own padding, so styling both
+     produced two hairlines separated by dead space. */
+  padding-bottom: 0.9rem;
+}
+
+/* Once the row wraps, space-between would stretch a short final line into
+   nonsense. Below that width it packs left with an even gap instead. */
+@media (max-width: 900px) {
+  .spec-footer-nav {
+    justify-content: flex-start;
+    gap: 0.6rem 1.4rem;
+  }
+}
+
+.spec-footer-nav a {
+  color: var(--spec-ink-faint, rgba(255, 255, 255, 0.5));
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.spec-footer-nav a:hover {
+  color: var(--accent-soft, #a5b4fc);
+}
+
+@media (max-width: 640px) {
+  .spec-footer-nav {
+    gap: 0.5rem 1.1rem;
+  }
+}
+
+/* Contact moved out of the header. It leads the footer row and carries the
+   availability dot, so the one action someone takes after reading is the first
+   thing in the closing block rather than another equal-weight link. */
+.spec-footer-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--spec-ink) !important;
+}
+
+.spec-footer-contact:hover {
+  color: var(--accent-soft) !important;
+}
+
+.spec-footer-contact-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #6ee7b7;
+  box-shadow: 0 0 8px rgba(110, 231, 183, 0.6);
+  flex-shrink: 0;
 }

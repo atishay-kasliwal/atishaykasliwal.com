@@ -1,0 +1,246 @@
+.xp-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.xp-entry {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: var(--s-5);
+}
+
+/* Continuous rail behind the dots. Drawn on the rail column rather than as a
+   border on each card so it runs unbroken between entries. */
+.xp-rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.xp-rail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.xp-entry:first-child .xp-rail::before {
+  top: 1.75rem;
+}
+
+.xp-entry:last-child .xp-rail::before {
+  bottom: calc(100% - 1.75rem);
+}
+
+.xp-dot {
+  position: relative;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  margin-top: 1.5rem;
+  border-radius: var(--r-full);
+  background: var(--bg);
+  border: 1.5px solid var(--border-strong);
+}
+
+.xp-dot.is-current {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-surface);
+}
+
+.xp-card {
+  padding-block: var(--s-5) var(--s-7);
+}
+
+.xp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  margin-bottom: var(--s-4);
+}
+
+.xp-role {
+  font-size: var(--t-xl);
+  margin-bottom: var(--s-2);
+}
+
+.xp-company {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+}
+
+.xp-company a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.xp-sep {
+  color: var(--fg-subtle);
+}
+
+.xp-head-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+
+.xp-period {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  letter-spacing: var(--ls-wide);
+  white-space: nowrap;
+}
+
+.xp-badge {
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  color: var(--fg-subtle);
+}
+
+.xp-badge--research {
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+.xp-summary {
+  font-size: var(--t-lg);
+  line-height: var(--lh-relaxed);
+  color: var(--fg);
+  max-width: 62ch;
+  margin-bottom: var(--s-5);
+}
+
+.xp-clients {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  margin-bottom: var(--s-5);
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+}
+
+.xp-clients-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.xp-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--s-6);
+}
+
+.xp-highlight {
+  display: grid;
+  gap: var(--s-2);
+  padding-block: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.xp-metric {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+
+.xp-metric-value {
+  font-size: var(--t-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  color: var(--accent);
+  line-height: 1;
+}
+
+.xp-metric-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}
+
+.xp-highlight-text {
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+}
+
+@media (min-width: 820px) {
+  .xp-entry {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+
+  .xp-highlight {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--s-6);
+    align-items: baseline;
+  }
+
+  .xp-metric {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* ── Education ────────────────────────────────────────────────────────── */
+.xp-edu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.xp-edu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  padding-block: var(--s-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.xp-edu-degree {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-2);
+}
+
+.xp-edu-school {
+  color: var(--fg-muted);
+  margin-bottom: var(--s-2);
+}
+
+.xp-edu-courses {
+  font-size: var(--t-sm);
+  color: var(--fg-subtle);
+  max-width: 60ch;
+}
+
+.xp-edu-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+
+.xp-edu-gpa {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}

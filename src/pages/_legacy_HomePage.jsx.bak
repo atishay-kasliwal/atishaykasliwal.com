@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Seo from '../seo/Seo';
-import { webPageSchema } from '../seo/schema.js';
-import { resolveMeta } from '../seo/routes.js';
+import { Helmet } from 'react-helmet';
 import SiteHeader from '../SiteHeader';
 import StoryTimeline from '../StoryTimeline';
 import SkillsSection from '../components/SkillsSection';
 import AboutSection from '../components/AboutSection';
 import HeroSystemPanel from '../components/HeroSystemPanel';
-import useHeroPointer from '../lib/useHeroPointer';
 import '../styles/hero.css';
 import '../styles/editorial.css';
 import '../styles/testimonials.css';
@@ -84,21 +81,53 @@ const CURRENTLY = [
   { head: 'Based in New York', sub: 'Open to relocation' },
 ];
 
+/* Cursor light + grid parallax. Writes two custom properties per frame and
+   nothing else — the grid transform and the glow both stay on the compositor.
+   Sits out entirely on touch devices and under reduced-motion. */
+function useHeroPointer(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!fine.matches || still.matches) return undefined;
+
+    let frame = 0;
+    let pending = null;
+
+    const apply = () => {
+      frame = 0;
+      if (!pending) return;
+      const { x, y, w, h } = pending;
+      el.style.setProperty('--gx', `${x}px`);
+      el.style.setProperty('--gy', `${y}px`);
+      el.style.setProperty('--px', (x / w) * 2 - 1);
+      el.style.setProperty('--py', (y / h) * 2 - 1);
+    };
+
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      pending = { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height };
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+
+    el.addEventListener('pointermove', onMove, { passive: true });
+    return () => {
+      el.removeEventListener('pointermove', onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [ref]);
+}
+
 function HomePage() {
-  /* Seeded with the desktop width rather than window.innerWidth, because this
-     component is also rendered in Node by the build-time prerenderer where
-     there is no window. Reading it directly threw and cost the homepage its
-     entire prerendered body. The real width is picked up on mount below, so
-     the only cost is that the prerendered HTML lists all six testimonials —
-     which is the better default for a crawler anyway. */
-  const [windowWidth, setWindowWidth] = useState(1200);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const heroRef = useRef(null);
 
   useHeroPointer(heroRef);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -107,11 +136,47 @@ function HomePage() {
 
   return (
     <>
-      {/* Head tags and JSON-LD come from the SEO layer, which the build-time
-          prerenderer also uses — so the served HTML carries them before any JS
-          runs. react-helmet only ever wrote them client-side, which OG and
-          Twitter crawlers never see. */}
-      <Seo path="/" schema={[webPageSchema(resolveMeta('/'), 'ProfilePage')]} />
+      <Helmet>
+        <html lang="en" translate="no" />
+        <title>Atishay Kasliwal - Software Engineer | Portfolio & Resume</title>
+        <link rel="canonical" href="https://atishaykasliwal.com/" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-translate-customization" content="no" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Atishay Kasliwal - Software Engineer" />
+        <meta property="og:description" content="Portfolio & resume of Atishay Kasliwal - Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University." />
+        <meta property="og:url" content="https://atishaykasliwal.com/" />
+        <meta property="og:image" content="https://atishaykasliwal.com/atishaylogo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Atishay Kasliwal - Software Engineer" />
+        <meta name="twitter:description" content="Portfolio & resume of Atishay Kasliwal - Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University." />
+        <meta name="description" content="Atishay Kasliwal - Software Engineer. Portfolio, resume, and projects. 4+ years building scalable distributed systems across fintech, healthcare, and research. MS Data Science at Stony Brook University. Python, Java, FastAPI, Spring Boot, AWS, GCP." />
+        <meta name="keywords" content="Atishay Kasliwal, Atishay Kasliwal portfolio, Atishay Kasliwal resume, software engineer, distributed systems, machine learning, Python developer, Java developer, FastAPI, Spring Boot, Stony Brook University, Accolite Digital, Wake Forest CAIR, Atriveo" />
+        <meta name="author" content="Atishay Kasliwal" />
+        <script type="application/ld+json">
+          {`{
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": "https://atishaykasliwal.com/#person",
+            "name": "Atishay Kasliwal",
+            "url": "https://atishaykasliwal.com/",
+            "image": "https://atishaykasliwal.com/atishaylogo.png",
+            "description": "Software Engineer specializing in distributed systems, ML pipelines, and backend engineering. MS Data Science, Stony Brook University.",
+            "jobTitle": "Software Engineer",
+            "email": "hire@atishaykasliwal.com",
+            "alumniOf": [
+              { "@type": "CollegeOrUniversity", "name": "Stony Brook University" },
+              { "@type": "CollegeOrUniversity", "name": "Symbiosis University of Applied Sciences" }
+            ],
+            "sameAs": [
+              "https://www.linkedin.com/in/atishay-kasliwal/",
+              "https://github.com/atishay-kasliwal",
+              "https://x.com/AtiahayKasliwal",
+              "https://www.instagram.com/atishay_kasliwal/"
+            ]
+          }`}
+        </script>
+      </Helmet>
 
       <div className="page-content page-content--landing" translate="no">
         <SiteHeader />
@@ -239,6 +304,7 @@ function HomePage() {
                 to="/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01"
                 className="editorial-card editorial-card--wide editorial-card--has-bg"
                 style={{ backgroundImage: 'url(/fmocc.jpeg)' }}
+                aria-label="Read more: FOMC Intelligence Dashboard"
                 data-feature-name="FOMC Intelligence Dashboard"
                 translate="no"
               >
@@ -264,6 +330,7 @@ function HomePage() {
                 to="/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0"
                 className="editorial-card editorial-card--medium editorial-card--has-bg"
                 style={{ backgroundImage: 'url(/4th.jpeg)' }}
+                aria-label="Discover: Legal RAG"
                 data-feature-name="Legal RAG System"
                 translate="no"
               >
@@ -289,6 +356,7 @@ function HomePage() {
                 to="/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123"
                 className="editorial-card editorial-card--medium editorial-card--has-bg"
                 style={{ backgroundImage: 'url(/5th%20image.jpeg)' }}
+                aria-label="Explore: PolicyFabric"
                 data-feature-name="PolicyFabric"
                 translate="no"
               >
@@ -316,6 +384,7 @@ function HomePage() {
                 rel="noopener noreferrer"
                 className="editorial-card editorial-card--medium editorial-card--has-bg"
                 style={{ backgroundImage: 'url(/chrome.png)' }}
+                aria-label="View demo: Job Intelligence Platform"
                 data-feature-name="Atriveo Chrome Extension"
                 translate="no"
               >
@@ -341,6 +410,7 @@ function HomePage() {
                 to="/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012"
                 className="editorial-card editorial-card--medium editorial-card--has-bg"
                 style={{ backgroundImage: 'url(/mriimage.jpeg)' }}
+                aria-label="View: MRI Brain Tumor Viewer"
                 data-feature-name="MRI Brain Tumor Viewer"
                 translate="no"
               >
@@ -368,6 +438,7 @@ function HomePage() {
                 rel="noopener noreferrer"
                 className="editorial-card editorial-card--wide editorial-card--has-bg"
                 style={{ backgroundImage: 'url(/Atriveo6th.jpg)' }}
+                aria-label="Visit Atriveo"
                 data-feature-name="Atriveo Platform"
                 translate="no"
               >
@@ -430,7 +501,7 @@ function HomePage() {
                           </div>
                         </div>
                       </div>
-                      <div className="testimonial-card__rating" role="img" aria-label="Rated 5 out of 5" translate="no">
+                      <div className="testimonial-card__rating" aria-label="5 out of 5 stars" translate="no">
                         <span aria-hidden="true">★★★★★</span>
                       </div>
                     </header>
@@ -440,6 +511,9 @@ function HomePage() {
               })}
             </div>
           </div>
+        </div>
+
+        <div id="final-product-section" data-analytics-section="gallery" className="section-wrap" translate="no">
         </div>
       </div>
     </>

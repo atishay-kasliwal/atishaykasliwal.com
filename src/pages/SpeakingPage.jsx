@@ -47,21 +47,45 @@ export default function SpeakingPage() {
               {TALKS.map((talk) => (
                 <li key={talk.title} className="talk-item card">
                   <div className="talk-meta mono">
-                    <time dateTime={talk.date}>
-                      {new Date(talk.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        timeZone: 'UTC',
-                      })}
-                    </time>
-                    <span aria-hidden="true">·</span>
-                    <span>{talk.location}</span>
+                    {talk.date && (
+                      <time dateTime={talk.date}>
+                        {new Date(talk.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          timeZone: 'UTC',
+                        })}
+                      </time>
+                    )}
+                    {talk.location && (
+                      <>
+                        <span aria-hidden="true">·</span>
+                        <span>{talk.location}</span>
+                      </>
+                    )}
                   </div>
 
                   <h2 className="talk-title">{talk.title}</h2>
-                  <p className="talk-event mono">{talk.event}</p>
+                  {talk.event && <p className="talk-event mono">{talk.event}</p>}
+
+                  {/* Stated plainly: this was a review of another team's paper,
+                      not original authorship. */}
+                  {talk.presentationOf && (
+                    <p className="talk-note">Presentation of {talk.presentationOf}</p>
+                  )}
+                  {talk.coPresenter && (
+                    <p className="talk-note">Co-presented with {talk.coPresenter}</p>
+                  )}
+
                   <p className="talk-desc">{talk.description}</p>
+
+                  {talk.topics?.length > 0 && (
+                    <ul className="talk-topics">
+                      {talk.topics.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  )}
 
                   <div className="talk-links">
                     {talk.slides && (

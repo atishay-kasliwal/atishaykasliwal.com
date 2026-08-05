@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Seo from '../seo/Seo';
 import { blogPostingSchema } from '../seo/schema.js';
-import { resolveMeta } from '../seo/routes.js';
+import { resolveMeta, seoTitle, seoDescription } from '../seo/routes.js';
 import { Container, Breadcrumbs, Tag, ArrowIcon } from '../components/ui';
 import { getPost, relatedPosts, formatPostDate } from '../content/posts.js';
 import { FULL_NAME, IMAGES } from '../data/site.js';
@@ -103,8 +103,8 @@ export default function BlogPostPage() {
   ];
   const meta = resolveMeta(path, {
     path,
-    title: `${post.title} — ${FULL_NAME}`,
-    description: post.description,
+    title: seoTitle(post.title),
+    description: seoDescription(post.description),
     ogType: 'article',
     breadcrumbs,
   });

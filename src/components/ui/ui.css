@@ -158,12 +158,12 @@
   font-size: var(--t-base);
 }
 
-.btn-icon {
+.ak-btn-icon {
   display: inline-flex;
   transition: transform var(--d-fast) var(--ease-out);
 }
 
-.btn:hover .btn-icon {
+.btn:hover .ak-btn-icon {
   transform: translateX(2px);
 }
 

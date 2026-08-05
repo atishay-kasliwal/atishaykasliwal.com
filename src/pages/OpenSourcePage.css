@@ -1,0 +1,171 @@
+.os-stats-section {
+  padding-block: var(--s-12);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Language distribution ────────────────────────────────────────────── */
+.os-langs {
+  margin-top: var(--s-10);
+}
+
+.os-langs-title {
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-3);
+}
+
+.os-lang-bar {
+  display: flex;
+  height: 8px;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--s-4);
+  background: var(--bg-inset);
+}
+
+.os-lang-seg {
+  width: var(--pct);
+  background: var(--lang-color, var(--fg-subtle));
+}
+
+.os-lang-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-5);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--t-xs);
+  color: var(--fg-muted);
+}
+
+.os-lang-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.os-lang-count {
+  color: var(--fg-subtle);
+}
+
+.os-lang-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--lang-color, var(--fg-subtle));
+  flex-shrink: 0;
+}
+
+/* Language colors follow GitHub's conventions so the mapping is familiar.
+   Set on any element carrying data-lang; both the bar and the dots read it. */
+[data-lang='TypeScript'] { --lang-color: #3178c6; }
+[data-lang='JavaScript'] { --lang-color: #f1e05a; }
+[data-lang='Python']     { --lang-color: #3572a5; }
+[data-lang='Java']       { --lang-color: #b07219; }
+[data-lang='C++']        { --lang-color: #f34b7d; }
+[data-lang='Go']         { --lang-color: #00add8; }
+[data-lang='HTML']       { --lang-color: #e34c26; }
+[data-lang='CSS']        { --lang-color: #563d7c; }
+[data-lang='Jupyter Notebook'] { --lang-color: #da5b0b; }
+[data-lang='Shell']      { --lang-color: #89e051; }
+
+/* ── Repo grid ────────────────────────────────────────────────────────── */
+.os-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
+  gap: var(--s-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.os-card {
+  gap: var(--s-3);
+}
+
+.os-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.os-card-name {
+  font-family: var(--font-mono);
+  font-size: var(--t-base);
+  font-weight: var(--fw-medium);
+  word-break: break-word;
+}
+
+.os-card:hover .os-card-name a {
+  color: var(--accent);
+}
+
+.os-card-stars {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  white-space: nowrap;
+}
+
+.os-card-desc {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+  flex: 1;
+}
+
+.os-card-nodesc {
+  color: var(--fg-subtle);
+  font-style: italic;
+}
+
+.os-card-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.os-card-topics li {
+  padding: 0.15em 0.5em;
+  border-radius: var(--r-full);
+  background: var(--accent-surface);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+.os-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+}
+
+.os-card-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.os-card-updated {
+  margin-left: auto;
+}
+
+.os-fetched {
+  margin-top: var(--s-8);
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  text-align: center;
+}

@@ -1,0 +1,537 @@
+/**
+ * /about — styled on the site's spec-sheet language: document meta row, Playfair
+ * display headings with the shared gradient, mono annotations, square geometry,
+ * hairline rules.
+ */
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+.ab-hero {
+  padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
+}
+
+.ab-hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-bottom: var(--s-5);
+  margin-bottom: var(--s-8);
+  border-bottom: 1px solid var(--border);
+}
+
+.ab-hero-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .ab-hero-cols {
+    grid-template-columns: minmax(0, 1fr) 17rem;
+  }
+}
+
+.ab-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: var(--s-5);
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.ab-status-mark {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: var(--ok-500);
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.6);
+}
+
+.ab-title {
+  font-size: clamp(2.1rem, 1.6rem + 2.4vw, 3.4rem);
+  line-height: 1.06;
+  margin-bottom: var(--s-5);
+  max-width: 17ch;
+}
+
+/* The gradient is applied to the emphasised span only, so the sentence keeps
+   its shape rather than fading out at the end the way a full-width gradient
+   does on a multi-line heading. */
+.ab-title em {
+  font-style: italic;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ab-lede {
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--fg-muted);
+  max-width: 56ch;
+}
+
+.ab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: 1.75rem;
+}
+
+/* ── Portrait plate ───────────────────────────────────────────────────── */
+.ab-portrait-plate {
+  position: relative;
+  margin: 0;
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  justify-self: start;
+  max-width: 17rem;
+  width: 100%;
+}
+
+.ab-portrait {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.ab-portrait-cap {
+  display: block;
+  padding-top: 0.6rem;
+  text-align: center;
+}
+
+/* ── Currently ────────────────────────────────────────────────────────── */
+.ab-currently {
+  padding-block: var(--s-6);
+  border-block: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.ab-currently-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: var(--s-5);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ab-currently-item a {
+  display: block;
+}
+
+.ab-currently-item a:hover .ab-currently-head {
+  color: var(--accent);
+}
+
+.ab-currently-head {
+  display: block;
+  font-size: var(--t-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg);
+  margin-bottom: 2px;
+  transition: color 0.2s ease;
+}
+
+.ab-currently-sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle);
+}
+
+/* ── Narrative ────────────────────────────────────────────────────────── */
+.ab-bio-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-4);
+}
+
+@media (min-width: 900px) {
+  .ab-bio-grid {
+    grid-template-columns: 10rem minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+}
+
+.ab-bio-label {
+  padding-top: 0.4rem;
+}
+
+.ab-bio-body p {
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+  line-height: 1.75;
+  color: var(--fg-muted);
+  margin-bottom: var(--s-4);
+  max-width: 66ch;
+}
+
+.ab-bio-body p:first-child {
+  color: var(--fg);
+}
+
+.ab-bio-more {
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--t-sm) !important;
+}
+
+.ab-bio-more a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Organizations ────────────────────────────────────────────────────── */
+.ab-orgs {
+  padding-block: var(--s-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.ab-orgs-label {
+  margin-bottom: var(--s-3);
+}
+
+.ab-orgs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3) var(--s-8);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.25rem);
+  color: var(--fg-muted);
+}
+
+/* ── Focus ────────────────────────────────────────────────────────────── */
+.ab-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  gap: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.ab-focus-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  color: var(--fg);
+}
+
+.ab-focus-num {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Principles ───────────────────────────────────────────────────────── */
+.ab-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  gap: var(--s-4);
+}
+
+.ab-principle {
+  gap: var(--s-2);
+}
+
+.ab-principle-num {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: var(--s-2);
+}
+
+.ab-principle-title {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-2);
+}
+
+.ab-principle-body {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  line-height: 1.68;
+}
+
+/* ── Selected work ────────────────────────────────────────────────────── */
+.ab-work-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  gap: var(--s-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ab-work-cat {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-3);
+}
+
+.ab-work-title {
+  font-size: var(--t-xl);
+  margin-bottom: var(--s-2);
+}
+
+.ab-work-item:hover .ab-work-title a {
+  color: var(--accent);
+}
+
+.ab-work-tagline {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  line-height: 1.6;
+  margin-bottom: var(--s-4);
+  flex: 1;
+}
+
+.ab-work-metrics {
+  display: flex;
+  gap: var(--s-6);
+  margin: 0;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.ab-work-metrics dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  color: var(--accent);
+  line-height: 1;
+}
+
+.ab-work-metrics dt {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle);
+}
+
+/* ── Skills ───────────────────────────────────────────────────────────── */
+.ak-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: var(--s-6);
+}
+
+.ab-skill-group.is-primary {
+  grid-column: 1 / -1;
+  padding: var(--s-5);
+  border: 1px solid var(--border-accent);
+  background: var(--accent-surface);
+}
+
+.ab-skill-category {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.ab-skill-group.is-primary .ab-skill-category {
+  color: var(--accent);
+  border-color: var(--border-accent);
+}
+
+.ab-skill-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ab-skill-items li {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+}
+
+.ab-skill-group.is-primary .ab-skill-items li {
+  color: var(--fg);
+}
+
+/* ── Education ────────────────────────────────────────────────────────── */
+.ab-edu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.ab-edu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.ab-edu-degree {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-2);
+}
+
+.ab-edu-school {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  margin-bottom: var(--s-2);
+}
+
+.ab-edu-school a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ab-edu-school a:hover {
+  color: var(--accent);
+}
+
+.ab-edu-loc {
+  color: var(--fg-subtle);
+}
+
+.ab-edu-courses {
+  font-size: var(--t-xs);
+  color: var(--fg-subtle);
+  max-width: 62ch;
+}
+
+.ab-edu-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle);
+  white-space: nowrap;
+}
+
+.ab-edu-gpa {
+  color: var(--accent);
+}
+
+/* ── Beyond ───────────────────────────────────────────────────────────── */
+.ab-beyond-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  gap: var(--s-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ab-beyond-label {
+  font-size: var(--t-lg);
+  margin-bottom: var(--s-2);
+}
+
+.ab-beyond-item:hover .ab-beyond-label a {
+  color: var(--accent);
+}
+
+.ab-beyond-body {
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  margin-bottom: var(--s-4);
+  flex: 1;
+}
+
+.ab-beyond-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.ab-beyond-item:hover .ab-beyond-cta {
+  color: var(--accent);
+}
+
+/* ── FAQ ──────────────────────────────────────────────────────────────── */
+.ab-faq-list {
+  border-top: 1px solid var(--border);
+}
+
+.ab-faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.ab-faq-q {
+  padding: var(--s-4) var(--s-8) var(--s-4) 0;
+  font-size: var(--t-base);
+  font-weight: var(--fw-medium);
+  color: var(--fg);
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+}
+
+.ab-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+/* Decorative +/− marker. `details` already exposes expanded state to assistive
+   tech, so this carries no meaning of its own. */
+.ab-faq-q::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--t-lg);
+  color: var(--accent);
+}
+
+.ab-faq-item[open] .ab-faq-q::after {
+  content: '−';
+}
+
+.ab-faq-a {
+  padding-bottom: var(--s-4);
+  color: var(--fg-muted);
+  line-height: 1.72;
+  max-width: 68ch;
+}
