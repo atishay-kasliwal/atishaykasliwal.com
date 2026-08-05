@@ -1,0 +1,335 @@
+{
+  "profile": {
+    "login": "atishay-kasliwal",
+    "name": "Atishay Kasliwal",
+    "bio": "SWE | MS Data Science @ Stony Brook '26 | Python, TypeScript, AI/ML | Building Atriveo | Open to SWE/AI-ML roles",
+    "url": "https://github.com/atishay-kasliwal",
+    "avatar": "https://avatars.githubusercontent.com/u/61780293?v=4",
+    "company": "Stony Brook University",
+    "location": "New York",
+    "publicRepos": 19,
+    "followers": 7,
+    "createdAt": "2020-03-04T09:26:24Z"
+  },
+  "repos": [
+    {
+      "name": "Atriveo",
+      "description": "End-to-end system that automatically captures job applications through a Chrome extension, tracks them in a dashboard, and provides network insights through a social layer, all running on a serverless edge stack.",
+      "url": "https://github.com/atishay-kasliwal/Atriveo",
+      "homepage": "https://atriveo.com/",
+      "language": "JavaScript",
+      "topics": [
+        "chrome-extension",
+        "fastapi",
+        "full-stack",
+        "job-tracker",
+        "langchain",
+        "postgresql",
+        "python",
+        "rag",
+        "react",
+        "typescript"
+      ],
+      "stars": 1,
+      "forks": 0,
+      "pushedAt": "2026-06-01T22:37:24Z",
+      "createdAt": "2026-03-03T19:03:15Z",
+      "license": null
+    },
+    {
+      "name": "atriveo-app",
+      "description": "A full-stack application that automatically captures job applications through a Chrome extension, tracks them in a centralized dashboard, and provides insights to improve your job search.",
+      "url": "https://github.com/atishay-kasliwal/atriveo-app",
+      "homepage": "https://atriveo.com/",
+      "language": "TypeScript",
+      "topics": [
+        "chrome-extension",
+        "fastapi",
+        "job-tracker",
+        "langchain",
+        "postgresql",
+        "python",
+        "rag",
+        "react",
+        "typescript"
+      ],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-08-05T15:38:48Z",
+      "createdAt": "2026-04-09T17:10:40Z",
+      "license": null
+    },
+    {
+      "name": "job-pipeline",
+      "description": "LinkedIn job aggregation, filtering & ranking pipeline for SWE roles — built on JobSpy",
+      "url": "https://github.com/atishay-kasliwal/job-pipeline",
+      "homepage": null,
+      "language": "Python",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-08-02T21:09:54Z",
+      "createdAt": "2026-03-25T18:09:38Z",
+      "license": null
+    },
+    {
+      "name": "pavillion-server",
+      "description": null,
+      "url": "https://github.com/atishay-kasliwal/pavillion-server",
+      "homepage": null,
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-07-23T07:36:57Z",
+      "createdAt": "2026-07-17T21:49:57Z",
+      "license": null
+    },
+    {
+      "name": "fedtalk-openai-analysis-main",
+      "description": "A data-driven system that analyzes Federal Reserve speeches and predicts their impact on stock market movements using NLP and time-series data.",
+      "url": "https://github.com/atishay-kasliwal/fedtalk-openai-analysis-main",
+      "homepage": null,
+      "language": "Python",
+      "topics": [
+        "financial-nlp",
+        "langchain",
+        "nlp",
+        "openai",
+        "python",
+        "sentiment-analysis",
+        "trading-bot"
+      ],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-07-02T17:47:42Z",
+      "createdAt": "2025-02-02T22:40:59Z",
+      "license": "MIT"
+    },
+    {
+      "name": "user-data-platform",
+      "description": "Always-on user data platform: Postgres+JSONB universal profile store, Redis cache, Kafka event bus",
+      "url": "https://github.com/atishay-kasliwal/user-data-platform",
+      "homepage": null,
+      "language": null,
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-07-02T16:59:09Z",
+      "createdAt": "2026-05-29T12:20:20Z",
+      "license": null
+    },
+    {
+      "name": "atriveo-cortex",
+      "description": "AI Working Memory on ScreenPipe — local-first extraction of projects, commitments, and ideas",
+      "url": "https://github.com/atishay-kasliwal/atriveo-cortex",
+      "homepage": "https://cortex.atriveo.com",
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-07-01T20:38:04Z",
+      "createdAt": "2026-06-17T02:23:19Z",
+      "license": "MIT"
+    },
+    {
+      "name": "atriveo-knowledge",
+      "description": null,
+      "url": "https://github.com/atishay-kasliwal/atriveo-knowledge",
+      "homepage": null,
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-07-01T16:26:53Z",
+      "createdAt": "2026-06-30T23:39:31Z",
+      "license": null
+    },
+    {
+      "name": "Atriveo-JD-Extractor",
+      "description": "Automates your job search from scraping to tailored resumes. Pulls jobs from LinkedIn, Greenhouse and Lever every hour, scores them against your skills, and uses a local LLM to tailor a one-page PDF resume for each role. No API costs, no data leaving your machine. Use the hosted UI at application.atriveo.com or run everything locally.",
+      "url": "https://github.com/atishay-kasliwal/Atriveo-JD-Extractor",
+      "homepage": "https://application.atriveo.com",
+      "language": "TypeScript",
+      "topics": [
+        "job-search",
+        "llm",
+        "open-source",
+        "python",
+        "resume",
+        "scraper",
+        "self-hosted",
+        "typescript"
+      ],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-06-25T01:18:25Z",
+      "createdAt": "2026-06-24T22:06:04Z",
+      "license": null
+    },
+    {
+      "name": "cortex-bio",
+      "description": "Open-source wearable intelligence platform for cognitive readiness, performance forecasting, and human optimization.",
+      "url": "https://github.com/atishay-kasliwal/cortex-bio",
+      "homepage": "https://bio.atriveo.com/",
+      "language": "TypeScript",
+      "topics": [
+        "api",
+        "apple-health",
+        "apple-watch",
+        "biometrics",
+        "chronotype",
+        "deep-work",
+        "forecasting",
+        "healthkit",
+        "hrv",
+        "neon",
+        "openapi",
+        "postgres",
+        "productivity",
+        "sleep",
+        "swiftui",
+        "typescript",
+        "wearables"
+      ],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-06-19T19:29:25Z",
+      "createdAt": "2026-06-19T17:00:53Z",
+      "license": "MIT"
+    },
+    {
+      "name": "MedLedger",
+      "description": "Secure and efficient medication management system for tracking prescriptions, schedules, and patient records.",
+      "url": "https://github.com/atishay-kasliwal/MedLedger",
+      "homepage": null,
+      "language": "JavaScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-05-02T14:20:19Z",
+      "createdAt": "2026-05-02T14:19:14Z",
+      "license": null
+    },
+    {
+      "name": "atishay-kasliwal",
+      "description": "GitHub profile README",
+      "url": "https://github.com/atishay-kasliwal/atishay-kasliwal",
+      "homepage": null,
+      "language": null,
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-05-01T17:19:10Z",
+      "createdAt": "2026-05-01T17:18:59Z",
+      "license": null
+    },
+    {
+      "name": "insurance-microservices-platform",
+      "description": "A complete solution that facilitates the flow of insurance information from third-party insurance providers to a payment gateway using a system that uses an event-driven microservices architecture.",
+      "url": "https://github.com/atishay-kasliwal/insurance-microservices-platform",
+      "homepage": null,
+      "language": "Java",
+      "topics": [
+        "event-driven",
+        "java",
+        "kafka",
+        "kubernetes",
+        "microservices",
+        "spring-boot"
+      ],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-04-29T01:35:53Z",
+      "createdAt": "2026-04-28T22:12:06Z",
+      "license": null
+    },
+    {
+      "name": "InsureRaft",
+      "description": "Insurers' data transmission network leveraging the Raft consensus protocol. Robust and fault-tolerant replication of insurance policy issuance, claims processing, and settlement transactions among insurers, brokers, reinsurers, and regulatory authorities without any data loss or change.",
+      "url": "https://github.com/atishay-kasliwal/InsureRaft",
+      "homepage": null,
+      "language": "C++",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-04-28T20:52:56Z",
+      "createdAt": "2026-04-28T20:48:13Z",
+      "license": null
+    },
+    {
+      "name": "encryption-decryption-app",
+      "description": "C++ console app with 10 classical cipher implementations including Affine, Vigenère, XOR, Rail Fence, and Polybius Square with full encrypt and decrypt support.",
+      "url": "https://github.com/atishay-kasliwal/encryption-decryption-app",
+      "homepage": null,
+      "language": "C++",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-04-28T20:48:42Z",
+      "createdAt": "2026-04-28T20:45:17Z",
+      "license": "MIT"
+    },
+    {
+      "name": "bayesian-marketing-mix-model",
+      "description": "Bayesian MMM (Marketing Mix Modeling) end-to-end implementation in Python with PyMC-Marketing package for adstock and saturation calculations, ROI and ROAS evaluation, Monte Carlo simulation, A/B holdout, hypothesis testing, budget allocation, and Tableau dashboard.",
+      "url": "https://github.com/atishay-kasliwal/bayesian-marketing-mix-model",
+      "homepage": null,
+      "language": "Jupyter Notebook",
+      "topics": [
+        "ab-testing",
+        "bayesian",
+        "data-science",
+        "marketing-mix-model",
+        "pymc",
+        "python"
+      ],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-04-28T16:11:30Z",
+      "createdAt": "2026-04-28T15:53:37Z",
+      "license": null
+    },
+    {
+      "name": "MRI",
+      "description": "MRI image classification using deep learning with Python and PyTorch",
+      "url": "https://github.com/atishay-kasliwal/MRI",
+      "homepage": null,
+      "language": "Python",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2025-07-29T02:36:42Z",
+      "createdAt": "2025-07-18T14:51:54Z",
+      "license": "NOASSERTION"
+    }
+  ],
+  "languages": [
+    {
+      "name": "TypeScript",
+      "count": 6
+    },
+    {
+      "name": "Python",
+      "count": 3
+    },
+    {
+      "name": "JavaScript",
+      "count": 2
+    },
+    {
+      "name": "C++",
+      "count": 2
+    },
+    {
+      "name": "Java",
+      "count": 1
+    },
+    {
+      "name": "Jupyter Notebook",
+      "count": 1
+    }
+  ],
+  "totalStars": 1,
+  "fetchedAt": "2026-08-05T16:26:06.179Z"
+}

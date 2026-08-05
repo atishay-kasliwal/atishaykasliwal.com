@@ -160,11 +160,22 @@ export const NOTABLE_ORGS = [
 ];
 
 /**
- * Derived headline number. Computed rather than hardcoded so it never goes
- * stale — the old copy claimed "5+ years" on one page and "4+ years" on
- * another, which is the kind of thing recruiters notice.
+ * Headline years-of-experience figure.
+ *
+ * NOT computed. Counting from the first role (Aug 2020) gives 6, but the
+ * landing page and résumé both say "4+", presumably counting full-time work
+ * only and excluding internships. Two different numbers on one site is exactly
+ * what makes a recruiter start checking the rest, so this defers to the figure
+ * already published rather than introducing a third.
+ *
+ * ── VERIFY THIS ──────────────────────────────────────────────────────────
+ * If "4+" is stale, change it here once and every page follows. The landing
+ * page's own HERO_METRICS still hardcodes "4+" separately — update that too,
+ * or point it at this constant.
+ * ─────────────────────────────────────────────────────────────────────────
  */
-export function yearsOfExperience(now = new Date()) {
-  const start = new Date('2020-08-01');
-  return Math.floor((now - start) / (365.25 * 24 * 60 * 60 * 1000));
+export const YEARS_EXPERIENCE = '4+';
+
+export function yearsOfExperience() {
+  return YEARS_EXPERIENCE;
 }
