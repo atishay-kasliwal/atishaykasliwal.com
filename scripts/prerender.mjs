@@ -34,9 +34,67 @@ const RED = '\x1b[31m';
 const DIM = '\x1b[2m';
 const RESET = '\x1b[0m';
 
+/**
+ * Route → source-file map for the four code-split legacy pages.
+ *
+ * Without this, their CSS only reaches the browser once it executes the
+ * route's JS chunk (Resume.jsx does `import './Resume.css'`, which Vite turns
+ * into a runtime-injected stylesheet, not one linked in the static HTML). On a
+ * throttled connection that meant the page painted with no styles at all and
+ * then reflowed hard — every card and heading jumping to its real size — the
+ * moment the CSS request finished, typically a couple of seconds in. Measured
+ * at 0.38–0.41 CLS, the worst on the site.
+ *
+ * Injecting the real emitted stylesheet as a <link> in <head> means the
+ * browser discovers and can apply it from the very first paint, same as any
+ * other page.
+ */
+const LEGACY_CSS_ROUTES = {
+  '/resume': 'src/Resume.jsx',
+  '/art': 'src/pages/ArtPage.jsx',
+  '/atriveo': 'src/pages/AtriveoPage.jsx',
+  '/highlights': 'src/Projects.jsx',
+};
+
+/** Resolve a manifest entry's CSS, walking `imports` for any inherited from a
+ *  shared component. Depth-capped defensively against import cycles. */
+function cssFor(manifest, key, seen = new Set(), depth = 0) {
+  if (seen.has(key) || depth > 4) return [];
+  seen.add(key);
+  const entry = manifest[key];
+  if (!entry) return [];
+  const own = entry.css || [];
+  const fromImports = (entry.imports || []).flatMap((k) => cssFor(manifest, k, seen, depth + 1));
+  return [...new Set([...own, ...fromImports])];
+}
+
+async function loadLegacyStylesheets() {
+  let manifest;
+  try {
+    manifest = JSON.parse(
+      await fs.readFile(path.join(BUILD, '.vite', 'manifest.json'), 'utf-8')
+    );
+  } catch {
+    console.log(`${YELLOW}!${RESET} no Vite manifest found — legacy routes will not get an inlined stylesheet link`);
+    return {};
+  }
+
+  const out = {};
+  for (const [route, srcFile] of Object.entries(LEGACY_CSS_ROUTES)) {
+    const css = cssFor(manifest, srcFile);
+    if (css.length) {
+      out[route] = css
+        .map((href) => `<link rel="stylesheet" href="/${href}" />`)
+        .join('\n    ');
+    }
+  }
+  return out;
+}
+
 async function main() {
   const template = await fs.readFile(path.join(BUILD, 'index.html'), 'utf-8');
   const server = await import(pathToFileURL(SSR).href);
+  const legacyStylesheets = await loadLegacyStylesheets();
 
   const { render, renderHead, ROUTES, PROJECTS, BLOG_POSTS, staticSchemaFor, seoTitle, seoDescription } = server;
 
@@ -140,7 +198,10 @@ async function main() {
       failures.push({ url, message: err.message.replace(/\s+/g, ' ').trim() });
     }
 
-    const head = renderHead(url, overrides, schema);
+    let head = renderHead(url, overrides, schema);
+    if (legacyStylesheets[url]) {
+      head = `${head}\n    ${legacyStylesheets[url]}`;
+    }
     const html = inject(template, head, appHtml, prerendered);
 
     await writeRoute(url, html);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import SiteHeader from '../SiteHeader';
+import galleryDims from '../data/generated/gallery-dims.json';
 import './ArtPage.css';
 
 const images = [
@@ -183,7 +184,24 @@ function ArtPage() {
               aria-label={`Open plate ${plate(idx)}`}
               translate="no"
             >
-              <img src={src} alt="" loading="lazy" decoding="async" translate="no" />
+              {/* Real intrinsic size, measured at build time by
+                  scripts/build-gallery-dims.mjs. Without it the masonry
+                  reserves no space and the whole column reflows as each image
+                  arrives. */}
+              <img
+                src={src}
+                alt=""
+                width={galleryDims[src]?.w}
+                height={galleryDims[src]?.h}
+                style={
+                  galleryDims[src]
+                    ? { aspectRatio: `${galleryDims[src].w} / ${galleryDims[src].h}` }
+                    : undefined
+                }
+                loading="lazy"
+                decoding="async"
+                translate="no"
+              />
               <span className="art-plate-num" aria-hidden="true">{plate(idx)}</span>
             </button>
           ))}

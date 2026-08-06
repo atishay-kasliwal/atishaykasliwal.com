@@ -2,6 +2,19 @@ import React from 'react';
 import { prerenderToNodeStream } from 'react-dom/static';
 import { StaticRouter } from 'react-router-dom/server';
 import AppRoutes from './AppRoutes';
+
+/**
+ * Statically imported so the prerenderer never hits a Suspense boundary.
+ * This module is loaded only by scripts/prerender.mjs in Node, so these imports
+ * never reach the browser bundle and code splitting is unaffected.
+ */
+import Resume from './Resume';
+import ArtPage from './pages/ArtPage';
+import AtriveoPage from './pages/AtriveoPage';
+import LegacyProjects from './Projects';
+import HighlightDetail from './HighlightDetail';
+
+const EAGER = { Resume, ArtPage, AtriveoPage, LegacyProjects, HighlightDetail };
 import { resolveMeta } from './seo/routes.js';
 import {
   buildGraph,
@@ -128,7 +141,7 @@ export function renderHead(url, overrides = {}, schema = []) {
 async function renderOnce(url, errors) {
   const { prelude } = await prerenderToNodeStream(
     <StaticRouter location={url}>
-      <AppRoutes />
+      <AppRoutes overrides={EAGER} />
     </StaticRouter>,
     {
       onError(error) {
@@ -166,30 +179,12 @@ export async function render(url) {
    * Cost is a few seconds of build time, which is the right trade for the pages
    * actually being present at first paint.
    */
-  await warmLazyModules();
-  await renderOnce(url, []);
   const html = await renderOnce(url, errors);
 
   return { html, errors };
 }
 
-/**
- * Pre-imports the code-split route modules so React.lazy's factory resolves
- * from cache rather than from a pending network/disk read. Combined with the
- * warm-up render above, this is what lets the lazy routes inline during
- * prerender instead of emitting a fallback.
- */
-let warmed;
-function warmLazyModules() {
-  warmed ||= Promise.all([
-    import('./Resume'),
-    import('./pages/ArtPage'),
-    import('./pages/AtriveoPage'),
-    import('./Projects'),
-    import('./HighlightDetail'),
-  ]).catch(() => {});
-  return warmed;
-}
+
 
 /**
  * Re-exported so scripts/prerender.mjs can enumerate routes without importing

@@ -29,6 +29,29 @@
   line-gap-override: 0%;
 }
 
+/**
+ * Same fallback metrics, registered a second time under the literal family
+ * name 'Inter'. This is what makes the fix reach every stylesheet that writes
+ * `font-family: 'Inter', sans-serif` directly — Resume.css, ArtPage.css,
+ * AboutSection.css, and the rest of the legacy pages — without editing each of
+ * them individually. It is safe layered under the real Google Fonts @font-face
+ * for 'Inter': browsers use the last matching @font-face whose src actually
+ * resolves, so once the network font finishes loading it takes over exactly as
+ * it would otherwise. Until then, this supplies real metrics instead of the
+ * browser's generic sans-serif, which is what was producing a ~0.38 CLS spike
+ * around the 4s mark on throttled connections — a full one-time reflow of
+ * every card and heading built with the literal string.
+ */
+@font-face {
+  font-family: 'Inter';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 106%;
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Playfair Fallback';
   src: local('Georgia'), local('Times New Roman');

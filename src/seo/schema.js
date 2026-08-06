@@ -26,6 +26,8 @@ import {
   LOCATION,
   NATIONALITY,
   SAME_AS,
+  ORCID_ID,
+  PROFILES,
   KNOWS_ABOUT,
   IMAGES,
   SITE,
@@ -161,6 +163,17 @@ export function personSchema() {
     // Only surfaces once real awards exist — see src/data/education.js.
     award: AWARDS.length ? AWARDS.map((a) => a.title || a) : undefined,
     sameAs: SAME_AS,
+    /**
+     * PropertyValue rather than a bare string: this states explicitly that the
+     * value is an ORCID iD, which is how Scholar, publishers and aggregators
+     * read it. A loose URL in sameAs alone does not carry that meaning.
+     */
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: 'ORCID',
+      value: ORCID_ID,
+      url: PROFILES.orcid,
+    },
     owns: { '@id': ID.organization },
   });
 }

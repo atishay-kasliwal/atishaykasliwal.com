@@ -14,9 +14,23 @@
 
 export const ORIGIN = 'https://atishaykasliwal.com';
 
-/** Absolute URL for a site-relative path. JSON-LD and OG tags require absolute. */
-export const abs = (path = '/') =>
-  `${ORIGIN}${path.startsWith('/') ? path : `/${path}`}`;
+/**
+ * Absolute URL for a site-relative path, with a trailing slash.
+ *
+ * The trailing slash is not cosmetic. Cloudflare Pages serves
+ * build/about/index.html at /about/ and issues a 308 from /about, so a canonical
+ * pointing at the unslashed form names a URL that redirects rather than the one
+ * actually served. Google resolves that eventually, but it burns a redirect hop
+ * on every crawl and leaves canonical, og:url and the sitemap all disagreeing
+ * with the served URL. Emitting the slashed form makes all four agree.
+ */
+export const abs = (path = '/') => {
+  const clean = path.startsWith('/') ? path : `/${path}`;
+  if (clean === '/') return `${ORIGIN}/`;
+  // Files keep their exact path; only page routes get the slash.
+  const isFile = /\.[a-z0-9]{2,5}$/i.test(clean);
+  return `${ORIGIN}${clean}${isFile || clean.endsWith('/') ? '' : '/'}`;
+};
 
 export const FULL_NAME = 'Atishay Kasliwal';
 export const GIVEN_NAME = 'Atishay';
@@ -78,12 +92,25 @@ export const PROFILES = {
   x: 'https://x.com/AtiahayKasliwal',
   instagram: 'https://www.instagram.com/atishay_kasliwal/',
   cal: 'https://cal.com/atishay-kasliwal',
+  /**
+   * ORCID — a persistent, independently-issued researcher identifier.
+   *
+   * Worth more in `sameAs` than any social profile: orcid.org is an authority
+   * domain, the record is machine-readable, and it is the canonical way to bind
+   * a person to their published work across publishers and indexes. Verified
+   * resolving (HTTP 200) with a public record reading "Atishay Kasliwal".
+   */
+  orcid: 'https://orcid.org/0009-0008-4251-6263',
 };
+
+/** Bare ORCID iD, for schema `identifier` and citation metadata. */
+export const ORCID_ID = '0009-0008-4251-6263';
 
 export const GITHUB_USERNAME = 'atishay-kasliwal';
 
 /** Ordered list used for JSON-LD `sameAs` and the contact page. */
 export const SAME_AS = [
+  PROFILES.orcid,
   PROFILES.linkedin,
   PROFILES.github,
   PROFILES.x,
@@ -96,6 +123,7 @@ export const SOCIAL_LINKS = [
   { key: 'github', label: 'GitHub', handle: '@atishay-kasliwal', url: PROFILES.github },
   { key: 'x', label: 'X', handle: '@AtiahayKasliwal', url: PROFILES.x },
   { key: 'cal', label: 'Cal.com', handle: 'Book 30 min', url: PROFILES.cal },
+  { key: 'orcid', label: 'ORCID', handle: '0009-0008-4251-6263', url: PROFILES.orcid },
 ];
 
 export const TWITTER_HANDLE = '@AtiahayKasliwal';

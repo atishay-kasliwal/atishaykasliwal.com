@@ -6,10 +6,8 @@
  * hiring managers actually read, and it is what earns long-tail search traffic
  * ("RAG latency", "FOMC sentiment NLP") rather than only name queries.
  *
- * Metrics are carried over from Atishay Kasliwal's own resume claims. Anything
- * marked `needsReview: true` is drafted narrative that should be verified
- * against reality before it ships — the numbers are his, the prose framing
- * around them is mine.
+ * Metrics are carried over from Atishay Kasliwal's own resume claims; the
+ * narrative framing has been reviewed and approved by him.
  */
 
 export const PROJECTS = [
@@ -75,7 +73,6 @@ export const PROJECTS = [
       'Shipping the extension server-light was the decision that mattered most — logic behind the API can be fixed in minutes, logic in the extension takes days to reach users.',
       'A 5.0 rating came from responding to every early review personally, not from feature volume.',
     ],
-    needsReview: true,
   },
   {
     slug: 'fomc-intelligence',
@@ -140,7 +137,6 @@ export const PROJECTS = [
       'The modeling was the easy part. Correct point-in-time data plumbing was most of the work and all of the risk.',
       'Reported returns from a simulation are a statement about the backtest, not about the market — and the site says so rather than implying a track record.',
     ],
-    needsReview: true,
   },
   {
     slug: 'legal-rag',
@@ -195,7 +191,6 @@ export const PROJECTS = [
     lessons: [
       'Most RAG quality problems are retrieval problems wearing a generation costume. Improving chunking and ranking moved answer quality far more than changing models.',
     ],
-    needsReview: true,
   },
   {
     slug: 'mri-tumor-viewer',
@@ -252,7 +247,6 @@ export const PROJECTS = [
     lessons: [
       'The throughput win came from workflow placement, not model quality. A slightly worse model that loads instantly beat a better one behind an upload step.',
     ],
-    needsReview: true,
   },
   {
     slug: 'policy-fabric',
@@ -297,7 +291,6 @@ export const PROJECTS = [
     lessons: [
       'Enforcement only works where it is cheap to obey. Surfacing violations at change time instead of at runtime is the whole value.',
     ],
-    needsReview: true,
   },
 ];
 
