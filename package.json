@@ -25,11 +25,13 @@
     "build:ssr": "vite build --ssr src/entry-server.jsx --outDir .ssr",
     "prerender": "node scripts/prerender.mjs",
     "feeds": "node scripts/generate-feeds.mjs",
+    "check:assets": "node scripts/check-assets.mjs",
     "postbuild": "(cp public/_redirects build/_redirects 2>/dev/null || true) && (cp public/_headers build/_headers 2>/dev/null || true)",
     "images": "node scripts/build-images.mjs",
-    "build": "npm run images && npm run content && npm run github && npm run build:client && npm run build:ssr && npm run prerender && npm run feeds && npm run postbuild",
+    "build": "npm run images && npm run gallery && npm run content && npm run github && npm run build:client && npm run build:ssr && npm run prerender && npm run feeds && npm run postbuild && npm run check:assets",
     "preview": "node scripts/preview.mjs",
-    "format": "prettier --write src/**/*.{js,jsx,css}"
+    "format": "prettier --write src/**/*.{js,jsx,css}",
+    "gallery": "node scripts/build-gallery-dims.mjs"
   },
   "eslintConfig": {
     "extends": [

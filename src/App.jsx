@@ -36,7 +36,7 @@ function AnalyticsTracker() {
   return null;
 }
 
-export default function App() {
+export default function App({ overrides }) {
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -47,7 +47,7 @@ export default function App() {
     <Router>
       <RouteChangeEffects />
       <AnalyticsTracker />
-      <AppRoutes />
+      <AppRoutes overrides={overrides} />
     </Router>
   );
 }

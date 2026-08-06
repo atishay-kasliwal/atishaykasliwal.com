@@ -20,6 +20,16 @@ export default defineConfig(({ isSsrBuild }) => ({
     outDir: 'build',
     // Source maps stay out of production: extra weight, and they expose source.
     sourcemap: false,
+    /**
+     * Emits build/.vite/manifest.json — the source-file → emitted-asset map
+     * scripts/prerender.mjs reads to inject real <link rel="stylesheet"> tags
+     * for the four code-split legacy routes (/resume, /art, /atriveo,
+     * /highlights). Without it their CSS only reaches the page once the
+     * browser executes the route's JS chunk, so on a throttled connection the
+     * page painted unstyled and then reflowed hard the moment the stylesheet
+     * arrived — measured at 0.38–0.41 CLS. SSR build does not need it.
+     */
+    manifest: !isSsrBuild,
     // The SSR pass would otherwise copy all of public/ into .ssr/ — hundreds of
     // images duplicated for a bundle that is only ever imported by Node.
     copyPublicDir: !isSsrBuild,

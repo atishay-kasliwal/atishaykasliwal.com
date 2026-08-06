@@ -21,6 +21,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { PROJECTS } from '../src/data/projects.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -197,6 +198,132 @@ async function main() {
     .toFile(path.join(PUBLIC, 'og/atishay-kasliwal-og.jpg'));
   written.push('OG card 1200×630 (png/jpg)');
 
+  /* ── Organization logo ──────────────────────────────────────────────────
+     src/data/site.js declares IMAGES.logo at /atishay-kasliwal-logo.png and
+     organizationSchema() feeds it to Organization.logo, which every prerendered
+     page emits. The file was never generated, so that JSON-LD pointed at a 404
+     on every page — Google drops an Organization logo it cannot fetch.
+
+     Same monogram source as the icons, so the schema logo and the browser tab
+     are the same mark. */
+  await sharp(LOGO_SOURCE)
+    .resize(512, 512, { fit: 'contain', background: BG })
+    .png({ compressionLevel: 9, palette: true, quality: 90 })
+    .toFile(path.join(PUBLIC, 'atishay-kasliwal-logo.png'));
+  written.push('org logo 512×512');
+
+  /* ── Project cover cards ────────────────────────────────────────────────
+     Every entry in src/data/projects.js declares an image at
+     /projects/<slug>-cover.jpg. None of those files existed, so each case study
+     rendered a broken hero AND served a dead og:image — meaning every project
+     link shared anywhere produced an empty preview card.
+
+     These are generated from project metadata rather than cropped from the
+     repo's image assets, and that is deliberate. The assets here are not
+     reliable: the file named fOMC.png was a scanned immigration document,
+     dashboard.png is Geckoboard's own marketing screenshot, and mriimage.jpeg
+     is stock photography of a radiology monitor. A generated card states only
+     what projects.js already claims, so it cannot misrepresent the work. Drop a
+     real screenshot at the same path to override any of these. */
+  await ensureDir(path.join(PUBLIC, 'projects'));
+
+  for (const project of PROJECTS) {
+    const out = path.basename(project.image.src);
+    const { width, height } = project.image; // 1600×900, per projects.js
+
+    /* Greedy wrap at a character budget rather than measured text: the
+       renderer falls back to a system sans whose metrics we cannot query, so a
+       conservative budget is more predictable than a precise-looking guess. */
+    const wrap = (text, perLine) => {
+      const lines = [];
+      let line = '';
+      for (const word of text.split(/\s+/)) {
+        if (line && (line + ' ' + word).length > perLine) {
+          lines.push(line);
+          line = word;
+        } else line = line ? `${line} ${word}` : word;
+      }
+      if (line) lines.push(line);
+      return lines;
+    };
+
+    const titleSize = project.name.length > 22 ? 76 : 96;
+    const tagline = wrap(project.tagline, 52).slice(0, 3);
+    const stack = project.stack.slice(0, 6).join('  ·  ');
+
+    /* Metrics laid out on a measured cursor rather than a fixed column pitch.
+       An even 340px pitch collided on the MRI card, where "20min → 5min" ran
+       straight into the next value — metric values vary from "90%" to
+       "20min → 5min", so the column has to be as wide as its content.
+
+       Widths are estimated, not measured: the renderer falls back to a system
+       sans whose metrics we cannot query. The mono label is reliable at 0.6em;
+       the bold sans value is approximated slightly wide so the error lands on
+       the side of extra gutter. Anything that would cross the right margin is
+       dropped rather than clipped. */
+    const metricColumns = [];
+    let cursor = 104;
+    for (const m of project.metrics || []) {
+      const valueW = String(m.value).length * 29;
+      const labelW = m.label.length * 12.6;
+      const colW = Math.max(valueW, labelW);
+      if (cursor + colW > width - 104) break;
+      metricColumns.push({ m, x: cursor });
+      cursor += colW + 64;
+    }
+    /* Category and status overlap on some entries — "Applied Research" carries
+       status "Research" — which renders as a stutter. Drop whichever term the
+       other already contains. */
+    const eyebrow = [project.category, project.status, project.year]
+      .filter(Boolean)
+      .filter((part, i, all) =>
+        all.every((other, j) => {
+          if (i === j || typeof other !== 'string') return true;
+          const a = String(part).toLowerCase();
+          const b = other.toLowerCase();
+          return !(b.includes(a) && b.length > a.length);
+        })
+      )
+      .join('  /  ');
+
+    const cover = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+  <rect width="${width}" height="${height}" fill="${BG}"/>
+  <rect x="0" y="0" width="${width}" height="6" fill="${ACCENT}"/>
+
+  <g stroke="#ffffff" stroke-opacity="0.035" stroke-width="1">
+    ${Array.from({ length: 13 }, (_, i) => `<line x1="${i * 128}" y1="0" x2="${i * 128}" y2="${height}"/>`).join('\n    ')}
+    ${Array.from({ length: 8 }, (_, i) => `<line x1="0" y1="${i * 128}" x2="${width}" y2="${i * 128}"/>`).join('\n    ')}
+  </g>
+
+  <text x="104" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="26" fill="${ACCENT}" letter-spacing="3.4">${esc(eyebrow.toUpperCase())}</text>
+
+  <text x="104" y="${titleSize > 80 ? 316 : 300}" font-family="Inter, Helvetica, Arial, sans-serif" font-size="${titleSize}" font-weight="700" fill="${FG}" letter-spacing="-3">${esc(project.name)}</text>
+
+  ${tagline
+    .map(
+      (line, i) =>
+        `<text x="104" y="${404 + i * 52}" font-family="Inter, Helvetica, Arial, sans-serif" font-size="38" font-weight="400" fill="${MUTED}">${esc(line)}</text>`
+    )
+    .join('\n  ')}
+
+  ${metricColumns
+    .map(
+      ({ m, x }) =>
+        `<text x="${x}" y="596" font-family="Inter, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="${FG}" letter-spacing="-1.4">${esc(m.value)}</text>
+  <text x="${x}" y="636" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="${MUTED}" letter-spacing="1">${esc(m.label.toUpperCase())}</text>`
+    )
+    .join('\n  ')}
+
+  <line x1="104" y1="700" x2="${width - 104}" y2="700" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="104" y="758" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" fill="${MUTED}" letter-spacing="1.2">${esc(stack)}</text>
+  <text x="104" y="812" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" fill="#5b626d" letter-spacing="1.6">${esc(DOMAIN)}/projects/${esc(project.slug)}</text>
+</svg>`;
+
+    await sharp(Buffer.from(cover))
+      .jpeg({ quality: 88, mozjpeg: true })
+      .toFile(path.join(PUBLIC, 'projects', out));
+  }
+  written.push(`${PROJECTS.length} project covers 1600×900`);
 
   /* ── Footer lapel pins ──────────────────────────────────────────────────
      Ten PNGs totalling ~1.8 MB, rendered in a 10-column grid at roughly 100 CSS

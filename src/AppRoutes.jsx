@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, Fragment } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import Footer from './components/Footer';
@@ -38,11 +38,27 @@ import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-const Resume = lazy(() => import('./Resume'));
-const ArtPage = lazy(() => import('./pages/ArtPage'));
-const AtriveoPage = lazy(() => import('./pages/AtriveoPage'));
-const LegacyProjects = lazy(() => import('./Projects'));
-const HighlightDetail = lazy(() => import('./HighlightDetail'));
+/**
+ * Code-split routes.
+ *
+ * `overrides` lets the prerenderer swap in already-imported components. React.lazy
+ * suspends on its first render no matter what, and a suspended boundary makes
+ * React emit the FALLBACK into the static shell and defer the real markup to a
+ * hydration-time swap — so these four pages were shipping an empty
+ * `.route-loading` div and jumping to full height on load. Warming the modules
+ * beforehand does not help, because the suspension is a property of the lazy
+ * wrapper, not of module availability.
+ *
+ * On the client `overrides` is undefined, so lazy() is used and code splitting
+ * is fully preserved.
+ */
+const lazyRoutes = {
+  Resume: lazy(() => import('./Resume')),
+  ArtPage: lazy(() => import('./pages/ArtPage')),
+  AtriveoPage: lazy(() => import('./pages/AtriveoPage')),
+  LegacyProjects: lazy(() => import('./Projects')),
+  HighlightDetail: lazy(() => import('./HighlightDetail')),
+};
 
 /* Reserves vertical space while a chunk loads so the swap-in does not shift
    layout. aria-busy lets assistive tech announce the pending state. */
@@ -68,7 +84,13 @@ function RouteFallback() {
  */
 const Lazy = ({ children }) => <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
 
-export default function AppRoutes() {
+export default function AppRoutes({ overrides }) {
+  const R = { ...lazyRoutes, ...overrides };
+
+  /* With eager components there is nothing to suspend on, so the boundary is
+     skipped entirely and the markup inlines into the static HTML. */
+  const Boundary = overrides ? Fragment : Lazy;
+
   return (
     <>
       <a className="skip-link" href="#main">
@@ -94,12 +116,12 @@ export default function AppRoutes() {
             <Route path="/privacy" element={<PageShell><PrivacyPage /></PageShell>} />
 
             {/* Existing routes — code-split, so each carries its own boundary. */}
-            <Route path="/resume" element={<Lazy><Resume /></Lazy>} />
-            <Route path="/art" element={<Lazy><ArtPage /></Lazy>} />
-            <Route path="/atriveo" element={<Lazy><AtriveoPage /></Lazy>} />
-            <Route path="/highlights" element={<Lazy><LegacyProjects /></Lazy>} />
-            <Route path="/highlights/:id" element={<Lazy><HighlightDetail /></Lazy>} />
-            <Route path="/Highlights/:uuid" element={<Lazy><HighlightDetail /></Lazy>} />
+            <Route path="/resume" element={<Boundary><R.Resume /></Boundary>} />
+            <Route path="/art" element={<Boundary><R.ArtPage /></Boundary>} />
+            <Route path="/atriveo" element={<Boundary><R.AtriveoPage /></Boundary>} />
+            <Route path="/highlights" element={<Boundary><R.LegacyProjects /></Boundary>} />
+            <Route path="/highlights/:id" element={<Boundary><R.HighlightDetail /></Boundary>} />
+            <Route path="/Highlights/:uuid" element={<Boundary><R.HighlightDetail /></Boundary>} />
 
             <Route path="*" element={<PageShell><NotFoundPage /></PageShell>} />
           </Routes>

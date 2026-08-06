@@ -43,7 +43,7 @@ async function main() {
     // invites Google to index thin pages, which drags down site quality.
     if (route.noindex || route.hidden) continue;
     urls.push({
-      loc: route.path === '/' ? `${ORIGIN}/` : `${ORIGIN}${route.path}`,
+      loc: route.path === '/' ? `${ORIGIN}/` : `${ORIGIN}${route.path}/`,
       lastmod: today,
       changefreq: route.changefreq || 'monthly',
       priority: route.priority ?? 0.5,
@@ -52,7 +52,7 @@ async function main() {
 
   for (const p of PROJECTS) {
     urls.push({
-      loc: `${ORIGIN}/projects/${p.slug}`,
+      loc: `${ORIGIN}/projects/${p.slug}/`,
       lastmod: today,
       changefreq: 'monthly',
       priority: p.featured ? 0.8 : 0.6,
@@ -64,7 +64,7 @@ async function main() {
 
   for (const post of BLOG_POSTS) {
     urls.push({
-      loc: `${ORIGIN}/blog/${post.slug}`,
+      loc: `${ORIGIN}/blog/${post.slug}/`,
       lastmod: (post.updated || post.date || today).slice(0, 10),
       changefreq: 'yearly',
       priority: 0.7,
