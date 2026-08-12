@@ -104,6 +104,19 @@
   align-items: start;
 }
 
+/**
+ * Bottom-align the featured plate.
+ *
+ * It used to be the lower of two plates, with the system diagram above it, so
+ * removing the diagram floated it to the top of the column beside the name.
+ * Aligning to the end of the row puts it back roughly where it was without
+ * hard-coding the height the diagram happened to occupy — which would drift the
+ * moment the lead column's type reflows.
+ */
+.spec-hero-cols > .hsp {
+  align-self: end;
+}
+
 .spec-hero-lead {
   min-width: 0;
   display: flex;
@@ -137,14 +150,31 @@
 }
 
 /* ── Display name ── */
+/**
+ * Both halves of the name on one line.
+ *
+ * This was `flex-direction: column`, which is what stacked "Atishay" over
+ * "Kasliwal" — the stacking came from the container, not from the spans, so
+ * changing the children alone did nothing.
+ *
+ * `wrap` is kept so the name still breaks in two on a narrow viewport rather
+ * than overflowing, and the column-gap supplies the word space: the two spans
+ * are adjacent JSX elements, which emit no whitespace between them.
+ *
+ * The size cap comes down from 5.9rem because the name now has to fit the lead
+ * column's width on one line rather than two.
+ */
 .spec-display {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.26em;
   margin: 0 0 1.35rem;
   font-family: var(--font-display);
-  font-size: clamp(2.9rem, 6.4vw, 5.9rem);
+  font-size: clamp(2.4rem, 4.4vw, 4.4rem);
   font-weight: 400;
-  line-height: 0.9;
+  line-height: 1;
   letter-spacing: -0.018em;
 }
 

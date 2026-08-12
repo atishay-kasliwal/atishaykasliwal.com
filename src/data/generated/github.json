@@ -7,8 +7,8 @@
     "avatar": "https://avatars.githubusercontent.com/u/61780293?v=4",
     "company": "Stony Brook University",
     "location": "New York",
-    "publicRepos": 20,
-    "followers": 7,
+    "publicRepos": 22,
+    "followers": 8,
     "createdAt": "2020-03-04T09:26:24Z"
   },
   "repos": [
@@ -55,8 +55,34 @@
       ],
       "stars": 0,
       "forks": 0,
-      "pushedAt": "2026-08-05T18:03:22Z",
+      "pushedAt": "2026-08-12T17:10:11Z",
       "createdAt": "2026-04-09T17:10:40Z",
+      "license": null
+    },
+    {
+      "name": "atriveo-reel",
+      "description": "Paste two videos, pick two moments, get a vertical comparison reel. Self-hosted on a Mac behind a Cloudflare Tunnel.",
+      "url": "https://github.com/atishay-kasliwal/atriveo-reel",
+      "homepage": null,
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-08-11T21:52:18Z",
+      "createdAt": "2026-08-10T12:59:54Z",
+      "license": "MIT"
+    },
+    {
+      "name": "kaggriculture",
+      "description": null,
+      "url": "https://github.com/atishay-kasliwal/kaggriculture",
+      "homepage": null,
+      "language": "Python",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-08-08T17:00:16Z",
+      "createdAt": "2026-08-06T19:05:00Z",
       "license": null
     },
     {
@@ -307,11 +333,11 @@
   "languages": [
     {
       "name": "TypeScript",
-      "count": 6
+      "count": 7
     },
     {
       "name": "Python",
-      "count": 3
+      "count": 4
     },
     {
       "name": "JavaScript",
@@ -331,5 +357,5 @@
     }
   ],
   "totalStars": 1,
-  "fetchedAt": "2026-08-06T02:57:12.080Z"
+  "fetchedAt": "2026-08-12T17:18:59.605Z"
 }

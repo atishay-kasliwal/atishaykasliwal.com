@@ -1,0 +1,284 @@
+/* ── About page: the bookshelf ─────────────────────────────────────────────
+   Same spec-sheet grammar as BookshelfReader.css: flat hairline-bordered
+   plates, mono labels, corner registration ticks, one accent used sparingly.
+   Shelf runs top to bottom on the left; the open book sits at its natural
+   page ratio on the right. Pages read as paper (light bg, dark ink) because
+   that's what a page is — everything around it stays the site's usual dark. */
+
+.ab-wrap {
+  display: grid;
+  grid-template-columns: min(100%, 280px) 1fr;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  justify-content: center;
+  column-gap: clamp(2rem, 5vw, 4rem);
+  row-gap: clamp(0.9rem, 1.8vw, 1.4rem);
+  min-height: 100vh;
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.25rem, 5vw, 3rem) clamp(2rem, 6vw, 4rem);
+  background: var(--bg, #0a0c0e);
+}
+
+/* ── Header — kept to an eyebrow + a single line so it doesn't eat into
+   the room the shelf and reader need. ── */
+.ab-header {
+  grid-column: 1 / -1;
+  margin: 0 0 clamp(0.2rem, 0.8vw, 0.45rem);
+}
+
+.ab-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.4rem;
+}
+
+.ab-doc-mark {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--accent-soft, #a5b4fc);
+}
+
+.ab-section-title {
+  margin: 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.9rem, 3.9vw, 3.35rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.024em;
+  color: var(--fg, #f2f4f7);
+  max-width: none;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+.ab-section-subtitle {
+  margin: 0.72rem 0 0;
+  max-width: none;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--fg-muted, #9aa1ab);
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+/* ── Shelf ────────────────────────────────────────────────────────────── */
+.ab-nav {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 280px);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+}
+
+.ab-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
+  padding: 0.85rem 0.9rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.ab-nav-item:hover,
+.ab-nav-item:focus-visible {
+  background: var(--surface-hover, rgba(255, 255, 255, 0.045));
+}
+
+.ab-nav-item.is-active {
+  border-left-color: var(--accent, #8b5cf6);
+  background: var(--accent-surface, rgba(139, 92, 246, 0.13));
+}
+
+.ab-nav-swatch {
+  flex-shrink: 0;
+  width: 4px;
+  align-self: stretch;
+  min-height: 2.5rem;
+  opacity: 0.85;
+}
+
+.ab-nav-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.ab-nav-title {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1rem;
+  line-height: 1.25;
+  color: var(--fg-muted, #9aa1ab);
+  transition: color 0.2s ease;
+}
+
+.ab-nav-item.is-active .ab-nav-title {
+  color: var(--fg, #f2f4f7);
+}
+
+.ab-nav-sub {
+  color: var(--spec-ink-faint);
+}
+
+/* ── Reader ───────────────────────────────────────────────────────────── */
+.ab-reader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  outline: none;
+}
+
+.ab-reader-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.ab-flip-outer {
+  display: flex;
+}
+
+.ab-flipbook {
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+}
+
+.ab-progress {
+  color: var(--spec-ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ab-arrow {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  color: var(--fg-muted, #9aa1ab);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ab-arrow:hover:not(:disabled) {
+  color: var(--fg, #f2f4f7);
+  border-color: var(--border-accent, rgba(165, 180, 252, 0.42));
+}
+
+.ab-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Pages ────────────────────────────────────────────────────────────── */
+.ab-page {
+  position: relative;
+  background: var(--fg, #f2f4f7);
+  color: var(--bg, #0a0c0e);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  container-type: inline-size;
+}
+
+.ab-page--image {
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.ab-page--image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.ab-page--cover,
+.ab-page--text {
+  padding: 2rem 1.6rem;
+}
+
+.ab-page .spec-brackets {
+  --tick: rgba(10, 12, 14, 0.22);
+  inset: 8px;
+}
+
+.ab-eyebrow {
+  color: rgba(10, 12, 14, 0.5) !important;
+}
+
+.ab-plate-title {
+  margin: 0.6rem 0 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.ab-plate-rule {
+  width: 2.5rem;
+  height: 2px;
+  margin: 0.85rem 0 0.6rem;
+  background: linear-gradient(120deg, #8b5cf6, #a5b4fc);
+}
+
+.ab-cover-author {
+  display: block;
+  color: rgba(10, 12, 14, 0.6) !important;
+}
+
+.ab-cover-year {
+  display: block;
+  margin-top: 0.3rem;
+  color: rgba(10, 12, 14, 0.42) !important;
+}
+
+.ab-text-copy {
+  margin: 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 0.78rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  color: rgba(10, 12, 14, 0.82);
+}
+
+.ab-text-num {
+  margin-top: auto;
+  align-self: center;
+  color: rgba(10, 12, 14, 0.4) !important;
+}
+
+@media (max-width: 860px) {
+  .ab-wrap {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .ab-nav {
+    width: min(100%, 460px);
+  }
+}
+
+@media (max-width: 980px) {
+  .ab-section-title,
+  .ab-section-subtitle {
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .ab-section-subtitle {
+    max-width: 52ch;
+  }
+}

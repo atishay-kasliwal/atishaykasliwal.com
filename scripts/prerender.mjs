@@ -53,7 +53,6 @@ const LEGACY_CSS_ROUTES = {
   '/resume': 'src/Resume.jsx',
   '/art': 'src/pages/ArtPage.jsx',
   '/atriveo': 'src/pages/AtriveoPage.jsx',
-  '/highlights': 'src/Projects.jsx',
 };
 
 /** Resolve a manifest entry's CSS, walking `imports` for any inherited from a

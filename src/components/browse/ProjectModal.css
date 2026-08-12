@@ -1,0 +1,292 @@
+/**
+ * Project detail overlay.
+ *
+ * Styling a native <dialog> means overriding the UA defaults first: it ships
+ * with a border, padding, `width: fit-content`, and auto margins, all of which
+ * fight a full-bleed panel.
+ */
+
+.browse-modal {
+  width: min(56rem, calc(100vw - 2 * var(--gutter)));
+  max-width: none;
+  max-height: min(88svh, 60rem);
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--fg);
+  overflow: hidden;
+}
+
+.browse-modal::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.browse-modal__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.browse-modal__close {
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  cursor: pointer;
+  transition:
+    background-color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out);
+}
+
+.browse-modal__close:hover,
+.browse-modal__close:focus-visible {
+  background: var(--surface-active);
+  border-color: var(--border-accent);
+}
+
+/* ── Media ────────────────────────────────────────────────────────────── */
+
+.browse-modal__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--border);
+}
+
+.browse-modal__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Sits over the poster and covers it once it has painted a frame, so a refused
+   or slow load leaves the still showing rather than a black rectangle.
+
+   Only a light filter. The lockup gradient below already buys contrast where
+   the text is; dimming the whole frame on top of it would turn the recording
+   into a dark plate, which defeats the reason for showing it at all. */
+.browse-modal__video {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  filter: brightness(0.88) saturate(0.95);
+  transition: opacity var(--d-slower) var(--ease-out);
+}
+
+.browse-modal__video.is-ready {
+  opacity: 1;
+}
+
+/* Bottom-right, opposite the close button and clear of the lockup, which is
+   bottom-LEFT-aligned text. z-index above the lockup gradient so it stays
+   clickable where the two overlap. */
+.browse-modal__playback {
+  position: absolute;
+  right: var(--s-3);
+  bottom: var(--s-3);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-strong);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    background-color var(--d-fast) var(--ease-out);
+}
+
+.browse-modal__playback:hover,
+.browse-modal__playback:focus-visible {
+  color: var(--fg);
+  border-color: var(--border-accent);
+  background: var(--surface-active);
+}
+
+.browse-modal__lockup {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0 0;
+  padding: var(--s-8) var(--s-6) var(--s-5);
+  /* Two stops rather than one: a single linear fade over the full height
+     washes out the middle of the image, where the actual screen content is. */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.7) 45%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.browse-modal__eyebrow {
+  margin: 0 0 var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.browse-modal__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--t-2xl);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+
+.browse-modal__tagline {
+  margin: var(--s-2) 0 0;
+  font-size: var(--t-base);
+  color: var(--fg-muted);
+  max-width: 46ch;
+}
+
+/* ── Body ─────────────────────────────────────────────────────────────── */
+
+.browse-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding: var(--s-6);
+}
+
+.browse-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.browse-modal__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0.55em 0.95em;
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    background-color var(--d-fast) var(--ease-out);
+}
+
+.browse-modal__cta:hover,
+.browse-modal__cta:focus-visible {
+  color: var(--fg);
+  border-color: var(--border-accent);
+  background: var(--surface-hover);
+}
+
+.browse-modal__cta--primary {
+  background: var(--accent-surface);
+  border-color: var(--border-accent);
+  color: var(--fg);
+}
+
+.browse-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.browse-modal__section p {
+  margin: 0;
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+  max-width: var(--max-w-prose);
+}
+
+.browse-modal__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.browse-modal__list {
+  margin: 0;
+  padding-left: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  color: var(--fg-muted);
+  line-height: var(--lh-relaxed);
+  max-width: var(--max-w-prose);
+}
+
+.browse-modal__metrics {
+  padding-block: var(--s-5);
+  border-block: 1px solid var(--border);
+}
+
+.browse-modal__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--s-4);
+  margin: 0;
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--border);
+}
+
+.browse-modal__facts dt {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.browse-modal__facts dd {
+  margin: var(--s-1) 0 0;
+  font-size: var(--t-sm);
+  color: var(--fg);
+}
+
+@media (max-width: 640px) {
+  .browse-modal {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100svh;
+    height: 100svh;
+    border: none;
+  }
+
+  .browse-modal__body {
+    padding: var(--s-5) var(--s-4) var(--s-8);
+  }
+}

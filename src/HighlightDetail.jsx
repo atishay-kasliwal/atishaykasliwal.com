@@ -8,7 +8,7 @@ import './HighlightDetail.css';
 import SiteHeader from './SiteHeader';
 
 // Import project data
-import { projectsData } from './Projects';
+import { projectsData } from './data/highlights';
 import { getProjectArticleByUuid } from './project list';
 import FOMCDashboard from './FOMCDashboard';
 import LegalRAGChat from './LegalRAGChat';

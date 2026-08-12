@@ -1,5 +1,193 @@
 [
   {
+    "slug": "atriveo-capture-before-analytics",
+    "title": "Atriveo: build capture before analytics",
+    "description": "Atriveo started from a simple premise: if a job tracker depends on manual entry, it fails. This is how I designed passive capture, per-board heuristics, and the analytics layer on top.",
+    "date": "2026-08-11",
+    "updated": null,
+    "tags": [
+      "Product",
+      "Chrome Extension",
+      "Systems Design",
+      "Analytics"
+    ],
+    "category": "Engineering",
+    "featured": false,
+    "image": "/projects/atriveo-tile.jpg",
+    "readingTime": 3,
+    "wordCount": 763,
+    "toc": [
+      {
+        "id": "the-real-problem-was-adherence",
+        "text": "The real problem was adherence",
+        "depth": 2
+      },
+      {
+        "id": "why-the-browser-extension-came-first",
+        "text": "Why the browser extension came first",
+        "depth": 2
+      },
+      {
+        "id": "generic-parsing-was-the-wrong-abstraction",
+        "text": "Generic parsing was the wrong abstraction",
+        "depth": 2
+      },
+      {
+        "id": "the-backend-exists-to-make-the-analytics-honest",
+        "text": "The backend exists to make the analytics honest",
+        "depth": 2
+      },
+      {
+        "id": "what-i-would-keep-and-what-i-would-change",
+        "text": "What I would keep and what I would change",
+        "depth": 2
+      }
+    ],
+    "html": "<p>The first thing I learned building Atriveo was that job-search analytics are not the hard part. Capture is.</p>\n<p>Almost every tracker in this category starts from the same assumption: the user will log each application manually, keep the spreadsheet tidy, and update statuses as replies come in. That assumption collapses fast. The people who need a tracker most are applying under time pressure, juggling portals, and already context-switching across dozens of roles. The system falls apart exactly when the user needs it most.</p>\n<p>Atriveo exists because I wanted the tracking step to disappear.</p>\n<h2 id=\"the-real-problem-was-adherence\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#the-real-problem-was-adherence\" aria-label=\"Link to The real problem was adherence\">#</a>The real problem was adherence</h2>\n<p>The surface problem looks like organization: people want a better way to see applications, interviews, rejections, and response rates. The real problem underneath it is adherence. If capture is manual, the data goes stale in a week. Once the data is stale, every chart on top of it becomes decorative.</p>\n<p>That drove the entire product direction. I was less interested in making a prettier dashboard than in making sure the dashboard had a chance to stay true.</p>\n<h2 id=\"why-the-browser-extension-came-first\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#why-the-browser-extension-came-first\" aria-label=\"Link to Why the browser extension came first\">#</a>Why the browser extension came first</h2>\n<p>The key move was pushing collection to the point where the action actually happens: the job board itself.</p>\n<p>Atriveo&#39;s Chrome extension watches for submission events in the page, extracts the structured payload, and sends it to the backend without asking the user to do anything else. The point was not novelty for its own sake. It was to turn tracking into a byproduct of applying.</p>\n<p>That decision made the rest of the system possible:</p>\n<ul>\n<li>analytics could assume fresh data instead of reminding users to update it</li>\n<li>the backend could deduplicate and normalize centrally instead of trusting local notes</li>\n<li>the product could compete on signal quality rather than on how disciplined the user felt that week</li>\n</ul>\n<p>It was also the part that created the most product leverage. A dashboard can be copied. Reliable passive capture is much harder.</p>\n<h2 id=\"generic-parsing-was-the-wrong-abstraction\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#generic-parsing-was-the-wrong-abstraction\" aria-label=\"Link to Generic parsing was the wrong abstraction\">#</a>Generic parsing was the wrong abstraction</h2>\n<p>One lesson from the early builds was that a &quot;universal&quot; parser sounds elegant and performs badly.</p>\n<p>Job boards look similar at a glance and wildly different in the DOM. The long tail is especially messy: custom components, inconsistent field names, and submission flows that change without warning. A one-size-fits-all parser degraded exactly where users were counting on it.</p>\n<p>I moved to explicit per-board heuristics for the highest-traffic sites instead. That raised maintenance cost, but the trade was worth it. Precision matters more than architectural neatness when a false positive means someone&#39;s pipeline history is wrong.</p>\n<p>That same trade showed up elsewhere too. I kept as much logic as possible server-side because a fix in the API can ship immediately, while a fix in the extension waits on Chrome Web Store review and then waits again for users to update.</p>\n<h2 id=\"the-backend-exists-to-make-the-analytics-honest\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#the-backend-exists-to-make-the-analytics-honest\" aria-label=\"Link to The backend exists to make the analytics honest\">#</a>The backend exists to make the analytics honest</h2>\n<p>Once passive capture worked, the rest of the product could focus on what the data meant.</p>\n<p>The API validates incoming events, deduplicates repeated applications, and persists them into a normalized PostgreSQL schema. That structure mattered because the questions users actually ask are relational:</p>\n<ul>\n<li>which sources convert best</li>\n<li>which companies respond fastest</li>\n<li>which stages stall</li>\n<li>whether application volume is turning into interviews at all</li>\n</ul>\n<p>Those queries become simple once companies, roles, sources, and stages are modeled cleanly. They become painful if everything is stored as free-form documents and fixed later in application code.</p>\n<p>The result is a system that now serves 100+ active customers, handles 2K+ daily queries, and stays up at 99.9% uptime. Those numbers matter, but they are downstream of the more important decision: make the input automatic.</p>\n<h2 id=\"what-i-would-keep-and-what-i-would-change\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#what-i-would-keep-and-what-i-would-change\" aria-label=\"Link to What I would keep and what I would change\">#</a>What I would keep and what I would change</h2>\n<p>I would absolutely keep the principle that capture comes before analytics. It was the right product call and the right technical one.</p>\n<p>I would also keep the discipline of responding closely to users early. The 5.0 rating on the Chrome Web Store did not come from feature count. It came from closing feedback loops quickly and treating small product friction as serious.</p>\n<p>What I would change is the tooling around detector health. The most dangerous failures in Atriveo are silent ones: a board changes its DOM, capture rate drops, and the user assumes nothing is wrong. Health checks around board-specific detection should have existed earlier and should probably be even more aggressive now.</p>\n<p>The main thing Atriveo taught me is simple: in products like this, the moat is not the chart. The moat is the boring, reliable system that makes the chart worth believing.</p>\n",
+    "excerpt": "The first thing I learned building Atriveo was that job search analytics are not the hard part. Capture is. Almost every tracker in this category starts from the same assumption: the user will log each application manually, keep the spreadsheet tidy, and update statuses as replies come in. That assumption collapses fast. The people who need a tracker most are applying under time pressure, juggling"
+  },
+  {
+    "slug": "legal-rag-citations-before-answers",
+    "title": "Legal RAG: citations before answers",
+    "description": "In legal retrieval, fluent text is not the product. The product is traceability. This is why I inverted the usual RAG contract and made retrieval quality the gate.",
+    "date": "2026-08-09",
+    "updated": null,
+    "tags": [
+      "RAG",
+      "LLMs",
+      "Legal Tech",
+      "AI Systems"
+    ],
+    "category": "Engineering",
+    "featured": false,
+    "image": "/projects/legal-rag-tile.jpg",
+    "readingTime": 3,
+    "wordCount": 725,
+    "toc": [
+      {
+        "id": "why-i-inverted-the-usual-rag-contract",
+        "text": "Why I inverted the usual RAG contract",
+        "depth": 2
+      },
+      {
+        "id": "structural-chunking-mattered-more-than-model-choice",
+        "text": "Structural chunking mattered more than model choice",
+        "depth": 2
+      },
+      {
+        "id": "retrieval-quality-is-the-whole-product",
+        "text": "Retrieval quality is the whole product",
+        "depth": 2
+      },
+      {
+        "id": "refusal-is-a-feature-not-a-fallback",
+        "text": "Refusal is a feature, not a fallback",
+        "depth": 2
+      },
+      {
+        "id": "what-this-project-changed-in-how-i-think-about-rag",
+        "text": "What this project changed in how I think about RAG",
+        "depth": 2
+      }
+    ],
+    "html": "<p>Most RAG demos optimize for the wrong applause line.</p>\n<p>They answer quickly, sound fluent, and make the model feel confident. In legal work, that is not enough. A legal answer without a source somebody can inspect is not useful just because it reads well. It is often worse than no answer, because it invites trust without giving the reader any way to verify the claim.</p>\n<p>That was the starting constraint for this project: the answer is not the product unless the citation holds up.</p>\n<h2 id=\"why-i-inverted-the-usual-rag-contract\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#why-i-inverted-the-usual-rag-contract\" aria-label=\"Link to Why I inverted the usual RAG contract\">#</a>Why I inverted the usual RAG contract</h2>\n<p>The default RAG pattern is straightforward: retrieve some chunks, hand them to the model, and ask for a summary. The failure mode is straightforward too. If retrieval is weak, the model smooths over the gaps and produces something that sounds coherent anyway.</p>\n<p>That is tolerable in some domains. It is not tolerable here.</p>\n<p>So I flipped the contract. Instead of &quot;answer if you can,&quot; the system behaves more like &quot;retrieve first, answer only from what retrieval can support, and refuse when the evidence is weak.&quot; That is a less magical user experience on the surface, but it is a much better trust contract.</p>\n<p>The goal was never to make the model feel smart. The goal was to make the system auditable.</p>\n<h2 id=\"structural-chunking-mattered-more-than-model-choice\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#structural-chunking-mattered-more-than-model-choice\" aria-label=\"Link to Structural chunking mattered more than model choice\">#</a>Structural chunking mattered more than model choice</h2>\n<p>One of the earliest design choices was to chunk legal documents on structural boundaries instead of fixed token windows.</p>\n<p>Fixed windows are easy to implement and usually wrong for this kind of material. Clauses get split in the middle, headings detach from the text they govern, and the citation lands on a fragment that cannot stand on its own. The retrieval score may look acceptable while the evidence is still unusable.</p>\n<p>Chunking by sections, clauses, and other document boundaries costs more preprocessing work, but it pays back in the only place that matters: when a reader opens the cited span, it reads like a real unit of meaning instead of a clipped excerpt.</p>\n<p>That single choice improved answer quality more than swapping models did.</p>\n<h2 id=\"retrieval-quality-is-the-whole-product\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#retrieval-quality-is-the-whole-product\" aria-label=\"Link to Retrieval quality is the whole product\">#</a>Retrieval quality is the whole product</h2>\n<p>This project reinforced something I keep running into with LLM systems: many &quot;generation&quot; problems are retrieval problems in disguise.</p>\n<p>If the wrong chunk comes back, the answer is doomed before the prompt even starts. If the right chunks come back but in the wrong order, the answer drifts. If two relevant passages disagree and the system hides the disagreement, the model looks smoother while the product gets less trustworthy.</p>\n<p>So most of the real work ended up in the layers before generation:</p>\n<ul>\n<li>better chunk boundaries</li>\n<li>ranking that respected document structure</li>\n<li>metadata filters for narrowing by document and jurisdiction</li>\n<li>a response contract that forbids unsupported claims</li>\n</ul>\n<p>Once those pieces were right, the model had a fair chance to behave. Before that, it was just papering over retrieval mistakes.</p>\n<h2 id=\"refusal-is-a-feature-not-a-fallback\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#refusal-is-a-feature-not-a-fallback\" aria-label=\"Link to Refusal is a feature, not a fallback\">#</a>Refusal is a feature, not a fallback</h2>\n<p>One decision I feel strongly about is refusal under weak retrieval.</p>\n<p>People sometimes see refusal as a sign that the system is failing. In legal contexts it is often the system behaving correctly. If the evidence is thin, approximate confidence is the dangerous outcome. A refusal that says, in effect, &quot;I do not have enough support for this answer&quot; is much closer to what a careful human would do.</p>\n<p>That makes the product less theatrical and more dependable.</p>\n<p>It also changes how the interface should feel. A good legal assistant is not trying to hide uncertainty. It is trying to surface the boundary between what the source supports and what the model is tempted to infer.</p>\n<h2 id=\"what-this-project-changed-in-how-i-think-about-rag\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#what-this-project-changed-in-how-i-think-about-rag\" aria-label=\"Link to What this project changed in how I think about RAG\">#</a>What this project changed in how I think about RAG</h2>\n<p>The main shift for me was seeing retrieval not as plumbing around the model, but as the system&#39;s actual core logic.</p>\n<p>Improving chunking, ranking, and refusal behavior moved output quality far more than changing the model did. The answer contract only works if the retrieval layer deserves that power.</p>\n<p>If I extended this system further, I would keep pushing in the same direction: stronger handling of contradictory passages, better provenance on every claim, and more explicit UI around what came from source text versus what came from synthesis.</p>\n<p>That is the version of RAG I trust most now. Not the version that tries hardest to answer, but the one that makes it hardest to answer casually.</p>\n",
+    "excerpt": "Most RAG demos optimize for the wrong applause line. They answer quickly, sound fluent, and make the model feel confident. In legal work, that is not enough. A legal answer without a source somebody can inspect is not useful just because it reads well. It is often worse than no answer, because it invites trust without giving the reader any way to verify the claim. That was the starting constraint "
+  },
+  {
+    "slug": "mri-viewer-model-in-the-browser",
+    "title": "MRI Tumor Viewer: ship the model to the browser",
+    "description": "The biggest gain in this viewer did not come from another point of accuracy. It came from moving inference to the reviewer’s machine and removing the upload step.",
+    "date": "2026-08-07",
+    "updated": null,
+    "tags": [
+      "Machine Learning",
+      "Healthcare",
+      "TensorFlow.js",
+      "Privacy"
+    ],
+    "category": "Engineering",
+    "featured": false,
+    "image": "/projects/mri-tumor-viewer-tile.jpg",
+    "readingTime": 3,
+    "wordCount": 706,
+    "toc": [
+      {
+        "id": "the-queue-matters-more-than-the-headline-metric",
+        "text": "The queue matters more than the headline metric",
+        "depth": 2
+      },
+      {
+        "id": "why-the-browser-was-the-right-deployment-target",
+        "text": "Why the browser was the right deployment target",
+        "depth": 2
+      },
+      {
+        "id": "quantization-was-a-product-decision",
+        "text": "Quantization was a product decision",
+        "depth": 2
+      },
+      {
+        "id": "accuracy-needed-the-right-framing",
+        "text": "Accuracy needed the right framing",
+        "depth": 2
+      },
+      {
+        "id": "what-this-project-changed-for-me",
+        "text": "What this project changed for me",
+        "depth": 2
+      }
+    ],
+    "html": "<p>The most important choice in this project was not the model architecture. It was where the model ran.</p>\n<p>In medical imaging, people tend to focus first on raw accuracy. That matters, of course. But in practice a workflow can still be slow, awkward, and hard to trust even with a strong model if it adds friction in the wrong place. What delayed value here was not only classification quality. It was time-to-first-read.</p>\n<p>That pushed me toward a less common deployment target: the browser.</p>\n<h2 id=\"the-queue-matters-more-than-the-headline-metric\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#the-queue-matters-more-than-the-headline-metric\" aria-label=\"Link to The queue matters more than the headline metric\">#</a>The queue matters more than the headline metric</h2>\n<p>Reviewing scans is a throughput problem as much as an ML problem.</p>\n<p>If clinicians wait on uploads, remote inference, or tool-switching before they can even inspect a result, the model may be technically accurate and operationally unhelpful. A smaller improvement that fits the workflow cleanly can matter more than another benchmark win that arrives late.</p>\n<p>That is why I treated the viewer as part of the model, not as a shell around it. The product needed to shorten the path from opening a scan to seeing something useful.</p>\n<h2 id=\"why-the-browser-was-the-right-deployment-target\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#why-the-browser-was-the-right-deployment-target\" aria-label=\"Link to Why the browser was the right deployment target\">#</a>Why the browser was the right deployment target</h2>\n<p>Running inference client-side solved two problems at once.</p>\n<p>First, it reduced privacy exposure. MRI data is not the kind of thing you casually move around just because a hosted endpoint is easier to maintain. Keeping pixels on the reviewer&#39;s machine removes an entire category of risk and compliance overhead.</p>\n<p>Second, it cut latency in the workflow. There is no upload wait and no server round-trip before the reviewer can start interacting with the scan. That matters when the alternative is sending large volumes to a service first and only then rendering the result.</p>\n<p>The core path became:</p>\n<ul>\n<li>train offline on GCP</li>\n<li>export and quantize for TensorFlow.js</li>\n<li>run inference in the browser</li>\n<li>render slice-by-slice overlays the reviewer can inspect immediately</li>\n</ul>\n<p>That design choice is what turned the system into a practical tool instead of only a research artifact.</p>\n<h2 id=\"quantization-was-a-product-decision\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#quantization-was-a-product-decision\" aria-label=\"Link to Quantization was a product decision\">#</a>Quantization was a product decision</h2>\n<p>Getting the model into the browser was not a mechanical export step. It was a trade study.</p>\n<p>A model that is too large to load or too slow to run interactively is functionally unavailable, even if it is more accurate on paper. Quantization was therefore not just an optimization task. It was part of product design: decide how much model complexity the real workflow can afford.</p>\n<p>This is where a lot of ML projects quietly fall apart. They treat deployment as a packaging problem after the &quot;real work&quot; is done. In reality, the deployment target changes what counts as a good model.</p>\n<p>For this viewer, a slightly leaner model that loads reliably and responds quickly is often the better clinical experience than a heavier model that wins the metric table but loses the room.</p>\n<h2 id=\"accuracy-needed-the-right-framing\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#accuracy-needed-the-right-framing\" aria-label=\"Link to Accuracy needed the right framing\">#</a>Accuracy needed the right framing</h2>\n<p>The reported classification accuracy is useful, but it is not enough on its own.</p>\n<p>Tumor voxels are a small fraction of any given volume, which means naive aggregate accuracy can flatter a model that mostly predicts background correctly. That is why the evaluation had to care about recall and segmentation behavior, not just a broad percentage.</p>\n<p>The viewer design also reflects that mindset. The segmentation appears as an overlay, not a replacement for the original scan. The scan stays authoritative. The model assists interpretation; it does not pretend to become the image.</p>\n<p>That is a small interface detail with a big implication: the system is built to support clinical judgment, not to obscure it.</p>\n<h2 id=\"what-this-project-changed-for-me\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#what-this-project-changed-for-me\" aria-label=\"Link to What this project changed for me\">#</a>What this project changed for me</h2>\n<p>This was one of the clearest examples I have seen of workflow placement beating raw model glamour.</p>\n<p>The throughput gain came from meeting the clinician where the work actually happens. Reducing the path from scan to first useful visual mattered more than squeezing for an extra talking point in evaluation.</p>\n<p>If I pushed this further, I would keep working on browser-side performance and richer interaction around overlays, but I would protect the same core principle: the most valuable model is the one that arrives early enough, privately enough, and clearly enough to fit the real workflow.</p>\n<p>That is the version that turns ML from a result into a tool.</p>\n",
+    "excerpt": "The most important choice in this project was not the model architecture. It was where the model ran. In medical imaging, people tend to focus first on raw accuracy. That matters, of course. But in practice a workflow can still be slow, awkward, and hard to trust even with a strong model if it adds friction in the wrong place. What delayed value here was not only classification quality. It was tim"
+  },
+  {
+    "slug": "policy-fabric-contract-graph-visible",
+    "title": "PolicyFabric: make the contract graph visible",
+    "description": "Data contracts usually fail far from the change that caused them. PolicyFabric came out of wanting the contract graph itself to be the product, not a hidden implementation detail.",
+    "date": "2026-08-05",
+    "updated": null,
+    "tags": [
+      "Developer Tools",
+      "Data Engineering",
+      "Visualization",
+      "TypeScript"
+    ],
+    "category": "Engineering",
+    "featured": false,
+    "image": "/projects/policy-fabric-tile.jpg",
+    "readingTime": 3,
+    "wordCount": 664,
+    "toc": [
+      {
+        "id": "contract-failures-are-topology-problems",
+        "text": "Contract failures are topology problems",
+        "depth": 2
+      },
+      {
+        "id": "why-i-chose-a-graph-over-a-report",
+        "text": "Why I chose a graph over a report",
+        "depth": 2
+      },
+      {
+        "id": "the-full-graph-is-often-the-wrong-view",
+        "text": "The full graph is often the wrong view",
+        "depth": 2
+      },
+      {
+        "id": "enforcement-only-works-when-it-is-cheap-to-obey",
+        "text": "Enforcement only works when it is cheap to obey",
+        "depth": 2
+      },
+      {
+        "id": "what-i-would-push-next",
+        "text": "What I would push next",
+        "depth": 2
+      }
+    ],
+    "html": "<p>Most data contract failures are obvious only after they are expensive.</p>\n<p>A producer changes a field. Nothing breaks where the change happened. Hours later a downstream consumer fails in a different service, with a message that points nowhere near the real cause. By the time somebody traces it back, the team has already spent time debugging the wrong layer.</p>\n<p>PolicyFabric started from wanting that failure mode to be visible earlier and in the right shape.</p>\n<h2 id=\"contract-failures-are-topology-problems\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#contract-failures-are-topology-problems\" aria-label=\"Link to Contract failures are topology problems\">#</a>Contract failures are topology problems</h2>\n<p>The usual tooling around schema changes tends to flatten the problem into logs, reports, or lists of violations. That is useful up to a point, but it loses the most important piece of context: who depends on whom.</p>\n<p>Contract failures are inherently topological. The core question is never just &quot;is this field change breaking.&quot; The real question is &quot;which downstream edges does this break, and how far does the blast radius travel?&quot;</p>\n<p>Once I framed the problem that way, the product direction became clearer. The graph itself had to stop being a hidden implementation detail. It had to become the surface.</p>\n<h2 id=\"why-i-chose-a-graph-over-a-report\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#why-i-chose-a-graph-over-a-report\" aria-label=\"Link to Why I chose a graph over a report\">#</a>Why I chose a graph over a report</h2>\n<p>PolicyFabric parses services, schemas, and producer-consumer relationships into a directed graph, then evaluates changes against that graph before they ship.</p>\n<p>That sounds like an implementation choice, but it was really a UI choice too. I did not want the output to be a block of text somebody needed to interpret after the fact. I wanted the system to answer the downstream question visually:</p>\n<ul>\n<li>what changed</li>\n<li>what depends on it</li>\n<li>where the violation sits</li>\n<li>which path through the system is affected</li>\n</ul>\n<p>The visual layer is the difference between &quot;something somewhere might break&quot; and &quot;this edge here is the problem.&quot;</p>\n<h2 id=\"the-full-graph-is-often-the-wrong-view\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#the-full-graph-is-often-the-wrong-view\" aria-label=\"Link to The full graph is often the wrong view\">#</a>The full graph is often the wrong view</h2>\n<p>One challenge showed up quickly: graph interfaces become unreadable faster than people expect.</p>\n<p>Rendering every service and every contract at once sounds comprehensive and often produces a diagram nobody can parse. Past a certain size, the graph stops explaining the system and starts advertising its complexity.</p>\n<p>That is why the more useful view is usually the affected subgraph, not the whole topology. When a change is evaluated, the interesting question is the local consequence set. Collapse everything else and let the reader focus on the edges that matter right now.</p>\n<p>That sounds like a visual convenience. It is actually a correctness feature. A readable warning is more enforceable than a perfect but overwhelming one.</p>\n<h2 id=\"enforcement-only-works-when-it-is-cheap-to-obey\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#enforcement-only-works-when-it-is-cheap-to-obey\" aria-label=\"Link to Enforcement only works when it is cheap to obey\">#</a>Enforcement only works when it is cheap to obey</h2>\n<p>I keep coming back to this idea in developer tools: enforcement is only effective when the cost of compliance stays low.</p>\n<p>If the system catches a breaking contract only after deployment, it is already too late. If it catches the issue earlier but explains it poorly, people work around it instead of trusting it. If it explains the problem clearly at change time, the right fix is usually the easiest fix.</p>\n<p>That is the real value PolicyFabric aims for. Not just detecting breakage, but detecting it early enough and clearly enough that teams can act before the incident exists.</p>\n<h2 id=\"what-i-would-push-next\" class=\"post-h2\"><a class=\"heading-anchor\" href=\"#what-i-would-push-next\" aria-label=\"Link to What I would push next\">#</a>What I would push next</h2>\n<p>If I kept extending this system, I would invest in richer rule authoring and deeper change previews: not just &quot;this breaks,&quot; but &quot;this breaks because this consumer expects this field contract, and here is the exact edge path.&quot;</p>\n<p>I would also keep protecting the same product instinct that shaped the first version: make the architecture legible. Most systems already contain the information you need to reason about contract risk. The problem is that the information is scattered across definitions and repositories and logs.</p>\n<p>PolicyFabric is my attempt to pull that structure into one place and make it visible enough to act on.</p>\n<p>When a tool like this works, the best outcome is boring. The breaking change never ships, the incident never starts, and nobody has to figure out at 2 a.m. which service quietly depended on the field you just renamed.</p>\n",
+    "excerpt": "Most data contract failures are obvious only after they are expensive. A producer changes a field. Nothing breaks where the change happened. Hours later a downstream consumer fails in a different service, with a message that points nowhere near the real cause. By the time somebody traces it back, the team has already spent time debugging the wrong layer. PolicyFabric started from wanting that fail"
+  },
+  {
     "slug": "point-in-time-correctness",
     "title": "Your backtest is lying to you",
     "description": "Point-in-time correctness is the difference between a financial ML pipeline that works and one that only appears to. Here is where the leaks hide and how to design them out.",
@@ -13,7 +201,7 @@
     ],
     "category": "Engineering",
     "featured": true,
-    "image": null,
+    "image": "/projects/fomc-intelligence-tile.jpg",
     "readingTime": 3,
     "wordCount": 753,
     "toc": [

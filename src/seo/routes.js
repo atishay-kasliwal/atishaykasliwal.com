@@ -213,14 +213,13 @@ export const ROUTES = {
     changefreq: 'monthly',
   },
 
-  '/highlights': {
-    path: '/highlights',
-    title: `Live Demos | ${FULL_NAME}`,
-    description: `Interactive demos of systems built by ${FULL_NAME}: FOMC intelligence, legal RAG, in-browser MRI segmentation, and data contract enforcement.`,
-    breadcrumbs: [{ name: 'Demos', path: '/highlights' }],
-    priority: 0.7,
-    changefreq: 'monthly',
-  },
+  /* No '/highlights' entry, deliberately. That index retired into /projects and
+     301s there (public/_redirects). Leaving it here would make the prerenderer
+     emit build/highlights/index.html, and Cloudflare Pages serves a matching
+     static file BEFORE it consults the redirect list — so the dead page would
+     keep answering 200 and the 301 would never fire. The /highlights/:id detail
+     pages are unaffected: they are client-rendered and have no entry here
+     either, resolving through resolveMeta's per-page overrides instead. */
 
   '/404': {
     path: '/404',

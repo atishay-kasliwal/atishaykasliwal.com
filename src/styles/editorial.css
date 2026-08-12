@@ -45,7 +45,9 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 1.5rem;
-  min-height: 380px;
+  /* Sized so both grid rows + the header fit one viewport without scrolling.
+     Card widths (grid-column spans) are unchanged. */
+  min-height: clamp(240px, 34vh, 340px);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
@@ -230,7 +232,7 @@
   .editorial-grid-inner { width: 92vw; }
   .editorial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .editorial-card--wide, .editorial-card--medium { grid-column: span 1; }
-  .editorial-card { min-height: 320px; }
+  .editorial-card { min-height: clamp(220px, 30vh, 300px); }
 }
 
 @media (max-width: 640px) {

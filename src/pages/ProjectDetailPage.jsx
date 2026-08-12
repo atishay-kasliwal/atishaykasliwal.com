@@ -4,7 +4,7 @@ import Seo from '../seo/Seo';
 import { projectSchema, webPageSchema } from '../seo/schema.js';
 import { resolveMeta, seoTitle, seoDescription } from '../seo/routes.js';
 import { Container, Section, Breadcrumbs, Button, TagList, ArrowIcon, ExternalIcon } from '../components/ui';
-import { getProject, PROJECTS } from '../data/projects.js';
+import { getProjectBySlug, getProjects } from '../lib/content/publicContent.js';
 import NotFoundPage from './NotFoundPage';
 import './ProjectDetailPage.css';
 
@@ -18,7 +18,7 @@ import './ProjectDetailPage.css';
  */
 export default function ProjectDetailPage() {
   const { slug } = useParams();
-  const project = getProject(slug);
+  const project = getProjectBySlug(slug);
 
   if (!project) return <NotFoundPage />;
 
@@ -33,7 +33,7 @@ export default function ProjectDetailPage() {
     ],
   });
 
-  const others = PROJECTS.filter((p) => p.slug !== project.slug).slice(0, 3);
+  const others = getProjects().filter((p) => p.slug !== project.slug).slice(0, 3);
 
   return (
     <>

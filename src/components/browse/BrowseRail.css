@@ -1,0 +1,179 @@
+/**
+ * Browse row.
+ *
+ * Full-bleed by design: rows run to the viewport edge so a partially visible
+ * tile signals "there is more this way" without needing a scrollbar. The header
+ * and the track share the same --gutter inset so titles still line up with the
+ * rest of the page's content column.
+ */
+
+/* Rows are one set, not a sequence of sections. The gap only has to separate
+   a shelf from the label of the next one — the track's own block padding and
+   the label's height already read as a break, so the margin can stay small.
+   A larger value made each row look like its own page section. */
+.browse-row {
+  --browse-fade: 3rem;
+  margin-block: var(--s-2);
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+
+.browse-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-inline: var(--browse-inset, var(--gutter));
+  /* The track carries its own top padding for the hover lift, so this only
+     needs to close the remaining gap. Anything more and the label stops
+     reading as attached to the shelf it names. */
+  margin-bottom: var(--s-1);
+}
+
+/* Mono/uppercase rather than a display-serif heading. A row label is a
+   classification, not a statement — it should read like the spec-sheet labels
+   used elsewhere on the site, and it keeps the project titles the largest type
+   in the row. */
+.browse-row__title {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--fg);
+  margin: 0;
+}
+
+.browse-row__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  flex-shrink: 0;
+}
+
+/* Optional per-row link ("All writing"). Sits left of the chevrons so the
+   scroll controls stay in the same place on every row regardless of whether a
+   row has one. */
+.browse-row__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.browse-row__action:hover,
+.browse-row__action:focus-visible {
+  color: var(--accent);
+}
+
+.browse-row__nav {
+  display: flex;
+  gap: var(--s-2);
+  flex-shrink: 0;
+}
+
+.browse-row__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    opacity var(--d-fast) var(--ease-out);
+}
+
+.browse-row__chevron:hover:not(:disabled) {
+  color: var(--fg);
+  border-color: var(--border-accent);
+}
+
+/* Dimmed rather than removed at the ends of the track. A control that vanishes
+   shifts the two beside it, and the pair is a fixed landmark. */
+.browse-row__chevron:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Track ────────────────────────────────────────────────────────────── */
+
+.browse-row__track {
+  display: flex;
+  gap: var(--s-3);
+  margin: 0;
+  padding: var(--s-2) var(--browse-inset, var(--gutter)) var(--s-3);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  /* Matches the track's own inline padding so a snapped tile lands flush with
+     the row title above it instead of hard against the viewport edge. */
+  scroll-padding-inline: var(--browse-inset, var(--gutter));
+
+  /* overflow-x:auto forces overflow-y to auto as well, so the -4px hover lift
+     on a tile would be clipped or would spawn a vertical scrollbar. The block
+     padding is the room that lift moves into. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.browse-row__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Edge fades, applied only on the side that actually has more content — a
+   permanent fade on both edges would imply scrollable content at the start of
+   a row that does not scroll at all. */
+.browse-row__track[data-overflow-left] {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--browse-fade));
+}
+
+.browse-row__track[data-overflow-right] {
+  mask-image: linear-gradient(
+    to left,
+    transparent 0,
+    #000 var(--browse-fade)
+  );
+}
+
+.browse-row__track[data-overflow-left][data-overflow-right] {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--browse-fade),
+    #000 calc(100% - var(--browse-fade)),
+    transparent 100%
+  );
+}
+
+/* Touch: swipe is the affordance, so the chevrons are redundant chrome that
+   also costs a tap target's worth of header. The edge fade still signals that
+   the row continues. Snapping goes too — it fights momentum scrolling on iOS
+   when tiles are narrower than the viewport. */
+@media (hover: none) {
+  .browse-row__nav {
+    display: none;
+  }
+
+  .browse-row__track {
+    scroll-snap-type: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .browse-row__track {
+    scroll-behavior: auto;
+  }
+}

@@ -202,26 +202,42 @@
   background: rgba(139, 92, 246, 0.05);
 }
 
+/**
+ * Height comes down, width is untouched.
+ *
+ * There are two of these plates now rather than one, so the column's vertical
+ * budget is split — the padding, the title size, and the gaps between the three
+ * text elements are all pulled in. Nothing here touches the grid columns, so the
+ * plate stays exactly as wide as it was.
+ */
 .hsp-featured-text {
-  padding: 1.1rem 1.15rem 1.15rem;
+  padding: 0.85rem 1rem 0.9rem;
   min-width: 0;
 }
 
 .hsp-featured-title {
-  margin: 0.55rem 0 0.5rem;
+  margin: 0.35rem 0 0.3rem;
   font-family: var(--font-display);
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   font-weight: 400;
   line-height: 1;
   color: var(--spec-ink);
 }
 
+/* Clamped at three lines so the two plates stay the same height even if one
+   description is edited longer than the other — with align-items: stretch, a
+   taller text column would silently stretch its screenshot to match. */
 .hsp-featured-desc {
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.7rem;
   font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
-  line-height: 1.6;
+  font-size: 0.75rem;
+  line-height: 1.5;
   color: var(--spec-ink-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .hsp-featured-cta {
@@ -241,11 +257,24 @@
 
 .hsp-featured:hover .hsp-featured-cta svg { transform: translateX(4px); }
 
+/**
+ * The art dissolves into the plate rather than butting against a rule.
+ *
+ * A hard border plus a full-opacity edge made the image read as pasted on top
+ * of the panel — fine for the FOMC screenshot, which is dark enough to sit down
+ * on its own, and obvious for the generated MRI plate, which carries a bright
+ * accent glow. The mask fades the left edge into the text column so both blend
+ * the same way regardless of how bright the source happens to be.
+ *
+ * The border goes with it: a crisp 1px rule beside a fading image contradicts
+ * itself, and the fade already reads as the boundary.
+ */
 .hsp-featured-shot {
   position: relative;
   overflow: hidden;
-  border-left: 1px solid var(--spec-line);
   background: rgba(0, 0, 0, 0.4);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 42%);
+  mask-image: linear-gradient(to right, transparent 0, #000 42%);
 }
 
 .hsp-featured-shot img {
@@ -255,6 +284,9 @@
   object-fit: cover;
   object-position: 0 0;
   opacity: 0.55;
+  /* Generated plates run hotter than screenshots; pulling saturation and
+     brightness down puts both sources in the same register. */
+  filter: saturate(0.8) brightness(0.88);
   transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -287,8 +319,11 @@
 @media (max-width: 1180px) {
   .hsp-node-name { font-size: 0.6rem; }
   .hsp-node-meta { font-size: 0.52rem; }
-  .hsp-featured-title { font-size: 1.5rem; }
-  .hsp-featured-desc { font-size: 0.74rem; }
+  /* Below the base 1.4rem, not above it — this used to raise the title to
+     1.5rem on narrower screens, which undid the height reduction exactly where
+     there is least room for it. */
+  .hsp-featured-title { font-size: 1.28rem; }
+  .hsp-featured-desc { font-size: 0.72rem; }
 }
 
 /* Below the two-column breakpoint the panel is full width, so the shot can go */

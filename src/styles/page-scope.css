@@ -155,15 +155,25 @@
 
 /* The site's shared heading gradient. Applied to page titles and section
    titles only — the same places the landing page uses it. */
+/**
+ * Page and section headings are plain ink, not a gradient.
+ *
+ * These used to be clipped to a white → indigo → violet gradient. It read as
+ * decoration applied to the most important text on every page, and the violet
+ * end of the ramp measures around 4.1:1 on black — under AA — so the tail of a
+ * long heading was both the least legible part and the part carrying the
+ * emphasis. tokens.css already reserves the accent for fills and small
+ * elements for exactly this reason.
+ *
+ * The accent still appears on these pages, on eyebrows and metadata, where it
+ * is short, deliberate, and sits above the contrast floor.
+ */
 .ak-page .page-header-title,
 .ak-page .section-title,
 .ak-page .cta-title,
 .ak-page .post-title,
 .ak-page .case-title {
-  background: var(--accent-gradient, linear-gradient(120deg, #ffffff 20%, #a5b4fc 55%, #8b5cf6 85%));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--fg);
   width: fit-content;
 }
 

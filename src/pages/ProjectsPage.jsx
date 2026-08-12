@@ -1,119 +1,153 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useCallback, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Seo from '../seo/Seo';
 import { collectionPageSchema } from '../seo/schema.js';
 import { resolveMeta } from '../seo/routes.js';
-import { Container, Section, PageHeader, Tag, TagList, ArrowIcon } from '../components/ui';
-import { PROJECTS, PROJECT_CATEGORIES } from '../data/projects.js';
+import ClientOnly from '../components/ClientOnly';
+import TrailerHero from '../components/browse/TrailerHero';
+import ProjectRow from '../components/browse/ProjectRow';
+import ProjectModal from '../components/browse/ProjectModal';
+import BlogCollage from '../components/browse/BlogCollage';
+import { GITHUB_COLLECTIONS, findProject } from '../data/githubProjects.js';
 import { abs } from '../data/site.js';
+import { trackEvent } from '../lib/analytics';
+import { getProjectCollections, getProjects } from '../lib/content/publicContent.js';
 import './ProjectsPage.css';
 
 /**
- * /projects — case study index with client-side category filtering.
+ * /projects — browse page.
  *
- * The filter is deliberately not routed through the URL. These are five items;
- * a querystring would add history entries and a re-render for no navigational
- * benefit. If the list grows past ~20, revisit that.
+ * Replaces both the old case-study grid here and the retired /highlights index.
+ * The structure is Netflix's because it suits the material: ten-odd systems,
+ * each better shown running than described, where the useful browsing question
+ * is "what kind of thing is this" rather than "what is it called".
+ *
+ * The open overlay lives in the URL as ?p=<slug> rather than in component
+ * state. Three things fall out of that for free: an open project is a
+ * shareable link, Back closes the overlay instead of leaving the page, and a
+ * cold load of ?p=… opens straight onto that project. `replace: true` keeps
+ * opening and closing from stacking history entries — otherwise browsing five
+ * projects means five Backs to leave the page.
+ *
+ * Rows come from COLLECTIONS in the data layer, deliberately not from
+ * PROJECT_CATEGORIES: row membership is editorial and overlapping (a project
+ * can sit in both "Try it live" and "Applied research"), which a category
+ * filter cannot express.
  */
 export default function ProjectsPage() {
   const meta = resolveMeta('/projects');
-  const [filter, setFilter] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const visible = useMemo(
-    () => (filter === 'All' ? PROJECTS : PROJECTS.filter((p) => p.category === filter)),
-    [filter]
+  const activeSlug = searchParams.get('p');
+  /* findProject rather than getProject: a slug in the URL can now name either a
+     curated case study or one of the repo-derived records. */
+  const activeProject = activeSlug ? findProject(activeSlug) : null;
+
+  const openInfo = useCallback(
+    (slug) => {
+      /* Which projects get opened for detail is the useful signal from this
+         page — a click through to a demo is already tracked as a pageview on
+         the destination, but an overlay open never leaves the route. */
+      trackEvent('project_info_open', { project: slug });
+
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set('p', slug);
+          return next;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
+
+  const closeInfo = useCallback(() => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('p');
+        return next;
+      },
+      { replace: true }
+    );
+  }, [setSearchParams]);
+
+  /* Rows are resolved once. An empty row renders nothing (ProjectRow bails on
+     an empty list), so a collection naming projects that do not exist yet is
+     harmless rather than a hole in the page. */
+  const rows = useMemo(
+    () => getProjectCollections().filter((row) => row.projects.length > 0),
+    []
+  );
+
+  const githubRows = useMemo(
+    () => GITHUB_COLLECTIONS.filter((row) => row.projects.length > 0),
+    []
   );
 
   const schema = collectionPageSchema(
     meta,
-    PROJECTS.map((p) => ({ url: abs(`/projects/${p.slug}`), name: p.name }))
+    getProjects().map((p) => ({ url: abs(`/projects/${p.slug}`), name: p.name }))
   );
 
   return (
     <>
       <Seo path="/projects" schema={[schema]} />
 
-      <PageHeader
-        eyebrow="Projects"
-        title="Systems I have designed, shipped, and operated."
-        lede="Each of these is a full case study — the problem, the architecture, the decisions I would defend, and the numbers. Not a screenshot gallery."
-        breadcrumbs={meta.breadcrumbs}
-      />
+      <div className="projects-page">
+        {/* The page's <h1> is visually hidden rather than rendered as a
+            PageHeader above the hero. A hero this size wants to be the first
+            thing on screen, but the document still needs exactly one h1 that
+            states what the page is — the hero's own heading names whichever
+            project happens to be showing, which is not the same claim. */}
+        <h1 className="sr-only">
+          Projects by Atishay Kasliwal — systems designed, shipped, and operated
+        </h1>
 
-      <Section>
-        <Container>
-          <div className="proj-filters" role="group" aria-label="Filter projects by category">
-            <Tag
-              as="button"
-              type="button"
-              active={filter === 'All'}
-              aria-pressed={filter === 'All'}
-              onClick={() => setFilter('All')}
-            >
-              All ({PROJECTS.length})
-            </Tag>
-            {PROJECT_CATEGORIES.map((cat) => {
-              const count = PROJECTS.filter((p) => p.category === cat).length;
-              return (
-                <Tag
-                  key={cat}
-                  as="button"
-                  type="button"
-                  active={filter === cat}
-                  aria-pressed={filter === cat}
-                  onClick={() => setFilter(cat)}
-                >
-                  {cat} ({count})
-                </Tag>
-              );
-            })}
-          </div>
+        <TrailerHero onInfo={openInfo} />
 
-          {/* aria-live so filtering announces the new count to screen readers,
-              which otherwise get no feedback that anything changed. */}
-          <p className="sr-only" role="status" aria-live="polite">
-            Showing {visible.length} of {PROJECTS.length} projects
-          </p>
+        <div className="projects-browse">
+          {rows.map((row) => (
+            <ProjectRow
+              key={row.id}
+              title={row.title}
+              projects={row.projects}
+              onInfo={openInfo}
+            />
+          ))}
 
-          <ul className="proj-grid">
-            {visible.map((p) => (
-              <li key={p.slug} className="proj-card card">
-                <div className="proj-card-head">
-                  <span className="proj-card-cat mono">{p.category}</span>
-                  <span className={`proj-card-status proj-card-status--${p.status.toLowerCase()}`}>
-                    {p.status}
-                  </span>
-                </div>
+          <ProjectRow
+            title="Everything"
+            projects={getProjects()}
+            onInfo={openInfo}
+          />
 
-                <h2 className="proj-card-title">
-                  <Link to={`/projects/${p.slug}`} className="card-link">
-                    {p.name}
-                  </Link>
-                </h2>
+          {/* Rows built from the GitHub snapshot. They sit BELOW the curated
+              rows on purpose: a repo card carries a description and a language,
+              while the rows above carry a case study each, and the page should
+              lead with the deeper material. See src/data/githubProjects.js. */}
+          {githubRows.map((row) => (
+            <ProjectRow
+              key={row.id}
+              title={row.title}
+              projects={row.projects}
+              onInfo={openInfo}
+            />
+          ))}
 
-                <p className="proj-card-tagline">{p.tagline}</p>
+          <BlogCollage />
+        </div>
 
-                {p.metrics?.length > 0 && (
-                  <dl className="proj-card-metrics">
-                    {p.metrics.slice(0, 3).map((m) => (
-                      <div key={m.label}>
-                        <dd className="proj-card-metric-value tabular">{m.value}</dd>
-                        <dt className="proj-card-metric-label">{m.label}</dt>
-                      </div>
-                    ))}
-                  </dl>
-                )}
-
-                <TagList items={p.stack.slice(0, 5)} className="proj-card-stack" />
-
-                <span className="proj-card-cta" aria-hidden="true">
-                  Read case study <ArrowIcon />
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </Section>
+        {/* Gated behind ClientOnly because <dialog>.showModal() does not exist
+            in Node, and an overlay has no business in the prerendered HTML —
+            the crawler should see the browse page, not a detail panel. */}
+        <ClientOnly>
+          {activeProject ? (
+            <ProjectModal project={activeProject} onClose={closeInfo} />
+          ) : null}
+        </ClientOnly>
+      </div>
     </>
   );
 }

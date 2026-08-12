@@ -1,5 +1,6 @@
 import React from 'react';
 import SiteHeader from '../SiteHeader';
+import PageTone from './PageTone';
 import '../styles/page-scope.css';
 
 /**
@@ -17,9 +18,10 @@ import '../styles/page-scope.css';
  * Removing this wrapper would let the new stylesheet's element selectors leak
  * site-wide, which is precisely what it exists to prevent.
  */
-export default function PageShell({ children }) {
+export default function PageShell({ children, tone = null }) {
   return (
-    <div className="ak-page">
+    <div className={`ak-page${tone ? ` premium-page premium-page--${tone}` : ''}`}>
+      {tone ? <PageTone variant={tone} /> : null}
       <SiteHeader />
       {children}
     </div>

@@ -1,0 +1,316 @@
+/* ── Profile dossier ─────────────────────────────────────────────────────
+   A calmer profile surface: the portrait has a dedicated column, the copy is
+   shorter, and the proof/status line is integrated into the card rather than
+   floating on top of it. */
+
+.pp-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+  background:
+    radial-gradient(circle at 14% 18%, rgba(165, 180, 252, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02) 100%);
+}
+
+.pp-card .spec-brackets {
+  inset: 10px;
+}
+
+.pp-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(220px, 0.82fr);
+  align-items: stretch;
+}
+
+.pp-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+  padding: clamp(1.45rem, 2.6vw, 1.9rem);
+}
+
+.pp-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.pp-doc-mark {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--accent-soft, #a5b4fc);
+}
+
+.pp-role {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.54) !important;
+}
+
+.pp-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  margin: 0.1rem 0 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(2.2rem, 3.9vw, 3.1rem);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  color: var(--fg, #f2f4f7);
+}
+
+.pp-name span:last-child {
+  color: rgba(242, 244, 247, 0.58);
+}
+
+.pp-summary,
+.pp-current {
+  margin: 0;
+  max-width: 31ch;
+}
+
+.pp-summary {
+  font-size: 0.95rem;
+  line-height: 1.64;
+  color: var(--fg-muted, #9aa1ab);
+}
+
+.pp-current {
+  font-size: 0.86rem;
+  line-height: 1.58;
+  color: rgba(242, 244, 247, 0.74);
+}
+
+.pp-current strong {
+  color: var(--fg, #f2f4f7);
+  font-weight: 500;
+}
+
+.pp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.25rem;
+}
+
+.pp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.55rem;
+  padding: 0.68rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.pp-btn:hover,
+.pp-btn:focus-visible {
+  transform: translateY(-1px);
+}
+
+.pp-btn--primary {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.95);
+  color: #0a0c0e;
+}
+
+.pp-btn--secondary {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--fg, #f2f4f7);
+}
+
+.pp-btn--secondary:hover,
+.pp-btn--secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.pp-photo {
+  position: relative;
+  min-height: 350px;
+  margin: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pp-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(1) contrast(1.03);
+}
+
+.pp-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10, 12, 14, 0.2) 0%, rgba(10, 12, 14, 0.04) 26%, rgba(10, 12, 14, 0.3) 100%),
+    linear-gradient(180deg, rgba(10, 12, 14, 0.03), rgba(10, 12, 14, 0.4));
+}
+
+.pp-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.1rem clamp(1.45rem, 2.6vw, 1.9rem) 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.pp-metrics {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0;
+}
+
+.pp-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  min-width: 0;
+}
+
+.pp-metric-value {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.8vw, 2.05rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--fg, #f2f4f7);
+}
+
+.pp-metric-label {
+  margin: 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.64rem;
+  line-height: 1.55;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-subtle, #717983);
+}
+
+.pp-status {
+  width: 100%;
+  margin: 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pp-status-top,
+.pp-status-sub {
+  margin: 0;
+}
+
+.pp-status-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-subtle, #717983);
+}
+
+.pp-status-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.pp-status-dot.is-open {
+  background: var(--ok-500, #059669);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.16);
+}
+
+.pp-status-sub {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--fg-muted, #9aa1ab);
+}
+
+@media (max-width: 1180px) {
+  .pp-main {
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 0.72fr);
+  }
+
+  .pp-summary,
+  .pp-current {
+    max-width: 29ch;
+  }
+}
+
+@media (max-width: 960px) {
+  .pp-main {
+    grid-template-columns: 1fr;
+  }
+
+  .pp-photo {
+    order: -1;
+    min-height: 280px;
+    border-left: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .pp-footer {
+    align-items: flex-start;
+  }
+
+  .pp-status {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .pp-copy {
+    padding: 1.2rem;
+  }
+
+  .pp-name {
+    font-size: clamp(2rem, 12vw, 2.8rem);
+  }
+
+  .pp-summary,
+  .pp-current {
+    max-width: none;
+  }
+
+  .pp-actions {
+    flex-direction: column;
+  }
+
+  .pp-btn {
+    width: 100%;
+  }
+
+  .pp-footer {
+    padding: 1rem 1.2rem 1.15rem;
+  }
+
+  .pp-metrics {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+}

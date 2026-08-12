@@ -9,62 +9,11 @@ import SkillsSection from '../components/SkillsSection';
 import AboutSection from '../components/AboutSection';
 import HeroSystemPanel from '../components/HeroSystemPanel';
 import useHeroPointer from '../lib/useHeroPointer';
+import { getLandingTestimonials } from '../lib/content/publicContent.js';
 import '../styles/hero.css';
 import '../styles/editorial.css';
 import '../styles/testimonials.css';
 import '../styles/buttons.css';
-
-import ankitPhoto from '../assets/Ankit Jain.jpeg';
-import wencuiPhoto from '../assets/Prof.jpeg';
-import nehaPhoto from '../assets/Neha gupta.jpeg';
-import goldyPhoto from '../assets/goldey.jpeg';
-import daMaPhoto from '../assets/da ma.jpeg';
-import gunjanPhoto from '../assets/gunjanjain.jpg';
-
-const testimonials = [
-  {
-    text: 'Atishay delivered our project ahead of schedule and exceeded expectations. His technical skills made him invaluable.',
-    name: 'Ankit Jain⭐⭐⭐⭐⭐',
-    company: 'Accolite Digital',
-    post: 'Technical Director',
-    photo: ankitPhoto,
-  },
-  {
-    text: 'Atishay developed an NLP pipeline and designed an LLM-based trading simulation with clear visualizations.',
-    name: 'Wencui Han⭐⭐⭐⭐⭐',
-    company: 'Stony Brook University',
-    post: 'Professor',
-    photo: wencuiPhoto,
-  },
-  {
-    text: 'Creative and reliable, Atishay brought fresh ideas to our projects and fostered a collaborative environment.',
-    name: 'Neha Gupta⭐⭐⭐⭐⭐',
-    company: 'Symbiosis University',
-    post: 'Director SCSIT',
-    photo: nehaPhoto,
-  },
-  {
-    text: 'Atishay delivered our product on time with perfection. His technical expertise exceeded our expectations.',
-    name: 'Gunjan Jain⭐⭐⭐⭐⭐',
-    company: 'Brains and Taxes',
-    post: 'Private Limited',
-    photo: gunjanPhoto,
-  },
-  {
-    text: "Atishay's ML expertise was instrumental in our research. His technical skills made our project a huge success.",
-    name: 'Dr. Goldy Khanna⭐⭐⭐⭐⭐',
-    company: 'Wake Forest University',
-    post: 'Cerebrovascular & Skull Base Neurosurgeon',
-    photo: goldyPhoto,
-  },
-  {
-    text: 'Working with Atishay was a pleasure. His innovative approach made him exceptional.',
-    name: 'Dr. Da Ma⭐⭐⭐⭐⭐',
-    company: 'Wake Forest University',
-    post: 'Assistant Professor',
-    photo: daMaPhoto,
-  },
-];
 
 /* Every figure below traces to a specific line on the résumé. Anything that
    couldn't be sourced (paper counts, project tallies) is deliberately absent —
@@ -85,6 +34,7 @@ const CURRENTLY = [
 ];
 
 function HomePage() {
+  const testimonials = getLandingTestimonials();
   /* Seeded with the desktop width rather than window.innerWidth, because this
      component is also rendered in Node by the build-time prerenderer where
      there is no window. Reading it directly threw and cost the homepage its
@@ -159,7 +109,7 @@ function HomePage() {
 
                 <div className="spec-cta-row" translate="no">
                   <Link
-                    to="/highlights"
+                    to="/projects"
                     className="spec-btn spec-btn--primary"
                     data-cta-position="hero_view_projects"
                   >
@@ -199,7 +149,7 @@ function HomePage() {
                 </dl>
               </div>
 
-              {/* ── Right: the system, not a decoration ── */}
+              {/* ── Right: the featured project ── */}
               <HeroSystemPanel />
             </div>
 
@@ -407,7 +357,7 @@ function HomePage() {
             <h2 className="testimonials-title" translate="no">Testimonials</h2>
             <div className="testimonials-grid" translate="no">
               {visibleTestimonials.map((t, idx) => {
-                const displayName = String(t.name || '').replace('⭐⭐⭐⭐⭐', '').trim();
+                const displayName = String(t.name || '').trim();
                 return (
                   <article className="testimonial-card" key={idx} translate="no">
                     <span className="spec-brackets" aria-hidden="true" />
@@ -415,7 +365,7 @@ function HomePage() {
                       <div className="testimonial-card__person" translate="no">
                         <span className="testimonial-card__avatar-ring" aria-hidden="true" translate="no">
                           <img
-                            src={t.photo}
+                            src={t.avatar}
                             alt={displayName}
                             className="testimonial-card__avatar"
                             loading="lazy"
@@ -426,7 +376,7 @@ function HomePage() {
                         <div className="testimonial-card__meta" translate="no">
                           <div className="testimonial-card__name" translate="no">{displayName}</div>
                           <div className="testimonial-card__role" translate="no">
-                            {t.company} · {t.post}
+                            {t.org} · {t.role}
                           </div>
                         </div>
                       </div>
@@ -434,7 +384,7 @@ function HomePage() {
                         <span aria-hidden="true">★★★★★</span>
                       </div>
                     </header>
-                    <p className="testimonial-card__quote" translate="no">{t.text}</p>
+                    <p className="testimonial-card__quote" translate="no">{t.quote}</p>
                   </article>
                 );
               })}
