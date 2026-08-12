@@ -296,6 +296,10 @@ async function ensureDir(p) {
   await fs.mkdir(p, { recursive: true });
 }
 
+async function readJsonFile(file) {
+  return JSON.parse(await fs.readFile(file, 'utf-8'));
+}
+
 async function main() {
   try {
     await fs.access(SOURCE);
@@ -648,9 +652,7 @@ async function main() {
      Read defensively — the slug rule here must match the one in
      src/data/githubProjects.js, since that is what the <img src> points at. */
   try {
-    const { default: gh } = await import('../src/data/generated/github.json', {
-      with: { type: 'json' },
-    });
+    const gh = await readJsonFile(path.join(ROOT, 'src', 'data', 'generated', 'github.json'));
 
     const repos = gh.repos || [];
     if (repos.length) {
@@ -721,9 +723,7 @@ async function main() {
      the file present) fills them in. A post that sets `image:` in its
      frontmatter overrides all of this. */
   try {
-    const { default: posts } = await import('../src/content/generated/posts.json', {
-      with: { type: 'json' },
-    });
+    const posts = await readJsonFile(path.join(ROOT, 'src', 'content', 'generated', 'posts.json'));
 
     await ensureDir(path.join(PUBLIC, 'blog'));
 
