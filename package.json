@@ -30,10 +30,10 @@
     "prerender": "node scripts/prerender.mjs",
     "feeds": "node scripts/generate-feeds.mjs",
     "check:assets": "node scripts/check-assets.mjs",
-    "postbuild": "(cp public/_redirects build/_redirects 2>/dev/null || true) && (cp public/_headers build/_headers 2>/dev/null || true)",
+    "finalize": "node scripts/finalize-build.mjs",
     "images": "node scripts/build-images.mjs",
     "video": "node scripts/build-video.mjs",
-    "build": "npm run content && npm run github && npm run images && npm run gallery && npm run build:client && npm run build:ssr && npm run prerender && npm run feeds && npm run postbuild && npm run check:assets",
+    "build": "npm run content && npm run github && npm run images && npm run gallery && npm run build:client && npm run build:ssr && npm run prerender && npm run feeds && npm run finalize && npm run check:assets",
     "preview": "node scripts/preview.mjs",
     "format": "prettier --write src/**/*.{js,jsx,css}",
     "gallery": "node scripts/build-gallery-dims.mjs"
