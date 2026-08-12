@@ -111,3 +111,8 @@ ADD_CUSTOM_DOMAIN.md
 
 # Local audit output
 /scripts/audit/*.json
+
+# Raw screen recordings, the input to scripts/build-video.mjs. These are large
+# and git cannot diff them; only the transcoded derivatives in public/video/
+# are committed, the same arrangement as the loose source photos above.
+/media/raw/

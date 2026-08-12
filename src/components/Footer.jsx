@@ -1,18 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FinalProductGrid from './FinalProductGrid';
 import './Footer.css';
 
 function Footer() {
   return (
     <footer className="site-footer spec-footer" translate="no">
-      {/* the pins sit on top of the ghosted wordmark, both inside one band so
-          the mark stays centred on them at any width */}
+      {/* The band is the ghosted wordmark alone now. It used to also carry ten
+          lapel-pin images layered over the mark — the only saturated colour on
+          a site that is otherwise monochrome plus one indigo, and they sat
+          directly on top of the wordmark so neither read cleanly.
+          FinalProductGrid.jsx is still in the tree if they are ever wanted
+          back. */}
       <div className="spec-footer-band" translate="no">
         <span className="spec-footer-wordmark" aria-hidden="true" translate="no">
           Atishay Kasliwal
         </span>
-        <FinalProductGrid />
       </div>
 
       {/* Sitemap row. The header carries only five items, which left several
@@ -26,8 +28,6 @@ function Footer() {
           Contact
         </Link>
         <Link to="/projects" className="spec-label">Projects</Link>
-        <Link to="/highlights" className="spec-label">Live demos</Link>
-        <Link to="/atriveo" className="spec-label">Atriveo</Link>
         <Link to="/experience" className="spec-label">Experience</Link>
         <Link to="/open-source" className="spec-label">Open source</Link>
         <Link to="/blog" className="spec-label">Writing</Link>

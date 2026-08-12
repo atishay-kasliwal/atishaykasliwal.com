@@ -1,0 +1,326 @@
+/**
+ * Rotating spotlight.
+ *
+ * Full-bleed and edge-to-edge, but the lockup stays on the same left margin as
+ * every other page's content column so the hero reads as the top of this
+ * document rather than as an embedded player.
+ */
+
+.trailer-hero {
+  position: relative;
+  /* svh, not vh: on mobile Safari, vh is the tallest possible viewport, so a
+     100vh hero is cropped by the URL bar until the user scrolls. */
+  min-height: clamp(30rem, 74svh, 46rem);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  isolation: isolate;
+}
+
+/* ── Media stack ──────────────────────────────────────────────────────── */
+
+.trailer-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-sunken);
+}
+
+.trailer-hero__poster,
+.trailer-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity var(--d-slower) var(--ease-out);
+}
+
+.trailer-hero__poster.is-active,
+.trailer-hero__video.is-ready {
+  opacity: 1;
+}
+
+/* Video above posters: when it is ready it should cover whichever poster is
+   showing, and when it is not it should be invisible rather than stacked.
+
+   Only a light touch here. An earlier brightness(0.5) plus a full-width scrim
+   meant the recording read as a dark plate rather than as footage — the whole
+   point of the hero is to show the thing running, and dimming it to near-black
+   throws that away to solve a contrast problem that only exists behind the
+   text. */
+.trailer-hero__video {
+  z-index: 1;
+  filter: brightness(0.85) saturate(0.95);
+}
+
+/* Contrast is bought locally, not globally.
+ *
+ * The vertical layer only seats the hero into the page below it and fades out
+ * by the upper third. The horizontal layer is a pocket behind the lockup on
+ * the left; by ~65% across it is fully transparent, so the right side of the
+ * frame — where the recording actually shows the product — is left alone.
+ *
+ * The earlier version washed the entire hero to buy legibility for text
+ * occupying a quarter of it, which is what made the page look like it had a
+ * black sheet over it. */
+.trailer-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(
+      to top,
+      var(--bg) 0%,
+      rgba(0, 0, 0, 0.72) 14%,
+      rgba(0, 0, 0, 0.22) 40%,
+      rgba(0, 0, 0, 0) 68%
+    ),
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.52) 26%,
+      rgba(0, 0, 0, 0.14) 48%,
+      rgba(0, 0, 0, 0) 66%
+    );
+}
+
+/* ── Content ──────────────────────────────────────────────────────────── */
+
+.trailer-hero__inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-6);
+  padding: var(--s-16) var(--browse-inset, var(--gutter)) var(--s-10);
+}
+
+.trailer-hero__lockup {
+  max-width: 44rem;
+  min-width: 0;
+}
+
+.trailer-hero__eyebrow {
+  margin: 0 0 var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.trailer-hero__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--t-4xl);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tighter);
+  color: var(--fg);
+}
+
+.trailer-hero__tagline {
+  margin: var(--s-4) 0 0;
+  font-size: var(--t-lg);
+  line-height: var(--lh-normal);
+  color: var(--fg-muted);
+  max-width: 38ch;
+}
+
+.trailer-hero__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-8);
+  margin: var(--s-6) 0 0;
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--border);
+}
+
+.trailer-hero__metrics dd {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  line-height: 1;
+  color: var(--fg);
+}
+
+.trailer-hero__metrics dt {
+  margin-top: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.trailer-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-8);
+}
+
+.trailer-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0.7em 1.2em;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition:
+    background-color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out),
+    color var(--d-fast) var(--ease-out);
+}
+
+.trailer-hero__cta:hover,
+.trailer-hero__cta:focus-visible {
+  background: var(--surface-active);
+  border-color: var(--border-accent);
+}
+
+.trailer-hero__cta--primary {
+  background: var(--accent-solid, #8b5cf6);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.trailer-hero__cta--primary:hover,
+.trailer-hero__cta--primary:focus-visible {
+  background: var(--accent-hover, #ffffff);
+  color: var(--fg-inverse);
+  border-color: transparent;
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────── */
+
+.trailer-hero__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  flex-shrink: 0;
+  padding-bottom: var(--s-2);
+}
+
+.trailer-hero__pause {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-strong);
+  color: var(--fg-muted);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition:
+    color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out);
+}
+
+.trailer-hero__pause:hover,
+.trailer-hero__pause:focus-visible {
+  color: var(--fg);
+  border-color: var(--border-accent);
+}
+
+.trailer-hero__ticks {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The visible mark is 2px tall but the button is 44px wide and tall enough to
+   hit — a 2px target is unusable on touch and barely usable with a mouse. */
+.trailer-hero__tick {
+  display: block;
+  width: 2.25rem;
+  height: 1.5rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.trailer-hero__tick::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 2px;
+  background: var(--border-strong);
+  transition: background-color var(--d-fast) var(--ease-out);
+}
+
+.trailer-hero__tick:hover::after {
+  background: var(--fg-muted);
+}
+
+.trailer-hero__tick.is-active::after {
+  background: var(--accent);
+}
+
+/* ── Narrow ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 860px) {
+  .trailer-hero {
+    min-height: clamp(26rem, 64svh, 34rem);
+  }
+
+  .trailer-hero__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-6);
+    padding-top: var(--s-12);
+  }
+
+  /* The horizontal pocket is pointless here: the lockup spans the full width,
+     so there is no clear right-hand side to protect. A vertical wash is the
+     only axis that separates text from footage at this size — heavier than on
+     desktop out of necessity, but still fading out at the top so the recording
+     is visible above the lockup. */
+  .trailer-hero__scrim {
+    background: linear-gradient(
+      to top,
+      var(--bg) 0%,
+      rgba(0, 0, 0, 0.88) 30%,
+      rgba(0, 0, 0, 0.55) 62%,
+      rgba(0, 0, 0, 0.25) 100%
+    );
+  }
+
+  .trailer-hero__metrics {
+    gap: var(--s-6);
+  }
+
+  /* Four metrics wrap to two cramped rows under a narrow lockup and push the
+     buttons off screen. The overlay carries the full set. */
+  .trailer-hero__metrics div:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trailer-hero__poster,
+  .trailer-hero__video {
+    transition: none;
+  }
+}

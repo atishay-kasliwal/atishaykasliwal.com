@@ -1,0 +1,250 @@
+.ati-wrap {
+  width: 100%;
+  padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 5vw, 3rem) 0;
+}
+
+.ati-bridge {
+  display: block;
+  margin-bottom: clamp(0.5rem, 1.2vw, 0.75rem);
+}
+
+.ati-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+}
+
+.ati-doc-mark {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--accent-soft, #a5b4fc);
+}
+
+.ati-title {
+  margin: 0;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: var(--ls-tight, -0.022em);
+  color: var(--fg, #f2f4f7);
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+.ati-rows {
+  border-top: none;
+}
+
+/* Deliberately tight. The three rows read as one contact sheet, so the gap
+   between them is a rule plus a hairline of air rather than a section break —
+   the row plate ("02 / FILMS") already says a new row started. */
+.ati-row {
+  display: block;
+  padding: 0.5rem 0 0.7rem;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+}
+
+.ati-row__head {
+  min-width: 0;
+  margin-bottom: 0.4rem;
+}
+
+.ati-row__plate {
+  margin: 0;
+  color: var(--accent, #a5b4fc) !important;
+}
+
+.ati-row__blurb {
+  margin: 0.45rem 0 0;
+  max-width: none;
+  font-size: 0.82rem;
+  line-height: 1.58;
+  color: var(--fg-muted, #9aa1ab);
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+.ati-row__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Seven across rather than five: a 2:3 poster is far narrower than a square at
+   the same column width, so five of them would be tall columns with dead space
+   either side. Seven keeps each poster near the width a sleeve had. */
+.ati-row--poster .ati-row__grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.ati-card {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+    rgba(10, 12, 14, 0.78);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  overflow: hidden;
+  transition:
+    transform var(--d-fast, 160ms) var(--ease-out, ease),
+    border-color var(--d-fast, 160ms) var(--ease-out, ease);
+}
+
+.ati-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-accent, rgba(165, 180, 252, 0.42));
+}
+
+/* 5:4 is the photography default, kept for any row that declares no shape.
+   The two real shapes override it below: sleeve art is square by definition and
+   a theatrical one-sheet is 2:3, so cropping either to 5:4 would cut the artwork
+   rather than frame it. */
+.ati-card__media {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  background: var(--bg-raised, #121519);
+}
+
+.ati-row--square .ati-card__media {
+  aspect-ratio: 1 / 1;
+}
+
+.ati-row--poster .ati-card__media {
+  aspect-ratio: 2 / 3;
+}
+
+.ati-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transition:
+    opacity var(--d-fast, 160ms) var(--ease-out, ease),
+    transform var(--d-slow, 420ms) var(--ease-out, ease);
+}
+
+.ati-card:hover .ati-card__media img {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.ati-card__index {
+  position: absolute;
+  left: 0.55rem;
+  bottom: 0.55rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.ati-card__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  padding: 0.72rem 0.72rem 0.78rem;
+}
+
+.ati-card__title {
+  display: block;
+  font-size: 0.88rem;
+  line-height: 1.36;
+  color: var(--fg, #f2f4f7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ati-card__meta {
+  display: block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.6rem;
+  line-height: 1.55;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-subtle, rgba(255, 255, 255, 0.5));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A poster column is ~180px, which is not enough for a nowrap credit line —
+   "Christopher Nolan / 2014" was ellipsing to "Christopher Nolan / 20…".
+   Director names vary far too much in length to solve by shrinking type, so the
+   credit wraps here instead of truncating. The title above it still ellipses:
+   it is one line by design and a film title is recognisable from its start. */
+.ati-row--poster .ati-card__meta {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 1260px) {
+  .ati-row__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Posters shed one column at a time rather than dropping straight to three —
+     they are narrow enough that five still fit comfortably here. */
+  .ati-row--poster .ati-row__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .ati-title {
+    white-space: normal;
+    text-wrap: balance;
+  }
+}
+
+@media (max-width: 760px) {
+  .ati-wrap {
+    padding-top: 1.25rem;
+  }
+
+  .ati-row__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .ati-row__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* A poster at full phone width is enormous; two keeps the row scannable. */
+  .ati-row--poster .ati-row__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ati-card,
+  .ati-card__media img {
+    transition: none;
+  }
+
+  .ati-card:hover {
+    transform: none;
+  }
+
+  .ati-card:hover .ati-card__media img {
+    transform: none;
+  }
+}

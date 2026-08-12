@@ -1,118 +1,408 @@
-.blog-controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-5);
-  margin-bottom: var(--s-6);
-  padding-bottom: var(--s-4);
-  border-bottom: 1px solid var(--border);
+/**
+ * /blog — research-journal listing.
+ *
+ * Palette note: the site's existing tokens already sit where this design wants
+ * to be — --fg is a warm ivory (#ece9e4) and --accent is a muted periwinkle
+ * (#a5b4fc). The only additions are midnight-navy surfaces, which are mixed
+ * locally rather than added to tokens.css because nothing outside this page
+ * uses them.
+ *
+ * Everything is scoped under .journal so none of it reaches the article view or
+ * the writing row on /projects, both of which have their own treatments.
+ */
+
+.journal {
+  /* Barely off black, cooled toward navy. Card fills need to read as raised
+     without becoming grey — at this value the lift is visible against #000 and
+     still reads as the same family of dark. */
+  --j-surface: #0a0d16;
+  --j-surface-hover: #0e1220;
+
+  --j-line: rgba(255, 255, 255, 0.085);
+  --j-line-bright: rgba(165, 180, 252, 0.34);
+
+  --j-ink: var(--fg);
+  --j-ink-muted: var(--fg-muted);
+  --j-ink-faint: var(--fg-subtle);
+  --j-accent: var(--accent);
+
+  padding-bottom: clamp(4rem, 8vw, 7rem);
 }
 
-.blog-search {
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+
+/* Compact on purpose: the brief is that cards are visible without scrolling,
+   so the hero is sized by its content plus a fixed rhythm rather than by a
+   viewport fraction. */
+.journal-hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.5rem, 4.5vw, 4rem) clamp(2rem, 3.5vw, 3rem);
+  overflow: hidden;
+}
+
+/* Technical rule grid. Masked to fade out before the text starts so it reads
+   as paper texture rather than as a table behind the words. */
+.journal-hero__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.038) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.038) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.35) 60%, transparent 100%);
+}
+
+/* Concentric arcs, right of centre. repeating-radial-gradient draws hairline
+   rings with no markup and no image request; the ring pitch is deliberately
+   wide so this stays an instrument detail rather than a pattern. */
+.journal-hero__rings {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: repeating-radial-gradient(
+    circle at 84% 34%,
+    transparent 0 96px,
+    rgba(165, 180, 252, 0.075) 96px 97px
+  );
+  mask-image: radial-gradient(circle at 84% 34%, #000 0%, transparent 62%);
+  pointer-events: none;
+}
+
+.journal-hero__label {
+  margin: var(--s-5) 0 var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--j-accent);
+}
+
+/**
+ * Sized to hold 63 characters on one line inside the wide container.
+ *
+ * The vw term is what does that: at 1360px it resolves to ~38px and the line
+ * measures ~1150px against a 1224px container; at 1500px and up it caps at
+ * 42px. `nowrap` is applied only from 1360px, so narrower screens wrap normally
+ * instead of overflowing — which is why the rule is a min-width query and not a
+ * blanket `white-space: nowrap`.
+ */
+.journal-hero__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 2.8vw, 2.625rem);
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: var(--j-ink);
+  max-width: none;
+}
+
+@media (min-width: 1360px) {
+  .journal-hero__title {
+    white-space: nowrap;
+  }
+}
+
+.journal-hero__lede {
+  margin: var(--s-5) 0 0;
+  max-width: 58ch;
+  font-size: var(--t-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--j-ink-muted);
+}
+
+/* ── Section bar ──────────────────────────────────────────────────────── */
+
+.journal-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-top: var(--s-5);
+  padding-bottom: var(--s-5);
+  border-top: 1px solid var(--j-line);
+}
+
+.journal-bar__title,
+.journal-bar__count {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.journal-bar__title {
+  color: var(--j-ink);
+}
+
+.journal-bar__count {
+  color: var(--j-ink-faint);
+}
+
+/* ── Controls (rendered only past the thresholds in BlogPage.jsx) ─────── */
+
+.journal-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+}
+
+.journal-search {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  padding: var(--s-3) var(--s-4);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  background: var(--bg-raised);
-  color: var(--fg-subtle);
-  max-width: 26rem;
+  padding: var(--s-2) 0;
+  border-bottom: 1px solid var(--j-line);
+  color: var(--j-ink-faint);
+  min-width: 16rem;
   transition: border-color var(--d-fast) var(--ease-out);
 }
 
-.blog-search:focus-within {
-  border-color: var(--accent);
+.journal-search:focus-within {
+  border-color: var(--j-accent);
 }
 
-.blog-search input {
+.journal-search input {
   flex: 1;
   border: none;
   background: none;
   outline: none;
   font-size: var(--t-sm);
-  color: var(--fg);
+  color: var(--j-ink);
   min-width: 0;
 }
 
-/* Safari renders its own clear button on type=search; removing it keeps the
-   control consistent across browsers. */
-.blog-search input::-webkit-search-cancel-button {
+.journal-search input::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
 
-.blog-tags {
+.journal-tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-2);
 }
 
-.blog-list {
-  list-style: none;
-  padding: 0;
+/* ── Grid ─────────────────────────────────────────────────────────────── */
+
+/**
+ * Three across on desktop, two on tablet, one on phone — fixed counts rather
+ * than auto-fill, because the brief specifies the counts and auto-fill would
+ * put four across on a 1600px screen.
+ *
+ * Cells stretch, so every card in a row is the same height regardless of title
+ * length; the footer inside each card is pushed to the bottom with an auto
+ * margin so the tag rows align across the row.
+ */
+.journal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-5);
   margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: stretch;
 }
 
-.blog-item {
-  border-bottom: 1px solid var(--border);
+@media (max-width: 1080px) {
+  .journal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.blog-item article {
-  padding-block: var(--s-5);
+@media (max-width: 680px) {
+  .journal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-.blog-item-meta {
+/* ── Card ─────────────────────────────────────────────────────────────── */
+
+.note {
+  display: flex;
+}
+
+.note__inner {
+  display: flex;
+  width: 100%;
+}
+
+.note__link {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--j-surface);
+  border: 1px solid var(--j-line);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color var(--d-base) var(--ease-out),
+    background-color var(--d-base) var(--ease-out);
+}
+
+.note__link:hover,
+.note__link:focus-visible {
+  border-color: var(--j-line-bright);
+  background: var(--j-surface-hover);
+}
+
+/* Visible keyboard focus, distinct from the hover border so a focused card is
+   not merely "the one that looks hovered". */
+.note__link:focus-visible {
+  outline: 2px solid var(--j-accent);
+  outline-offset: 2px;
+}
+
+.note__cover {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #05070d;
+  border-bottom: 1px solid var(--j-line);
+}
+
+.note__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--d-slow) var(--ease-out);
+}
+
+/* Very gentle — 1.03, not 1.1. At card size a larger scale reads as the image
+   jumping rather than as the card responding. */
+.note__link:hover .note__cover img,
+.note__link:focus-visible .note__cover img {
+  transform: scale(1.03);
+}
+
+.note__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--s-3);
+  padding: var(--s-5);
+}
+
+.note__meta {
   display: flex;
   align-items: center;
-  gap: var(--s-2);
-  font-size: var(--t-xs);
-  color: var(--fg-subtle);
-  margin-bottom: var(--s-3);
+  gap: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--j-ink-faint);
 }
 
-.blog-item-title {
-  font-size: var(--t-2xl);
-  letter-spacing: var(--ls-tighter);
-  margin-bottom: var(--s-3);
-  max-width: 24ch;
+.note__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: var(--r-full);
+  background: currentColor;
+  flex-shrink: 0;
 }
 
-.blog-item-title a {
+.note__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--j-ink);
   transition: color var(--d-fast) var(--ease-out);
 }
 
-.blog-item-title a:hover {
-  color: var(--accent);
+.note__link:hover .note__title,
+.note__link:focus-visible .note__title {
+  color: var(--j-accent);
 }
 
-.blog-item-desc {
-  color: var(--fg-muted);
+/* Clamped so a long description cannot push the footer out of alignment with
+   the cards beside it. */
+.note__desc {
+  font-size: var(--t-sm);
   line-height: var(--lh-relaxed);
-  max-width: 66ch;
-  margin-bottom: var(--s-5);
+  color: var(--j-ink-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.blog-item-footer {
+/* margin-top:auto is what makes the tag row and CTA sit on a shared baseline
+   across the row. */
+.note__foot {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--s-4);
+  margin-top: auto;
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--j-line);
 }
 
-.blog-item-cta {
+.note__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.note__tag {
+  padding: 0.3em 0.65em;
+  border: 1px solid var(--j-line);
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--j-ink-faint);
+}
+
+.note__cta {
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
-  font-size: var(--t-xs);
-  color: var(--fg-subtle);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--j-ink);
 }
 
-.blog-item:hover .blog-item-cta {
-  color: var(--accent);
+.note__arrow {
+  display: inline-block;
+  transition: transform var(--d-fast) var(--ease-out);
 }
 
-.blog-noresults {
+.note__link:hover .note__arrow,
+.note__link:focus-visible .note__arrow {
+  transform: translate(3px, -3px);
+}
+
+.journal-empty {
   padding-block: var(--s-16);
-  color: var(--fg-muted);
+  color: var(--j-ink-muted);
   text-align: center;
+}
+
+/* Texture and micro-motion are decoration; both come off for anyone who has
+   asked for less movement. */
+@media (prefers-reduced-motion: reduce) {
+  .note__cover img,
+  .note__arrow {
+    transition: none;
+  }
+
+  .note__link:hover .note__cover img,
+  .note__link:focus-visible .note__cover img {
+    transform: none;
+  }
 }

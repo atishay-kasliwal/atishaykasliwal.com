@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, Fragment } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import Footer from './components/Footer';
 import PageShell from './components/PageShell';
@@ -56,8 +56,8 @@ const lazyRoutes = {
   Resume: lazy(() => import('./Resume')),
   ArtPage: lazy(() => import('./pages/ArtPage')),
   AtriveoPage: lazy(() => import('./pages/AtriveoPage')),
-  LegacyProjects: lazy(() => import('./Projects')),
   HighlightDetail: lazy(() => import('./HighlightDetail')),
+  AdminApp: lazy(() => import('./admin/AdminApp')),
 };
 
 /* Reserves vertical space while a chunk loads so the swap-in does not shift
@@ -86,6 +86,9 @@ const Lazy = ({ children }) => <Suspense fallback={<RouteFallback />}>{children}
 
 export default function AppRoutes({ overrides }) {
   const R = { ...lazyRoutes, ...overrides };
+  const location = useLocation();
+  const isAdminRoute =
+    location.pathname === '/admin' || location.pathname.startsWith('/admin/');
 
   /* With eager components there is nothing to suspend on, so the boundary is
      skipped entirely and the markup inlines into the static HTML. */
@@ -96,15 +99,15 @@ export default function AppRoutes({ overrides }) {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <div className="bg-overlay" />
+      {!isAdminRoute ? <div className="bg-overlay" /> : null}
       <ErrorBoundary>
         <main id="main" tabIndex={-1}>
           <Routes>
             <Route path="/" element={<HomePage />} />
 
             {/* New routes — eagerly imported, so no Suspense boundary. */}
-            <Route path="/about" element={<PageShell><AboutPage /></PageShell>} />
-            <Route path="/projects" element={<PageShell><ProjectsPage /></PageShell>} />
+            <Route path="/about" element={<PageShell tone="about"><AboutPage /></PageShell>} />
+            <Route path="/projects" element={<PageShell tone="projects"><ProjectsPage /></PageShell>} />
             <Route path="/projects/:slug" element={<PageShell><ProjectDetailPage /></PageShell>} />
             <Route path="/experience" element={<PageShell><ExperiencePage /></PageShell>} />
             <Route path="/research" element={<PageShell><ResearchPage /></PageShell>} />
@@ -119,7 +122,12 @@ export default function AppRoutes({ overrides }) {
             <Route path="/resume" element={<Boundary><R.Resume /></Boundary>} />
             <Route path="/art" element={<Boundary><R.ArtPage /></Boundary>} />
             <Route path="/atriveo" element={<Boundary><R.AtriveoPage /></Boundary>} />
-            <Route path="/highlights" element={<Boundary><R.LegacyProjects /></Boundary>} />
+            <Route path="/admin/*" element={<Boundary><R.AdminApp /></Boundary>} />
+
+            {/* /highlights (the index) retired to /projects — a 301 in
+                public/_redirects handles it in production. The DETAIL pages
+                stay: they are the live interactive demos, and the browse page
+                links straight into them. */}
             <Route path="/highlights/:id" element={<Boundary><R.HighlightDetail /></Boundary>} />
             <Route path="/Highlights/:uuid" element={<Boundary><R.HighlightDetail /></Boundary>} />
 
@@ -127,8 +135,8 @@ export default function AppRoutes({ overrides }) {
           </Routes>
         </main>
       </ErrorBoundary>
-      <Footer />
-      <CommandPalette />
+      {!isAdminRoute ? <Footer /> : null}
+      {!isAdminRoute ? <CommandPalette /> : null}
     </>
   );
 }

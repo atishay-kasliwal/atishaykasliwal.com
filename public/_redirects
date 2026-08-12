@@ -11,10 +11,19 @@
 # duplicate-content problem against the real homepage). Returning a true 404
 # keeps them out of the index entirely.
 
+# The /highlights index retired into /projects. Must come BEFORE the wildcard
+# below, which would otherwise swallow it into the SPA fallback and answer 200.
+/highlights  /projects  301
+/Highlights  /projects  301
+
 # Highlight detail pages are addressed by UUID and are rendered client-side,
 # so they still need the SPA fallback.
 /highlights/*  /index.html  200
 /Highlights/*  /index.html  200
+
+# Admin routes are client-rendered and protected in-app.
+/admin  /index.html  200
+/admin/*  /index.html  200
 
 # Everything unmatched is genuinely missing.
 /*  /404.html  404

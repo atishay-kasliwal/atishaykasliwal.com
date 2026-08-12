@@ -13,27 +13,28 @@ import { AVAILABILITY, EMAIL } from './site.js';
  */
 export const ABOUT_FAQS = [
   {
-    question: 'Who is Atishay Kasliwal?',
+    question: 'What kind of work do you do?',
     answer:
-      'Atishay Kasliwal is an AI Engineer based in New York who builds production large language model systems, retrieval-augmented generation pipelines, and the distributed infrastructure they run on. He holds a Master of Science in Data Science from Stony Brook University.',
+      'I build production AI systems and backend infrastructure: large language model workflows, retrieval-augmented generation, APIs, and the distributed systems around latency, reliability, and cost.',
   },
   {
-    question: 'What does Atishay Kasliwal specialize in?',
+    question: 'What are you looking for right now?',
     answer:
-      'Large language model systems, retrieval-augmented generation, AI agents, event-driven distributed architecture, and cloud infrastructure on AWS and GCP. His primary languages are Python, TypeScript, and Java.',
+      `${AVAILABILITY.label}. ${AVAILABILITY.detail}. The best fit is work that sits between applied AI, backend engineering, and distributed systems.`,
   },
   {
-    question: 'Where did Atishay Kasliwal study?',
+    question: 'Where have you worked before?',
     answer:
-      'Atishay Kasliwal earned a Master of Science in Data Science from Stony Brook University and a Bachelor of Technology in Computer Science and Information Technology from Symbiosis University of Applied Sciences in Indore, India.',
+      'Most recently I have been doing financial NLP research at Stony Brook University and machine learning work at Wake Forest CAIR. Before that I spent three years at Accolite Digital building systems for Fidelity Investments and BT Group.',
   },
   {
-    question: 'Where has Atishay Kasliwal worked?',
+    question: 'What are you building outside of work?',
     answer:
-      'He is a Graduate Research Assistant at Stony Brook University, previously a machine learning intern at the Wake Forest University Center for Artificial Intelligence Research, and spent three years as a Senior Software Engineer at Accolite Digital building systems for Fidelity Investments and BT Group.',
+      'Atriveo is the main one right now: a job-search platform I designed and run myself. I also keep a few smaller experiments around search, agents, and workflow tools.',
   },
   {
-    question: 'Is Atishay Kasliwal available for hire?',
-    answer: `${AVAILABILITY.label}. ${AVAILABILITY.detail}. He can be reached at ${EMAIL}.`,
+    question: 'What do you care about as an engineer?',
+    answer:
+      `The hour after a deploy. I care whether the system stays reliable under load, whether the model still behaves on messy real inputs, and whether the people using it can trust it. The fastest way to reach me is ${EMAIL}.`,
   },
 ];

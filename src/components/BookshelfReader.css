@@ -1,0 +1,196 @@
+/* ── Bookshelf + flip-book reader ────────────────────────────────────────
+   Styled on the site's own spec-sheet language rather than a literal wood
+   shelf: flat hairline-bordered plates, one accent used sparingly, mono
+   index numbers instead of a rainbow of spine colors, no drop shadows, no
+   rounded corners. Left: a row of book spines, hover/focus reveals the full
+   title. Right: the selected book, open as a two-page spread. */
+
+.bs-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  min-height: 100vh;
+  padding: 3rem 1.5rem;
+  background: var(--bg, #0a0c0e);
+}
+
+.mono {
+  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace);
+}
+
+/* ── Shelf ────────────────────────────────────────────────────────────── */
+.bs-shelf {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+}
+
+.bs-spine {
+  position: relative;
+  width: 36px;
+  height: 280px;
+  background: var(--bg-raised, #121519);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  border-left: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.7rem 0;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.bs-shelf .bs-spine:first-child {
+  border-left: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+}
+
+.bs-spine:hover,
+.bs-spine:focus-visible {
+  background: var(--surface-hover, rgba(255, 255, 255, 0.045));
+}
+
+.bs-spine.is-active {
+  border-color: var(--border-accent, rgba(165, 180, 252, 0.42));
+  background: var(--accent-surface, rgba(139, 92, 246, 0.13));
+}
+
+.bs-spine-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 0.66rem;
+  line-height: 1.2;
+  color: var(--fg-muted, #9aa1ab);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bs-spine.is-active .bs-spine-title {
+  color: var(--fg, #f2f4f7);
+}
+
+.bs-spine-num {
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle, #717983);
+}
+
+.bs-spine.is-active .bs-spine-num {
+  color: var(--accent, #a5b4fc);
+}
+
+.bs-spine-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.55rem 0.75rem;
+  background: var(--bg-raised, #121519);
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+}
+
+.bs-spine-tooltip-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--fg, #f2f4f7);
+}
+
+.bs-spine-tooltip-author {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-subtle, #717983);
+}
+
+.bs-spine:hover .bs-spine-tooltip,
+.bs-spine:focus-visible .bs-spine-tooltip {
+  opacity: 1;
+}
+
+/* ── Reader ───────────────────────────────────────────────────────────── */
+.bs-reader {
+  display: flex;
+  justify-content: center;
+  width: min(90vw, 760px);
+}
+
+.bs-flipbook {
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+}
+
+.bs-page {
+  background: var(--fg, #f2f4f7);
+  color: var(--bg, #0a0c0e);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.75rem;
+  overflow: hidden;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.bs-page-text {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.bs-page-num {
+  margin-top: auto;
+  align-self: center;
+  font-size: 0.62rem;
+  color: var(--fg-subtle, #717983);
+}
+
+.bs-page--cover {
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.bs-page-eyebrow {
+  color: var(--fg-subtle, #717983) !important;
+}
+
+.bs-page-title {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.2rem;
+  line-height: 1.3;
+  max-width: 16ch;
+}
+
+.bs-page-rule {
+  width: 2.5rem;
+  height: 2px;
+  background: linear-gradient(120deg, #8b5cf6, #a5b4fc);
+}
+
+.bs-page-author {
+  font-size: 0.8rem;
+  color: rgba(10, 12, 14, 0.68);
+}
+
+.bs-page-year {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.66rem;
+  color: rgba(10, 12, 14, 0.5);
+}
+
+@media (max-width: 720px) {
+  .bs-wrap { flex-direction: column; }
+  .bs-shelf { max-width: 100%; overflow-x: auto; }
+}

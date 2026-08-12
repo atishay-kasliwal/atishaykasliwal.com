@@ -11,10 +11,9 @@ import AppRoutes from './AppRoutes';
 import Resume from './Resume';
 import ArtPage from './pages/ArtPage';
 import AtriveoPage from './pages/AtriveoPage';
-import LegacyProjects from './Projects';
 import HighlightDetail from './HighlightDetail';
 
-const EAGER = { Resume, ArtPage, AtriveoPage, LegacyProjects, HighlightDetail };
+const EAGER = { Resume, ArtPage, AtriveoPage, HighlightDetail };
 import { resolveMeta } from './seo/routes.js';
 import {
   buildGraph,
@@ -31,10 +30,9 @@ import {
 } from './seo/schema.js';
 import { TWITTER_HANDLE, SITE, abs } from './data/site.js';
 import { ABOUT_FAQS } from './data/faqs.js';
-import { PROJECTS } from './data/projects.js';
-import { BLOG_POSTS } from './content/posts.js';
 import { PUBLICATIONS, TALKS, CONFERENCES } from './data/authority.js';
 import githubData from './data/generated/github.json';
+import { getPosts, getProjects } from './lib/content/publicContent.js';
 
 /**
  * Server entry used only at build time by scripts/prerender.mjs.
@@ -263,3 +261,5 @@ export function staticSchemaFor(routePath) {
       return [webPageSchema(meta)];
   }
 }
+const PROJECTS = getProjects();
+const BLOG_POSTS = getPosts();

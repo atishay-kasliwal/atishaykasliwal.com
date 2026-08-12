@@ -2,141 +2,98 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './HeroSystemPanel.css';
 
-/* ── Fig. A — the right half of the hero ──────────────────────────────────
-   Every node below is a real piece of Atriveo, taken from the system map on
-   /atriveo. Nothing here is invented filler: if a recruiter clicks through,
-   the diagram they just read is the one they land on. */
+/* ── The right half of the hero ───────────────────────────────────────────
+   Two featured projects, both linking to their live interactive build rather
+   than to a write-up — the point of this column is that the work runs.
 
-/* Same uuid the FOMC card uses in projectsData — HighlightDetail keys the live
-   dashboard off it, so this lands on the interactive build, not a stub. */
-const FOMC_HREF = '/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01';
+   It previously held an Atriveo system diagram ("Fig. A / System Architecture")
+   above a single featured plate. The diagram came out: it duplicated the system
+   map on /atriveo, which is where it belongs and has room to be read, and at
+   hero size its three columns of nine nodes were the densest thing on an
+   otherwise open page. */
 
-const STAGES = [
+/* uuids, not slugs. These are the ids HighlightDetail keys the live demos off
+   (src/data/highlights.js), so each lands on the interactive build rather than
+   on a stub. */
+const FEATURED = [
   {
-    id: 'capture',
-    label: 'Capture',
-    nodes: [
-      { name: 'Chrome Extension', meta: 'MV3 · 20+ ATS' },
-      { name: 'Job Pipeline', meta: 'Python · hourly' },
-      { name: 'Capture Agent', meta: 'TypeScript · edge' },
-    ],
+    id: 'mri',
+    href: '/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012',
+    cta: 'hero_featured_mri',
+    title: 'Tumor Detection',
+    body: 'A CNN that segments brain tumours entirely in the browser — no upload, no server. Quantised for TensorFlow.js, so scan data never leaves the machine.',
+    action: 'Open the viewer',
+    /* A real axial T1 slice — the exact modality the viewer renders — composited
+       onto the plate by scripts/build-images.mjs. It replaces the generated
+       placeholder plate (<slug>-tile.jpg), which was a numbered dot field and
+       said nothing about the work.
+
+       Still not /mriimage.jpeg: that file is stock photography of a radiology
+       monitor, and using it here would imply the screenshot is of this system
+       when it is of nothing. The slice claims only to be a scan, which is what
+       it is. */
+    shot: '/projects/mri-tumor-viewer-shot.jpg',
   },
   {
-    id: 'core',
-    label: 'Core',
-    nodes: [
-      { name: 'Edge Platform', meta: 'Hono · CF Workers' },
-      { name: 'Neon Postgres', meta: '36 migrations' },
-      { name: 'Resume Compiler', meta: 'Beam search · LaTeX' },
-    ],
-  },
-  {
-    id: 'surface',
-    label: 'Surface',
-    nodes: [
-      { name: 'Web Dashboard', meta: 'React · Recharts' },
-      { name: 'macOS Dock', meta: 'Tauri 2 · Rust' },
-      { name: 'ATS-safe PDF', meta: 'Deterministic' },
-    ],
+    id: 'fomc',
+    href: '/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    cta: 'hero_featured_fomc',
+    title: 'FOMC Intelligence',
+    body: 'An NLP pipeline that reads Fed press conferences minute by minute. Five models backtested across 13 rate decisions, with a public API behind it.',
+    action: 'Open the dashboard',
+    shot: '/fomc-preview.jpg',
   },
 ];
 
 function HeroSystemPanel() {
   return (
-    <aside className="hsp" aria-labelledby="hsp-title" translate="no">
-      <div className="hsp-head" translate="no">
-        <span className="spec-label spec-label--accent" id="hsp-title">
-          <span className="hsp-head-mark" aria-hidden="true" />
-          Fig. A / System Architecture / Atriveo
-        </span>
-        <Link to="/atriveo" className="hsp-head-link" data-cta-position="hero_atriveo">
-          Explore
-          <svg width="11" height="11" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+    /* aria-label rather than aria-labelledby: the element that carried
+       id="hsp-title" was the removed diagram's heading, and a labelledby
+       pointing at a missing id leaves the region silently unnamed. */
+    <aside className="hsp" aria-label="Featured projects" translate="no">
+      {FEATURED.map((item) => (
+        <Link
+          key={item.id}
+          to={item.href}
+          className="hsp-plate hsp-featured"
+          data-cta-position={item.cta}
+          translate="no"
+        >
+          <div className="hsp-featured-text" translate="no">
+            <span className="spec-label spec-label--accent">Featured Project</span>
+            <h2 className="hsp-featured-title" translate="no">
+              {item.title}
+            </h2>
+            <p className="hsp-featured-desc" translate="no">
+              {item.body}
+            </p>
+            <span className="hsp-featured-cta" translate="no">
+              {item.action}
+              <svg width="13" height="13" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <span className="hsp-featured-shot" aria-hidden="true" translate="no">
+            <img
+              src={item.shot}
+              alt=""
+              width="560"
+              height="311"
+              loading="lazy"
+              decoding="async"
+              translate="no"
+            />
+          </span>
         </Link>
-      </div>
-
-      {/* ── Architecture plate ── */}
-      <div className="hsp-plate hsp-plate--diagram" translate="no">
-        <div className="hsp-plate-head" translate="no">
-          <span className="spec-label">Data Flow</span>
-          <span className="hsp-status" translate="no">
-            <span className="hsp-status-dot" aria-hidden="true" />
-            Operational
-          </span>
-        </div>
-
-        <div className="hsp-diagram" translate="no">
-          {STAGES.map((stage, i) => (
-            <div className="hsp-stage" key={stage.id} translate="no">
-              {/* Connector lives in the column gap, where nothing can cover it */}
-              {i > 0 && (
-                <span className="hsp-wire" aria-hidden="true">
-                  <span className="hsp-packet" />
-                </span>
-              )}
-              <span className="spec-label hsp-stage-label">{stage.label}</span>
-              <ul className="hsp-nodes" translate="no">
-                {stage.nodes.map((node) => (
-                  <li className="hsp-node" key={node.name} translate="no">
-                    <span className="hsp-node-name">{node.name}</span>
-                    <span className="hsp-node-meta">{node.meta}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <p className="hsp-readout" translate="no">
-          <span className="hsp-prompt" aria-hidden="true">$</span>
-          <span className="hsp-cmd">atriveo --status</span>
-          <span className="hsp-ok">99.9% uptime · 100+ users · 2K+ queries/day</span>
-        </p>
-      </div>
-
-      {/* ── Featured project — the research side, so the two plates aren't
-             both Atriveo ── */}
-      <Link
-        to={FOMC_HREF}
-        className="hsp-plate hsp-featured"
-        data-cta-position="hero_featured_fomc"
-        translate="no"
-      >
-        <div className="hsp-featured-text" translate="no">
-          <span className="spec-label spec-label--accent">Featured Project</span>
-          <h2 className="hsp-featured-title" translate="no">FOMC Intelligence</h2>
-          <p className="hsp-featured-desc" translate="no">
-            An NLP pipeline that reads Fed press conferences minute by minute. Five models
-            backtested across 13 rate decisions, scored on accuracy, MAE and MSE. There is a
-            public API behind it.
-          </p>
-          <span className="hsp-featured-cta" translate="no">
-            Open the dashboard
-            <svg width="13" height="13" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-        </div>
-
-        <span className="hsp-featured-shot" aria-hidden="true" translate="no">
-          <img
-            src="/fomc-preview.jpg"
-            alt=""
-            width="560"
-            height="311"
-            decoding="async"
-            translate="no"
-          />
-        </span>
-      </Link>
+      ))}
     </aside>
   );
 }

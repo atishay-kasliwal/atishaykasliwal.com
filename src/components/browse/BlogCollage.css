@@ -1,0 +1,21 @@
+/**
+ * Writing row.
+ *
+ * Almost nothing here: the row reuses BrowseRail.css for the shelf and
+ * ProjectCard.css for the tiles, which is the point — the writing row should be
+ * indistinguishable from a project row apart from what it links to.
+ *
+ * Class names are namespaced `blog-tile*`. `blog-list*` is taken: BlogPage.css
+ * defines a global `.blog-list` for the /blog index, and because that file
+ * loads later in the bundle it silently zeroed this section's padding and
+ * margin when the names collided. Neither file scopes its selectors, so the
+ * only safe fix is a name that is not already in use.
+ */
+
+/* The status pill slot carries reading time rather than a project status, so
+   it should read as neutral information rather than as a state badge — no
+   accent, no semantic colour. */
+.blog-tile__status {
+  color: var(--fg-muted);
+  border-color: var(--border);
+}

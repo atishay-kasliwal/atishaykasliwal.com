@@ -1,0 +1,174 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return
+        isSignedIn() &&
+        (
+          request.auth.token.admin == true ||
+          request.auth.token.email == 'katishay@admin.atishaykasliwal.com'
+        );
+    }
+
+    function validStatus(status) {
+      return status in ['draft', 'published', 'unpublished', 'archived', 'deleted'];
+    }
+
+    function validVisibility(visibility) {
+      return visibility in ['private', 'public', 'unlisted'];
+    }
+
+    function validOptionalString(value) {
+      return value == null || value is string;
+    }
+
+    function validOptionalTimestamp(value) {
+      return value == null || value is timestamp;
+    }
+
+    function validDisplayOrder(data) {
+      return !('displayOrder' in data) || (data.displayOrder is int && data.displayOrder >= 0);
+    }
+
+    function validSeo(data) {
+      return
+        (!('seoTitle' in data) || (data.seoTitle is string && data.seoTitle.size() <= 70)) &&
+        (!('seoDescription' in data) || (data.seoDescription is string && data.seoDescription.size() <= 160));
+    }
+
+    function validCommonCmsDocument(documentId, data) {
+      return
+        data.id == documentId &&
+        data.title is string &&
+        validOptionalString(data.slug) &&
+        validStatus(data.status) &&
+        validVisibility(data.visibility) &&
+        validDisplayOrder(data) &&
+        validOptionalTimestamp(data.createdAt) &&
+        validOptionalTimestamp(data.updatedAt) &&
+        validOptionalTimestamp(data.publishedAt) &&
+        validOptionalTimestamp(data.archivedAt) &&
+        validOptionalTimestamp(data.deletedAt) &&
+        validOptionalString(data.createdBy) &&
+        validOptionalString(data.updatedBy) &&
+        validSeo(data);
+    }
+
+    function validLandingConfig(data) {
+      return
+        (!('heroProjectSlugs' in data) || (data.heroProjectSlugs is list && data.heroProjectSlugs.size() <= 2)) &&
+        (!('highlightProjectSlugs' in data) || (data.highlightProjectSlugs is list && data.highlightProjectSlugs.size() <= 6)) &&
+        (!('testimonialIds' in data) || (data.testimonialIds is list && data.testimonialIds.size() <= 6)) &&
+        (!('journeyEntryIds' in data) || (data.journeyEntryIds is list && data.journeyEntryIds.size() <= 6));
+    }
+
+    function validMediaDocument(data) {
+      return
+        data.kind in ['image', 'video', 'document', 'audio'] &&
+        data.storagePath is string &&
+        data.storagePath.matches('^cms/.+') &&
+        (!('sizeBytes' in data) || (data.sizeBytes is int && data.sizeBytes > 0 && data.sizeBytes <= 26214400)) &&
+        (!('contentType' in data) || data.contentType is string);
+    }
+
+    function validMusicEntry(data) {
+      return !('kind' in data) || data.kind in ['album', 'track', 'ep', 'playlist'];
+    }
+
+    function validWatchStatus(data) {
+      return !('watchStatus' in data) || data.watchStatus in ['planned', 'watching', 'completed'];
+    }
+
+    function validMusicCollection(data) {
+      return !('type' in data) || data.type in ['all_time', 'monthly', 'seasonal', 'custom'];
+    }
+
+    function validCmsDocument(collectionName, documentId, data) {
+      return
+        validCommonCmsDocument(documentId, data) &&
+        (
+          (collectionName == 'cms_landing_config' && validLandingConfig(data)) ||
+          (collectionName == 'cms_media' && validMediaDocument(data)) ||
+          (collectionName == 'cms_music_entries' && validMusicEntry(data)) ||
+          (collectionName == 'cms_music_collections' && validMusicCollection(data)) ||
+          (collectionName == 'cms_movies' && validWatchStatus(data)) ||
+          (collectionName == 'cms_tv_series' && validWatchStatus(data)) ||
+          (
+            collectionName in [
+              'cms_posts',
+              'cms_projects',
+              'cms_photos',
+              'cms_testimonials',
+              'cms_journey_entries',
+              'cms_site_settings'
+            ]
+          )
+        );
+    }
+
+    match /fomc_sessions/{sessionId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /{document=**} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+
+    match /{collectionName}/{documentId} {
+      allow read: if collectionName in [
+        'cms_posts',
+        'cms_projects',
+        'cms_photos',
+        'cms_testimonials',
+        'cms_journey_entries',
+        'cms_movies',
+        'cms_tv_series',
+        'cms_music_entries',
+        'cms_music_collections',
+        'cms_landing_config',
+        'cms_media',
+        'cms_site_settings'
+      ] && isAdmin();
+
+      allow create, update: if collectionName in [
+        'cms_posts',
+        'cms_projects',
+        'cms_photos',
+        'cms_testimonials',
+        'cms_journey_entries',
+        'cms_movies',
+        'cms_tv_series',
+        'cms_music_entries',
+        'cms_music_collections',
+        'cms_landing_config',
+        'cms_media',
+        'cms_site_settings'
+      ] && isAdmin() && validCmsDocument(collectionName, documentId, request.resource.data);
+
+      allow delete: if collectionName in [
+        'cms_posts',
+        'cms_projects',
+        'cms_photos',
+        'cms_testimonials',
+        'cms_journey_entries',
+        'cms_movies',
+        'cms_tv_series',
+        'cms_music_entries',
+        'cms_music_collections',
+        'cms_landing_config',
+        'cms_media',
+        'cms_site_settings'
+      ] && isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

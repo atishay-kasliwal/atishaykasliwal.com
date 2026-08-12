@@ -1,115 +1,72 @@
-.proj-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-2);
-  margin-bottom: var(--s-10);
+/**
+ * /projects — browse page shell.
+ *
+ * Almost everything visual lives with its component (ProjectRow.css,
+ * ProjectCard.css, ProjectModal.css, TrailerHero.css). This file only owns the
+ * page-level rhythm and the one structural thing rows need: permission to run
+ * past the content column to the viewport edge.
+ *
+ * The previous spotlight/archive/filter styles were removed with the markup
+ * they described. They are recoverable from git history if the case-study grid
+ * is ever wanted back.
+ */
+
+.projects-page {
+  padding-bottom: clamp(4rem, 8vw, 6rem);
+  /* Rows are full-bleed and manage their own inline gutters. Without this a
+     row's overflowing track would widen the document and give the whole page a
+     horizontal scrollbar — the classic full-bleed-inside-a-container bug. */
+  overflow-x: clip;
+
+  /**
+   * The single inset every full-bleed child aligns to.
+   *
+   * Surfaces here (hero, row headers, row tracks, the writing grid) span the
+   * viewport, so a plain gutter meant that on a 2560px display the hero lockup
+   * sat hard against the far left while its controls sat hard against the far
+   * right, with the trailer's own headings stranded in the dead space between —
+   * the page stopped reading as a composition and started reading as three
+   * things that happened to be on screen together.
+   *
+   * max() keeps the gutter on normal displays and centres a capped column on
+   * wide ones. 1760px rather than --max-w-wide (1360px): this is a shelf, and
+   * cutting it to a prose measure would waste an ultrawide screen in the other
+   * direction.
+   */
+  --browse-inset: max(var(--gutter), calc((100% - 1760px) / 2));
 }
 
-.proj-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
-  gap: var(--s-5);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.proj-card {
-  gap: var(--s-4);
-}
-
-.proj-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-}
-
-.proj-card-cat {
+/**
+ * Restores mono type on the browse UI's <button>s.
+ *
+ * page-scope.css carries `.ak-page input, .ak-page button, … { font: inherit }`
+ * so form controls pick up page typography instead of the UA's. That selector
+ * is (0,1,1); a component's own `.trailer-hero__cta` is (0,1,0), so the reset
+ * wins and every button renders at body size in the body face while the <a>
+ * beside it — same class, unaffected by the reset — renders correctly. The
+ * result is a row of controls that disagree with each other.
+ *
+ * Fixed once here at page scope rather than by bumping specificity inside four
+ * component files, which would put an unexplained `.ak-page` prefix in each of
+ * them. Anything added to the browse UI that mixes buttons and links in one
+ * control group belongs on this list.
+ */
+.ak-page .browse-card__action,
+.ak-page .browse-modal__cta,
+.ak-page .browse-modal__close,
+.ak-page .browse-row__chevron,
+.ak-page .trailer-hero__cta,
+.ak-page .trailer-hero__pause {
+  font-family: var(--font-mono);
   font-size: var(--t-xs);
   letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--fg-subtle);
-}
-
-.proj-card-status {
-  padding: 0.2em 0.6em;
-  border-radius: var(--r-full);
-  border: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-
-.proj-card-status--live {
-  border-color: color-mix(in srgb, var(--ok-500) 45%, transparent);
-  color: var(--ok-500);
-}
-
-.proj-card-status--research {
-  border-color: var(--border-accent);
-  color: var(--accent);
-}
-
-.proj-card-title {
-  font-size: var(--t-xl);
-}
-
-.proj-card-title a {
-  transition: color var(--d-fast) var(--ease-out);
-}
-
-.proj-card:hover .proj-card-title a {
-  color: var(--accent);
-}
-
-.proj-card-tagline {
-  font-size: var(--t-sm);
-  color: var(--fg-muted);
-  line-height: var(--lh-relaxed);
-}
-
-.proj-card-metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
-  gap: var(--s-4);
-  margin: 0;
-  padding-block: var(--s-4);
-  border-block: 1px solid var(--border);
-}
-
-.proj-card-metric-value {
-  margin: 0;
-  font-size: var(--t-lg);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-tight);
-  color: var(--accent);
   line-height: 1;
 }
 
-.proj-card-metric-label {
-  margin-top: 2px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--fg-subtle);
-}
-
-.proj-card-stack {
-  margin-top: auto;
-}
-
-.proj-card-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
-  font-size: var(--t-xs);
-  font-weight: var(--fw-medium);
-  color: var(--fg-subtle);
-  transition: color var(--d-fast) var(--ease-out);
-}
-
-.proj-card:hover .proj-card-cta {
-  color: var(--accent);
+.projects-browse {
+  display: flex;
+  flex-direction: column;
+  /* Rows carry their own block margins; this only sets the gap between the
+     page header and the first row. */
+  margin-top: var(--s-8);
 }

@@ -4,13 +4,25 @@ import Seo from '../seo/Seo';
 import { blogPostingSchema } from '../seo/schema.js';
 import { resolveMeta, seoTitle, seoDescription } from '../seo/routes.js';
 import { Container, Breadcrumbs, Tag, ArrowIcon } from '../components/ui';
-import { getPost, relatedPosts, formatPostDate } from '../content/posts.js';
-import { FULL_NAME, IMAGES } from '../data/site.js';
+import {
+  formatPostDate,
+  getPostBySlug,
+  getRelatedPosts,
+} from '../lib/content/publicContent.js';
 import NotFoundPage from './NotFoundPage';
 import './BlogPostPage.css';
 
 /**
  * /blog/:slug — article view.
+ *
+ * One column, top to bottom: header, lead image, article, related posts.
+ *
+ * There is no table of contents. It began as a sticky sidebar, which pushed the
+ * body off centre and left a column of empty space tracking down the page on
+ * wide screens; moving it above the text fixed that but put a block of links
+ * between the reader and the first sentence. These posts run three to eight
+ * minutes — short enough that scrolling is a better index than a list of
+ * headings, and the reading-progress bar already answers "how much is left".
  *
  * The HTML is already compiled, highlighted, and heading-anchored by
  * scripts/build-content.mjs, so this renders it directly. dangerouslySetInnerHTML
@@ -20,9 +32,8 @@ import './BlogPostPage.css';
  */
 export default function BlogPostPage() {
   const { slug } = useParams();
-  const post = getPost(slug);
+  const post = getPostBySlug(slug);
   const articleRef = useRef(null);
-  const [activeHeading, setActiveHeading] = useState(null);
   const [progress, setProgress] = useState(0);
 
   /* Copy buttons on code blocks. Attached after render rather than authored
@@ -65,7 +76,9 @@ export default function BlogPostPage() {
     return () => cleanups.forEach((fn) => fn());
   }, [post]);
 
-  /* Scroll progress + active TOC entry, in one rAF-throttled listener. */
+  /* Reading progress, rAF-throttled. This used to also track which heading was
+     nearest the top, to highlight the active TOC entry; with the TOC gone that
+     work had no consumer and came out. */
   useEffect(() => {
     if (!post) return;
 
@@ -79,11 +92,6 @@ export default function BlogPostPage() {
           const total = el.offsetHeight - window.innerHeight;
           const scrolled = window.scrollY - el.offsetTop;
           setProgress(total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0);
-
-          // The heading nearest the top of the viewport wins.
-          const headings = [...el.querySelectorAll('h2[id], h3[id]')];
-          const current = headings.filter((h) => h.getBoundingClientRect().top <= 120).pop();
-          setActiveHeading(current?.id ?? null);
         }
         ticking = false;
       });
@@ -108,7 +116,7 @@ export default function BlogPostPage() {
     ogType: 'article',
     breadcrumbs,
   });
-  const related = relatedPosts(post.slug, 3);
+  const related = getRelatedPosts(post.slug, 3);
 
   return (
     <>
@@ -127,15 +135,15 @@ export default function BlogPostPage() {
         schema={[blogPostingSchema(post)]}
       />
 
-      {/* Presentational only — the same information is in the TOC and the
-          scrollbar, so it is hidden from assistive tech. */}
+      {/* Presentational only — the scrollbar carries the same information, so
+          it is hidden from assistive tech. */}
       <div className="read-progress" aria-hidden="true">
         <div className="read-progress-bar" style={{ transform: `scaleX(${progress / 100})` }} />
       </div>
 
       <article className="post">
-        <header className="post-header">
-          <Container width="prose">
+        <Container width="prose">
+          <header className="post-header">
             <Breadcrumbs items={breadcrumbs} />
 
             <div className="post-meta">
@@ -149,7 +157,7 @@ export default function BlogPostPage() {
             </div>
 
             <h1 className="post-title">{post.title}</h1>
-            <p className="lede post-desc">{post.description}</p>
+            <p className="post-desc">{post.description}</p>
 
             <ul className="tag-list post-tags">
               {post.tags.map((t) => (
@@ -158,65 +166,46 @@ export default function BlogPostPage() {
                 </li>
               ))}
             </ul>
-          </Container>
-        </header>
+          </header>
 
-        <div className="post-layout">
-          <Container>
-            <div className="post-columns">
-              {post.toc?.length > 2 && (
-                <nav className="post-toc" aria-label="Table of contents">
-                  <p className="post-toc-title mono">Contents</p>
-                  <ol>
-                    {post.toc.map((h) => (
-                      <li key={h.id} className={`post-toc-item post-toc-item--h${h.depth}`}>
-                        <a
-                          href={`#${h.id}`}
-                          className={activeHeading === h.id ? 'is-active' : undefined}
-                          aria-current={activeHeading === h.id ? 'location' : undefined}
-                        >
-                          {h.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
-                </nav>
-              )}
+          {/* Lead image, in a short banner crop rather than the tile's native
+              16:9. The header above it already runs to a full screen — date,
+              reading time, word count, title, description, tags — so a
+              540px-tall image on top of that pushed the first sentence out of
+              view entirely. The banner keeps the visual break without costing
+              the opening paragraph its place.
 
-              <div
-                className="post-body"
-                ref={articleRef}
-                dangerouslySetInnerHTML={{ __html: post.html }}
-              />
-            </div>
-          </Container>
-        </div>
+              Falls back to the plate drawn for this post by
+              scripts/build-images.mjs. Set `image:` in the post's frontmatter
+              to override it. */}
+          <div className="post-hero">
+            <img
+              src={post.image || `/blog/${post.slug}-tile.jpg`}
+              alt=""
+              width={1600}
+              height={900}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>
 
-        <footer className="post-footer">
-          <Container width="prose">
-            <div className="post-author">
-              <img
-                src={IMAGES.headshot.src}
-                width="56"
-                height="56"
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="post-author-avatar"
-              />
-              <div>
-                <p className="post-author-name">{FULL_NAME}</p>
-                <p className="post-author-bio">
-                  AI Engineer in New York. <Link to="/about">More about me</Link> or{' '}
-                  <Link to="/contact">get in touch</Link>.
-                </p>
-              </div>
-            </div>
+          <div
+            className="post-body"
+            ref={articleRef}
+            dangerouslySetInnerHTML={{ __html: post.html }}
+          />
+
+          <footer className="post-footer">
+            <Link to="/blog" className="post-back">
+              <span aria-hidden="true">←</span>
+              All writing
+            </Link>
 
             {related.length > 0 && (
               <section className="post-related" aria-labelledby="related-heading">
                 <h2 id="related-heading" className="post-related-title">
-                  Related
+                  Keep reading
                 </h2>
                 <ul>
                   {related.map((r) => (
@@ -231,8 +220,8 @@ export default function BlogPostPage() {
                 </ul>
               </section>
             )}
-          </Container>
-        </footer>
+          </footer>
+        </Container>
       </article>
     </>
   );

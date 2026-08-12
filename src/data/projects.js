@@ -8,7 +8,47 @@
  *
  * Metrics are carried over from Atishay Kasliwal's own resume claims; the
  * narrative framing has been reviewed and approved by him.
+ *
+ * ── Fields the /projects browse page adds on top of the case study ──────────
+ *
+ * `spotlight`  Rotation slot in the trailer hero, 1..n. Omit to keep a project
+ *              out of the hero entirely. Sorted ascending, so this is an
+ *              editorial ordering, not a computed one.
+ * `uuid`       The live interactive demo at /highlights/<uuid>, when one
+ *              exists. This is the bridge to src/data/highlights.js — see the
+ *              header there. Absent means there is nothing to play on-domain.
+ * `video`      Screen recording, or null. Shape:
+ *                { poster, preview, trailer }
+ *              `preview` and `trailer` accept either a full path with an
+ *              extension ('/clip.mp4') or an extensionless basename
+ *              ('/video/atriveo-card'), in which case .webm and .mp4 are both
+ *              offered as <source> elements — see mediaSources() in
+ *              components/browse/videoSupport.js. Null is a fully supported
+ *              state; every surface falls back to `image`, so recordings can
+ *              land one project at a time.
+ * `writeup`    Slug of the blog post telling this project's story, or absent.
+ * `links`      Extra destinations for the info overlay, beyond the case study /
+ *              demo / GitHub links already derived from the fields above.
  */
+
+/**
+ * PLACEHOLDER — every project currently points its preview and trailer at the
+ * same clip, the one the retired /highlights hero used.
+ *
+ * It exists so the browse page's motion can be built and reviewed before the
+ * real screen recordings are captured. Replace per project as recordings land:
+ * set `video` to { poster, preview, trailer } with that project's own paths and
+ * delete the reference here. When every project has its own, delete this too.
+ *
+ * Nothing else is placeholder-aware — `video: null` is equally valid and falls
+ * back to the poster image — so removing this constant degrades gracefully
+ * rather than breaking the page.
+ */
+const DEMO_VIDEO = {
+  poster: null,
+  preview: '/featured-project.mp4',
+  trailer: '/featured-project.mp4',
+};
 
 export const PROJECTS = [
   {
@@ -17,6 +57,7 @@ export const PROJECTS = [
     tagline: 'Job-search platform with a 5.0-rated Chrome extension and live customers.',
     category: 'Product',
     featured: true,
+    spotlight: 1,
     status: 'Live',
     year: '2026',
     timeline: 'Jan 2026 — Present',
@@ -24,11 +65,18 @@ export const PROJECTS = [
     href: 'https://atriveo.com/',
     demo: 'https://atriveo.com/',
     github: 'https://github.com/atishay-kasliwal/atriveo-app',
+    video: DEMO_VIDEO,
+    writeup: 'atriveo-capture-before-analytics',
+    links: [
+      { label: 'Chrome Web Store', href: 'https://chromewebstore.google.com/detail/atriveo-job-assistant/ocbmncmmepfjgpnakenoibaambecidcf' },
+      { label: 'Product walkthrough', href: '/atriveo' },
+    ],
     image: {
       src: '/projects/atriveo-cover.jpg',
+      tile: '/projects/atriveo-tile.jpg',
       width: 1600,
       height: 900,
-      alt: 'Atriveo dashboard showing tracked job applications and pipeline analytics',
+      alt: 'Atriveo network insights dashboard: a weekly application-volume chart beside a leaderboard and streak panel',
     },
     stack: ['TypeScript', 'React', 'Python', 'FastAPI', 'PostgreSQL', 'Docker', 'Chrome Extension API'],
     metrics: [
@@ -80,18 +128,23 @@ export const PROJECTS = [
     tagline: 'NLP pipeline turning Federal Reserve communications into market signals.',
     category: 'Applied Research',
     featured: true,
+    spotlight: 2,
     status: 'Research',
     year: '2025',
     timeline: 'Nov 2024 — Present',
     role: 'Graduate Research Assistant, Stony Brook University',
     href: '/projects/fomc-intelligence',
-    demo: '/highlights',
+    uuid: 'd4e5f6a7-b8c9-4012-d345-6789abcdef01',
+    demo: '/highlights/d4e5f6a7-b8c9-4012-d345-6789abcdef01',
     github: 'https://github.com/atishay-kasliwal/fedtalk-openai-analysis-main',
+    video: DEMO_VIDEO,
+    writeup: 'point-in-time-correctness',
     image: {
       src: '/projects/fomc-intelligence-cover.jpg',
+      tile: '/projects/fomc-intelligence-tile.jpg',
       width: 1600,
       height: 900,
-      alt: 'FOMC Intelligence dashboard plotting Federal Reserve sentiment against market movement',
+      alt: 'A rendered candlestick chart trending downward — illustrative of the markets this pipeline reads, not a screenshot of it',
     },
     stack: ['Python', 'FastAPI', 'AWS Lambda', 'S3', 'DynamoDB', 'NLP', 'Transformers', 'Prometheus'],
     metrics: [
@@ -144,18 +197,23 @@ export const PROJECTS = [
     tagline: 'Retrieval-augmented generation over legal filings, with citations that hold up.',
     category: 'AI Systems',
     featured: true,
+    spotlight: 3,
     status: 'Demo',
     year: '2025',
     timeline: '2025',
     role: 'Solo build',
     href: '/projects/legal-rag',
-    demo: '/highlights',
+    uuid: 'c3d4e5f6-a7b8-4901-c234-56789abcdef0',
+    demo: '/highlights/c3d4e5f6-a7b8-4901-c234-56789abcdef0',
     github: null,
+    video: DEMO_VIDEO,
+    writeup: 'legal-rag-citations-before-answers',
     image: {
       src: '/projects/legal-rag-cover.jpg',
+      tile: '/projects/legal-rag-tile.jpg',
       width: 1600,
       height: 900,
-      alt: 'Legal RAG interface answering a question with inline citations to source filings',
+      alt: 'A field of connected points against a dark ground — illustrative of a vector index, not a screenshot of the system',
     },
     stack: ['Python', 'FastAPI', 'Vector Search', 'Embeddings', 'LLMs', 'React'],
     metrics: [
@@ -198,18 +256,23 @@ export const PROJECTS = [
     tagline: 'Brain tumor segmentation running entirely in the browser.',
     category: 'Machine Learning',
     featured: true,
+    spotlight: 4,
     status: 'Demo',
     year: '2025',
     timeline: 'May 2025 — Aug 2025',
     role: 'ML Engineer Intern, Wake Forest CAIR',
     href: '/projects/mri-tumor-viewer',
-    demo: '/highlights',
+    uuid: 'e5f6a7b8-c9d0-4123-e456-789abcdef012',
+    demo: '/highlights/e5f6a7b8-c9d0-4123-e456-789abcdef012',
     github: null,
+    video: DEMO_VIDEO,
+    writeup: 'mri-viewer-model-in-the-browser',
     image: {
       src: '/projects/mri-tumor-viewer-cover.jpg',
+      tile: '/projects/mri-tumor-viewer-tile.jpg',
       width: 1600,
       height: 900,
-      alt: 'MRI viewer displaying a brain scan with model-predicted tumor segmentation overlay',
+      alt: 'An axial T1 brain slice, the modality this viewer renders — the scan alone, without a segmentation overlay',
     },
     stack: ['Python', 'PyTorch', 'TensorFlow.js', 'GCP', 'Terraform', 'Firebase'],
     metrics: [
@@ -254,18 +317,25 @@ export const PROJECTS = [
     tagline: 'Data contract enforcement with live architecture visualization.',
     category: 'Developer Tools',
     featured: false,
+    spotlight: 5,
     status: 'Demo',
     year: '2025',
     timeline: '2025',
     role: 'Solo build',
     href: '/projects/policy-fabric',
-    demo: '/highlights',
+    uuid: 'f6a7b8c9-d0e1-4234-f567-89abcdef0123',
+    demo: '/highlights/f6a7b8c9-d0e1-4234-f567-89abcdef0123',
     github: null,
+    video: DEMO_VIDEO,
+    writeup: 'policy-fabric-contract-graph-visible',
     image: {
       src: '/projects/policy-fabric-cover.jpg',
+      tile: '/projects/policy-fabric-tile.jpg',
       width: 1600,
       height: 900,
-      alt: 'PolicyFabric graph showing services, data contracts, and policy violations',
+      /* The only tile still generated — nothing in the repo depicts PolicyFabric.
+         See TILE_SOURCES in scripts/build-images.mjs. */
+      alt: 'An abstract plate of vertical bars on a ruled grid, standing in until a screenshot of PolicyFabric exists',
     },
     stack: ['TypeScript', 'React', 'Node.js', 'Graph Visualization'],
     metrics: [{ value: 'Per-layer', label: 'contract enforcement' }],
@@ -299,3 +369,106 @@ export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured);
 export const PROJECT_CATEGORIES = [...new Set(PROJECTS.map((p) => p.category))];
 
 export const getProject = (slug) => PROJECTS.find((p) => p.slug === slug);
+
+/** Trailer hero rotation, in editorial order. */
+export const SPOTLIGHT = PROJECTS.filter((p) => p.spotlight).sort(
+  (a, b) => a.spotlight - b.spotlight
+);
+
+/**
+ * Rows on the browse page.
+ *
+ * Explicit slug lists rather than category filters. A filter would be shorter
+ * and would quietly do the wrong thing: rows are an editorial sequence — which
+ * project opens a row matters, a project can legitimately belong to two rows,
+ * and adding a project should never silently reshuffle rows it was not meant to
+ * touch. Membership and order are both stated here on purpose.
+ *
+ * A slug that matches nothing is skipped rather than rendering a hole, so rows
+ * can name projects whose entries have not landed yet.
+ *
+ * ── On row count ────────────────────────────────────────────────────────────
+ *
+ * Keep rows few enough that each is nearly full and no project appears in more
+ * than about two of them. Six rows over five projects put the same five tiles
+ * on screen repeatedly and left three rows more than half empty background —
+ * the shelf metaphor needs a catalogue to hold up, and past a certain ratio of
+ * rows to projects it advertises how little there is rather than organising it.
+ *
+ * Rough rule: rows ≈ projects ÷ 3. Add categories back as the catalogue grows.
+ */
+export const COLLECTIONS = [
+  {
+    id: 'building',
+    title: 'Currently building',
+    slugs: ['atriveo', 'fomc-intelligence'],
+  },
+  {
+    id: 'live',
+    title: 'Try it live',
+    slugs: ['legal-rag', 'mri-tumor-viewer', 'policy-fabric', 'fomc-intelligence'],
+  },
+];
+
+/** Resolve a collection to its project records, dropping unknown slugs. */
+export const collectionProjects = (collection) =>
+  collection.slugs.map((slug) => getProject(slug)).filter(Boolean);
+
+/**
+ * Where the primary "Play" action goes for a project.
+ *
+ * This is the on-domain-vs-GitHub rule, and it lives here alone so the hero,
+ * the card, and the info overlay cannot drift apart on it. Precedence, most to
+ * least preferred:
+ *
+ *   1. `uuid`   — a live interactive demo on this domain. Always wins: keeping
+ *                 someone on the site beats sending them to a repo.
+ *   2. `href`   — an internal route (starts with "/").
+ *   3. `href`   — an external product URL (starts with "http").
+ *   4. `github` — nothing is hosted, so the source is the honest destination.
+ *
+ * Returns `{ to }` for a react-router <Link>, `{ href, external: true }` for a
+ * new tab, or null when a project has no destination at all — callers must
+ * handle null by hiding the action rather than rendering a dead button.
+ */
+export function resolvePlay(project) {
+  if (!project) return null;
+  if (project.uuid) return { to: `/highlights/${project.uuid}` };
+  if (project.href?.startsWith('/')) return { to: project.href };
+  if (project.href?.startsWith('http')) return { href: project.href, external: true };
+  if (project.github) return { href: project.github, external: true };
+  return null;
+}
+
+/**
+ * SECONDARY destinations for a project — the info overlay's action row, which
+ * renders alongside a primary Play button built from resolvePlay().
+ *
+ * Whatever resolvePlay() picked is filtered out by destination, not by label.
+ * Doing it by label would miss the common case: for a project with a live demo,
+ * Play and the "Live demo" link are the same URL under two names, and a
+ * label-based check has no way to know that.
+ */
+export function projectLinks(project) {
+  if (!project) return [];
+
+  const play = resolvePlay(project);
+  const playTarget = play?.to || play?.href;
+
+  return [
+    project.uuid && { label: 'Live demo', to: `/highlights/${project.uuid}` },
+    /* Repo-derived records have no case study to link to — /projects/<slug> is
+       only routed for the curated entries below, so offering it would be a link
+       to a 404. See src/data/githubProjects.js. */
+    project.source !== 'github' && { label: 'Case study', to: `/projects/${project.slug}` },
+    ...(project.links || []).map((link) =>
+      link.href?.startsWith('/')
+        ? { label: link.label, to: link.href }
+        : { label: link.label, href: link.href, external: true }
+    ),
+    project.github && { label: 'Source', href: project.github, external: true },
+    project.writeup && { label: 'Read the story', to: `/blog/${project.writeup}` },
+  ]
+    .filter(Boolean)
+    .filter((link) => (link.to || link.href) !== playTarget);
+}

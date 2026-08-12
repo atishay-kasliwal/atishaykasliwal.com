@@ -3,6 +3,20 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
+# Browse-page video. Safe to cache forever because the filenames are derived
+# from a project slug plus a variant and the contents only change when a
+# recording is re-cut — at which point the whole file is replaced deliberately.
+# Without this the previews re-validate on every navigation, which is the one
+# thing that would make them feel slow.
+/video/*
+  Cache-Control: public, max-age=31536000, immutable
+/featured-project.mp4
+  Cache-Control: public, max-age=31536000, immutable
+
+/admin
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+
 # OG preview images must be embeddable by crawlers
 /fmocc.jpeg
   X-Frame-Options: ALLOWALL
@@ -14,4 +28,3 @@
   X-Frame-Options: ALLOWALL
 /profile-dark-theme.jpg
   X-Frame-Options: ALLOWALL
-

@@ -6,7 +6,7 @@
   width: 90vw;
   max-width: 1400px;
   margin: 2.5rem auto 0;
-  padding: 2rem 0 1.75rem;
+  padding: 2rem 0 0.8rem;
   border-top: 1px solid var(--spec-line);
   overflow: hidden;
   color: var(--spec-ink-faint);
@@ -21,9 +21,16 @@
   margin-bottom: 1.75rem;
 }
 
+/**
+ * Static, not absolutely positioned.
+ *
+ * This was `position: absolute; inset: 0`, which worked only because the pin
+ * grid underneath gave the band its height. With the pins gone the band had no
+ * in-flow content, collapsed to zero, and took the wordmark with it — the mark
+ * was sized to a box that no longer existed. In flow it sets its own height.
+ */
 .spec-footer-wordmark {
-  position: absolute;
-  inset: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +172,7 @@
   .spec-footer {
     width: 100%;
     margin-top: 2rem;
-    padding: 1.75rem 0 6rem;
+    padding: 1.75rem 0 3rem;
   }
 
   .spec-footer-band { margin-bottom: 2rem; }
@@ -215,7 +222,7 @@
 }
 
 @media (max-width: 480px) {
-  .spec-footer { padding: 2rem 0 6.5rem; }
+  .spec-footer { padding: 2rem 0 3.25rem; }
   .spec-pins { gap: 0.85rem 0.7rem; }
 }
 

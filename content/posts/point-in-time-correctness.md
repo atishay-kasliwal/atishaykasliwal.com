@@ -5,6 +5,7 @@ date: "2026-07-14"
 tags: ["Machine Learning", "Data Engineering", "NLP", "Finance"]
 category: "Engineering"
 featured: true
+image: "/projects/fomc-intelligence-tile.jpg"
 draft: false
 ---
 

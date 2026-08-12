@@ -1,0 +1,175 @@
+.pg-wrap {
+  width: 100%;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem) 0;
+}
+
+.pg-wrap--embedded {
+  padding: 0 0 0;
+}
+
+.pg-row {
+  display: block;
+  padding: 0.5rem 0 0.7rem;
+  border-top: 1px solid var(--border-strong, rgba(255, 255, 255, 0.17));
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+}
+
+.pg-intro {
+  min-width: 0;
+  margin: 0 0 1rem;
+}
+
+.pg-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+}
+
+.pg-doc-mark {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--accent-soft, #a5b4fc);
+}
+
+.pg-wrap--embedded .pg-row {
+  padding-top: 0.5rem;
+}
+
+.pg-wrap--embedded .pg-intro {
+  margin-bottom: 0.4rem;
+}
+
+.pg-wrap--embedded .pg-doc {
+  margin-bottom: 0;
+}
+
+.pg-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.pg-card {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+    rgba(10, 12, 14, 0.78);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    transform var(--d-fast, 160ms) var(--ease-out, ease),
+    border-color var(--d-fast, 160ms) var(--ease-out, ease);
+}
+
+.pg-card:hover,
+.pg-card:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--border-accent, rgba(165, 180, 252, 0.42));
+}
+
+.pg-card__media {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.09));
+  background: var(--bg-raised, #121519);
+}
+
+.pg-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transition:
+    opacity var(--d-fast, 160ms) var(--ease-out, ease),
+    transform var(--d-slow, 420ms) var(--ease-out, ease);
+}
+
+.pg-card:hover .pg-card__media img,
+.pg-card:focus-visible .pg-card__media img {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.pg-card__index {
+  position: absolute;
+  left: 0.55rem;
+  bottom: 0.55rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* One line of caption, so the bar is padding plus that line and nothing else.
+   The gap went with the meta it used to separate.
+
+   Padding sits between the old two-line budget and a tight crop: dropping
+   straight to ~0.4rem took the bar from 55px to 30px, which read as the caption
+   being squeezed against the image rather than sitting under it. */
+.pg-card__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.62rem 0.6rem 0.66rem;
+}
+
+.pg-card__title {
+  display: block;
+  font-size: 0.82rem;
+  line-height: 1.25;
+  color: var(--fg, #f2f4f7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pg-caption {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 1260px) {
+  .pg-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .pg-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .pg-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-card,
+  .pg-card__media img {
+    transition: none;
+  }
+
+  .pg-card:hover,
+  .pg-card:focus-visible {
+    transform: none;
+  }
+
+  .pg-card:hover .pg-card__media img,
+  .pg-card:focus-visible .pg-card__media img {
+    transform: none;
+  }
+}

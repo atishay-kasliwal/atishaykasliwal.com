@@ -1,0 +1,181 @@
+.premium-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+}
+
+.premium-page > :not(.page-tone) {
+  position: relative;
+  z-index: 1;
+}
+
+.page-tone {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  --tone-grid-minor: rgba(255, 255, 255, 0.026);
+  --tone-grid-major: rgba(255, 255, 255, 0.046);
+  --tone-grid-size: 34px;
+  --tone-grid-major-size: 136px;
+  --tone-primary: rgba(165, 180, 252, 0.1);
+  --tone-secondary: rgba(139, 92, 246, 0.055);
+  --tone-primary-left: 22%;
+  --tone-primary-top: 18%;
+  --tone-primary-size: 40rem;
+  --tone-secondary-left: 76%;
+  --tone-secondary-top: 56%;
+  --tone-secondary-size: 30rem;
+  --tone-beam-angle: 118deg;
+  --tone-beam: rgba(255, 255, 255, 0.03);
+  --tone-vignette: rgba(0, 0, 0, 0.34);
+}
+
+.page-tone__mesh,
+.page-tone__glow,
+.page-tone__beam,
+.page-tone__noise {
+  position: absolute;
+  inset: 0;
+}
+
+.page-tone__mesh {
+  background-image:
+    linear-gradient(to right, var(--tone-grid-minor) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--tone-grid-minor) 1px, transparent 1px),
+    linear-gradient(to right, var(--tone-grid-major) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--tone-grid-major) 1px, transparent 1px);
+  background-size:
+    var(--tone-grid-size) var(--tone-grid-size),
+    var(--tone-grid-size) var(--tone-grid-size),
+    var(--tone-grid-major-size) var(--tone-grid-major-size),
+    var(--tone-grid-major-size) var(--tone-grid-major-size);
+  opacity: 0.8;
+  mask-image: radial-gradient(ellipse 118% 90% at 50% 42%, #000 0%, #000 60%, transparent 100%);
+}
+
+.page-tone__glow {
+  inset: auto;
+  width: var(--tone-primary-size);
+  height: var(--tone-primary-size);
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.95;
+  transform: translate(-50%, -50%);
+}
+
+.page-tone__glow--primary {
+  left: var(--tone-primary-left);
+  top: var(--tone-primary-top);
+  background: radial-gradient(circle, var(--tone-primary) 0%, transparent 72%);
+}
+
+.page-tone__glow--secondary {
+  width: var(--tone-secondary-size);
+  height: var(--tone-secondary-size);
+  left: var(--tone-secondary-left);
+  top: var(--tone-secondary-top);
+  background: radial-gradient(circle, var(--tone-secondary) 0%, transparent 74%);
+}
+
+.page-tone__beam {
+  background:
+    linear-gradient(var(--tone-beam-angle), transparent 18%, var(--tone-beam) 48%, transparent 78%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022), transparent 24%, transparent 74%, rgba(255, 255, 255, 0.03));
+  opacity: 0.56;
+}
+
+.page-tone__noise {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.008) 0 1px, transparent 1px 6px);
+  opacity: 0.08;
+  mix-blend-mode: screen;
+}
+
+.page-tone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(255, 255, 255, 0.03), transparent 48%),
+    radial-gradient(circle at 50% 50%, transparent 0%, transparent 70%, var(--tone-vignette) 100%);
+}
+
+.page-tone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.14), transparent 14%, transparent 86%, rgba(0, 0, 0, 0.28)),
+    radial-gradient(circle at 50% 26%, transparent 0%, transparent 58%, rgba(0, 0, 0, 0.18) 100%);
+}
+
+.page-tone--about {
+  --tone-primary-left: 24%;
+  --tone-primary-top: 18%;
+  --tone-primary-size: 42rem;
+  --tone-secondary-left: 78%;
+  --tone-secondary-top: 62%;
+  --tone-secondary-size: 32rem;
+  --tone-primary: rgba(165, 180, 252, 0.1);
+  --tone-secondary: rgba(139, 92, 246, 0.07);
+  --tone-beam-angle: 132deg;
+  --tone-beam: rgba(165, 180, 252, 0.04);
+}
+
+/**
+ * /projects runs dimmer than the other toned pages.
+ *
+ * This page is a wall of image tiles rather than a column of prose. The grid
+ * and the glow read as texture behind text, but behind a row of posters they
+ * compete with the thing they are meant to frame — the tiles stop looking lit
+ * and start looking washed. Roughly half the mesh and glow of the document
+ * tone, so the brightest thing on screen is always a project.
+ */
+.page-tone--projects {
+  --tone-grid-major: rgba(255, 255, 255, 0.028);
+  --tone-primary-left: 72%;
+  --tone-primary-top: 20%;
+  --tone-primary-size: 44rem;
+  --tone-secondary-left: 18%;
+  --tone-secondary-top: 66%;
+  --tone-secondary-size: 34rem;
+  --tone-primary: rgba(165, 180, 252, 0.055);
+  --tone-secondary: rgba(139, 92, 246, 0.025);
+  --tone-beam-angle: 90deg;
+  --tone-beam: rgba(255, 255, 255, 0.014);
+}
+
+.page-tone--projects .page-tone__mesh {
+  opacity: 0.4;
+}
+
+.page-tone--document {
+  --tone-primary-left: 18%;
+  --tone-primary-top: 18%;
+  --tone-primary-size: 34rem;
+  --tone-secondary-left: 82%;
+  --tone-secondary-top: 58%;
+  --tone-secondary-size: 26rem;
+  --tone-primary: rgba(165, 180, 252, 0.075);
+  --tone-secondary: rgba(139, 92, 246, 0.04);
+  --tone-beam: rgba(255, 255, 255, 0.02);
+}
+
+@media (max-width: 900px) {
+  .page-tone__mesh {
+    --tone-grid-size: 24px;
+    --tone-grid-major-size: 96px;
+    opacity: 0.56;
+  }
+
+  .page-tone__glow {
+    filter: blur(44px);
+  }
+
+  .page-tone__noise {
+    opacity: 0.05;
+  }
+}

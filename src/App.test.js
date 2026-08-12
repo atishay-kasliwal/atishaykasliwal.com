@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
-
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+/*
+ * Placeholder CRA test retired.
+ *
+ * Meaningful coverage now lives under /test and runs through Node's built-in
+ * test runner with Vite SSR module loading, which fits this repo's ESM + JSX
+ * setup without introducing a second test stack.
+ */
+export {};

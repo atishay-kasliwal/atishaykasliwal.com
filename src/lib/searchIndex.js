@@ -7,10 +7,9 @@
  */
 
 import { ROUTES } from '../seo/routes.js';
-import { PROJECTS } from '../data/projects.js';
-import { BLOG_POSTS } from '../content/posts.js';
 import { EXPERIENCE } from '../data/experience.js';
 import { PROFILES, RESUME_PDF, EMAIL } from '../data/site.js';
+import { getPosts, getProjects } from './content/publicContent.js';
 
 /**
  * @typedef {Object} SearchEntry
@@ -36,7 +35,7 @@ const pageEntries = Object.values(ROUTES)
     boost: r.priority ?? 0.5,
   }));
 
-const projectEntries = PROJECTS.map((p) => ({
+const projectEntries = getProjects().map((p) => ({
   id: `project:${p.slug}`,
   title: p.name,
   subtitle: p.tagline,
@@ -46,7 +45,7 @@ const projectEntries = PROJECTS.map((p) => ({
   boost: p.featured ? 0.9 : 0.7,
 }));
 
-const postEntries = BLOG_POSTS.map((p) => ({
+const postEntries = getPosts().map((p) => ({
   id: `post:${p.slug}`,
   title: p.title,
   subtitle: p.description,

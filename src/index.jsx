@@ -35,7 +35,16 @@ const SPLIT_ROUTES = [
   [/^\/art/i, 'ArtPage', () => import('./pages/ArtPage')],
   [/^\/atriveo/i, 'AtriveoPage', () => import('./pages/AtriveoPage')],
   [/^\/highlights\/.+/i, 'HighlightDetail', () => import('./HighlightDetail')],
-  [/^\/highlights\/?$/i, 'LegacyProjects', () => import('./Projects')],
+];
+
+/*
+ * Routes served through the SPA fallback rather than through their own
+ * prerendered HTML. Mounting them fresh avoids hydrating homepage markup into a
+ * different route when Cloudflare serves the root index.html as the fallback.
+ */
+const NON_PRERENDERED_PATTERNS = [
+  /^\/admin(?:\/.*)?$/i,
+  /^\/highlights\/.+/i,
 ];
 
 async function preloadCurrentRoute() {
@@ -50,7 +59,10 @@ async function preloadCurrentRoute() {
   }
 }
 
-if (container.dataset.prerendered === 'true') {
+const shouldMountFresh =
+  NON_PRERENDERED_PATTERNS.some((re) => re.test(window.location.pathname));
+
+if (container.dataset.prerendered === 'true' && !shouldMountFresh) {
   preloadCurrentRoute().then((overrides) => {
     hydrateRoot(container, <App overrides={overrides} />);
   });
