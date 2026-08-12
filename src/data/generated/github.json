@@ -7,7 +7,7 @@
     "avatar": "https://avatars.githubusercontent.com/u/61780293?v=4",
     "company": "Stony Brook University",
     "location": "New York",
-    "publicRepos": 22,
+    "publicRepos": 23,
     "followers": 8,
     "createdAt": "2020-03-04T09:26:24Z"
   },
@@ -37,6 +37,19 @@
       "license": null
     },
     {
+      "name": "grants-gov-ai-finder",
+      "description": null,
+      "url": "https://github.com/atishay-kasliwal/grants-gov-ai-finder",
+      "homepage": null,
+      "language": "JavaScript",
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushedAt": "2026-08-12T22:05:33Z",
+      "createdAt": "2026-08-12T21:48:16Z",
+      "license": null
+    },
+    {
       "name": "atriveo-app",
       "description": "A full-stack application that automatically captures job applications through a Chrome extension, tracks them in a centralized dashboard, and provides insights to improve your job search.",
       "url": "https://github.com/atishay-kasliwal/atriveo-app",
@@ -55,7 +68,7 @@
       ],
       "stars": 0,
       "forks": 0,
-      "pushedAt": "2026-08-12T17:10:11Z",
+      "pushedAt": "2026-08-12T21:24:42Z",
       "createdAt": "2026-04-09T17:10:40Z",
       "license": null
     },
@@ -341,7 +354,7 @@
     },
     {
       "name": "JavaScript",
-      "count": 2
+      "count": 3
     },
     {
       "name": "C++",
@@ -357,5 +370,5 @@
     }
   ],
   "totalStars": 1,
-  "fetchedAt": "2026-08-12T17:18:59.605Z"
+  "fetchedAt": "2026-08-12T22:15:14.072Z"
 }
