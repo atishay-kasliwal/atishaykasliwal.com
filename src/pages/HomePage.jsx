@@ -178,6 +178,46 @@ function HomePage() {
           </a>
         </header>
 
+        <div id="testimonials-section" data-analytics-section="testimonials" className="testimonials-section section-wrap" translate="no">
+          <div className="testimonials-inner" translate="no">
+            <h2 className="testimonials-title" translate="no">Testimonials</h2>
+            <div className="testimonials-grid" translate="no">
+              {visibleTestimonials.map((t, idx) => {
+                const displayName = String(t.name || '').trim();
+                return (
+                  <article className="testimonial-card" key={idx} translate="no">
+                    <span className="spec-brackets" aria-hidden="true" />
+                    <header className="testimonial-card__head" translate="no">
+                      <div className="testimonial-card__person" translate="no">
+                        <span className="testimonial-card__avatar-ring" aria-hidden="true" translate="no">
+                          <img
+                            src={t.avatar}
+                            alt={displayName}
+                            className="testimonial-card__avatar"
+                            loading="lazy"
+                            decoding="async"
+                            translate="no"
+                          />
+                        </span>
+                        <div className="testimonial-card__meta" translate="no">
+                          <div className="testimonial-card__name" translate="no">{displayName}</div>
+                          <div className="testimonial-card__role" translate="no">
+                            {t.org} · {t.role}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="testimonial-card__rating" role="img" aria-label="Rated 5 out of 5" translate="no">
+                        <span aria-hidden="true">★★★★★</span>
+                      </div>
+                    </header>
+                    <p className="testimonial-card__quote" translate="no">{t.quote}</p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         <section className="editorial-grid-section section-wrap" data-analytics-section="editorial" translate="no">
           <div className="editorial-grid-inner">
             <div className="editorial-grid-header" translate="no">
@@ -350,46 +390,6 @@ function HomePage() {
 
         <div id="journey-section" data-analytics-section="features" className="section-wrap" translate="no">
           <StoryTimeline />
-        </div>
-
-        <div id="testimonials-section" data-analytics-section="testimonials" className="testimonials-section section-wrap" translate="no">
-          <div className="testimonials-inner" translate="no">
-            <h2 className="testimonials-title" translate="no">Testimonials</h2>
-            <div className="testimonials-grid" translate="no">
-              {visibleTestimonials.map((t, idx) => {
-                const displayName = String(t.name || '').trim();
-                return (
-                  <article className="testimonial-card" key={idx} translate="no">
-                    <span className="spec-brackets" aria-hidden="true" />
-                    <header className="testimonial-card__head" translate="no">
-                      <div className="testimonial-card__person" translate="no">
-                        <span className="testimonial-card__avatar-ring" aria-hidden="true" translate="no">
-                          <img
-                            src={t.avatar}
-                            alt={displayName}
-                            className="testimonial-card__avatar"
-                            loading="lazy"
-                            decoding="async"
-                            translate="no"
-                          />
-                        </span>
-                        <div className="testimonial-card__meta" translate="no">
-                          <div className="testimonial-card__name" translate="no">{displayName}</div>
-                          <div className="testimonial-card__role" translate="no">
-                            {t.org} · {t.role}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="testimonial-card__rating" role="img" aria-label="Rated 5 out of 5" translate="no">
-                        <span aria-hidden="true">★★★★★</span>
-                      </div>
-                    </header>
-                    <p className="testimonial-card__quote" translate="no">{t.quote}</p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
     </>
