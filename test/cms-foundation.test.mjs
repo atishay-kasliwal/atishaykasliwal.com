@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createServer } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -100,6 +100,20 @@ test('cloudflare spa fallbacks use the root shell for admin and highlights route
   assert.match(redirects, /^\/highlights\/\*\s+\/\s+200$/m);
   assert.match(redirects, /^\/Highlights\/\*\s+\/\s+200$/m);
   assert.doesNotMatch(redirects, /^\/admin(?:\/\*)?\s+\/index\.html\s+200$/m);
+});
+
+test('admin pages function serves an admin-specific boot shell', async () => {
+  const { buildAdminBootPayload } = await import(
+    pathToFileURL(path.join(ROOT, 'functions', 'admin', '_shared.js')).href
+  );
+
+  const signIn = buildAdminBootPayload('/admin');
+  assert.match(signIn.title, /Admin Sign-In/);
+  assert.match(signIn.shell, /Opening the editorial workspace/);
+
+  const workspace = buildAdminBootPayload('/admin/settings');
+  assert.match(workspace.title, /Admin Workspace/);
+  assert.match(workspace.shell, /Loading the admin workspace/);
 });
 
 test('cms validation enforces content state, slug format, and landing slot uniqueness', async () => {
