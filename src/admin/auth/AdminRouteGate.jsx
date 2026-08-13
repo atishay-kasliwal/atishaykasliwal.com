@@ -20,7 +20,7 @@ export default function AdminRouteGate({ children }) {
       <AdminStateScreen
         eyebrow="Authorizing"
         title="Restoring your editorial session"
-        description="Checking Google sign-in and administrator permissions."
+        description="Checking your current session and administrator permissions."
         tone="loading"
       />
     );
@@ -42,7 +42,7 @@ export default function AdminRouteGate({ children }) {
       <AdminStateScreen
         eyebrow="Redirecting"
         title="Sign-in required"
-        description="Sending you to Google sign-in for the admin workspace."
+        description="Sending you to the private sign-in screen for this workspace."
         tone="loading"
       />
     );

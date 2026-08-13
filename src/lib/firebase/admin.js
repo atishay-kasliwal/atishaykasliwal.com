@@ -32,12 +32,6 @@ export function toFriendlyAuthError(error) {
   const code = error?.code || '';
 
   switch (code) {
-    case 'auth/popup-closed-by-user':
-      return 'Google sign-in was closed before it finished.';
-    case 'auth/popup-blocked':
-      return 'The browser blocked the Google sign-in popup. Allow popups for this site and try again.';
-    case 'auth/cancelled-popup-request':
-      return 'Another sign-in window is already open.';
     case 'auth/invalid-admin-username':
       return 'That username is not allowed for this admin workspace.';
     case 'auth/invalid-credential':
@@ -45,6 +39,12 @@ export function toFriendlyAuthError(error) {
     case 'auth/user-not-found':
     case 'auth/wrong-password':
       return 'The username or password is incorrect.';
+    case 'auth/user-disabled':
+      return 'This admin account has been disabled in Firebase Authentication.';
+    case 'auth/operation-not-allowed':
+      return 'Email/password sign-in is not enabled in Firebase for this project yet.';
+    case 'auth/network-request-failed':
+      return 'The network request failed. Check your connection and try again.';
     case 'auth/too-many-requests':
       return 'Too many sign-in attempts were made. Please wait a moment and try again.';
     case 'auth/weak-password':
@@ -53,6 +53,8 @@ export function toFriendlyAuthError(error) {
       return 'Please sign in again before changing the password.';
     case 'auth/no-current-user':
       return 'You need to be signed in before changing the password.';
+    case 'auth/user-token-expired':
+      return 'Your session expired. Sign in again to continue.';
     default:
       return error?.message || 'Authentication failed. Please try again.';
   }
