@@ -5,7 +5,7 @@
  * Slack) don't execute JS, so react-helmet meta tags are never seen.
  *
  * Solution: Detect bot User-Agent → return minimal HTML with correct OG tags.
- *           Real users → context.next() → falls through to _redirects → index.html.
+ *           Real users → fetch the root SPA shell directly from Pages assets.
  *
  * Deploy: Committed to `functions/` — Cloudflare Pages picks it up automatically.
  * No wrangler config changes needed.
@@ -141,9 +141,10 @@ export async function onRequestGet(context) {
   const url = request.url;
   const id  = params.id;
 
-  // Non-bot: pass through → _redirects serves index.html → React handles routing
+  // Redirect rules do not run on Pages Function routes, so real browsers need
+  // an explicit asset fetch for the SPA shell.
   if (!BOT_UA.test(ua)) {
-    return context.next();
+    return context.env.ASSETS.fetch(new URL('/', request.url));
   }
 
   const project = lookupProject(id);
