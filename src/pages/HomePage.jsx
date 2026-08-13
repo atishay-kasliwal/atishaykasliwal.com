@@ -220,10 +220,6 @@ function HomePage() {
 
         <AboutSection />
 
-        <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
-          <SkillsSection />
-        </div>
-
         <div id="journey-section" data-analytics-section="features" className="section-wrap" translate="no">
           <StoryTimeline />
         </div>
@@ -391,6 +387,10 @@ function HomePage() {
             </div>
           </div>
         </section>
+
+        <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
+          <SkillsSection />
+        </div>
       </div>
     </>
   );
