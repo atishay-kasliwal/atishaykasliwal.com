@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, Fragment } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import Footer from './components/Footer';
 import PageShell from './components/PageShell';
@@ -84,11 +84,29 @@ function RouteFallback() {
  */
 const Lazy = ({ children }) => <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
 
+function isAdminWorkspacePath(pathname = '') {
+  return (
+    pathname === '/admin' ||
+    pathname.startsWith('/admin/') ||
+    pathname === '/workspace' ||
+    pathname.startsWith('/workspace/')
+  );
+}
+
+function AdminWorkspaceRedirect() {
+  const location = useLocation();
+  const adminPath =
+    location.pathname === '/workspace'
+      ? '/admin'
+      : `/admin${location.pathname.slice('/workspace'.length)}`;
+
+  return <Navigate to={`${adminPath}${location.search || ''}${location.hash || ''}`} replace />;
+}
+
 export default function AppRoutes({ overrides }) {
   const R = { ...lazyRoutes, ...overrides };
   const location = useLocation();
-  const isAdminRoute =
-    location.pathname === '/admin' || location.pathname.startsWith('/admin/');
+  const isAdminRoute = isAdminWorkspacePath(location.pathname);
 
   /* With eager components there is nothing to suspend on, so the boundary is
      skipped entirely and the markup inlines into the static HTML. */
@@ -123,6 +141,7 @@ export default function AppRoutes({ overrides }) {
             <Route path="/art" element={<Boundary><R.ArtPage /></Boundary>} />
             <Route path="/atriveo" element={<Boundary><R.AtriveoPage /></Boundary>} />
             <Route path="/admin/*" element={<Boundary><R.AdminApp /></Boundary>} />
+            <Route path="/workspace/*" element={<AdminWorkspaceRedirect />} />
 
             {/* /highlights (the index) retired to /projects — a 301 in
                 public/_redirects handles it in production. The DETAIL pages

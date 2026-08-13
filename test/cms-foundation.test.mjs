@@ -153,6 +153,131 @@ test('cms validation enforces content state, slug format, and landing slot uniqu
     ),
     true
   );
+
+  const mediaBackedProject = validateDocument(
+    'cms_projects',
+    {
+      id: 'project-1',
+      slug: 'project-1',
+      title: 'Project 1',
+      status: 'draft',
+      visibility: 'public',
+      category: 'Tooling',
+      coverImage: '/covers/project-1.webp',
+    },
+    {
+      collections: {
+        cms_media: [
+          {
+            id: 'asset-1',
+            slug: 'asset-1',
+            src: '/covers/project-1.webp',
+            storagePath: 'cms/imported/project-1.webp',
+          },
+        ],
+      },
+    }
+  );
+  assert.equal(mediaBackedProject.valid, true);
+});
+
+test('admin media upload helpers build cms-safe asset metadata', async () => {
+  const {
+    buildUploadedMediaDocument,
+    createUploadedMediaTitle,
+    resolveCmsUploadCollectionName,
+  } = await loadModule('/src/admin/lib/adminMediaUploads.js');
+
+  assert.equal(createUploadedMediaTitle('hero-cover_final.webp'), 'hero cover final');
+  assert.equal(resolveCmsUploadCollectionName('cms_music_entries'), 'music');
+  assert.equal(resolveCmsUploadCollectionName('cms_projects'), 'projects');
+
+  const asset = buildUploadedMediaDocument({
+    file: {
+      name: 'hero-cover_final.webp',
+      type: 'image/webp',
+      size: 24567,
+    },
+    downloadUrl: 'https://example.com/hero-cover.webp',
+    storagePath: 'cms/projects/2026/08/hero-cover-final.webp',
+    now: new Date('2026-08-13T12:00:00.000Z'),
+    usage: 'Project · Cover image',
+    width: 1600,
+    height: 900,
+    id: 'media-hero-cover-final',
+    slug: 'hero-cover-final',
+  });
+
+  assert.deepEqual(
+    {
+      id: asset.id,
+      slug: asset.slug,
+      title: asset.title,
+      kind: asset.kind,
+      fileType: asset.fileType,
+      sizeBytes: asset.sizeBytes,
+      width: asset.width,
+      height: asset.height,
+      storagePath: asset.storagePath,
+      src: asset.src,
+      status: asset.status,
+      visibility: asset.visibility,
+    },
+    {
+      id: 'media-hero-cover-final',
+      slug: 'hero-cover-final',
+      title: 'hero cover final',
+      kind: 'image',
+      fileType: 'WEBP',
+      sizeBytes: 24567,
+      width: 1600,
+      height: 900,
+      storagePath: 'cms/projects/2026/08/hero-cover-final.webp',
+      src: 'https://example.com/hero-cover.webp',
+      status: 'published',
+      visibility: 'public',
+    }
+  );
+});
+
+test('admin firestore cms helpers serialize timestamps and strip local metadata', async () => {
+  const { deserializeCmsDocument, serializeCmsDocument } = await loadModule(
+    '/src/admin/lib/adminFirestoreCms.js'
+  );
+
+  const serialized = serializeCmsDocument({
+    id: 'project-1',
+    title: 'Project 1',
+    status: 'draft',
+    visibility: 'public',
+    createdAt: '2026-08-13T12:00:00.000Z',
+    updatedAt: '2026-08-13T13:00:00.000Z',
+    displayOrder: '',
+    year: '2026',
+    _syncFailedAt: '2026-08-13T14:00:00.000Z',
+  });
+
+  assert.equal(serialized.id, 'project-1');
+  assert.equal(serialized.title, 'Project 1');
+  assert.equal(serialized.displayOrder, undefined);
+  assert.equal(serialized.year, 2026);
+  assert.equal('_syncFailedAt' in serialized, false);
+  assert.equal(typeof serialized.createdAt?.toDate, 'function');
+  assert.equal(typeof serialized.updatedAt?.toDate, 'function');
+
+  const deserialized = deserializeCmsDocument('project-1', {
+    ...serialized,
+    publishedAt: {
+      toDate() {
+        return new Date('2026-08-13T15:00:00.000Z');
+      },
+    },
+  });
+
+  assert.equal(deserialized.id, 'project-1');
+  assert.equal(deserialized.createdAt, '2026-08-13T12:00:00.000Z');
+  assert.equal(deserialized.updatedAt, '2026-08-13T13:00:00.000Z');
+  assert.equal(deserialized.publishedAt, '2026-08-13T15:00:00.000Z');
 });
 
 test('legacy content adapters preserve testimonials, collections, and media-backed metadata', async () => {
@@ -209,4 +334,29 @@ test('existing public routes still render through the SSR entry', async () => {
   const project = await render('/projects/atriveo');
   assert.equal(project.errors.length, 0);
   assert.match(project.html, /Atriveo/i);
+});
+
+test('admin metadata and command indexing cover music collection workflows', async () => {
+  const { getAdminPageMeta } = await loadModule('/src/admin/adminRoutes.js');
+  const { createCommandItems, createLiveCollections } = await loadModule(
+    '/src/admin/lib/adminContent.js'
+  );
+
+  const newCollectionMeta = getAdminPageMeta('/admin/music/collections/new');
+  assert.equal(newCollectionMeta.title, 'New Music Collection');
+
+  const editCollectionMeta = getAdminPageMeta('/admin/music/collections/all-time-favorites');
+  assert.equal(editCollectionMeta.title, 'Edit Music Collection');
+
+  const collections = createLiveCollections();
+  const commandItems = createCommandItems(collections);
+
+  assert.equal(
+    commandItems.some((item) => item.href?.startsWith('/admin/music/collections/')),
+    true
+  );
+  assert.equal(
+    commandItems.some((item) => item.href === '/admin/music/new'),
+    true
+  );
 });

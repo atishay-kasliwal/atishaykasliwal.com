@@ -1,98 +1,259 @@
-export const ADMIN_NAV_ITEMS = [
-  { key: 'overview', href: '/admin', label: 'Overview' },
-  { key: 'blogs', href: '/admin/blogs', label: 'Blogs' },
-  { key: 'projects', href: '/admin/projects', label: 'Projects' },
-  { key: 'photos', href: '/admin/photos', label: 'Photos' },
-  { key: 'testimonials', href: '/admin/testimonials', label: 'Testimonials' },
-  { key: 'journey', href: '/admin/journey', label: 'Journey' },
-  { key: 'landing', href: '/admin/landing', label: 'Landing' },
-  { key: 'movies', href: '/admin/movies', label: 'Movies' },
-  { key: 'tv', href: '/admin/tv', label: 'TV' },
-  { key: 'music', href: '/admin/music', label: 'Music' },
-  { key: 'media', href: '/admin/media', label: 'Media' },
-  { key: 'settings', href: '/admin/settings', label: 'Settings' },
+import { sentenceCase } from './lib/adminUtils.js';
+
+export const ADMIN_NAV_GROUPS = [
+  {
+    key: 'workspace',
+    label: 'Workspace',
+    items: ['overview'],
+  },
+  {
+    key: 'content',
+    label: 'Content',
+    items: ['blogs', 'projects', 'photos', 'testimonials', 'journey'],
+  },
+  {
+    key: 'entertainment',
+    label: 'Entertainment',
+    items: ['movies', 'tv', 'music'],
+  },
+  {
+    key: 'system',
+    label: 'System',
+    items: ['media', 'landing', 'settings'],
+  },
 ];
 
-const STATIC_META = {
-  '/admin': {
-    title: 'Dashboard',
-    description: 'A private overview of every editorial surface that will be CMS-managed.',
+export const ADMIN_MODULES = {
+  overview: {
+    key: 'overview',
+    href: '/admin',
+    label: 'Overview',
+    group: 'workspace',
+    icon: 'dashboard',
+    description: 'Operational view of live content, drafts, and publishing readiness.',
   },
-  '/admin/blogs': {
-    title: 'Blogs',
-    description: 'Manage essays, publication state, SEO metadata, and project-linked writeups.',
+  blogs: {
+    key: 'blogs',
+    collection: 'cms_posts',
+    href: '/admin/blogs',
+    label: 'Blogs',
+    singular: 'Blog',
+    group: 'content',
+    icon: 'fileText',
+    supportsGrid: false,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/blogs/new',
+    description: 'Draft, review, and manage long-form writing, metadata, and related project writeups.',
   },
-  '/admin/blogs/new': {
-    title: 'New Blog Draft',
-    description: 'The editor will land in the next phase; this route now anchors workflow and permissions.',
+  projects: {
+    key: 'projects',
+    collection: 'cms_projects',
+    href: '/admin/projects',
+    label: 'Projects',
+    singular: 'Project',
+    group: 'content',
+    icon: 'sparkles',
+    supportsGrid: true,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/projects/new',
+    description: 'Control case studies, featured portfolio items, links, and supporting narrative.',
   },
-  '/admin/projects': {
-    title: 'Projects',
-    description: 'Manage case studies, cards, links, media, and project-to-blog relationships.',
+  photos: {
+    key: 'photos',
+    collection: 'cms_photos',
+    href: '/admin/photos',
+    label: 'Photos',
+    singular: 'Photo',
+    group: 'content',
+    icon: 'camera',
+    supportsGrid: true,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/photos/new',
+    description: 'Organize photography, metadata, gallery sequencing, and visual presentation.',
   },
-  '/admin/projects/new': {
-    title: 'New Project',
-    description: 'Project authoring will reuse the shared validation and media pipeline shipped in this foundation.',
+  testimonials: {
+    key: 'testimonials',
+    collection: 'cms_testimonials',
+    href: '/admin/testimonials',
+    label: 'Testimonials',
+    singular: 'Testimonial',
+    group: 'content',
+    icon: 'message',
+    supportsGrid: false,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/testimonials/new',
+    description: 'Maintain quotes, attribution, visibility, and homepage ordering.',
   },
-  '/admin/photos': {
-    title: 'Photos',
-    description: 'Manage gallery entries, metadata, ordering, and future media uploads.',
+  journey: {
+    key: 'journey',
+    collection: 'cms_journey_entries',
+    href: '/admin/journey',
+    label: 'Journey',
+    singular: 'Journey entry',
+    group: 'content',
+    icon: 'timeline',
+    supportsGrid: true,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/journey/new',
+    description: 'Update the timeline, ordering, imagery, and milestones that power the homepage story.',
   },
-  '/admin/testimonials': {
-    title: 'Testimonials',
-    description: 'Manage quotes, attribution, avatars, and landing-page ordering.',
+  movies: {
+    key: 'movies',
+    collection: 'cms_movies',
+    href: '/admin/movies',
+    label: 'Movies',
+    singular: 'Movie',
+    group: 'entertainment',
+    icon: 'clapperboard',
+    supportsGrid: true,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/movies/new',
+    description: 'Track film entries, artwork, visibility, and watch-state metadata.',
   },
-  '/admin/journey': {
-    title: 'Journey',
-    description: 'Manage timeline entries, display order, imagery, and placement.',
+  tv: {
+    key: 'tv',
+    collection: 'cms_tv_series',
+    href: '/admin/tv',
+    label: 'TV',
+    singular: 'TV series',
+    group: 'entertainment',
+    icon: 'tv',
+    supportsGrid: true,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/tv/new',
+    description: 'Manage television entries, progress state, artwork, and future dedicated pages.',
   },
-  '/admin/landing': {
-    title: 'Landing Configuration',
-    description: 'Control fixed homepage slots without changing the visual grid.',
+  music: {
+    key: 'music',
+    collection: 'cms_music_entries',
+    href: '/admin/music',
+    label: 'Music',
+    singular: 'Music entry',
+    group: 'entertainment',
+    icon: 'music',
+    supportsGrid: true,
+    supportsCreate: true,
+    supportsEditor: true,
+    createPath: '/admin/music/new',
+    description: 'Manage monthly listening, all-time favorites, and individual music entries.',
   },
-  '/admin/movies': {
-    title: 'Movies',
-    description: 'Manage films, watch state, posters, and future dedicated media pages.',
+  media: {
+    key: 'media',
+    collection: 'cms_media',
+    href: '/admin/media',
+    label: 'Media Library',
+    singular: 'Media asset',
+    group: 'system',
+    icon: 'image',
+    supportsGrid: true,
+    supportsCreate: false,
+    supportsEditor: true,
+    description: 'Audit reusable assets, metadata, and where each file is currently used.',
   },
-  '/admin/tv': {
-    title: 'TV Series',
-    description: 'Manage series, watch state, artwork, and dedicated TV listings.',
+  landing: {
+    key: 'landing',
+    collection: 'cms_landing_config',
+    href: '/admin/landing',
+    label: 'Landing',
+    singular: 'Landing configuration',
+    group: 'system',
+    icon: 'layout',
+    supportsGrid: false,
+    supportsCreate: false,
+    supportsEditor: true,
+    description: 'Choose which live content appears in the fixed homepage slots.',
   },
-  '/admin/music': {
-    title: 'Music',
-    description: 'Manage all-time favorites, monthly listening collections, and individual entries.',
-  },
-  '/admin/media': {
-    title: 'Media Library',
-    description: 'Track reusable uploads, storage paths, types, and validation status.',
-  },
-  '/admin/settings': {
-    title: 'Settings',
-    description: 'Review environment assumptions, admin account setup, and operational notes.',
-  },
-  '/admin/sign-in': {
-    title: 'Sign In',
-    description: 'Authenticate with the private admin account before entering the editorial workspace.',
-  },
-  '/admin/unauthorized': {
-    title: 'Unauthorized',
-    description: 'This account is signed in but has not been granted CMS access.',
+  settings: {
+    key: 'settings',
+    collection: 'cms_site_settings',
+    href: '/admin/settings',
+    label: 'Settings',
+    singular: 'Settings',
+    group: 'system',
+    icon: 'settings',
+    supportsGrid: false,
+    supportsCreate: false,
+    supportsEditor: false,
+    description: 'Manage account security, appearance, branding defaults, and environment configuration.',
   },
 };
 
+export const ADMIN_NAV_ITEMS = Object.values(ADMIN_MODULES).filter((item) => item.href);
+
+export function getModuleByKey(key) {
+  return ADMIN_MODULES[key] || null;
+}
+
 export function getAdminPageMeta(pathname) {
-  if (STATIC_META[pathname]) return STATIC_META[pathname];
-  if (/^\/admin\/blogs\/[^/]+$/.test(pathname)) {
+  if (pathname === '/admin' || pathname === '/workspace') {
     return {
-      title: 'Edit Blog Draft',
-      description: 'The full editor is intentionally deferred; permissions and routing are ready now.',
+      title: 'Overview',
+      description: ADMIN_MODULES.overview.description,
     };
   }
-  if (/^\/admin\/projects\/[^/]+$/.test(pathname)) {
+
+  const normalizedPath = pathname.replace(/^\/workspace/, '/admin');
+
+  if (normalizedPath === '/admin/music/collections/new') {
     return {
-      title: 'Edit Project',
-      description: 'Project editing will be enabled in the next phase on top of this foundation.',
+      title: 'New Music Collection',
+      description: 'Create a new ranked or monthly collection for the music workspace.',
     };
   }
-  return STATIC_META['/admin'];
+
+  if (/^\/admin\/music\/collections\/[^/]+$/i.test(normalizedPath)) {
+    return {
+      title: 'Edit Music Collection',
+      description: 'Review ordering, assigned entries, and publishing controls for this collection.',
+    };
+  }
+
+  for (const module of Object.values(ADMIN_MODULES)) {
+    if (normalizedPath === module.href) {
+      return {
+        title: module.label,
+        description: module.description,
+      };
+    }
+
+    if (module.supportsCreate && normalizedPath === `${module.href}/new`) {
+      return {
+        title: `New ${module.singular}`,
+        description: `Create a new ${module.singular.toLowerCase()} draft inside the private workspace.`,
+      };
+    }
+
+    if (module.supportsEditor && normalizedPath.startsWith(`${module.href}/`)) {
+      return {
+        title: `Edit ${module.singular}`,
+        description: `Review details, metadata, status, and publishing controls for this ${module.singular.toLowerCase()}.`,
+      };
+    }
+  }
+
+  if (normalizedPath === '/admin/sign-in') {
+    return {
+      title: 'Sign In',
+      description: 'Authenticate with the private editorial workspace.',
+    };
+  }
+
+  if (normalizedPath === '/admin/unauthorized') {
+    return {
+      title: 'Access Required',
+      description: 'This account is signed in but does not have access to the workspace.',
+    };
+  }
+
+  return {
+    title: sentenceCase(normalizedPath.split('/').filter(Boolean).slice(-1)[0] || 'Overview'),
+    description: 'Private editorial workspace.',
+  };
 }

@@ -44,6 +44,7 @@ const SPLIT_ROUTES = [
  */
 const NON_PRERENDERED_PATTERNS = [
   /^\/admin(?:\/.*)?$/i,
+  /^\/workspace(?:\/.*)?$/i,
   /^\/highlights\/.+/i,
 ];
 

@@ -249,12 +249,12 @@ function validateRelationshipValue(value, relationshipCollection, path, issues, 
   const collection = context.collections?.[relationshipCollection];
   if (!collection) return;
 
-  const ids = new Set(
-    collection
-      .map((entry) => entry.id || entry.slug)
+  const ids = new Set();
+  collection.forEach((entry) => {
+    [entry?.id, entry?.slug, entry?.src, entry?.storagePath, entry?.mediaId]
       .filter(Boolean)
-      .map((item) => String(item))
-  );
+      .forEach((item) => ids.add(String(item)));
+  });
 
   if (Array.isArray(value)) {
     value.forEach((item, index) => {

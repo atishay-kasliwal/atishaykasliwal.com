@@ -2,13 +2,14 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import AdminStateScreen from '../components/AdminStateScreen.jsx';
 import { useAdminAuth } from '../auth/AdminAuthProvider.jsx';
+import { AdminButton } from '../components/AdminPrimitives.jsx';
 
 const REASON_COPY = {
   not_allowlisted:
-    'This signed-in account is not the configured admin account for the CMS workspace.',
+    'This signed-in account is not approved for the Atishay CMS workspace.',
   missing_admin_claim:
-    'This account is allowlisted locally, but Firebase has not granted it the required admin custom claim yet.',
-  unauthorized: 'This account is not approved for the CMS workspace yet.',
+    'This account is locally allowlisted, but Firebase still has not granted the required admin claim.',
+  unauthorized: 'This account does not have access to the private editorial workspace.',
 };
 
 export default function AdminUnauthorizedPage() {
@@ -20,22 +21,22 @@ export default function AdminUnauthorizedPage() {
 
   return (
     <AdminStateScreen
-      eyebrow="Access Restricted"
+      eyebrow="Access restricted"
       title="Administrator access is still blocked"
       description={REASON_COPY[reason] || REASON_COPY.unauthorized}
       tone="warning"
       actions={(
         <>
-          <button type="button" className="admin-button" onClick={() => navigate(`/admin/sign-in?next=${encodeURIComponent(next)}`, { replace: true })}>
+          <AdminButton tone="primary" onClick={() => navigate(`/admin/sign-in?next=${encodeURIComponent(next)}`, { replace: true })}>
             Try another account
-          </button>
-          <button type="button" className="admin-button admin-button--ghost" onClick={auth.signOut}>
+          </AdminButton>
+          <AdminButton tone="ghost" onClick={auth.signOut}>
             Sign out
-          </button>
+          </AdminButton>
           {!auth.hasClaim ? (
-            <button type="button" className="admin-button admin-button--ghost" onClick={auth.refreshClaims}>
+            <AdminButton tone="ghost" onClick={auth.refreshClaims}>
               Refresh claims
-            </button>
+            </AdminButton>
           ) : null}
         </>
       )}
