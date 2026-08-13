@@ -16,14 +16,17 @@
 /highlights  /projects  301
 /Highlights  /projects  301
 
-# Highlight detail pages are addressed by UUID and are rendered client-side,
-# so they still need the SPA fallback.
-/highlights/*  /index.html  200
-/Highlights/*  /index.html  200
+# Highlight detail pages are addressed by UUID and are rendered client-side.
+#
+# Rewriting them to `/` instead of `/index.html` matters on Cloudflare Pages:
+# `/index.html` is itself redirected to `/`, so using it here can bounce the
+# request out of the proxy path entirely.
+/highlights/*  /  200
+/Highlights/*  /  200
 
 # Admin routes are client-rendered and protected in-app.
-/admin  /index.html  200
-/admin/*  /index.html  200
+/admin  /  200
+/admin/*  /  200
 
 # Everything unmatched is genuinely missing.
 /*  /404.html  404

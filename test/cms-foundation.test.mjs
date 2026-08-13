@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
@@ -89,6 +90,16 @@ test('protected admin routing handles signed-out, unauthorized, authorized, and 
   );
   assert.equal(loading.status, 'loading');
   assert.equal(loading.redirectTo, null);
+});
+
+test('cloudflare spa fallbacks use the root shell for admin and highlights routes', async () => {
+  const redirects = await fs.readFile(path.join(ROOT, 'public', '_redirects'), 'utf-8');
+
+  assert.match(redirects, /^\/admin\s+\/\s+200$/m);
+  assert.match(redirects, /^\/admin\/\*\s+\/\s+200$/m);
+  assert.match(redirects, /^\/highlights\/\*\s+\/\s+200$/m);
+  assert.match(redirects, /^\/Highlights\/\*\s+\/\s+200$/m);
+  assert.doesNotMatch(redirects, /^\/admin(?:\/\*)?\s+\/index\.html\s+200$/m);
 });
 
 test('cms validation enforces content state, slug format, and landing slot uniqueness', async () => {
