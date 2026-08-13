@@ -220,7 +220,7 @@ function HomePage() {
 
         <AboutSection />
 
-        <div id="skills-section" data-analytics-section="skills" translate="no">
+        <div id="skills-section" data-analytics-section="skills" className="section-wrap" translate="no">
           <SkillsSection />
         </div>
 

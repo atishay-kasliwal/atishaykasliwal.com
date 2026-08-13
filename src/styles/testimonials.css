@@ -159,7 +159,7 @@
 
 @media (max-width: 768px) {
   .testimonials-inner {
-    padding: 1rem 1.5rem 0.2rem 1.5rem;
+    padding: 0 1.5rem 0.2rem 1.5rem;
   }
   .testimonials-grid {
     grid-template-columns: 1fr;
@@ -176,7 +176,7 @@
 
 @media (max-width: 480px) {
   .testimonials-inner {
-    padding: 1rem 1rem 0.2rem 1rem;
+    padding: 0 1rem 0.2rem 1rem;
   }
   .testimonials-title {
     font-size: 1.6rem;

@@ -1,6 +1,5 @@
 .editorial-grid-section {
   width: 100%;
-  padding: 0;
 }
 
 .editorial-grid-inner {
@@ -18,7 +17,7 @@
 }
 
 .editorial-grid-header p {
-  margin: 0 0 2rem 0;
+  margin: 0;
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
@@ -236,7 +235,6 @@
 }
 
 @media (max-width: 640px) {
-  .editorial-grid-section { padding: 2rem 0 2.5rem; }
   .editorial-grid-inner { width: 100%; padding: 0 1rem; box-sizing: border-box; }
   .editorial-grid {
     display: flex;
