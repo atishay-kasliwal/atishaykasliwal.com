@@ -218,6 +218,16 @@ function HomePage() {
           </div>
         </div>
 
+        <AboutSection />
+
+        <div id="skills-section" data-analytics-section="skills" translate="no">
+          <SkillsSection />
+        </div>
+
+        <div id="journey-section" data-analytics-section="features" className="section-wrap" translate="no">
+          <StoryTimeline />
+        </div>
+
         <section className="editorial-grid-section section-wrap" data-analytics-section="editorial" translate="no">
           <div className="editorial-grid-inner">
             <div className="editorial-grid-header" translate="no">
@@ -381,16 +391,6 @@ function HomePage() {
             </div>
           </div>
         </section>
-
-        <AboutSection />
-
-        <div id="skills-section" data-analytics-section="skills" translate="no">
-          <SkillsSection />
-        </div>
-
-        <div id="journey-section" data-analytics-section="features" className="section-wrap" translate="no">
-          <StoryTimeline />
-        </div>
       </div>
     </>
   );
