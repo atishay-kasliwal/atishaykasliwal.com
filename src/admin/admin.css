@@ -432,6 +432,11 @@
   line-height: 1;
 }
 
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .admin-btn--sm {
   min-height: 28px;
   padding: 0 9px;

@@ -22,6 +22,17 @@ jobs:
       VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID || secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
       VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID || secrets.REACT_APP_FIREBASE_APP_ID }}
       VITE_LOG_ENDPOINT: ${{ secrets.VITE_LOG_ENDPOINT || secrets.REACT_APP_LOG_ENDPOINT }}
+      # The admin identity settings were previously left out of this list, so the
+      # production bundle fell back to the defaults compiled into
+      # src/lib/firebase/env.js. That happened to match .env.local, which is the
+      # only reason sign-in worked at all — change the local values and
+      # production would have silently kept authorizing the old account. Pinning
+      # them here makes the deployed allowlist explicit; the `||` defaults keep
+      # the build working before the secrets exist.
+      VITE_ADMIN_USERNAME: ${{ secrets.VITE_ADMIN_USERNAME || 'katishay' }}
+      VITE_ADMIN_AUTH_EMAIL: ${{ secrets.VITE_ADMIN_AUTH_EMAIL || 'katishay@admin.atishaykasliwal.com' }}
+      VITE_ADMIN_ALLOWED_EMAILS: ${{ secrets.VITE_ADMIN_ALLOWED_EMAILS || 'katishay@admin.atishaykasliwal.com' }}
+      VITE_ADMIN_REQUIRE_FIREBASE_CLAIM: ${{ secrets.VITE_ADMIN_REQUIRE_FIREBASE_CLAIM || 'false' }}
 
     steps:
       - name: Checkout

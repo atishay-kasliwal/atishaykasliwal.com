@@ -25,8 +25,26 @@
 /Highlights/*  /  200
 
 # Admin routes are client-rendered and protected in-app.
+#
+# functions/admin/ owns these paths in production — a Pages Function runs before
+# this file is consulted, so these two lines are the fallback for when Functions
+# are unavailable (local `wrangler pages dev` without functions, preview builds).
+#
+# The `/` target is load-bearing. Pointing them at `/index.html` — as they did
+# until Aug 2026 — made Cloudflare answer /admin with a 308 to `/`, because
+# Pages permanently redirects /index.html to /. Browsers cache a 308 forever, so
+# anyone who opened /admin under that config keeps getting bounced to the
+# homepage from their own cache until they clear the site's data. Never target
+# /index.html here.
 /admin  /  200
 /admin/*  /  200
+
+# /workspace is the legacy alias for /admin. Without these it falls through to
+# the 404 rule below and answers with a 404 status, which the client then has to
+# route out of. 302, not 301: a permanent redirect on an admin path is exactly
+# the mistake documented above, and it is not worth re-learning.
+/workspace  /admin  302
+/workspace/*  /admin/:splat  302
 
 # Everything unmatched is genuinely missing.
 /*  /404.html  404

@@ -100,6 +100,15 @@ test('cloudflare spa fallbacks use the root shell for admin and highlights route
   assert.match(redirects, /^\/highlights\/\*\s+\/\s+200$/m);
   assert.match(redirects, /^\/Highlights\/\*\s+\/\s+200$/m);
   assert.doesNotMatch(redirects, /^\/admin(?:\/\*)?\s+\/index\.html\s+200$/m);
+
+  // /workspace has to resolve at the edge, otherwise it falls through to the
+  // 404 rule and answers an admin alias with a 404 status.
+  assert.match(redirects, /^\/workspace\s+\/admin\s+302$/m);
+  assert.match(redirects, /^\/workspace\/\*\s+\/admin\/:splat\s+302$/m);
+
+  // A permanent redirect on an admin path is what stranded /admin in browser
+  // caches once already. Never again on these routes.
+  assert.doesNotMatch(redirects, /^\/(?:admin|workspace)\S*\s+\S+\s+30[18]$/m);
 });
 
 test('admin pages function serves an admin-specific boot shell', async () => {
