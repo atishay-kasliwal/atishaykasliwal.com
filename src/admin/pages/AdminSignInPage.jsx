@@ -78,6 +78,15 @@ export default function AdminSignInPage() {
             Sign in with the private admin account used to manage writing, projects, media, and landing-page content.
           </p>
           {loggedOut ? <AdminBadge tone="success">You signed out successfully.</AdminBadge> : null}
+          {/* A missing Firebase config used to fail silently here: signIn()
+              stores configError and returns without ever reaching Firebase, and
+              this page only rendered auth.error — so the button appeared to do
+              nothing at all. Surfacing it names the actual problem. */}
+          {auth.configError ? (
+            <AdminBadge tone="danger">
+              {auth.configError} Set the VITE_FIREBASE_* variables for this environment.
+            </AdminBadge>
+          ) : null}
         </div>
 
         <form className="admin-authForm" onSubmit={handleSubmit}>
@@ -119,7 +128,13 @@ export default function AdminSignInPage() {
           </div>
 
           <div className="admin-auth__actions">
-            <AdminButton type="submit" tone="primary" icon="chevronRight" iconSide="right">
+            <AdminButton
+              type="submit"
+              tone="primary"
+              icon="chevronRight"
+              iconSide="right"
+              disabled={Boolean(auth.configError)}
+            >
               Sign in
             </AdminButton>
           </div>
