@@ -570,20 +570,25 @@ export function AdminWorkspaceProvider({ children }) {
       updateStatus(moduleKey, ids, 'archived', options);
     }
 
-    function createCollectionDraft(collectionName, initialDocument = {}, options = {}) {
-      const document = {
+    /* Build a draft WITHOUT persisting it.
+     *
+     * These used to persist on the spot, and both editor pages called them
+     * inline in `useRef(...)` — whose argument React evaluates on every render.
+     * So every render of a /new route wrote another draft and setState'd this
+     * provider, which re-rendered the editor, which wrote another draft: an
+     * infinite loop that React killed with "Maximum update depth exceeded",
+     * after spraying junk drafts at Firestore. Keeping the builders pure means
+     * a draft reaches storage only through the editor's autosave, once the
+     * document actually exists in component state. */
+    function buildCollectionDraft(collectionName, initialDocument = {}) {
+      return {
         ...createDefaultDocumentForCollection(collectionName),
         ...initialDocument,
       };
-      return persistDocument(collectionName, document, options);
     }
 
-    function createDraft(moduleKey, options = {}) {
-      const document = createDefaultDocument(moduleKey);
-      if (ADMIN_MODULES[moduleKey]?.collection) {
-        return persistDocument(ADMIN_MODULES[moduleKey].collection, document, options);
-      }
-      return document;
+    function buildDraft(moduleKey) {
+      return createDefaultDocument(moduleKey);
     }
 
     return {
@@ -608,8 +613,8 @@ export function AdminWorkspaceProvider({ children }) {
       getModuleCollection,
       getCollectionDocument,
       getDocument,
-      createCollectionDraft,
-      createDraft,
+      buildCollectionDraft,
+      buildDraft,
       upsertCollectionDocument,
       upsertDocument,
       duplicateCollectionDocument,

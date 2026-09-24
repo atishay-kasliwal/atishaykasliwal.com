@@ -163,10 +163,11 @@ export default function AdminEditorPage({ moduleKey, mode = 'edit' }) {
     { label: 'Mobile', value: 'mobile' },
   ];
 
-  const initialDocumentRef = useRef(
-    mode === 'create' ? workspace.createDraft(moduleKey) : workspace.getDocument(moduleKey, id)
+  /* Lazy initializer, not useRef(...): React evaluates a useRef argument on
+     every render, so the previous form rebuilt the draft each pass. */
+  const [documentState, setDocumentState] = useState(() =>
+    mode === 'create' ? workspace.buildDraft(moduleKey) : workspace.getDocument(moduleKey, id)
   );
-  const [documentState, setDocumentState] = useState(initialDocumentRef.current);
   const [saveState, setSaveState] = useState('saved');
   const [previewViewport, setPreviewViewport] = useState('desktop');
 
@@ -201,15 +202,22 @@ export default function AdminEditorPage({ moduleKey, mode = 'edit' }) {
   const isSyncing = saveState === 'saving' || workspace.sync.pendingWrites > 0;
   const savedLabel = workspace.sync.mode === 'firebase' ? 'Synced to Firebase' : 'Saved locally';
 
+  /* The autosave reads the workspace through a ref rather than depending on it.
+     The context value is rebuilt whenever collections change — including by
+     this very effect's write — so depending on `workspace` made each save
+     schedule the next one, forever. Only a real document edit should autosave. */
+  const workspaceRef = useRef(workspace);
+  workspaceRef.current = workspace;
+
   useEffect(() => {
     if (!documentState) return undefined;
     setSaveState('saving');
     const timeout = window.setTimeout(() => {
-      workspace.upsertDocument(moduleKey, documentState);
+      workspaceRef.current.upsertDocument(moduleKey, documentState);
       setSaveState('saved');
     }, 500);
     return () => window.clearTimeout(timeout);
-  }, [documentState, moduleKey, workspace]);
+  }, [documentState, moduleKey]);
 
   useEffect(() => {
     function handleBeforeUnload(event) {

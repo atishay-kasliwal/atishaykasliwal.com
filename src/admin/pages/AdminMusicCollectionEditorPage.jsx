@@ -146,12 +146,13 @@ export default function AdminMusicCollectionEditorPage({ mode = 'edit' }) {
     { label: 'Mobile', value: 'mobile' },
   ];
 
-  const initialDocumentRef = useRef(
+  /* Lazy initializer, not useRef(...): React evaluates a useRef argument on
+     every render, so the previous form rebuilt the draft each pass. */
+  const [documentState, setDocumentState] = useState(() =>
     mode === 'create'
-      ? workspace.createCollectionDraft('cms_music_collections')
+      ? workspace.buildCollectionDraft('cms_music_collections')
       : workspace.getCollectionDocument('cms_music_collections', id)
   );
-  const [documentState, setDocumentState] = useState(initialDocumentRef.current);
   const [saveState, setSaveState] = useState('saved');
   const [previewViewport, setPreviewViewport] = useState('desktop');
   const [searchEntries, setSearchEntries] = useState('');
@@ -201,15 +202,21 @@ export default function AdminMusicCollectionEditorPage({ mode = 'edit' }) {
   const isSyncing = saveState === 'saving' || workspace.sync.pendingWrites > 0;
   const savedLabel = workspace.sync.mode === 'firebase' ? 'Synced to Firebase' : 'Saved locally';
 
+  /* Read through a ref: the context value is rebuilt on every collections
+     change, including this effect's own write, so depending on `workspace`
+     made each save schedule the next one. */
+  const workspaceRef = useRef(workspace);
+  workspaceRef.current = workspace;
+
   useEffect(() => {
     if (!documentState) return undefined;
     setSaveState('saving');
     const timeout = window.setTimeout(() => {
-      workspace.upsertCollectionDocument('cms_music_collections', documentState);
+      workspaceRef.current.upsertCollectionDocument('cms_music_collections', documentState);
       setSaveState('saved');
     }, 500);
     return () => window.clearTimeout(timeout);
-  }, [documentState, workspace]);
+  }, [documentState]);
 
   useEffect(() => {
     function handleBeforeUnload(event) {

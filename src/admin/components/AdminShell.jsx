@@ -77,7 +77,13 @@ export default function AdminShell() {
   const auth = useAdminAuth();
   const { theme, toggleTheme } = useAdminTheme();
   const { toasts, dismissToast, pushToast } = useAdminToast();
-  const { insights } = useAdminWorkspace();
+  /* Destructured to `insights` alone until Aug 2026, while the sign-out dialog
+     below read `workspace.sync.mode`. That identifier existed nowhere in scope,
+     so the shell threw a ReferenceError on its first render and every
+     authenticated route died in the site error boundary — the CMS was
+     unreachable for anyone who actually signed in. */
+  const workspace = useAdminWorkspace();
+  const { insights } = workspace;
   const { actions } = useAdminPageActions();
 
   const [menuOpen, setMenuOpen] = useState(false);
