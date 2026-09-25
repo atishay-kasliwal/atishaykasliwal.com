@@ -13,26 +13,6 @@ jobs:
     permissions:
       contents: read
       deployments: write
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY || secrets.REACT_APP_FIREBASE_API_KEY }}
-      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN || secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
-      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID || secrets.REACT_APP_FIREBASE_PROJECT_ID }}
-      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET || secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
-      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID || secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
-      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID || secrets.REACT_APP_FIREBASE_APP_ID }}
-      VITE_LOG_ENDPOINT: ${{ secrets.VITE_LOG_ENDPOINT || secrets.REACT_APP_LOG_ENDPOINT }}
-      # The admin identity settings were previously left out of this list, so the
-      # production bundle fell back to the defaults compiled into
-      # src/lib/firebase/env.js. That happened to match .env.local, which is the
-      # only reason sign-in worked at all — change the local values and
-      # production would have silently kept authorizing the old account. Pinning
-      # them here makes the deployed allowlist explicit; the `||` defaults keep
-      # the build working before the secrets exist.
-      VITE_ADMIN_USERNAME: ${{ secrets.VITE_ADMIN_USERNAME || 'katishay' }}
-      VITE_ADMIN_AUTH_EMAIL: ${{ secrets.VITE_ADMIN_AUTH_EMAIL || 'katishay@admin.atishaykasliwal.com' }}
-      VITE_ADMIN_ALLOWED_EMAILS: ${{ secrets.VITE_ADMIN_ALLOWED_EMAILS || 'katishay@admin.atishaykasliwal.com' }}
-      VITE_ADMIN_REQUIRE_FIREBASE_CLAIM: ${{ secrets.VITE_ADMIN_REQUIRE_FIREBASE_CLAIM || 'false' }}
 
     steps:
       - name: Checkout
@@ -42,38 +22,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Validate admin Firebase env
-        run: |
-          node <<'EOF'
-          const required = [
-            'VITE_FIREBASE_API_KEY',
-            'VITE_FIREBASE_AUTH_DOMAIN',
-            'VITE_FIREBASE_PROJECT_ID',
-            'VITE_FIREBASE_STORAGE_BUCKET',
-            'VITE_FIREBASE_MESSAGING_SENDER_ID',
-            'VITE_FIREBASE_APP_ID',
-          ];
-
-          const missing = required.filter((key) => !String(process.env[key] || '').trim());
-
-          if (missing.length > 0) {
-            console.error(`Missing required deploy env: ${missing.join(', ')}`);
-            console.error('Admin CMS deploy stopped before publishing a broken /admin build.');
-            process.exit(1);
-          }
-
-          console.log('Firebase admin env check passed.');
-          EOF
+        run: npm ci
 
       - name: Build
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
-        run: npx wrangler@latest pages deploy ./build --project-name=atishay-kasliwal-github-io
+        run: npx wrangler@latest pages deploy ./dist --project-name=atishay-kasliwal-github-io --branch=master
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
