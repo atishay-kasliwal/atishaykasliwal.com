@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111111" />
+    <meta
+      name="description"
+      content="Atishay Kasliwal — full-stack engineer building distributed systems and the interfaces on top of them."
+    />
+    <title>Atishay Kasliwal</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <script>
+      document.documentElement.classList.add("has-intro");
+      // Reveal the page even if the main module fails to load.
+      window.portfolioIntroFallback = window.setTimeout(() => {
+        document.documentElement.classList.remove("has-intro");
+        document.querySelector("#intro-loader")?.remove();
+        document.querySelector(".portfolio")?.removeAttribute("inert");
+      }, 6000);
+    </script>
+  </head>
+  <body>
+    <div
+      id="intro-loader"
+      class="intro-loader"
+      role="region"
+      aria-label="Welcome intro"
+    >
+      <p class="loader-greeting" aria-hidden="true">
+        <span class="greeting-dot"></span
+        ><bdi id="greeting-word" lang="en">Hello</bdi>
+      </p>
+      <button id="skip-intro" class="skip-intro">
+        Skip intro <span aria-hidden="true">↗</span>
+      </button>
+    </div>
+    <main class="portfolio">
+      <header class="masthead">
+        <section class="info-column">
+          <h1 class="eyebrow">Atishay Kasliwal</h1>
+          <p class="lead">
+            Full-stack engineer <span class="aside">(5+ years in production)</span>
+          </p>
+          <p>New York · <time id="local-time">--:--</time></p>
+        </section>
+        <section class="info-column">
+          <h2 class="eyebrow">Now</h2>
+          <p class="lead">
+            Building Atriveo <span class="aside">(previously Bounteous)</span>
+          </p>
+          <p>MS Data Science, Stony Brook ’26</p>
+        </section>
+        <section class="info-column">
+          <h2 class="eyebrow">Stack</h2>
+          <p class="lead">Java · Python · Go · React</p>
+          <p>AWS · Kubernetes · Kafka</p>
+        </section>
+        <section class="info-column contact">
+          <h2 class="eyebrow">
+            Contact
+            <span class="availability"><span class="status-dot"></span>Open to roles</span>
+          </h2>
+          <a class="lead" href="mailto:katishay@gmail.com"
+            >katishay<wbr />@gmail.com</a
+          >
+          <p class="links">
+            <a
+              href="https://github.com/atishay-kasliwal"
+              target="_blank"
+              rel="noreferrer"
+              >GitHub <span>↗</span></a
+            >
+            <a
+              href="https://www.linkedin.com/in/atishay-kasliwal"
+              target="_blank"
+              rel="noreferrer"
+              >LinkedIn <span>↗</span></a
+            >
+            <a href="/Atishay-Kasliwal-Resume.pdf" target="_blank" rel="noreferrer"
+              >Résumé <span>↗</span></a
+            >
+          </p>
+        </section>
+        <p class="phone-status">
+          <span class="status-dot"></span>Open to roles
+        </p>
+      </header>
+
+      <section class="intro" aria-label="Introduction">
+        <p class="hero-copy">
+          Software engineer building distributed systems
+          <span>and the interfaces on top of them.</span>
+        </p>
+        <p class="hero-note">
+          A little curiosity. A lot of attention to detail.
+        </p>
+        <span class="intro-mark" aria-hidden="true">✳</span>
+      </section>
+
+      <section
+        class="work"
+        aria-label="Project carousel"
+        aria-roledescription="carousel"
+      >
+        <div class="work-toolbar">
+          <div class="work-label">
+            Selected work <span class="muted">/ Live and open source</span>
+          </div>
+          <div class="project-counter" aria-live="polite" aria-atomic="true">
+            <span id="current-index">01</span><span class="counter-rule"></span
+            ><span class="muted" id="total-count">06</span>
+          </div>
+          <div class="carousel-controls">
+            <span class="drag-hint">Drag or scroll to explore</span>
+            <button
+              id="toggle-carousel-motion"
+              aria-label="Pause automatic carousel movement"
+            >
+              Ⅱ</button
+            ><button id="previous" aria-label="Previous project">←</button
+            ><button id="next" aria-label="Next project">→</button>
+          </div>
+        </div>
+        <div
+          class="carousel-viewport"
+          id="carousel-viewport"
+          tabindex="0"
+          aria-label="Projects. Use left and right arrow keys to browse."
+        >
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+        <div class="work-footer">
+          <p id="selected-project">Atriveo Tracker <span>— Full-stack product / Live</span></p>
+          <button id="open-project">Explore project <span>↗</span></button>
+        </div>
+      </section>
+      <footer class="site-footer">
+        <span>© 2026 Atishay Kasliwal</span
+        ><span>Design meets development <span class="purple">↗</span></span>
+      </footer>
+      <nav class="thumb-bar" aria-label="Contact">
+        <button class="thumb-button primary" data-open-sheet="contact">
+          Contact
+        </button>
+        <a
+          class="thumb-button"
+          href="/Atishay-Kasliwal-Resume.pdf"
+          target="_blank"
+          rel="noreferrer"
+          >Résumé ↗</a
+        >
+        <button
+          class="thumb-button more"
+          data-open-sheet
+          aria-label="More about Atishay"
+        >
+          ⋯
+        </button>
+      </nav>
+    </main>
+
+    <dialog id="project-dialog" class="project-preview" aria-labelledby="dialog-title" aria-modal="false">
+      <div class="preview-browser-bar">
+        <button class="preview-window-close" data-close-project aria-label="Close project preview">
+          <span>×</span><i aria-hidden="true">−</i><i aria-hidden="true">+</i>
+        </button>
+        <h2 id="dialog-title"></h2>
+        <div class="preview-bar-end">
+          <span class="preview-demo-label" id="dialog-stack"></span>
+          <a id="dialog-open" class="preview-open" target="_blank" rel="noreferrer" hidden
+            ><span id="dialog-open-label">Open site</span> <b aria-hidden="true">↗</b></a
+          >
+        </div>
+      </div>
+      <div id="dialog-art" class="preview-canvas" role="img"></div>
+    </dialog>
+    <!-- Phone-only details sheet. Keep these details in sync with the header above. -->
+    <dialog id="info-sheet" class="info-sheet" aria-labelledby="sheet-title">
+      <div class="sheet-handle">
+        <button class="sheet-grabber" data-close-sheet aria-label="Close details">
+          <span></span>
+        </button>
+        <h2 id="sheet-title">Atishay Kasliwal</h2>
+        <p class="sheet-sub">Full-stack engineer · New York · 5+ years</p>
+      </div>
+      <section>
+        <h3 class="eyebrow">Now</h3>
+        <p class="sheet-lead">Building Atriveo</p>
+        <p class="sheet-sub">
+          MS Data Science, Stony Brook ’26 · Previously Bounteous
+        </p>
+      </section>
+      <section>
+        <h3 class="eyebrow">Stack</h3>
+        <ul class="sheet-chips">
+          <li>Java</li>
+          <li>Python</li>
+          <li>Go</li>
+          <li>AWS</li>
+          <li>Kubernetes</li>
+          <li>Kafka</li>
+          <li>React</li>
+          <li>Next.js</li>
+        </ul>
+      </section>
+      <section>
+        <h3 class="eyebrow">Contact</h3>
+        <div class="sheet-rows">
+          <div class="sheet-row email-row">
+            <a id="sheet-email" href="mailto:katishay@gmail.com"
+              >katishay@gmail.com</a
+            >
+            <button id="copy-email" data-email="katishay@gmail.com">
+              Copy
+            </button>
+          </div>
+          <a
+            class="sheet-row"
+            href="https://github.com/atishay-kasliwal"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub <span>↗</span></a
+          >
+          <a
+            class="sheet-row"
+            href="https://www.linkedin.com/in/atishay-kasliwal"
+            target="_blank"
+            rel="noreferrer"
+            >LinkedIn <span>↗</span></a
+          >
+          <a
+            class="sheet-row"
+            href="/Atishay-Kasliwal-Resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            >Résumé <span>PDF ↗</span></a
+          >
+        </div>
+      </section>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
