@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- Link-preview card (1200×630) rendered to public/og.jpg by render_og.py. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Share card</title>
+<style>
+  @font-face { font-family: Geist; src: url("../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Geist Mono"; src: url("../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  html, body { margin: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; position: relative; background: #111; color: #efefec; font-family: Geist, sans-serif; -webkit-font-smoothing: antialiased; }
+  .top { position: absolute; left: 64px; right: 64px; top: 56px; display: flex; justify-content: space-between; font: 400 17px "Geist Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #848480; }
+  .top span { display: flex; align-items: center; gap: 12px; }
+  .top span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #8554ff; }
+  .top span.open::before { background: #a5b8a1; }
+  h1 { position: absolute; left: 64px; top: 124px; width: 900px; margin: 0; font-size: 66px; font-weight: 450; line-height: 1.08; letter-spacing: -0.045em; }
+  h1 em { font-style: normal; color: #969692; }
+  .strip { position: absolute; left: -96px; top: 418px; display: flex; gap: 18px; }
+  .strip img { width: 238px; height: 146px; object-fit: cover; border-radius: 6px; opacity: 0.7; }
+  .strip img.on { opacity: 1; box-shadow: 0 0 0 3px #eee, 0 0 0 6px #111; }
+  .url { position: absolute; left: 64px; bottom: 30px; font: 400 16px "Geist Mono", monospace; color: #848480; }
+  .url b { color: #8554ff; font-weight: 400; }
+</style>
+</head>
+<body>
+  <div class="top"><span>Atishay Kasliwal</span><span class="open">New York · Open to roles</span></div>
+  <h1>Software engineer building distributed systems <em>and the interfaces on top of them.</em></h1>
+  <div class="strip">
+    <img src="../public/projects/cards/fedtalk.webp" alt="" />
+    <img src="../public/projects/cards/tracker.webp" alt="" class="on" />
+    <img src="../public/projects/cards/insurance.webp" alt="" />
+    <img src="../public/projects/cards/cortex.webp" alt="" />
+    <img src="../public/projects/cards/bio.webp" alt="" />
+    <img src="../public/projects/cards/jobs.webp" alt="" />
+  </div>
+  <div class="url">atishaykasliwal.com <b>↗</b></div>
+</body>
+</html>

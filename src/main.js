@@ -4,6 +4,8 @@ import { projects } from "./projects.js";
 import { startIntro } from "./intro.js";
 import { createProjectPreview } from "./project-preview.js";
 import { setupInfoSheet } from "./info-sheet.js";
+import { setupScrollStory } from "./scroll-story.js";
+import { setupCursorMarquee } from "./cursor-marquee.js";
 
 const viewport = document.querySelector("#carousel-viewport");
 const track = document.querySelector("#carousel-track");
@@ -309,6 +311,19 @@ viewport.addEventListener(
   },
   { passive: false },
 );
+
+// Page scroll (desktop scroll story) drifts the carousel too, the way the wheel does over it.
+setupScrollStory({
+  onScroll(delta) {
+    if (busy || dragging) return;
+    projectPreview.close({ immediate: true });
+    offset -= delta * 0.6;
+    resumeAt = performance.now() + 1200;
+    wrap();
+    draw();
+  },
+});
+setupCursorMarquee(track, projects, { isBusy: () => dragging || busy });
 
 document
   .querySelector("#open-project")

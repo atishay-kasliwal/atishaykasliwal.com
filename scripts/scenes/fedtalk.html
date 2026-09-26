@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- Preview scene for FedTalk: the market reacts to the 2:00 PM statement and the three research steps run. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>FedTalk scene</title>
+<style>
+  @font-face { font-family: Geist; src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Geist Mono"; src: url("../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  :root { --paper: #dfe6df; --ink: #16322a; --red: #c2412d; }
+  html, body { margin: 0; }
+  body { width: 1440px; height: 885px; overflow: hidden; position: relative; background: var(--paper); color: var(--ink); font-family: Geist, sans-serif; }
+  .nav, .bottom { position: absolute; left: 72px; right: 72px; display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.02em; }
+  .nav { top: 53px; font-size: 30px; }
+  .nav b { font-size: 50px; letter-spacing: -0.06em; font-weight: 700; }
+  .bottom { bottom: 53px; font-size: 26px; }
+  h1 { position: absolute; top: 204px; left: 72px; margin: 0; font-size: 106px; font-weight: 500; line-height: 1.02; letter-spacing: -0.06em; }
+  /* Chart box: right 5%, top 30%, 42% wide, 44% tall, as on the card. */
+  svg { position: absolute; left: 763px; top: 266px; width: 605px; height: 389px; overflow: visible; }
+  .line { fill: none; stroke: var(--ink); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+  .rule { stroke: var(--red); stroke-width: 2.5; stroke-dasharray: 8 6; }
+  .mark { position: absolute; top: 212px; left: 1045px; font: 400 24px/1.25 "Geist Mono", monospace; color: var(--red); }
+  .pulse { fill: var(--red); }
+  .steps { position: absolute; left: 72px; top: 520px; display: flex; gap: 12px; font: 400 20px "Geist Mono", monospace; }
+  .steps span { padding: 11px 16px; border: 2px solid #16322a40; border-radius: 999px; color: #16322a99; background: #dfe6df; }
+  .steps b { font-weight: 500; color: var(--ink); }
+</style>
+</head>
+<body data-loop="9000">
+  <div class="nav"><b>FedTalk</b><span>FOMC × GPT-4o</span></div>
+  <h1>Can an LLM<br />read the Fed?</h1>
+  <svg viewBox="0 0 605 389" aria-hidden="true">
+    <path class="rule" d="M266 0V389" />
+    <path class="line calm" d="" />
+    <path class="line jolt" d="" />
+    <circle class="pulse" cx="266" cy="0" r="7" />
+  </svg>
+  <div class="mark">2:00 PM ET<br />statement</div>
+  <div class="steps">
+    <span><b>1</b> Transcribe · Whisper</span>
+    <span><b>2</b> Retrieve · Pinecone</span>
+    <span><b>3</b> Predict · GPT-4o</span>
+  </div>
+  <div class="bottom">Whisper · Pinecone · minute-level prices<span>Research ↗</span></div>
+<script>
+  // Same price path as the card (a 200×80 box), scaled to the 605×389 chart.
+  const card = [[0,44],[8,45],[16,43],[24,44],[32,42],[40,44],[48,43],[56,45],[64,43],[72,44],[80,43],[88,44],
+    [92,30],[96,52],[100,22],[104,48],[108,16],[113,40],[118,26],[124,34],[130,20],[137,30],[144,24],[152,28],[160,18],[170,24],[180,16],[190,20],[200,14]];
+  const pts = card.map(([x, y]) => [x * 605 / 200, y * 389 / 80]);
+  const d = list => "M" + list.map(p => p.map(n => n.toFixed(1)).join(" ")).join("L");
+  const split = card.findIndex(([x]) => x === 88);
+  document.querySelector(".calm").setAttribute("d", d(pts.slice(0, split + 1)));
+  const jolt = document.querySelector(".jolt");
+  jolt.setAttribute("d", d(pts.slice(split)));
+  document.querySelector(".pulse").setAttribute("cy", pts[split][1]);
+
+  const LOOP = 9000, at = ms => ms / LOOP;
+  const len = jolt.getTotalLength();
+  jolt.style.strokeDasharray = len;
+  // Statement at 0.4 s, the market reacts 0.6–4.2 s, holds, then fades out before the loop restarts.
+  jolt.animate([
+    { offset: 0, strokeDashoffset: len, opacity: 1 }, { offset: at(600), strokeDashoffset: len, opacity: 1 },
+    { offset: at(4200), strokeDashoffset: 0, opacity: 1 }, { offset: at(8000), strokeDashoffset: 0, opacity: 1 },
+    { offset: at(8800), strokeDashoffset: 0, opacity: 0 }, { offset: 1, strokeDashoffset: len, opacity: 0 },
+  ], { duration: LOOP, iterations: Infinity, easing: "linear" });
+  const fadeInOut = (el, start, peak = 1) => el.animate([
+    { offset: 0, opacity: 0 }, { offset: at(start), opacity: 0 }, { offset: at(start + 350), opacity: peak },
+    { offset: at(8000), opacity: peak }, { offset: at(8700), opacity: 0 }, { offset: 1, opacity: 0 },
+  ], { duration: LOOP, iterations: Infinity });
+  fadeInOut(document.querySelector(".rule"), 250);
+  fadeInOut(document.querySelector(".mark"), 350);
+  const pulse = document.querySelector(".pulse");
+  pulse.animate([
+    { offset: 0, r: 0, opacity: 0 }, { offset: at(400), r: 0, opacity: 1 }, { offset: at(700), r: 16, opacity: 0.5 },
+    { offset: at(1100), r: 7, opacity: 1 }, { offset: at(8000), r: 7, opacity: 1 }, { offset: at(8700), r: 7, opacity: 0 }, { offset: 1, r: 0, opacity: 0 },
+  ], { duration: LOOP, iterations: Infinity });
+  // The three research steps light up in order while the line moves.
+  document.querySelectorAll(".steps span").forEach((s, i) => s.animate([
+    { offset: 0, opacity: 0.35, borderColor: "#16322a40", transform: "translateY(0)" },
+    { offset: at(1200 + i * 1000), opacity: 0.35, borderColor: "#16322a40", transform: "translateY(0)" },
+    { offset: at(1500 + i * 1000), opacity: 1, borderColor: "#16322a", transform: "translateY(-4px)" },
+    { offset: at(8000), opacity: 1, borderColor: "#16322a", transform: "translateY(-4px)" },
+    { offset: at(8700), opacity: 0.35, borderColor: "#16322a40", transform: "translateY(0)" },
+    { offset: 1, opacity: 0.35, borderColor: "#16322a40", transform: "translateY(0)" },
+  ], { duration: LOOP, iterations: Infinity }));
+  document.fonts.ready.then(() => { window.sceneReady = true; });
+</script>
+</body>
+</html>
