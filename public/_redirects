@@ -1,0 +1,18 @@
+# Cloudflare Pages redirects. Pages that existed on the old site (listed in its sitemap or linked
+# from elsewhere) move permanently to their closest match, so old links and search results keep
+# working. Anything else gets a real 404 from 404.html instead of the homepage under a 200.
+/resume          /Atishay-Kasliwal-Resume.pdf  301
+/resume/         /Atishay-Kasliwal-Resume.pdf  301
+/art             /  301
+/art/*           /  301
+/highlights      /  301
+/Highlights      /  301
+/highlights/*    /  301
+/Highlights/*    /  301
+/projects        /  301
+/about           /  301
+/live.html       /  301
+/admin           /  301
+/admin/*         /  301
+/workspace       /  301
+/workspace/*     /  301

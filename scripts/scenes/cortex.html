@@ -1,0 +1,98 @@
+<!doctype html>
+<!-- Preview scene for Atriveo Cortex: captured screens become projects, commitments and ideas. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Atriveo Cortex scene</title>
+<style>
+  @font-face { font-family: Geist; src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Geist Mono"; src: url("../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  :root { --bg: #0c0f12; --ink: #eef2f2; --soft: #8d9a9c; --teal: #2dd4bf; --line: #ffffff14; }
+  html, body { margin: 0; }
+  body { width: 1440px; height: 885px; overflow: hidden; position: relative; color: var(--ink); font-family: Geist, sans-serif;
+    background: radial-gradient(700px 520px at 1180px 120px, #134e4a88, transparent 70%), var(--bg); }
+  .copy { position: absolute; left: 96px; top: 170px; width: 600px; }
+  .pill { display: inline-flex; align-items: center; gap: 12px; padding: 10px 20px; border: 1px solid #ffffff26; border-radius: 999px; background: #ffffff0a; font-size: 19px; color: #c9d3d3; }
+  .pill::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--teal); }
+  h1 { margin: 34px 0 0; font-size: 78px; font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
+  h1 em { font-style: normal; color: var(--teal); }
+  p { margin: 30px 0 0; font-size: 22px; line-height: 1.55; color: var(--soft); }
+  ul { margin: 40px 0 0; padding: 0; list-style: none; display: grid; gap: 18px; font-size: 21px; color: #d6dede; }
+  li { display: flex; align-items: center; gap: 14px; }
+  li::before { content: "✓"; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #2dd4bf26; color: var(--teal); font-size: 15px; }
+
+  /* A day of captured screens, scrolling past. */
+  .timeline { position: absolute; left: 790px; top: 96px; width: 230px; height: 600px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+  .reel { display: grid; gap: 18px; }
+  .shot { position: relative; height: 128px; border: 1px solid var(--line); border-radius: 12px; background: #11171b; overflow: hidden; }
+  .shot::before { content: ""; position: absolute; left: 14px; right: 14px; top: 34px; height: 8px; border-radius: 4px; background: #ffffff1c; box-shadow: 0 20px 0 #ffffff12, 0 40px 0 -2px #ffffff0e, 0 62px 0 #2dd4bf22; }
+  .shot time { position: absolute; left: 14px; top: 10px; font: 400 13px "Geist Mono", monospace; color: #6f7c7e; }
+  .scan { position: absolute; left: 780px; width: 250px; top: 380px; height: 2px; background: linear-gradient(90deg, transparent, var(--teal), transparent); box-shadow: 0 0 18px var(--teal); }
+
+  /* What the screens become. */
+  .memory { position: absolute; left: 1060px; top: 150px; width: 300px; display: grid; gap: 18px; }
+  .card { padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: #10161a; }
+  .card b { font: 500 14px "Geist Mono", monospace; letter-spacing: 0.12em; color: var(--teal); }
+  .card i { display: block; height: 9px; margin-top: 16px; border-radius: 5px; background: #ffffff1f; }
+  .card i + i { width: 62%; margin-top: 10px; background: #ffffff12; }
+  .ask { position: absolute; left: 790px; top: 740px; width: 570px; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 18px 24px;
+    border: 1px solid #2dd4bf55; border-radius: 999px; background: #0f1a1c; font: 400 24px "Geist Mono", monospace; color: var(--ink); }
+  .ask::before { content: "⌕"; color: var(--teal); font-size: 26px; }
+  .typed { display: inline-block; overflow: hidden; white-space: nowrap; width: 0; }
+  .caret { display: inline-block; width: 2px; height: 28px; background: var(--teal); }
+</style>
+</head>
+<body data-loop="9000">
+  <div class="copy">
+    <span class="pill">The memory layer for your work</span>
+    <h1>Your work,<br /><em>remembered.</em></h1>
+    <p>An honest record of your day — where your time went, what you focused on, and everything you'd otherwise forget.</p>
+    <ul><li>Automatic — no timers, no tagging</li><li>Honest time, focus &amp; attention</li><li>Every screen, searchable</li></ul>
+  </div>
+  <div class="timeline"><div class="reel"></div></div>
+  <div class="scan"></div>
+  <div class="memory">
+    <div class="card"><b>PROJECT</b><i></i><i></i></div>
+    <div class="card"><b>COMMITMENT</b><i></i><i></i></div>
+    <div class="card"><b>IDEA</b><i></i><i></i></div>
+  </div>
+  <div class="ask"><span class="typed">What am I forgetting?</span><span class="caret"></span></div>
+<script>
+  const LOOP = 9000, at = ms => ms / LOOP;
+  // Six captures per loop, then the same six again, so the reel wraps seamlessly.
+  const times = ["09:14", "10:02", "11:37", "13:20", "14:05", "15:48"];
+  const reel = document.querySelector(".reel");
+  reel.innerHTML = [...times, ...times].map(t => `<div class="shot"><time>${t}</time></div>`).join("");
+  const pitch = 128 + 18;
+  reel.animate([{ transform: "translateY(0)" }, { transform: `translateY(${-pitch * times.length}px)` }],
+    { duration: LOOP, iterations: Infinity, easing: "linear" });
+
+  // Every 3 s one memory card lights up: project, commitment, idea.
+  document.querySelectorAll(".card").forEach((card, i) => card.animate([
+    { offset: 0, borderColor: "#ffffff14", boxShadow: "0 0 0 0 #2dd4bf00", transform: "translateX(0)" },
+    { offset: at(i * 3000 + 300), borderColor: "#ffffff14", boxShadow: "0 0 0 0 #2dd4bf00", transform: "translateX(0)" },
+    { offset: at(i * 3000 + 700), borderColor: "#2dd4bf", boxShadow: "0 0 28px 0 #2dd4bf40", transform: "translateX(-6px)" },
+    { offset: at(i * 3000 + 2600), borderColor: "#2dd4bf88", boxShadow: "0 0 0 0 #2dd4bf00", transform: "translateX(0)" },
+    { offset: 1, borderColor: "#ffffff14", boxShadow: "0 0 0 0 #2dd4bf00", transform: "translateX(0)" },
+  ], { duration: LOOP, iterations: Infinity }));
+  document.querySelector(".scan").animate([{ opacity: 0.35 }, { opacity: 1 }, { opacity: 0.35 }],
+    { duration: 3000, iterations: Infinity, easing: "ease-in-out" });
+
+  // The north-star question types itself, holds, then clears before the loop restarts.
+  const typed = document.querySelector(".typed");
+  document.fonts.ready.then(() => {
+    const full = typed.scrollWidth;
+    const chars = typed.textContent.length;
+    typed.animate([
+      { offset: 0, width: "0px" }, { offset: at(400), width: "0px", easing: `steps(${chars}, end)` },
+      { offset: at(2600), width: `${full}px` }, { offset: at(8300), width: `${full}px` },
+      { offset: at(8700), width: "0px" }, { offset: 1, width: "0px" },
+    ], { duration: LOOP, iterations: Infinity });
+    document.querySelector(".caret").animate([{ opacity: 1 }, { opacity: 1, offset: 0.5 }, { opacity: 0, offset: 0.51 }, { opacity: 0 }],
+      { duration: 1000, iterations: Infinity });
+    window.sceneReady = true;
+  });
+</script>
+</body>
+</html>
