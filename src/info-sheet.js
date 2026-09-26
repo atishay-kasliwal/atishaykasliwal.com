@@ -3,7 +3,7 @@ export function setupInfoSheet() {
   const sheet = document.querySelector("#info-sheet");
   const handle = sheet.querySelector(".sheet-handle");
   const grabber = sheet.querySelector(".sheet-grabber");
-  const email = sheet.querySelector("#sheet-email");
+  const title = sheet.querySelector("#sheet-title");
   const copyButton = sheet.querySelector("#copy-email");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let closeTimer;
@@ -12,11 +12,12 @@ export function setupInfoSheet() {
   let dragDistance = 0;
   let suppressClick = false;
 
-  function open(focusTarget = grabber) {
+  function open() {
     clearTimeout(closeTimer);
     sheet.style.transform = "";
     if (!sheet.open) sheet.showModal();
-    focusTarget.focus({ preventScroll: true });
+    // Focus the title, not the close handle, so opening doesn't draw a focus ring on it.
+    title.focus({ preventScroll: true });
     requestAnimationFrame(() => sheet.classList.add("is-open"));
   }
 
@@ -29,9 +30,7 @@ export function setupInfoSheet() {
   }
 
   document.querySelectorAll("[data-open-sheet]").forEach(button => {
-    button.addEventListener("click", () =>
-      open(button.dataset.openSheet === "contact" ? email : grabber),
-    );
+    button.addEventListener("click", open);
   });
   grabber.addEventListener("click", () => {
     if (!suppressClick) close();
