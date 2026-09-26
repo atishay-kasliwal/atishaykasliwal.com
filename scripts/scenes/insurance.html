@@ -1,0 +1,109 @@
+<!doctype html>
+<!-- Preview scene for Insurance Platform: events flow through the pipeline. Recorded by record_previews.py. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Insurance Platform scene</title>
+<style>
+  @font-face { font-family: Geist; src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Geist Mono"; src: url("../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  :root { --paper: #e9e5da; --ink: #26241f; --accent: #e8743b; }
+  html, body { margin: 0; }
+  body { width: 1440px; height: 885px; overflow: hidden; position: relative; background: var(--paper); color: var(--ink); font-family: Geist, sans-serif; }
+  .nav, .bottom { position: absolute; left: 72px; right: 72px; display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.02em; }
+  .nav { top: 53px; font-size: 30px; }
+  .nav b { font-size: 50px; letter-spacing: -0.06em; font-weight: 700; }
+  .bottom { bottom: 53px; font-size: 26px; }
+  h1 { position: absolute; top: 204px; left: 72px; margin: 0; font-size: 106px; font-weight: 500; line-height: 1.02; letter-spacing: -0.06em; }
+  .flow { position: absolute; left: 72px; right: 72px; top: 520px; display: flex; justify-content: space-between; align-items: center; }
+  .flow::before { content: ""; position: absolute; left: 2%; right: 2%; top: 50%; height: 4px; margin-top: -2px; background: repeating-linear-gradient(90deg, var(--ink) 0 20px, transparent 0 32px); }
+  .flow i { position: relative; z-index: 2; padding: 22px 32px; border: 4px solid var(--ink); border-radius: 17px; background: var(--paper); font: 400 29px "Geist Mono", monospace; font-style: normal; letter-spacing: -0.02em; }
+  .flow i.kafka { background: var(--ink); color: var(--paper); }
+  .flow i.kafka::after { content: ""; position: absolute; top: -23px; right: -23px; width: 43px; height: 43px; border-radius: 50%; background: var(--accent); }
+  .ring { position: absolute; z-index: 3; box-sizing: border-box; width: 43px; height: 43px; border-radius: 50%; border: 3px solid var(--accent); pointer-events: none; }
+  .dot { position: absolute; z-index: 1; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px #e8743b33; }
+  .log { position: absolute; z-index: 1; height: 105px; overflow: hidden; font: 400 19px/35px "Geist Mono", monospace; color: #26241fb3; -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 100%); mask-image: linear-gradient(transparent, #000 30%, #000 100%); }
+  .log .entry { white-space: nowrap; }
+  .log .entry::before { content: "› "; color: var(--accent); }
+</style>
+</head>
+<body data-loop="8000">
+  <div class="nav"><b>Insurance Platform</b><span>Java · Spring Boot</span></div>
+  <h1>Policy data,<br />event by event.</h1>
+  <div class="flow"><i>Providers</i><i class="kafka">Kafka</i><i>Elasticsearch</i><i>Gateway</i></div>
+  <div class="bottom">CQRS · event sourcing · Kubernetes<span>Open source ↗</span></div>
+<script>
+  // Events leave Providers every 2 s and all arrivals land at the same phase (1.4 s into each 2 s beat),
+  // so the Kafka pulse, the log step and the box flashes share one 2 s cycle. Everything divides the 8 s loop.
+  const LOOP = 8000, BEAT = 2000, ARRIVE = 0.7; // arrival at 70% of each beat
+  document.fonts.ready.then(() => {
+    const boxes = [...document.querySelectorAll(".flow i")];
+    const r = boxes.map(b => b.getBoundingClientRect());
+    const y = r[0].top + r[0].height / 2;
+    const legs = [[r[0].right, r[1].left], [r[1].right, r[2].left], [r[2].right, r[3].left]];
+
+    // Each event: leg 1 (0–1.4 s), inside Kafka (1.4–2.0), leg 2 (2.0–3.4), inside Elasticsearch, leg 3 (4.0–5.4), gone.
+    const frames = [];
+    legs.forEach(([a, b], i) => {
+      const start = (i * 2000) / LOOP, end = (i * 2000 + 1400) / LOOP;
+      frames.push({ offset: start, left: `${a}px`, opacity: 0 });
+      frames.push({ offset: start + 0.01, left: `${a + 8}px`, opacity: 1 });
+      frames.push({ offset: end - 0.01, left: `${b - 8}px`, opacity: 1 });
+      frames.push({ offset: end, left: `${b}px`, opacity: 0 });
+    });
+    frames.push({ offset: 1, left: `${r[3].left}px`, opacity: 0 });
+    for (let k = 0; k < LOOP / BEAT; k++) {
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.style.top = `${y}px`;
+      document.body.append(dot);
+      dot.animate(frames, { duration: LOOP, iterations: Infinity, delay: -k * BEAT, easing: "linear" });
+    }
+
+    // Kafka's accent dot sends out a ring as each event lands.
+    // Same box as Kafka's ::after dot: 43 px, offset -23 px from the padding edge (4 px border).
+    const ring = document.createElement("span");
+    ring.className = "ring";
+    ring.style.left = `${r[1].right - 4 + 23 - 43}px`;
+    ring.style.top = `${r[1].top + 4 - 23}px`;
+    document.body.append(ring);
+    ring.animate(
+      [{ offset: 0, transform: "scale(1)", opacity: 0 }, { offset: ARRIVE, transform: "scale(1)", opacity: 0.9 },
+       { offset: Math.min(1, ARRIVE + 0.28), transform: "scale(2.4)", opacity: 0 }, { offset: 1, transform: "scale(1)", opacity: 0 }],
+      { duration: BEAT, iterations: Infinity }
+    );
+
+    // Elasticsearch and Gateway borders flash orange on arrival.
+    [boxes[2], boxes[3]].forEach(b => b.animate(
+      [{ offset: 0, borderColor: "#26241f" }, { offset: ARRIVE, borderColor: "#26241f" },
+       { offset: ARRIVE + 0.04, borderColor: "#e8743b" }, { offset: ARRIVE + 0.24, borderColor: "#26241f" }, { offset: 1, borderColor: "#26241f" }],
+      { duration: BEAT, iterations: Infinity }
+    ));
+
+    // Kafka's append-only log under the box: one new line per event.
+    const names = ["policy.created", "claim.filed", "policy.updated", "payment.settled"];
+    const log = document.createElement("div");
+    log.className = "log";
+    log.style.left = `${r[1].left}px`;
+    log.style.top = `${r[1].bottom + 22}px`;
+    const list = document.createElement("div");
+    list.innerHTML = [...names, ...names, ...names.slice(0, 3)].map(n => `<div class="entry">${n}</div>`).join("");
+    log.append(list);
+    document.body.append(log);
+    const step = [];
+    for (let k = 0; k <= 4; k++) {
+      const at = (k * BEAT + ARRIVE * BEAT) / LOOP;
+      if (k < 4) {
+        step.push({ offset: Math.max(0, at - 0.001), transform: `translateY(${-35 * k}px)` });
+        step.push({ offset: Math.min(1, at + 0.04), transform: `translateY(${-35 * (k + 1)}px)` });
+      }
+    }
+    step.unshift({ offset: 0, transform: "translateY(0px)" });
+    step.push({ offset: 1, transform: `translateY(${-35 * 4}px)` });
+    list.animate(step, { duration: LOOP, iterations: Infinity, easing: "linear" });
+
+    window.sceneReady = true;
+  });
+</script>
+</body>
+</html>
