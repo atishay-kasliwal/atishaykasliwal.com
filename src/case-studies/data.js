@@ -9,6 +9,7 @@ export const caseStudies = [
     name: "Atriveo Tracker",
     live: true,
     started: "2026-02-22", // first tracker commit: "Add dashboard page with owner login"
+    lastModified: "2026-09-27",
     seo: {
       title: "Atriveo Tracker — Job Application Tracker · Atishay Kasliwal",
       description:
@@ -109,6 +110,7 @@ export const caseStudies = [
     name: "Atriveo Cortex",
     live: true,
     started: "2026-06-16", // first commit: "Initial commit: Atriveo Cortex extraction inspector"
+    lastModified: "2026-09-27",
     seo: {
       title: "Atriveo Cortex — AI Working Memory · Atishay Kasliwal",
       description:
@@ -198,6 +200,7 @@ export const caseStudies = [
     name: "Atriveo Bio",
     live: true,
     started: "2026-06-19", // first commit: "Initial public release of Cortex Bio."
+    lastModified: "2026-09-27",
     seo: {
       title: "Atriveo Bio — Wearable Readiness API · Atishay Kasliwal",
       description:
@@ -296,6 +299,7 @@ export const caseStudies = [
     slug: "atriveo-job-search",
     name: "Atriveo Job Search",
     live: true,
+    lastModified: "2026-09-27",
     started: "2026-03-25", // job-pipeline's first commit; open-sourced as Atriveo-JD-Extractor on 2026-06-24
     seo: {
       title: "Atriveo Job Search — Self-Hosted Pipeline · Atishay Kasliwal",
@@ -392,3 +396,203 @@ export const caseStudies = [
     },
   },
 ];
+
+export const additionalProjectPages = [
+  {
+    slug: "insurance-platform",
+    name: "Insurance Platform",
+    schemaType: "SoftwareSourceCode",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "Insurance Platform — Kafka Microservices · Atishay Kasliwal",
+      description:
+        "An event-driven Java and Spring Boot insurance platform routing policy data through Kafka and Elasticsearch to a payment gateway, using CQRS and event sourcing.",
+      language: "Java",
+    },
+    headline: "Insurance policy data, moved through an event-driven system.",
+    headlineSoft: "From insurer feeds to payment processing.",
+    alt: "Insurance platform preview showing providers, Kafka, Elasticsearch and a payment gateway.",
+    sections: [
+      {
+        title: "System flow",
+        body: "The project moves policy data from third-party insurers through event-driven microservices to a payment gateway.",
+      },
+      {
+        title: "Event architecture",
+        body: "The repository describes CQRS and event sourcing, with Kafka and Elasticsearch in the system and Kubernetes in the listed stack.",
+      },
+    ],
+  },
+  {
+    slug: "fedtalk",
+    name: "FedTalk",
+    schemaType: "SoftwareSourceCode",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "FedTalk — FOMC Market-Reaction Research · Atishay Kasliwal",
+      description:
+        "FedTalk explores whether an LLM can predict short-horizon market reactions to FOMC statements using transcripts, retrieved news and minute-level prices.",
+    },
+    headline: "Can an LLM predict market reactions to FOMC statements?",
+    headlineSoft: "A research question using transcripts and market data.",
+    alt: "FedTalk research preview showing transcription, news retrieval and prediction steps beside a market chart.",
+    sections: [
+      {
+        title: "Research question",
+        body: "The project investigates whether an LLM can predict short-horizon market reactions to Federal Open Market Committee statements.",
+      },
+      {
+        title: "Inputs",
+        body: "The experiment uses statement transcripts, retrieved news and minute-level market prices.",
+      },
+      {
+        title: "Pipeline",
+        body: "The illustrated workflow uses Whisper for transcription, Pinecone for retrieval and GPT-4o for prediction.",
+      },
+    ],
+  },
+  {
+    slug: "developer-profile",
+    name: "Developer Profile",
+    schemaType: "CreativeWork",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "Developer Profile — Atishay Kasliwal",
+      description:
+        "A GitHub profile presenting Atishay Kasliwal's work, experience, photography, technical toolkit and engineering principles.",
+    },
+    headline: "A profile of the work, experience and ideas behind the projects.",
+    headlineSoft: "Published as an open GitHub profile.",
+    alt: "Atishay Kasliwal's developer profile with a Build, Ship, Systems and Frame map.",
+    sections: [
+      {
+        title: "Profile",
+        body: "The profile maps Atishay Kasliwal's work, experience, photography and technical toolkit.",
+      },
+      {
+        title: "Format",
+        body: "It is published as an open-source GitHub profile and includes the engineering principles behind the products presented here.",
+      },
+    ],
+  },
+  {
+    slug: "atriveo-reel",
+    name: "Atriveo Reel",
+    schemaType: "SoftwareSourceCode",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "Atriveo Reel — Vertical Video Editor · Atishay Kasliwal",
+      description:
+        "A self-hosted editor for making vertical comparison reels from two clips, with precise trims, layouts, captions and background rendering.",
+    },
+    headline: "Two source clips in, one comparison reel out.",
+    headlineSoft: "A self-hosted vertical video editor.",
+    alt: "Atriveo Reel editor preview showing two clips, editing stages and a vertical video output.",
+    sections: [
+      {
+        title: "Editing workflow",
+        body: "The editor organizes media, trim, layout, and text and timing controls for a two-clip comparison.",
+      },
+      {
+        title: "Rendering",
+        body: "The project uses FFmpeg and Remotion for video output, with SQLite and durable background rendering in its listed implementation.",
+      },
+      {
+        title: "Output format",
+        body: "The repository preview describes a 1080 by 1920 vertical output at 30 frames per second.",
+      },
+    ],
+  },
+  {
+    slug: "kaggriculture",
+    name: "Kaggriculture",
+    schemaType: "SoftwareSourceCode",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "Kaggriculture — Game-Agent Research · Atishay Kasliwal",
+      description:
+        "A competitive farming-game research platform with a deterministic simulator, opponent modeling, planner search, replay analysis and a strategy desk.",
+      language: "Python",
+    },
+    headline: "A strategy research platform for a competitive farming economy.",
+    headlineSoft: "Simulation, search and replay analysis.",
+    alt: "Kaggriculture strategy desk preview showing a public score, simulation episodes and opponent benchmarks.",
+    sections: [
+      {
+        title: "Simulation",
+        body: "A deterministic simulator provides the environment for testing strategies in a competitive farming economy.",
+      },
+      {
+        title: "Planning",
+        body: "The research platform combines opponent modeling and planner search with a live strategy desk.",
+      },
+      {
+        title: "Review",
+        body: "Replay analysis is part of the project workflow for examining agent behavior and strategy outcomes.",
+      },
+    ],
+  },
+  {
+    slug: "bayesian-marketing-mix",
+    name: "Bayesian Marketing Mix",
+    schemaType: "SoftwareSourceCode",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "Bayesian Marketing Mix Model · Atishay Kasliwal",
+      description:
+        "An end-to-end marketing mix model covering adstock, saturation, holdout validation, uncertainty simulation, channel ROI and budget allocation across 156 weeks.",
+      language: "Python",
+    },
+    headline: "A Bayesian marketing mix model built around uncertainty.",
+    headlineSoft: "From channel response to budget allocation.",
+    alt: "Bayesian marketing mix model preview with actual-versus-predicted sales and budget allocation charts.",
+    sections: [
+      {
+        title: "Modeling",
+        body: "The model covers adstock and saturation effects across 156 weeks of marketing data.",
+      },
+      {
+        title: "Validation",
+        body: "Holdout validation and uncertainty simulation are part of the model workflow.",
+      },
+      {
+        title: "Decision support",
+        body: "The analysis reports channel ROI and supports budget allocation across channels.",
+      },
+    ],
+  },
+  {
+    slug: "insureraft",
+    name: "InsureRaft",
+    schemaType: "SoftwareSourceCode",
+    lastModified: "2026-09-27",
+    seo: {
+      title: "InsureRaft — Raft Consensus Event Log · Atishay Kasliwal",
+      description:
+        "A replicated insurance event log using Raft, with quorum writes, leader election, idempotent commands, durable storage, snapshots and automatic failover.",
+      language: "C++",
+    },
+    headline: "An insurance event log replicated with Raft consensus.",
+    headlineSoft: "Ordered writes across a three-node cluster.",
+    alt: "InsureRaft preview showing a Raft leader with two followers and committed insurance events.",
+    sections: [
+      {
+        title: "Consensus",
+        body: "The project uses a Raft cluster for leader election and quorum-backed writes to a replicated insurance event log.",
+      },
+      {
+        title: "Command handling",
+        body: "Idempotent commands, ordered log entries, snapshots and automatic failover are listed among the implementation features.",
+      },
+      {
+        title: "Technology",
+        body: "The repository's listed stack is C++, NuRaft, OpenSSL and CMake.",
+      },
+    ],
+  },
+];
+
+export const staticPageLastModified = {
+  homepage: "2026-09-27",
+  resume: "2026-02-21",
+};

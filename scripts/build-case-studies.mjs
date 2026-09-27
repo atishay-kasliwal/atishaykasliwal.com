@@ -1,6 +1,5 @@
-// Renders each case study in src/case-studies/data.js to projects/<slug>/index.html, so every
-// project page is plain, prerendered HTML that search engines and link previews can read without
-// running JavaScript. Also writes public/sitemap.xml and the share-card sources in scripts/og/.
+// Renders every project page to projects/<slug>/index.html as prerendered HTML. Also writes
+// public/sitemap.xml and the share-card sources in scripts/og/.
 // Runs from vite.config.js on every dev start and build; the generated files are not committed.
 
 import fs from "node:fs";
@@ -18,7 +17,7 @@ const pageUrl = slug => `${SITE}/projects/${slug}/`;
 const exists = publicPath => fs.existsSync(path.join(ROOT, "public", publicPath));
 const TEXT_ARROW = "↗︎";
 
-function structuredData(study, image, dateModified) {
+function structuredData(study, image) {
   const url = pageUrl(study.slug);
   const project = {
     "@id": `${url}#project`,
@@ -27,7 +26,8 @@ function structuredData(study, image, dateModified) {
     image: `${SITE}${study.media.items[0].src}`,
     author: { "@id": PERSON },
     creator: { "@id": PERSON },
-    dateCreated: study.started,
+    ...(study.started ? { dateCreated: study.started } : {}),
+    mainEntityOfPage: { "@id": `${url}#webpage` },
   };
   if (study.live) {
     Object.assign(project, {
@@ -39,11 +39,13 @@ function structuredData(study, image, dateModified) {
     });
   } else {
     Object.assign(project, {
-      "@type": "SoftwareSourceCode",
+      "@type": study.schemaType ?? "SoftwareSourceCode",
       url: study.links[0].href,
-      codeRepository: study.links[0].href,
-      programmingLanguage: study.seo.language,
     });
+    if (project["@type"] === "SoftwareSourceCode") {
+      project.codeRepository = study.links[0].href;
+      if (study.seo.language) project.programmingLanguage = study.seo.language;
+    }
   }
   return {
     "@context": "https://schema.org",
@@ -57,10 +59,11 @@ function structuredData(study, image, dateModified) {
         inLanguage: "en",
         isPartOf: { "@id": `${SITE}/#website` },
         about: { "@id": `${url}#project` },
+        mainEntity: { "@id": `${url}#project` },
         primaryImageOfPage: { "@type": "ImageObject", url: image },
         breadcrumb: { "@id": `${url}#breadcrumb` },
         author: { "@id": PERSON },
-        dateModified,
+        ...(study.lastModified ? { dateModified: study.lastModified } : {}),
       },
       {
         "@type": "BreadcrumbList",
@@ -79,7 +82,6 @@ function structuredData(study, image, dateModified) {
 function render(study, { number, total, next }) {
   const url = pageUrl(study.slug);
   const og = exists(`projects/media/${study.slug}/og.jpg`) ? `${SITE}/projects/media/${study.slug}/og.jpg` : `${SITE}/og.jpg`;
-  const today = new Date().toISOString().slice(0, 10);
   const [first] = study.media.items;
   const primary = study.links[0];
   const hasVideo = Boolean(study.media.video);
@@ -94,7 +96,7 @@ function render(study, { number, total, next }) {
     )
     .join("");
 
-  const nodes = study.engineering.nodes
+  const nodes = (study.engineering?.nodes ?? [])
     .map((row, r) => {
       const cells = row.map(n => `<div class="node">${escape(n.name)}<small>${escape(n.detail)}</small></div>`);
       return r === 0
@@ -102,6 +104,51 @@ function render(study, { number, total, next }) {
         : `<div class="under">${cells.join("")}</div>`;
     })
     .join("\n            ");
+
+  const tiles = study.sections
+    ? `<section class="tiles" aria-label="${escape(study.name)} project details">
+${study.sections
+  .map(
+    (section, i) => `          <article class="tile">
+            <h2 class="eyebrow">${pad(i + 1)} · ${escape(section.title)}</h2>
+            <p>${escape(section.body)}</p>
+          </article>`,
+  )
+  .join("\n")}
+        </section>`
+    : `<section class="tiles" aria-label="Case study">
+          <article class="tile">
+            <h2 class="eyebrow">01 · Problem</h2>
+            <p class="tile-title">${escape(study.problem.title)}</p>
+            <p>${escape(study.problem.body)}</p>
+          </article>
+          <article class="tile">
+            <h2 class="eyebrow">02 · Solution</h2>
+            <p class="tile-title">${escape(study.solution.title)}</p>
+            <p>${escape(study.solution.body)}</p>
+          </article>
+          <article class="tile">
+            <h2 class="eyebrow">03 · Engineering</h2>
+            <div class="diagram" role="img" aria-label="${escape(
+              study.engineering.nodes.map(row => row.map(n => `${n.name} (${n.detail})`).join(", ")).join("; "),
+            )}">
+            ${nodes}
+            </div>
+            <p>${escape(study.engineering.note)}</p>
+          </article>
+          <article class="tile">
+            <h2 class="eyebrow">04 · Key decisions</h2>
+            <ul class="checks">
+${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n")}
+            </ul>
+          </article>
+        </section>
+
+        <section class="insight">
+          <h2 class="eyebrow">Engineering note</h2>
+          <p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p>
+          <p>${escape(study.note.body)}</p>
+        </section>`;
 
   const nextLink = next
     ? `<a href="/projects/${next.slug}/">Next: ${escape(next.name)} <b aria-hidden="true">→</b></a>`
@@ -133,7 +180,7 @@ function render(study, { number, total, next }) {
     <meta name="twitter:description" content="${escape(study.seo.description)}" />
     <meta name="twitter:image" content="${og}" />
     <script type="application/ld+json">
-${JSON.stringify(structuredData(study, og, today), null, 2)}
+${JSON.stringify(structuredData(study, og), null, 2)}
     </script>
     <script type="module" src="/src/case-study.js"></script>
   </head>
@@ -181,39 +228,7 @@ ${study.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escap
           </div>
         </section>
 
-        <section class="tiles" aria-label="Case study">
-          <article class="tile">
-            <h2 class="eyebrow">01 · Problem</h2>
-            <p class="tile-title">${escape(study.problem.title)}</p>
-            <p>${escape(study.problem.body)}</p>
-          </article>
-          <article class="tile">
-            <h2 class="eyebrow">02 · Solution</h2>
-            <p class="tile-title">${escape(study.solution.title)}</p>
-            <p>${escape(study.solution.body)}</p>
-          </article>
-          <article class="tile">
-            <h2 class="eyebrow">03 · Engineering</h2>
-            <div class="diagram" role="img" aria-label="${escape(
-              study.engineering.nodes.map(row => row.map(n => `${n.name} (${n.detail})`).join(", ")).join("; "),
-            )}">
-            ${nodes}
-            </div>
-            <p>${escape(study.engineering.note)}</p>
-          </article>
-          <article class="tile">
-            <h2 class="eyebrow">04 · Key decisions</h2>
-            <ul class="checks">
-${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n")}
-            </ul>
-          </article>
-        </section>
-
-        <section class="insight">
-          <h2 class="eyebrow">Engineering note</h2>
-          <p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p>
-          <p>${escape(study.note.body)}</p>
-        </section>
+        ${tiles}
       </main>
 
       <nav class="thumb-bar" aria-label="${escape(study.name)} links">
@@ -233,19 +248,18 @@ ${study.links
 `;
 }
 
-function sitemap(studies) {
-  const today = new Date().toISOString().slice(0, 10);
-  const entry = (loc, images = []) =>
-    `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n${images
+function sitemap(studies, staticPageLastModified) {
+  const entry = (loc, images = [], lastModified) =>
+    `  <url>\n    <loc>${loc}</loc>\n${lastModified ? `    <lastmod>${lastModified}</lastmod>\n` : ""}${images
       .map(src => `    <image:image>\n      <image:loc>${SITE}${src}</image:loc>\n    </image:image>\n`)
       .join("")}  </url>`;
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${[
-  entry(`${SITE}/`, ["/atishay-kasliwal.jpg"]),
-  entry(`${SITE}/Atishay-Kasliwal-Resume.pdf`),
-  ...studies.map(s => entry(pageUrl(s.slug), s.media.items.map(i => i.src))),
+  entry(`${SITE}/`, ["/atishay-kasliwal.jpg"], staticPageLastModified.homepage),
+  entry(`${SITE}/Atishay-Kasliwal-Resume.pdf`, [], staticPageLastModified.resume),
+  ...studies.map(s => entry(pageUrl(s.slug), s.media.items.map(i => i.src), s.lastModified)),
 ].join("\n")}
 </urlset>
 `;
@@ -277,17 +291,63 @@ function ogSource(study) {
 
 export async function buildCaseStudies() {
   const stamp = Date.now();
-  const { caseStudies } = await import(`${pathToFileURL(path.join(ROOT, "src/case-studies/data.js")).href}?t=${stamp}`);
+  const { caseStudies, additionalProjectPages, staticPageLastModified } = await import(`${pathToFileURL(path.join(ROOT, "src/case-studies/data.js")).href}?t=${stamp}`);
   const { projects } = await import(`${pathToFileURL(path.join(ROOT, "src/projects.js")).href}?t=${stamp}`);
-  // Number pages in carousel order; "next" skips projects that don't have a page yet.
   const order = projects.map(p => p.name);
-  const studies = [...caseStudies].sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+  const pageNames = new Set(caseStudies.map(study => study.name));
+  const additionalStudies = additionalProjectPages.map(page => {
+    const project = projects.find(item => item.name === page.name);
+    if (!project?.url || !project.poster) {
+      throw new Error(`Project page ${page.name} has no matching project URL or preview image.`);
+    }
+    pageNames.add(page.name);
+    const isGitHub = new URL(project.url).hostname === "github.com";
+    return {
+      ...page,
+      live: false,
+      lede: project.description,
+      spec: [
+        { label: "Stack", html: `<b>${escape(project.stack)}</b>` },
+        {
+          label: "Source",
+          html: `<b>Open source</b> · <a href="${escape(project.url)}">GitHub <span class="arrow">${TEXT_ARROW}</span></a>`,
+        },
+      ],
+      stats: [],
+      windowStack: project.stack,
+      links: [{ label: isGitHub ? "View code" : "Open site", href: project.url }],
+      media: {
+        video: project.video,
+        items: [
+          {
+            label: "Project preview",
+            src: project.poster,
+            thumb: project.poster,
+            alt: page.alt,
+            video: Boolean(project.video),
+          },
+        ],
+      },
+    };
+  });
+  const missingPages = order.filter(name => !pageNames.has(name));
+  if (missingPages.length) {
+    throw new Error(`Missing project pages for: ${missingPages.join(", ")}`);
+  }
+  if (pageNames.size !== caseStudies.length + additionalProjectPages.length) {
+    throw new Error("Project page names must be unique.");
+  }
+  const studies = [...caseStudies, ...additionalStudies].sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
   const outDir = path.join(ROOT, "projects");
   fs.rmSync(outDir, { recursive: true, force: true });
   fs.mkdirSync(path.join(ROOT, "scripts/og"), { recursive: true });
   const inputs = {};
-  studies.forEach((study, i) => {
-    const next = studies.length > 1 ? studies[(i + 1) % studies.length] : null;
+  const originalPages = studies.filter(study => caseStudies.some(original => original.name === study.name));
+  const supplementalPages = studies.filter(study => !caseStudies.some(original => original.name === study.name));
+  studies.forEach(study => {
+    const group = caseStudies.some(original => original.name === study.name) ? originalPages : supplementalPages;
+    const position = group.findIndex(item => item.name === study.name);
+    const next = group.length > 1 ? group[(position + 1) % group.length] : null;
     const html = render(study, { number: order.indexOf(study.name) + 1, total: order.length, next });
     const file = path.join(outDir, study.slug, "index.html");
     fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -295,7 +355,7 @@ export async function buildCaseStudies() {
     fs.writeFileSync(path.join(ROOT, "scripts/og", `${study.slug}.html`), ogSource(study));
     inputs[study.slug] = file;
   });
-  fs.writeFileSync(path.join(ROOT, "public/sitemap.xml"), sitemap(studies));
+  fs.writeFileSync(path.join(ROOT, "public/sitemap.xml"), sitemap(studies, staticPageLastModified));
   return inputs;
 }
 

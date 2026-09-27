@@ -59,6 +59,7 @@
             "url": "https://atishaykasliwal.com/",
             "isPartOf": { "@id": "https://atishaykasliwal.com/#website" },
             "mainEntity": { "@id": "https://atishaykasliwal.com/#person" },
+            "hasPart": { "@id": "https://atishaykasliwal.com/#selected-work" },
             "dateModified": "2026-09-27"
           },
           {
@@ -66,6 +67,7 @@
             "@id": "https://atishaykasliwal.com/#person",
             "name": "Atishay Kasliwal",
             "url": "https://atishaykasliwal.com/",
+            "mainEntityOfPage": { "@id": "https://atishaykasliwal.com/#profile" },
             "image": "https://atishaykasliwal.com/atishay-kasliwal.jpg",
             "jobTitle": "Software & AI Engineer",
             "description": "Full-stack and AI engineer with 5+ years in production, building distributed systems, LLM products and the interfaces on top of them.",
@@ -79,19 +81,20 @@
           },
           {
             "@type": "ItemList",
+            "@id": "https://atishaykasliwal.com/#selected-work",
             "name": "Selected work",
             "itemListElement": [
-              { "@type": "ListItem", "position": 1, "item": { "@type": "CreativeWork", "name": "Atriveo Tracker", "url": "https://tracker.atriveo.com", "description": "Job application tracking with a Chrome extension and one dashboard for referrals and assessments." } },
-              { "@type": "ListItem", "position": 2, "item": { "@type": "CreativeWork", "name": "Insurance Platform", "url": "https://github.com/atishay-kasliwal/insurance-microservices-platform", "description": "Event-driven microservices on Kafka and Elasticsearch using CQRS and event sourcing." } },
-              { "@type": "ListItem", "position": 3, "item": { "@type": "CreativeWork", "name": "Atriveo Cortex", "url": "https://cortex.atriveo.com/login", "description": "An AI working-memory layer that turns screen history into projects, commitments and ideas." } },
-              { "@type": "ListItem", "position": 4, "item": { "@type": "CreativeWork", "name": "Atriveo Bio", "url": "https://bio.atriveo.com", "description": "A wearable intelligence API that turns Apple Health data into an explainable readiness score and deep-work forecasts." } },
-              { "@type": "ListItem", "position": 5, "item": { "@type": "CreativeWork", "name": "Atriveo Job Search", "url": "https://application.atriveo.com", "description": "A self-hosted pipeline that scrapes, scores and tailors résumés with a local LLM." } },
-              { "@type": "ListItem", "position": 6, "item": { "@type": "CreativeWork", "name": "FedTalk", "url": "https://github.com/atishay-kasliwal/fedtalk-openai-analysis-main", "description": "Research on whether an LLM can predict market reactions to FOMC statements." } },
-              { "@type": "ListItem", "position": 7, "item": { "@type": "ProfilePage", "name": "Developer Profile", "url": "https://github.com/atishay-kasliwal/atishay-kasliwal", "description": "A visual map of Atishay Kasliwal's work, experience, photography, technical toolkit and engineering principles." } },
-              { "@type": "ListItem", "position": 8, "item": { "@type": "SoftwareSourceCode", "name": "Atriveo Reel", "url": "https://github.com/atishay-kasliwal/atriveo-reel", "description": "A self-hosted editor for producing vertical comparison reels with FFmpeg and Remotion." } },
-              { "@type": "ListItem", "position": 9, "item": { "@type": "SoftwareSourceCode", "name": "Kaggriculture", "url": "https://github.com/atishay-kasliwal/kaggriculture", "description": "A game-agent research platform with deterministic simulation, planner search and opponent modeling." } },
-              { "@type": "ListItem", "position": 10, "item": { "@type": "SoftwareSourceCode", "name": "Bayesian Marketing Mix", "url": "https://github.com/atishay-kasliwal/bayesian-marketing-mix-model", "description": "An end-to-end marketing mix model with uncertainty simulation and budget allocation." } },
-              { "@type": "ListItem", "position": 11, "item": { "@type": "SoftwareSourceCode", "name": "InsureRaft", "url": "https://github.com/atishay-kasliwal/InsureRaft", "description": "A replicated insurance event log built on the Raft consensus algorithm." } }
+              { "@type": "ListItem", "position": 1, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-tracker/#project", "@type": "SoftwareApplication", "name": "Atriveo Tracker", "url": "https://tracker.atriveo.com", "description": "Job application tracking with a Chrome extension and one dashboard for referrals and assessments." } },
+              { "@type": "ListItem", "position": 2, "item": { "@id": "https://atishaykasliwal.com/projects/insurance-platform/#project", "@type": "SoftwareSourceCode", "name": "Insurance Platform", "url": "https://github.com/atishay-kasliwal/insurance-microservices-platform", "description": "Event-driven microservices on Kafka and Elasticsearch using CQRS and event sourcing." } },
+              { "@type": "ListItem", "position": 3, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-cortex/#project", "@type": "SoftwareApplication", "name": "Atriveo Cortex", "url": "https://cortex.atriveo.com/login", "description": "An AI working-memory layer that turns screen history into projects, commitments and ideas." } },
+              { "@type": "ListItem", "position": 4, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-bio/#project", "@type": "SoftwareApplication", "name": "Atriveo Bio", "url": "https://bio.atriveo.com", "description": "A wearable intelligence API that turns Apple Health data into an explainable readiness score and deep-work forecasts." } },
+              { "@type": "ListItem", "position": 5, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-job-search/#project", "@type": "SoftwareApplication", "name": "Atriveo Job Search", "url": "https://application.atriveo.com", "description": "A self-hosted pipeline that scrapes, scores and tailors résumés with a local LLM." } },
+              { "@type": "ListItem", "position": 6, "item": { "@id": "https://atishaykasliwal.com/projects/fedtalk/#project", "@type": "SoftwareSourceCode", "name": "FedTalk", "url": "https://github.com/atishay-kasliwal/fedtalk-openai-analysis-main", "description": "Research on whether an LLM can predict market reactions to FOMC statements." } },
+              { "@type": "ListItem", "position": 7, "item": { "@id": "https://atishaykasliwal.com/projects/developer-profile/#project", "@type": "CreativeWork", "name": "Developer Profile", "url": "https://github.com/atishay-kasliwal/atishay-kasliwal", "description": "A visual map of Atishay Kasliwal's work, experience, photography, technical toolkit and engineering principles." } },
+              { "@type": "ListItem", "position": 8, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-reel/#project", "@type": "SoftwareSourceCode", "name": "Atriveo Reel", "url": "https://github.com/atishay-kasliwal/atriveo-reel", "description": "A self-hosted editor for producing vertical comparison reels with FFmpeg and Remotion." } },
+              { "@type": "ListItem", "position": 9, "item": { "@id": "https://atishaykasliwal.com/projects/kaggriculture/#project", "@type": "SoftwareSourceCode", "name": "Kaggriculture", "url": "https://github.com/atishay-kasliwal/kaggriculture", "description": "A game-agent research platform with deterministic simulation, planner search and opponent modeling." } },
+              { "@type": "ListItem", "position": 10, "item": { "@id": "https://atishaykasliwal.com/projects/bayesian-marketing-mix/#project", "@type": "SoftwareSourceCode", "name": "Bayesian Marketing Mix", "url": "https://github.com/atishay-kasliwal/bayesian-marketing-mix-model", "description": "An end-to-end marketing mix model with uncertainty simulation and budget allocation." } },
+              { "@type": "ListItem", "position": 11, "item": { "@id": "https://atishaykasliwal.com/projects/insureraft/#project", "@type": "SoftwareSourceCode", "name": "InsureRaft", "url": "https://github.com/atishay-kasliwal/InsureRaft", "description": "A replicated insurance event log built on the Raft consensus algorithm." } }
             ]
           }
         ]
@@ -206,9 +209,9 @@
         aria-roledescription="carousel"
       >
         <div class="work-toolbar">
-          <div class="work-label">
+          <h2 class="work-label">
             Selected work <span class="muted">/ Live and open source</span>
-          </div>
+          </h2>
           <div class="project-counter" aria-live="polite" aria-atomic="true">
             <span id="current-index">01</span><span class="counter-rule"></span
             ><span class="muted" id="total-count">06</span>

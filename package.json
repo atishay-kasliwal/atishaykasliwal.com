@@ -6,9 +6,19 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "validate:seo": "node scripts/validate-seo.mjs",
+    "test": "npm run build && npm run validate:seo",
+    "seo:sitemap:live": "seo crawl --sitemap-url https://atishaykasliwal.com/sitemap.xml --health --format json --output artifacts/seo-sitemap.json",
+    "seo:crawl:live": "seo crawl https://atishaykasliwal.com --max-pages 100 --max-depth 8 --format json --output artifacts/seo-crawl.json",
+    "lhci": "npx --yes @lhci/cli@0.15.1 autorun",
+    "images:responsive": "node scripts/generate-responsive-thumbnails.mjs"
   },
   "devDependencies": {
+    "fast-xml-parser": "^5.11.1",
+    "parse5": "^8.0.1",
+    "seo": "^0.2.41",
+    "sharp": "0.35.5",
     "vite": "^7.1.0"
   },
   "dependencies": {
