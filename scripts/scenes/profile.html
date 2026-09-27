@@ -1,0 +1,236 @@
+<!doctype html>
+<!-- Preview scene for the developer profile: a signal moves through an abstract software system. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Developer profile scene</title>
+<style>
+  :root { --violet: #9b73ff; --white: #f4f1ff; --mint: #b9d8ca; }
+  html, body { margin: 0; }
+  body {
+    width: 1440px;
+    height: 885px;
+    overflow: hidden;
+    position: relative;
+    background: #090a0e;
+  }
+  .scene,
+  .shade,
+  .grid,
+  .signal,
+  .particles,
+  .nodes {
+    position: absolute;
+    inset: 0;
+  }
+  .scene {
+    background: url("../../public/projects/cards/profile.webp") center / cover no-repeat;
+    transform: scale(1.015);
+  }
+  .shade {
+    background:
+      radial-gradient(circle at 67% 45%, transparent 0 14%, #08090d12 38%, #08090d88 100%),
+      linear-gradient(180deg, #07080b22, #07080b66);
+  }
+  .grid {
+    opacity: 0.18;
+    background-image:
+      linear-gradient(#c7bbff1c 1px, transparent 1px),
+      linear-gradient(90deg, #c7bbff1c 1px, transparent 1px);
+    background-size: 72px 72px;
+    transform: perspective(700px) rotateX(64deg) scale(1.35) translateY(285px);
+    transform-origin: 50% 70%;
+    -webkit-mask-image: radial-gradient(ellipse at 64% 65%, #000 0 24%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 64% 65%, #000 0 24%, transparent 70%);
+  }
+  .signal { overflow: visible; }
+  .rail {
+    fill: none;
+    stroke: #8e68ec35;
+    stroke-width: 10;
+  }
+  .pulse {
+    fill: none;
+    stroke: var(--violet);
+    stroke-width: 6;
+    stroke-linecap: round;
+    filter: url(#glow);
+  }
+  .node,
+  .ring {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin: -7px;
+    border-radius: 50%;
+  }
+  .node {
+    z-index: 3;
+    background: var(--white);
+    box-shadow: 0 0 9px 3px #a37dff, 0 0 30px 9px #8354ff88;
+  }
+  .ring {
+    z-index: 2;
+    box-sizing: border-box;
+    border: 2px solid #b99fff;
+  }
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 0 7px #ac8cff;
+  }
+  .scan {
+    position: absolute;
+    z-index: 2;
+    left: 56%;
+    top: 19%;
+    width: 28%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #cfbfff, transparent);
+    box-shadow: 0 0 22px 5px #8d62ff88;
+    transform: rotate(-7deg);
+  }
+  .status {
+    position: absolute;
+    right: 54px;
+    bottom: 46px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ddd6f7b3;
+    font: 500 17px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .status::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 12px #b9d8ca;
+  }
+</style>
+</head>
+<body data-loop="8000">
+  <div class="scene"></div>
+  <div class="shade"></div>
+  <div class="grid"></div>
+  <svg class="signal" viewBox="0 0 1440 885" aria-hidden="true">
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="7" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+      </filter>
+    </defs>
+    <path class="rail" d="M-80 490 C180 615 320 396 515 455 S755 610 885 430 S1115 315 1520 455" />
+    <path class="pulse" d="M-80 490 C180 615 320 396 515 455 S755 610 885 430 S1115 315 1520 455" />
+  </svg>
+  <div class="nodes"></div>
+  <div class="particles"></div>
+  <div class="scan"></div>
+  <div class="status">systems online</div>
+<script>
+  const LOOP = 8000;
+  const path = document.querySelector(".pulse");
+  const length = path.getTotalLength();
+  path.style.strokeDasharray = `190 ${length - 190}`;
+  path.animate(
+    [
+      { strokeDashoffset: 190, opacity: 0.15 },
+      { offset: 0.08, opacity: 1 },
+      { offset: 0.9, opacity: 1 },
+      { strokeDashoffset: -length, opacity: 0.15 },
+    ],
+    { duration: LOOP, iterations: Infinity, easing: "linear" },
+  );
+
+  document.querySelector(".scene").animate(
+    [
+      { transform: "scale(1.015) translate3d(0, 0, 0)", filter: "brightness(.9)" },
+      { transform: "scale(1.045) translate3d(-8px, 4px, 0)", filter: "brightness(1.08)" },
+      { transform: "scale(1.015) translate3d(0, 0, 0)", filter: "brightness(.9)" },
+    ],
+    { duration: LOOP, iterations: Infinity, easing: "ease-in-out" },
+  );
+
+  const points = [
+    [270, 505], [515, 455], [704, 517], [885, 430], [1085, 366], [1280, 395],
+  ];
+  const nodeLayer = document.querySelector(".nodes");
+  points.forEach(([x, y], index) => {
+    const node = document.createElement("i");
+    const ring = document.createElement("i");
+    node.className = "node";
+    ring.className = "ring";
+    node.style.left = ring.style.left = `${x}px`;
+    node.style.top = ring.style.top = `${y}px`;
+    nodeLayer.append(node, ring);
+    const delay = index * (LOOP / points.length);
+    node.animate(
+      [
+        { transform: "scale(.55)", opacity: 0.35 },
+        { offset: 0.16, transform: "scale(1.4)", opacity: 1 },
+        { offset: 0.32, transform: "scale(.75)", opacity: 0.6 },
+        { transform: "scale(.55)", opacity: 0.35 },
+      ],
+      { duration: LOOP, iterations: Infinity, delay: -delay, easing: "ease-in-out" },
+    );
+    ring.animate(
+      [
+        { transform: "scale(.6)", opacity: 0 },
+        { offset: 0.14, opacity: 0.8 },
+        { offset: 0.32, transform: "scale(3.8)", opacity: 0 },
+        { transform: "scale(.6)", opacity: 0 },
+      ],
+      { duration: LOOP, iterations: Infinity, delay: -delay, easing: "ease-out" },
+    );
+  });
+
+  const particles = document.querySelector(".particles");
+  for (let i = 0; i < 54; i += 1) {
+    const dot = document.createElement("i");
+    dot.className = "particle";
+    dot.style.left = `${770 + ((i * 83) % 430)}px`;
+    dot.style.top = `${130 + ((i * 47) % 340)}px`;
+    dot.style.opacity = `${0.25 + (i % 5) * 0.13}`;
+    particles.append(dot);
+    dot.animate(
+      [
+        { transform: "translateY(-28px) scale(.6)", opacity: 0 },
+        { offset: 0.18, opacity: Number(dot.style.opacity) },
+        { offset: 0.82, opacity: Number(dot.style.opacity) },
+        { transform: "translateY(78px) scale(1.25)", opacity: 0 },
+      ],
+      { duration: LOOP, iterations: Infinity, delay: -(i * 137) % LOOP, easing: "linear" },
+    );
+  }
+
+  document.querySelector(".scan").animate(
+    [
+      { transform: "translateY(0) rotate(-7deg)", opacity: 0 },
+      { offset: 0.12, opacity: 0.7 },
+      { offset: 0.8, opacity: 0.7 },
+      { transform: "translateY(390px) rotate(-7deg)", opacity: 0 },
+    ],
+    { duration: LOOP, iterations: Infinity, easing: "ease-in-out" },
+  );
+
+  document.querySelector(".status").animate(
+    [{ opacity: 0.45 }, { opacity: 1 }, { opacity: 0.45 }],
+    { duration: 2000, iterations: Infinity, easing: "ease-in-out" },
+  );
+
+  Promise.all([
+    document.fonts.ready,
+    ...[...document.images].map(img => img.complete ? Promise.resolve() : new Promise(resolve => {
+      img.addEventListener("load", resolve, { once: true });
+      img.addEventListener("error", resolve, { once: true });
+    })),
+  ]).then(() => { window.sceneReady = true; });
+</script>
+</body>
+</html>

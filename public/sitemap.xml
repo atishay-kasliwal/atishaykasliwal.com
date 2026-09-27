@@ -1,11 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://atishaykasliwal.com/</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/atishay-kasliwal.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/Atishay-Kasliwal-Resume.pdf</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-27</lastmod>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriveo-tracker/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/cards/tracker.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-tracker/landing.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-tracker/analytics.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-tracker/active-jobs.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriveo-cortex/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/cards/cortex.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/screens/cortex.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriveo-bio/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/cards/bio.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-bio/features.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-bio/pipeline.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-bio/docs.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriveo-job-search/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/cards/jobs.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-job-search/features.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-job-search/pipeline.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/media/atriveo-job-search/run.webp</image:loc>
+    </image:image>
   </url>
 </urlset>
