@@ -9,6 +9,12 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Project images and videos keep their names when re-recorded, so cache for a day and
-# refresh quietly in the background for a week.
-/projects/*
+# refresh quietly in the background for a week. Only media folders: /projects/<slug>/ is HTML.
+/projects/cards/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/projects/screens/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/projects/video/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/projects/media/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800

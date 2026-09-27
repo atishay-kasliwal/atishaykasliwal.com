@@ -2,9 +2,14 @@ export function createProjectPreview(projects, viewport) {
   const preview = document.querySelector("#project-dialog");
   const art = document.querySelector("#dialog-art");
   const title = document.querySelector("#dialog-title");
+  const projectIndex = document.querySelector("#dialog-index");
+  const category = document.querySelector("#dialog-category");
+  const description = document.querySelector("#dialog-description");
+  const year = document.querySelector("#dialog-year");
   const closeButton = preview.querySelector("[data-close-project]");
   const openLink = preview.querySelector("#dialog-open");
   const openLabel = preview.querySelector("#dialog-open-label");
+  const caseLink = preview.querySelector("#dialog-case");
   const stack = preview.querySelector("#dialog-stack");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let index = -1;
@@ -16,12 +21,24 @@ export function createProjectPreview(projects, viewport) {
   function position() {
     const strip = viewport.getBoundingClientRect();
     const landscape = innerHeight < 460 && innerWidth >= 500;
-    const top = landscape ? 12 : innerWidth > 700 ? 76 : 72;
+    const phone = innerWidth <= 700 && !landscape;
+    const top = landscape ? 12 : innerWidth > 700 ? 72 : 62;
     const bottom = landscape ? innerHeight - 12 : strip.top - 12;
     const availableHeight = Math.max(120, bottom - top);
-    const width = Math.min(innerWidth - 28, innerWidth > 700 ? 1012 : 560, (availableHeight - 36) * 270 / 166 + 12);
-    const height = (width - 12) * 166 / 270 + 36;
+    const sidebar = phone ? 0 : landscape ? 220 : innerWidth > 900 ? 300 : 250;
+    const mobileInfo = phone ? innerHeight < 620 ? 118 : 142 : 0;
+    const width = Math.min(
+      innerWidth - (phone ? 20 : 32),
+      phone ? 560 : 1180,
+      Math.max(280, sidebar + (availableHeight - mobileInfo) * 270 / 166),
+    );
+    const height = phone
+      ? width * 166 / 270 + mobileInfo
+      : (width - sidebar) * 166 / 270;
+    preview.style.setProperty("--preview-sidebar", `${sidebar}px`);
+    preview.style.setProperty("--preview-info-height", `${mobileInfo}px`);
     preview.style.width = `${width}px`;
+    preview.style.height = `${height}px`;
     preview.style.top = `${top + Math.max(0, (availableHeight - height) / 2)}px`;
   }
 
@@ -29,7 +46,11 @@ export function createProjectPreview(projects, viewport) {
     if (index === nextIndex) return;
     index = nextIndex;
     const project = projects[index];
+    projectIndex.textContent = `${String(index + 1).padStart(2, "0")} / ${String(projects.length).padStart(2, "0")}`;
+    category.textContent = project.category;
     title.textContent = project.name;
+    description.textContent = project.description;
+    year.textContent = project.year ?? "—";
     art.className = `preview-canvas ${project.theme}`;
     // Live sites play a scroll recording; reduced-motion visitors keep the still screenshot.
     const media = project.video && !reducedMotion.matches
@@ -38,15 +59,27 @@ export function createProjectPreview(projects, viewport) {
     art.innerHTML = `<div class="project-art">${media}</div>`;
     art.setAttribute("aria-label", `${project.name}. ${project.category}. ${project.description}`);
     stack.textContent = project.stack ?? "";
+    // Projects with a written case study link to it from the title bar.
+    caseLink.hidden = !project.caseStudy;
+    if (project.caseStudy) {
+      caseLink.href = project.caseStudy;
+      caseLink.setAttribute("aria-label", `${project.name} case study`);
+    } else {
+      caseLink.removeAttribute("href");
+    }
     // The link only appears for projects that have somewhere to go.
     openLink.hidden = !project.url;
     if (project.url) {
       const isCode = new URL(project.url).hostname === "github.com";
       openLink.href = project.url;
-      openLabel.textContent = isCode ? "View code" : "Open site";
+      openLabel.textContent = project.actionLabel ?? (isCode ? "View code" : "Open site");
       openLink.setAttribute(
         "aria-label",
-        isCode ? `View ${project.name} code on GitHub (opens in a new tab)` : `Open ${project.name} (opens in a new tab)`,
+        project.actionLabel
+          ? `${project.actionLabel}: ${project.name} (opens in a new tab)`
+          : isCode
+            ? `View ${project.name} code on GitHub (opens in a new tab)`
+            : `Open ${project.name} (opens in a new tab)`,
       );
     } else {
       openLink.removeAttribute("href");
@@ -69,6 +102,7 @@ export function createProjectPreview(projects, viewport) {
     else preview.setAttribute("aria-hidden", "true");
     closeButton.tabIndex = pin ? 0 : -1;
     openLink.tabIndex = pin ? 0 : -1;
+    caseLink.tabIndex = pin ? 0 : -1;
     // A non-modal preview preserves the surrounding page and the carousel.
     preview.open = true;
     openingFrame = requestAnimationFrame(() => preview.classList.add("is-visible"));
