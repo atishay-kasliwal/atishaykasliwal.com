@@ -16,6 +16,14 @@ npm run build
 npm run preview
 ```
 
+## SEO and performance checks
+
+`npm test` builds the static site and validates page metadata, canonicals, structured data, internal links, sitemap coverage, robots rules, and Cloudflare headers. `npm run lhci` runs the configured Lighthouse CI checks against the production build.
+
+To audit the deployed site with the pinned SEO crawler, run `npm run seo:sitemap:live` for sitemap health and `npm run seo:crawl:live` for a full technical crawl. Reports are written under `artifacts/`.
+
+After replacing a project card, the Reel source stills, the Bayesian chart, or the profile portrait, run `npm run images:responsive` to regenerate their responsive WebP alternatives. Full-resolution originals remain available for higher-density displays.
+
 ## Update the content
 
 - `src/projects.js` contains the eleven featured GitHub projects: links, stacks, descriptions, and artwork. Live-product screenshots are in `public/projects/`.

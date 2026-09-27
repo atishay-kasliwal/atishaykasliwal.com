@@ -355,6 +355,8 @@ html.scroll-story .scroll-cue {
   font-size: 10px;
 }
 .work-label {
+  margin: 0;
+  font: inherit;
   text-transform: uppercase;
   letter-spacing: 0.035em;
   display: flex;

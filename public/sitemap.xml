@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/Atishay-Kasliwal-Resume.pdf</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-02-21</lastmod>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-tracker/</loc>
@@ -26,6 +26,13 @@
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/atriveo-tracker/active-jobs.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/insurance-platform/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/insurance-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -68,6 +75,48 @@
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/atriveo-job-search/run.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/fedtalk/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/fedtalk-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/developer-profile/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/profile-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriveo-reel/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/reel-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/kaggriculture/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/kaggriculture-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/bayesian-marketing-mix/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/mmm-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/insureraft/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/raft-poster.webp</image:loc>
     </image:image>
   </url>
 </urlset>

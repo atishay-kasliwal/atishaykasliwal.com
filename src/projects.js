@@ -10,13 +10,18 @@
 // `year` (first commit, or repo creation when history was squashed) shows in the cursor marquee.
 // `caseStudy` links the preview window to the project's page (see src/case-studies/data.js).
 // The card button and preview window carry the accessible name, so the image itself is decorative.
-const shot = file => `<img src="/projects/${file}" alt="" decoding="async" />`;
+const shot = file => {
+  const src = `/projects/${file}`;
+  if (!file.startsWith("cards/")) return `<img src="${src}" alt="" decoding="async" />`;
+  const name = file.slice("cards/".length).replace(/\.webp$/, "");
+  return `<img src="${src}" srcset="/projects/cards/${name}-640.webp 640w, ${src} 1080w" sizes="305px" alt="" decoding="async" />`;
+};
 
 // Keep the portrait as the original photograph. It is the foundation of the
 // composition: the surrounding surface extends its neutral studio background.
 const profileArt = `
   <span class="profile-layout" aria-hidden="true">
-    <img class="profile-portrait" src="/atishay-kasliwal.jpg" alt="" decoding="async" />
+    <img class="profile-portrait" src="/atishay-kasliwal.jpg" srcset="/atishay-kasliwal-256.webp 256w, /atishay-kasliwal-512.webp 512w, /atishay-kasliwal.jpg 718w" sizes="256px" alt="" decoding="async" />
     <span class="profile-copy">
       <small><i></i> 07 / PERSONAL PROFILE</small>
       <strong>Atishay<br />Kasliwal</strong>
@@ -45,7 +50,7 @@ const reelArt = `
     <div class="reel-card-top"><b>ATRIVEO <em>REEL</em></b><span><i></i> READY TO RENDER</span></div>
     <div class="reel-card-copy"><strong>Create a comparison reel</strong><small>Two clips, one vertical video.</small></div>
     <div class="reel-card-panels"><span><i>01</i><b>Media</b><small>2 / 2 · READY</small></span><span><i>02</i><b>Trim</b><small>A 10.0s · B 10.0s</small></span><span><i>03</i><b>Layout</b><small>TOP + BOTTOM</small></span><span><i>04</i><b>Text and timing</b><small>CAPTION BAND</small></span></div>
-    <div class="reel-card-preview"><small>PREVIEW <i>9:16</i></small><div><span><img src="/projects/media/atriveo-reel/clip-a.webp" alt="" decoding="async" /><i>A</i></span><span><img src="/projects/media/atriveo-reel/clip-b.webp" alt="" decoding="async" /><i>B</i></span><b>Two clips.<br />One reel.</b></div></div>
+    <div class="reel-card-preview"><small>PREVIEW <i>9:16</i></small><div><span><img src="/projects/media/atriveo-reel/clip-a.webp" srcset="/projects/media/atriveo-reel/clip-a-480.webp 480w, /projects/media/atriveo-reel/clip-a-960.webp 960w, /projects/media/atriveo-reel/clip-a.webp 1920w" sizes="(max-width: 700px) 80px, 268px" alt="" decoding="async" /><i>A</i></span><span><img src="/projects/media/atriveo-reel/clip-b.webp" srcset="/projects/media/atriveo-reel/clip-b-480.webp 480w, /projects/media/atriveo-reel/clip-b-960.webp 960w, /projects/media/atriveo-reel/clip-b.webp 1920w" sizes="(max-width: 700px) 80px, 268px" alt="" decoding="async" /><i>B</i></span><b>Two clips.<br />One reel.</b></div></div>
     <div class="reel-card-output"><span>1080 × 1920</span><span>30 FPS</span><span>20.0S</span></div>
   </div>`;
 
@@ -71,7 +76,7 @@ const mmmArt = `
   <div class="mmm-card-art">
     <div class="mmm-card-head"><b>MARKETING MIX</b><span>MODEL DIAGNOSTICS · 156 WEEKS</span></div>
     <div class="mmm-card-copy"><small>OUT-OF-SAMPLE FIT</small><strong>0.9489</strong><span>R² · MAPE 2.74%</span></div>
-    <figure class="mmm-card-figure"><img src="/projects/media/bayesian-mmm/actual_vs_predicted.webp" alt="" decoding="async" /><figcaption>ACTUAL VS PREDICTED SALES</figcaption></figure>
+    <figure class="mmm-card-figure"><img src="/projects/media/bayesian-mmm/actual_vs_predicted.webp" srcset="/projects/media/bayesian-mmm/actual_vs_predicted-480.webp 480w, /projects/media/bayesian-mmm/actual_vs_predicted-960.webp 960w, /projects/media/bayesian-mmm/actual_vs_predicted.webp 1600w" sizes="339px" alt="" decoding="async" /><figcaption>ACTUAL VS PREDICTED SALES</figcaption></figure>
     <div class="mmm-card-foot"><span>ADSTOCK</span><span>SATURATION</span><span>1,000-RUN MONTE CARLO</span></div>
   </div>`;
 
@@ -109,6 +114,7 @@ export const projects = [
     url: "https://github.com/atishay-kasliwal/insurance-microservices-platform",
     tag: "CODE",
     theme: "insurance",
+    caseStudy: "/projects/insurance-platform/",
     year: 2024,
     card: shot("cards/insurance.webp"),
     video: "/projects/video/insurance.mp4",
@@ -172,6 +178,7 @@ export const projects = [
     url: "https://github.com/atishay-kasliwal/fedtalk-openai-analysis-main",
     tag: "CODE",
     theme: "fedtalk",
+    caseStudy: "/projects/fedtalk/",
     year: 2025,
     card: shot("cards/fedtalk.webp"),
     video: "/projects/video/fedtalk.mp4",
@@ -188,6 +195,7 @@ export const projects = [
     actionLabel: "View profile",
     tag: "PROFILE",
     theme: "profile",
+    caseStudy: "/projects/developer-profile/",
     year: 2026,
     card: profileArt,
     video: "/projects/video/profile.mp4",
@@ -203,6 +211,7 @@ export const projects = [
     url: "https://github.com/atishay-kasliwal/atriveo-reel",
     tag: "CODE",
     theme: "reel",
+    caseStudy: "/projects/atriveo-reel/",
     year: 2026,
     card: reelArt,
     video: "/projects/video/reel.mp4",
@@ -218,6 +227,7 @@ export const projects = [
     url: "https://github.com/atishay-kasliwal/kaggriculture",
     tag: "RESEARCH",
     theme: "kaggriculture",
+    caseStudy: "/projects/kaggriculture/",
     year: 2026,
     card: kaggricultureArt,
     video: "/projects/video/kaggriculture.mp4",
@@ -233,6 +243,7 @@ export const projects = [
     url: "https://github.com/atishay-kasliwal/bayesian-marketing-mix-model",
     tag: "DATA",
     theme: "mmm",
+    caseStudy: "/projects/bayesian-marketing-mix/",
     year: 2026,
     card: mmmArt,
     video: "/projects/video/mmm.mp4",
@@ -248,6 +259,7 @@ export const projects = [
     url: "https://github.com/atishay-kasliwal/InsureRaft",
     tag: "SYSTEMS",
     theme: "raft",
+    caseStudy: "/projects/insureraft/",
     year: 2026,
     card: raftArt,
     video: "/projects/video/raft.mp4",

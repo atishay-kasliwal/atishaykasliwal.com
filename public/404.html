@@ -4,31 +4,109 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
+    <meta name="description" content="Page not found. Return to Atishay Kasliwal's portfolio." />
     <meta name="theme-color" content="#111111" />
-    <title>Page not found · Atishay Kasliwal</title>
+    <title>404 · Page not found — Atishay Kasliwal</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
-      html, body { height: 100%; margin: 0; }
-      body {
-        display: grid; place-items: center; padding: 24px; box-sizing: border-box;
-        background: #111; color: #efefec;
-        font: 16px/1.5 "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased;
+      @font-face {
+        font-family: "Geist Variable";
+        src: url("/assets/geist-latin-wght-normal-BgDaEnEv.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: swap;
       }
-      main { max-width: 520px; }
-      p.code { margin: 0 0 18px; font: 11px ui-monospace, Menlo, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #848480; }
-      p.code::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 8px; border-radius: 50%; background: #8554ff; vertical-align: 1px; }
-      h1 { margin: 0; font-size: clamp(30px, 5vw, 44px); font-weight: 450; line-height: 1.1; letter-spacing: -0.04em; }
+      @font-face {
+        font-family: "Geist Mono Variable";
+        src: url("/assets/geist-mono-latin-wght-normal-XN7g48iV.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: swap;
+      }
+      :root {
+        --sans: "Geist Variable", "Helvetica Neue", Arial, sans-serif;
+        --mono: "Geist Mono Variable", ui-monospace, Menlo, monospace;
+        --ink: #efefec;
+        --muted: #848480;
+        --accent: #8554ff;
+        --line: #3a3a36;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      html, body { min-height: 100%; margin: 0; }
+      html { font-variant-emoji: text; }
+      body {
+        min-height: 100svh;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #111;
+        color: var(--ink);
+        font: 16px/1.5 var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      main { width: min(100%, 720px); padding: 32px; }
+      .code {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0;
+        color: var(--muted);
+        font: 400 10.5px/1 var(--mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .code::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        flex: 0 0 6px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .code span { color: #565650; }
+      h1 {
+        max-width: 12ch;
+        margin: 24px 0 28px;
+        font-size: 56px;
+        font-weight: 450;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        text-wrap: balance;
+      }
       h1 span { color: #969692; }
-      a { display: inline-block; margin-top: 28px; color: #efefec; font: 12px ui-monospace, Menlo, monospace; text-decoration: none; border-bottom: 1px solid #3a3a36; padding-bottom: 3px; }
-      a:hover, a:focus-visible { border-color: #8554ff; }
-      a b { color: #8554ff; font-weight: inherit; }
+      .home-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 24px;
+        padding: 0 0 5px;
+        border-bottom: 1px solid var(--line);
+        color: var(--ink);
+        font: 400 12px/1.4 var(--mono);
+        text-decoration: none;
+        transition: border-color 0.2s, color 0.2s;
+      }
+      .home-link:hover { border-color: var(--accent); color: #fff; }
+      .home-link:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 5px;
+      }
+      .home-link b { color: var(--accent); font-weight: 400; }
+      @media (max-width: 600px) {
+        body { padding: 20px; }
+        main { padding: 18px 4px; }
+        h1 { max-width: 10ch; margin: 20px 0 24px; font-size: 42px; }
+      }
+      @media (max-height: 480px) {
+        main { padding-block: 16px; }
+        h1 { margin-block: 14px 18px; font-size: 38px; }
+      }
     </style>
   </head>
   <body>
     <main>
-      <p class="code">404 · Page not found</p>
-      <h1>This page doesn't exist. <span>It may have moved when the site was rebuilt.</span></h1>
-      <a href="/">Back to atishaykasliwal.com <b>↗︎</b></a>
+      <p class="code">404 <span>/</span> Not found</p>
+      <h1>Page not found<span>.</span></h1>
+      <a class="home-link" href="/">Back home <b aria-hidden="true">↗︎</b></a>
     </main>
   </body>
 </html>
