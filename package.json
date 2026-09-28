@@ -12,7 +12,8 @@
     "seo:sitemap:live": "seo crawl --sitemap-url https://atishaykasliwal.com/sitemap.xml --health --format json --output artifacts/seo-sitemap.json",
     "seo:crawl:live": "seo crawl https://atishaykasliwal.com --max-pages 100 --max-depth 8 --format json --output artifacts/seo-crawl.json",
     "lhci": "npx --yes @lhci/cli@0.15.1 autorun",
-    "images:responsive": "node scripts/generate-responsive-thumbnails.mjs"
+    "images:responsive": "node scripts/generate-responsive-thumbnails.mjs",
+    "images:photography": "node scripts/generate-photography-images.mjs"
   },
   "devDependencies": {
     "fast-xml-parser": "^5.11.1",

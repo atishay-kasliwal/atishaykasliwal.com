@@ -1,0 +1,114 @@
+/* All layout changes are scoped to the standalone photography document. */
+html[data-photography-page],
+[data-photography-page] body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+.photography-portfolio {
+  min-height: 100svh;
+  height: auto;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+}
+.photography-portfolio .masthead,
+.photography-portfolio .site-footer,
+.photography-portfolio .thumb-bar { grid-column: 1; }
+.photography-portfolio .home-link { font-size: 10.5px; line-height: 1; color: var(--muted); }
+.photography-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+  min-width: 0;
+  padding: 46px 0 38px;
+}
+.photography-heading { text-align: center; padding: 0 var(--gutter); }
+.photography-heading h1 {
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 450;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+.photography-heading p { color: var(--muted); font-size: 13px; margin-top: 12px; }
+.photo-deck {
+  width: 100%;
+  max-width: 1288px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+  padding: 0 var(--gutter);
+}
+.photo-page-card {
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #1a1a19;
+  border: 1px solid #454542;
+}
+.photo-page-card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.photo-deck-controls { display: none; }
+.photography-enhancing .photography-portfolio { height: 100svh; height: 100dvh; }
+.photography-enhancing .photography-content { gap: clamp(18px, 3vh, 32px); padding: 22px 0; }
+.photography-enhancing .photo-deck {
+  --deck-width: min(56vw, 620px, calc((100svh - 310px) * 4 / 3));
+  --deck-step: clamp(38px, 7vw, 94px);
+  max-width: none;
+  display: block;
+  position: relative;
+  perspective: 1800px;
+  height: calc(var(--deck-width) * 3 / 4 + 24px);
+  padding: 0;
+  flex: none;
+  touch-action: pan-y;
+}
+.photography-enhancing .photo-page-card {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  width: var(--deck-width);
+  box-shadow: 0 24px 38px -20px #000b;
+  transform: translateX(calc(-50% + var(--offset) * var(--deck-step))) translateZ(calc(var(--distance) * -65px)) rotateY(var(--turn)) scale(calc(1 - var(--distance) * 0.035));
+  opacity: 1;
+  transition:
+    transform 900ms cubic-bezier(.4,0,.2,1),
+    opacity 450ms ease,
+    border-color 450ms ease,
+    z-index 900ms linear,
+    display 900ms allow-discrete;
+  backface-visibility: hidden;
+}
+.photography-enhancing .photo-page-card[data-near="false"] { display: none; opacity: 0; pointer-events: none; }
+@starting-style {
+  .photography-enhancing .photo-page-card[data-near="true"] { opacity: 0; }
+}
+.photography-enhancing .photo-page-card.is-current { border-color: #888881; }
+.photography-enhancing .photo-deck-controls { display: flex; margin: 0; gap: 20px; }
+.photo-page-counter { display: flex; align-items: center; gap: 12px; font: 11px var(--mono); }
+.photography-portfolio .site-footer { margin-top: 0; }
+@media (max-width: 700px) {
+  .photography-portfolio .home-link {
+    margin-bottom: 3px;
+    font: 500 15px/1.3 var(--sans);
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .photography-portfolio .home-link:before { display: none; }
+  .photography-heading p { max-width: 260px; font-size: 12px; line-height: 1.6; }
+  .photography-enhancing .photo-deck { --deck-width: min(78vw, calc((100svh - 300px) * 4 / 3)); --deck-step: 8vw; }
+  .photography-enhancing .photo-deck-controls button { width: 38px; height: 38px; }
+}
+@media (max-height: 460px) and (min-width: 500px) {
+  .photography-enhancing .photography-content { gap: 8px; padding: 8px 0; }
+  .photography-heading h1 { font-size: 22px; }
+  .photography-heading p { display: none; }
+  .photography-enhancing .photo-deck { --deck-width: min(46vw, calc((100svh - 180px) * 4 / 3)); }
+  .photography-portfolio .site-footer { display: flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photography-enhancing .photo-page-card { transition: none; }
+}

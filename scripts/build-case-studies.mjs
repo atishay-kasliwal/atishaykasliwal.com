@@ -278,7 +278,7 @@ ${study.links
 `;
 }
 
-function sitemap(studies, staticPageLastModified) {
+function sitemap(studies, staticPageLastModified, photographs, photographyPage) {
   const entry = (loc, images = [], lastModified) =>
     `  <url>\n    <loc>${loc}</loc>\n${lastModified ? `    <lastmod>${lastModified}</lastmod>\n` : ""}${images
       .map(src => `    <image:image>\n      <image:loc>${escape(new URL(src, SITE).href)}</image:loc>\n    </image:image>\n`)
@@ -293,6 +293,7 @@ ${[
     staticPageLastModified.homepage,
   ),
   entry(`${SITE}/Atishay-Kasliwal-Resume.pdf`, [], staticPageLastModified.resume),
+  entry(photographyPage.url, photographs.map(photo => photo.src), photographyPage.lastModified),
   ...studies.map(s => entry(pageUrl(s.slug), s.media.items.map(i => i.src), s.lastModified)),
 ].join("\n")}
 </urlset>
@@ -327,6 +328,7 @@ export async function buildCaseStudies() {
   const stamp = Date.now();
   const { caseStudies, additionalProjectPages, staticPageLastModified } = await import(`${pathToFileURL(path.join(ROOT, "src/case-studies/data.js")).href}?t=${stamp}`);
   const { projects } = await import(`${pathToFileURL(path.join(ROOT, "src/projects.js")).href}?t=${stamp}`);
+  const { photographs, photographyPage } = await import(`${pathToFileURL(path.join(ROOT, "src/photography.js")).href}?t=${stamp}`);
   const order = projects.map(p => p.name);
   const pageNames = new Set(caseStudies.map(study => study.name));
   const additionalStudies = additionalProjectPages.map(page => {
@@ -389,7 +391,7 @@ export async function buildCaseStudies() {
     fs.writeFileSync(path.join(ROOT, "scripts/og", `${study.slug}.html`), ogSource(study));
     inputs[study.slug] = file;
   });
-  fs.writeFileSync(path.join(ROOT, "public/sitemap.xml"), sitemap(studies, staticPageLastModified));
+  fs.writeFileSync(path.join(ROOT, "public/sitemap.xml"), sitemap(studies, staticPageLastModified, photographs, photographyPage));
   return inputs;
 }
 
