@@ -1,5 +1,7 @@
 // A short welcome sequence, not an artificial download progress indicator.
 // Edit the text, language tags, and durations here to personalize the intro.
+import { createIntroBackground } from "./intro-background.js";
+
 export const greetings = [
   { text: "Hello", lang: "en", duration: 650 },
   { text: "Bonjour", lang: "fr", duration: 190 },
@@ -20,6 +22,7 @@ export function startIntro() {
   let timer;
   let exitTimer;
   let leaving = false;
+  let background = null;
 
   if (!loader) return;
 
@@ -28,6 +31,9 @@ export function startIntro() {
     clearTimeout(exitTimer);
     clearTimeout(window.portfolioIntroFallback);
     const hadFocus = loader.contains(document.activeElement);
+    // Stop the rAF loop before the node goes, so nothing keeps painting.
+    background?.destroy();
+    background = null;
     loader.remove();
     portfolio.inert = false;
     document.documentElement.classList.remove("has-intro");
@@ -69,6 +75,9 @@ export function startIntro() {
     const greeting = greetings[index];
     word.textContent = greeting.text;
     word.lang = greeting.lang;
+    // Only the greetings that linger get a swell. Reacting to every 190ms
+    // change would read as a strobe rather than as atmosphere.
+    if (greeting.duration >= 300) background?.pulse();
     timer = setTimeout(() => showGreeting(index + 1), greeting.duration);
   }
 
@@ -78,6 +87,7 @@ export function startIntro() {
   }
 
   portfolio.inert = true;
+  background = createIntroBackground(loader);
   skip.addEventListener("click", () => reveal());
   document.addEventListener("keydown", onKeydown);
   motion.addEventListener("change", onMotionChange);

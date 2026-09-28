@@ -11,7 +11,13 @@
     <meta name="author" content="Atishay Kasliwal" />
     <title>Atishay Kasliwal — Software &amp; AI Engineer, New York</title>
     <link rel="canonical" href="https://atishaykasliwal.com/" />
+    <!-- Same icon in every format search/browser crawlers check: ICO at the default path,
+         SVG for browsers that use it, PNG at Google's recommended sizes as a fallback. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
@@ -59,8 +65,11 @@
             "url": "https://atishaykasliwal.com/",
             "isPartOf": { "@id": "https://atishaykasliwal.com/#website" },
             "mainEntity": { "@id": "https://atishaykasliwal.com/#person" },
-            "hasPart": { "@id": "https://atishaykasliwal.com/#selected-work" },
-            "dateModified": "2026-09-27"
+            "hasPart": [
+              { "@id": "https://atishaykasliwal.com/#selected-work" },
+              { "@id": "https://atishaykasliwal.com/#photography" }
+            ],
+            "dateModified": "2026-09-28"
           },
           {
             "@type": "Person",
@@ -68,7 +77,11 @@
             "name": "Atishay Kasliwal",
             "url": "https://atishaykasliwal.com/",
             "mainEntityOfPage": { "@id": "https://atishaykasliwal.com/#profile" },
-            "image": "https://atishaykasliwal.com/atishay-kasliwal.jpg",
+            "image": [
+              "https://atishaykasliwal.com/atishay-kasliwal-1x1.jpg",
+              "https://atishaykasliwal.com/atishay-kasliwal-4x3.jpg",
+              "https://atishaykasliwal.com/atishay-kasliwal-16x9.jpg"
+            ],
             "jobTitle": "Software & AI Engineer",
             "description": "Full-stack and AI engineer with 5+ years in production, building distributed systems, LLM products and the interfaces on top of them.",
             "email": "mailto:katishay@gmail.com",
@@ -90,7 +103,7 @@
               { "@type": "ListItem", "position": 4, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-bio/#project", "@type": "SoftwareApplication", "name": "Atriveo Bio", "url": "https://bio.atriveo.com", "description": "A wearable intelligence API that turns Apple Health data into an explainable readiness score and deep-work forecasts." } },
               { "@type": "ListItem", "position": 5, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-job-search/#project", "@type": "SoftwareApplication", "name": "Atriveo Job Search", "url": "https://application.atriveo.com", "description": "A self-hosted pipeline that scrapes, scores and tailors résumés with a local LLM." } },
               { "@type": "ListItem", "position": 6, "item": { "@id": "https://atishaykasliwal.com/projects/fedtalk/#project", "@type": "SoftwareSourceCode", "name": "FedTalk", "url": "https://github.com/atishay-kasliwal/fedtalk-openai-analysis-main", "description": "Research on whether an LLM can predict market reactions to FOMC statements." } },
-              { "@type": "ListItem", "position": 7, "item": { "@id": "https://atishaykasliwal.com/projects/developer-profile/#project", "@type": "CreativeWork", "name": "Developer Profile", "url": "https://github.com/atishay-kasliwal/atishay-kasliwal", "description": "A visual map of Atishay Kasliwal's work, experience, photography, technical toolkit and engineering principles." } },
+              { "@type": "ListItem", "position": 7, "item": { "@id": "https://atishaykasliwal.com/projects/developer-profile/#project", "@type": "CreativeWork", "name": "Beyond the Resume", "url": "https://github.com/atishay-kasliwal/atishay-kasliwal", "description": "The GitHub profile Atishay Kasliwal built to say more about himself than a resume does: his work, his history, and a few things outside of it." } },
               { "@type": "ListItem", "position": 8, "item": { "@id": "https://atishaykasliwal.com/projects/atriveo-reel/#project", "@type": "SoftwareSourceCode", "name": "Atriveo Reel", "url": "https://github.com/atishay-kasliwal/atriveo-reel", "description": "A self-hosted editor for producing vertical comparison reels with FFmpeg and Remotion." } },
               { "@type": "ListItem", "position": 9, "item": { "@id": "https://atishaykasliwal.com/projects/kaggriculture/#project", "@type": "SoftwareSourceCode", "name": "Kaggriculture", "url": "https://github.com/atishay-kasliwal/kaggriculture", "description": "A game-agent research platform with deterministic simulation, planner search and opponent modeling." } },
               { "@type": "ListItem", "position": 10, "item": { "@id": "https://atishaykasliwal.com/projects/bayesian-marketing-mix/#project", "@type": "SoftwareSourceCode", "name": "Bayesian Marketing Mix", "url": "https://github.com/atishay-kasliwal/bayesian-marketing-mix-model", "description": "An end-to-end marketing mix model with uncertainty simulation and budget allocation." } },
@@ -100,6 +113,7 @@
         ]
       }
     </script>
+    <!-- photography:metadata -->
     <link rel="stylesheet" href="/src/style.css" />
     <script>
       document.documentElement.classList.add("has-intro");
@@ -203,43 +217,131 @@
         <span class="intro-mark" aria-hidden="true">✳︎</span>
       </section>
 
-      <section
-        class="work"
-        aria-label="Project carousel"
-        aria-roledescription="carousel"
-      >
-        <div class="work-toolbar">
-          <h2 class="work-label">
-            Selected work <span class="muted">/ Live and open source</span>
-          </h2>
-          <div class="project-counter" aria-live="polite" aria-atomic="true">
-            <span id="current-index">01</span><span class="counter-rule"></span
-            ><span class="muted" id="total-count">06</span>
-          </div>
-          <div class="carousel-controls">
-            <span class="drag-hint">Drag or scroll to explore</span>
-            <button
-              id="toggle-carousel-motion"
-              aria-label="Pause automatic carousel movement"
-            >
-              Ⅱ</button
-            ><button id="previous" aria-label="Previous project">←</button
-            ><button id="next" aria-label="Next project">→</button>
-          </div>
-        </div>
-        <div
-          class="carousel-viewport"
-          id="carousel-viewport"
-          tabindex="0"
-          aria-label="Projects. Use left and right arrow keys to browse."
+      <div class="portfolio-sections">
+        <section
+          class="work"
+          aria-label="Project carousel"
+          aria-roledescription="carousel"
         >
-          <div class="carousel-track" id="carousel-track"></div>
-        </div>
-        <div class="work-footer">
-          <p id="selected-project">Atriveo Tracker <span>— Full-stack product / Live</span></p>
-          <button id="open-project">Explore project <span>↗︎</span></button>
-        </div>
-      </section>
+          <div class="work-toolbar">
+            <h2 class="work-label">
+              <button class="section-toggle" id="work-toggle" data-section-toggle aria-expanded="true" aria-controls="work-panel">
+                <span>Selected work <span class="muted">/ Live and open source</span></span>
+                <span class="section-symbol" aria-hidden="true"></span>
+              </button>
+            </h2>
+            <div class="project-counter" data-section-extra="work-panel" aria-live="polite" aria-atomic="true">
+              <span id="current-index" data-carousel-current>01</span><span class="counter-rule"></span
+              ><span class="muted" id="total-count" data-carousel-total>06</span>
+            </div>
+            <div class="carousel-controls" data-section-extra="work-panel">
+              <span class="drag-hint">Drag or scroll to explore</span>
+              <button
+                id="toggle-carousel-motion" data-carousel-motion
+                aria-label="Pause automatic carousel movement"
+              >
+                Ⅱ</button
+              ><button id="previous" data-carousel-previous aria-label="Previous project">←</button
+              ><button id="next" data-carousel-next aria-label="Next project">→</button>
+            </div>
+          </div>
+          <div class="section-panel" id="work-panel" role="region" aria-labelledby="work-toggle">
+          <div
+            class="carousel-viewport"
+            id="carousel-viewport"
+            tabindex="0"
+            aria-label="Projects. Use left and right arrow keys to browse."
+          >
+            <div class="carousel-track" id="carousel-track"></div>
+          </div>
+          <div class="work-footer">
+            <p id="selected-project" data-carousel-caption>Atriveo Tracker <span>— Full-stack product / Live</span></p>
+            <button id="open-project" data-carousel-open>Explore project <span>↗︎</span></button>
+          </div>
+          </div>
+        </section>
+        <section
+          class="work experience"
+          aria-label="Experience carousel"
+          aria-roledescription="carousel"
+        >
+          <div class="work-toolbar">
+            <h2 class="work-label">
+              <button class="section-toggle" id="experience-toggle" data-section-toggle aria-expanded="false" aria-controls="experience-panel">
+                <span>Experience <span class="muted">/ Work and education</span></span>
+                <span class="section-symbol" aria-hidden="true"></span>
+              </button>
+            </h2>
+            <div class="project-counter" data-section-extra="experience-panel" aria-live="polite" aria-atomic="true">
+              <span id="experience-current-index" data-carousel-current>01</span><span class="counter-rule"></span
+              ><span class="muted" id="experience-total-count" data-carousel-total>06</span>
+            </div>
+            <div class="carousel-controls" data-section-extra="experience-panel">
+              <span class="drag-hint">Drag or scroll to explore</span>
+              <button
+                id="experience-toggle-carousel-motion" data-carousel-motion
+                aria-label="Pause automatic carousel movement"
+              >
+                Ⅱ</button
+              ><button id="experience-previous" data-carousel-previous aria-label="Previous project">←</button
+              ><button id="experience-next" data-carousel-next aria-label="Next project">→</button>
+            </div>
+          </div>
+          <div class="section-panel" id="experience-panel" hidden role="region" aria-labelledby="experience-toggle">
+          <div
+            class="carousel-viewport"
+            id="experience-carousel-viewport"
+            tabindex="0"
+            aria-label="Projects. Use left and right arrow keys to browse."
+          >
+            <div class="carousel-track" id="experience-carousel-track"></div>
+          </div>
+          <div class="work-footer">
+            <p id="experience-selected-project" data-carousel-caption>Atriveo Tracker <span>— Full-stack product / Live</span></p>
+            <button id="experience-open-project" data-carousel-open>Explore project <span>↗︎</span></button>
+          </div>
+          </div>
+        </section>
+        <section
+          class="work photography"
+          id="photography"
+          aria-label="Photography carousel"
+          aria-roledescription="carousel"
+        >
+          <div class="work-toolbar">
+            <h2 class="work-label">
+              <button class="section-toggle" id="photography-toggle" data-section-toggle aria-expanded="false" aria-controls="photography-panel">
+                <span>Photography <span class="muted">/ Selected moments</span></span>
+                <span class="section-symbol" aria-hidden="true"></span>
+              </button>
+            </h2>
+            <div class="project-counter" data-section-extra="photography-panel" aria-live="polite" aria-atomic="true">
+              <span id="photography-current-index" data-carousel-current>01</span><span class="counter-rule"></span
+              ><span class="muted" id="photography-total-count" data-carousel-total>16</span>
+            </div>
+            <div class="carousel-controls" data-section-extra="photography-panel">
+              <span class="drag-hint">Drag or scroll to explore</span>
+              <button
+                id="photography-toggle-carousel-motion" data-carousel-motion
+                aria-label="Pause automatic carousel movement"
+              >
+                Ⅱ</button
+              ><button id="photography-previous" data-carousel-previous aria-label="Previous photograph">←</button
+              ><button id="photography-next" data-carousel-next aria-label="Next photograph">→</button>
+            </div>
+          </div>
+          <div class="section-panel" id="photography-panel" hidden role="region" aria-labelledby="photography-toggle">
+          <div
+            class="carousel-viewport"
+            id="photography-carousel-viewport"
+            tabindex="0"
+            aria-label="Photographs. Use left and right arrow keys to browse."
+          >
+            <div class="carousel-track" id="photography-carousel-track"><!-- photography:cards --></div>
+          </div>
+          </div>
+        </section>
+      </div>
       <footer class="site-footer">
         <span>© 2026 Atishay Kasliwal</span
         ><span>Design meets development <span class="purple">↗︎</span></span>
@@ -271,7 +373,7 @@
           <header class="preview-info-head">
             <span id="dialog-index">01 / 11</span>
             <button class="preview-window-close" data-close-project aria-label="Close project preview">
-              Close <i aria-hidden="true">×</i>
+              <span>Close</span> <i aria-hidden="true">×</i>
             </button>
           </header>
           <div class="preview-copy">
@@ -293,9 +395,6 @@
           </footer>
         </section>
         <div class="preview-stage">
-          <div class="preview-stage-bar" aria-hidden="true">
-            <span><i></i> Motion preview</span><span>Looping</span>
-          </div>
           <div id="dialog-art" class="preview-canvas" role="img"></div>
         </div>
       </div>

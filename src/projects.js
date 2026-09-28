@@ -190,7 +190,7 @@ export const projects = [
     art: '<div class="mock-nav"><b>FedTalk</b><span>FOMC × GPT-4o</span></div><div class="fed-title">Can an LLM<br />read the Fed?</div><svg class="fed-chart" viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path class="fed-rule" d="M88 0V80" /><path class="fed-line" d="M0 44L8 45L16 43L24 44L32 42L40 44L48 43L56 45L64 43L72 44L80 43L88 44L92 30L96 52L100 22L104 48L108 16L113 40L118 26L124 34L130 20L137 30L144 24L152 28L160 18L170 24L180 16L190 20L200 14" /></svg><div class="fed-mark">2:00 PM ET<br />statement</div><div class="mock-bottom">Whisper · Pinecone · minute-level prices<span>Research ↗︎</span></div>',
   },
   {
-    name: "Developer Profile",
+    name: "Beyond the Resume",
     url: "https://github.com/atishay-kasliwal/atishay-kasliwal",
     actionLabel: "View profile",
     tag: "PROFILE",
@@ -198,13 +198,11 @@ export const projects = [
     caseStudy: "/projects/developer-profile/",
     year: 2026,
     card: profileArt,
-    video: "/projects/video/profile.mp4",
-    poster: "/projects/video/profile-poster.webp",
-    category: "GitHub profile / Open source",
+    category: "Personal profile / Open source",
     stack: "Markdown · Open source · Systems",
     description:
-      "A visual map of my work, experience, photography, technical toolkit, and the principles behind the products I build.",
-    art: shot("video/profile-poster.webp"),
+      "The profile that comes up when someone searches my name on GitHub: my work, my history, and a few things outside of it.",
+    art: shot("media/developer-profile/card.webp"),
   },
   {
     name: "Atriveo Reel",
