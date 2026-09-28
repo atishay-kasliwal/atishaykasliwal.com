@@ -1,4 +1,4 @@
-export function createProjectPreview(projects, viewport) {
+export function createProjectPreview(projects, viewport, { centered = false } = {}) {
   const preview = document.querySelector("#project-dialog");
   const art = document.querySelector("#dialog-art");
   const title = document.querySelector("#dialog-title");
@@ -10,6 +10,7 @@ export function createProjectPreview(projects, viewport) {
   const openLink = preview.querySelector("#dialog-open");
   const openLabel = preview.querySelector("#dialog-open-label");
   const caseLink = preview.querySelector("#dialog-case");
+  const caseLabel = preview.querySelector("#dialog-case-label");
   const stack = preview.querySelector("#dialog-stack");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let index = -1;
@@ -24,7 +25,7 @@ export function createProjectPreview(projects, viewport) {
     const landscape = innerHeight < 460 && innerWidth >= 500;
     const phone = innerWidth <= 700 && !landscape;
     const top = landscape ? 12 : innerWidth > 700 ? 72 : 62;
-    const bottom = landscape ? innerHeight - 12 : strip.top - 12;
+    const bottom = centered || landscape ? innerHeight - 12 : strip.top - 12;
     const availableHeight = Math.max(120, bottom - top);
     const photo = collection[index]?.kind === "photo";
     // Every photograph uses the same frame; CSS crops the image to fill it.
@@ -74,7 +75,8 @@ export function createProjectPreview(projects, viewport) {
     caseLink.hidden = !project.caseStudy;
     if (project.caseStudy) {
       caseLink.href = project.caseStudy;
-      caseLink.setAttribute("aria-label", `${project.name} case study`);
+      caseLabel.textContent = project.caseStudyLabel ?? "Read case study";
+      caseLink.setAttribute("aria-label", `${caseLabel.textContent}: ${project.name}`);
     } else {
       caseLink.removeAttribute("href");
     }
@@ -151,6 +153,7 @@ export function createProjectPreview(projects, viewport) {
   });
   const resizeObserver = new ResizeObserver(position);
   document.querySelectorAll(".carousel-viewport").forEach(strip => resizeObserver.observe(strip));
+  if (centered) resizeObserver.observe(viewport);
   return {
     open: (nextIndex, trigger, sourceViewport, items) => show(nextIndex, true, trigger, sourceViewport, items),
     hover: (nextIndex, sourceViewport, items) => show(nextIndex, false, null, sourceViewport, items),
