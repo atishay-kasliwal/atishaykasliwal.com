@@ -204,6 +204,37 @@ h3 {
   color: var(--muted);
   margin-top: 24px;
 }
+.hero-quote-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+}
+.hero-quote-row .hero-note {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin-top: 0;
+}
+.hero-quote-row .intro-mark {
+  position: static;
+  flex: none;
+}
+.hero-quote-mobile {
+  display: none;
+}
+/* Keep the headline centered while the quote and scroll cue sit near the work. */
+@media (min-width: 701px) and (min-height: 741px) {
+  .portfolio > .intro {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto auto;
+    padding-bottom: 18px;
+  }
+  .intro > .statements {
+    align-self: center;
+  }
+}
 /* Scroll story (desktop; see scroll-story.js). Everywhere else only the first statement shows. */
 .statement + .statement,
 .scroll-cue {
@@ -413,14 +444,18 @@ html.scroll-story .scroll-cue {
   grid-template-columns: 1fr;
   padding-bottom: 0;
 }
+.work.is-collapsed .work-label,
+.work.is-collapsed .section-toggle {
+  min-height: 24px;
+}
 .work + .work {
-  margin-top: 12px;
+  margin-top: 4px;
 }
 .work + .work::before {
   content: "";
   display: block;
   height: 1px;
-  margin: 0 var(--gutter) 6px;
+  margin: 0 var(--gutter) 3px;
   background: #2a2a27;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -1135,6 +1170,32 @@ html.scroll-story .scroll-cue {
   color: #c2412d;
 }
 
+/* Experience & education cards: one shared layout (reusing .mock-nav / .mock-bottom),
+   a slightly different dark tint per entry so the row still reads with some variety. */
+.timeline {
+  color: #e9e8e3;
+}
+.timeline-a { background: #14171c; }
+.timeline-b { background: #121712; }
+.timeline-c { background: #17151c; }
+.timeline-d { background: #1c1512; }
+.timeline-e { background: #101418; }
+.timeline-f { background: #16140f; }
+.timeline .mock-nav b {
+  color: var(--accent);
+}
+.timeline-title {
+  position: absolute;
+  z-index: 2;
+  top: 32%;
+  left: 5%;
+  right: 5%;
+  font-size: 6.2cqw;
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+}
+
 /* Editorial project preview, opened on hover or click. */
 .project-preview {
   position: fixed;
@@ -1743,9 +1804,19 @@ html.scroll-story .scroll-cue {
   }
   .hero-note {
     font-size: 9px;
-    max-width: 28ch;
+    max-width: min(64ch, calc(100% - 40px));
     line-height: 1.6;
     margin-top: 20px;
+  }
+  .hero-quote-row {
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .hero-quote-desktop {
+    display: none;
+  }
+  .hero-quote-mobile {
+    display: inline;
   }
   .intro-mark {
     font-size: 30px;
@@ -1775,11 +1846,17 @@ html.scroll-story .scroll-cue {
     flex-direction: column;
     gap: 4px;
   }
+  /* Keep the touch target at the accessible 44px minimum even collapsed;
+     only the surrounding gaps shrink. */
+  .work.is-collapsed .work-label,
+  .work.is-collapsed .section-toggle {
+    min-height: 44px;
+  }
   .work + .work {
-    margin-top: 8px;
+    margin-top: 6px;
   }
   .work + .work::before {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .project-counter {
     display: none;
@@ -1964,6 +2041,9 @@ html.scroll-story .scroll-cue {
   .hero-note {
     margin-top: 14px;
   }
+  .hero-quote-row {
+    margin-top: 14px;
+  }
   .intro {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -1976,11 +2056,25 @@ html.scroll-story .scroll-cue {
     padding-bottom: 8px;
   }
 }
+/* The longer personal quote needs normal page flow on short phones. */
+@media (min-height: 601px) and (max-height: 740px) and (max-width: 700px) {
+  html:has(.hero-quote),
+  body:has(.hero-quote) {
+    height: auto;
+    overflow-y: auto;
+  }
+  .portfolio:has(.hero-quote) {
+    height: auto;
+    min-height: 100svh;
+    grid-template-rows: auto auto auto auto;
+  }
+}
 @media (max-height: 600px) and (max-width: 700px) {
   :root {
     --card-width: 57vw;
   }
   .hero-note,
+  .hero-quote-row,
   .intro-mark {
     display: none;
   }
@@ -2011,6 +2105,9 @@ html.scroll-story .scroll-cue {
     padding-bottom: 18px;
   }
   .hero-note {
+    margin-top: 12px;
+  }
+  .hero-quote-row {
     margin-top: 12px;
   }
   .work-toolbar {
@@ -2053,6 +2150,7 @@ html.scroll-story .scroll-cue {
     max-width: 330px;
   }
   .hero-note,
+  .hero-quote-row,
   .intro-mark {
     display: none;
   }

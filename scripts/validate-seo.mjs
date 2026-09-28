@@ -7,6 +7,10 @@ import { parse, parseFragment } from "parse5";
 import sharp from "sharp";
 import { additionalProjectPages, caseStudies, staticPageLastModified } from "../src/case-studies/data.js";
 import { projects } from "../src/projects.js";
+import { photographs, photographyPage } from "../src/photography.js";
+import { experience } from "../src/experience.js";
+import { experiencePages } from "../src/experience-pages.js";
+import { validatePhotography } from "./validate-photography.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -64,7 +68,7 @@ function graphFor(document) {
 assert.ok(fs.existsSync(path.join(dist, "index.html")), "Run npm run build before SEO validation.");
 
 const htmlFiles = listFiles(dist).filter(file => file.endsWith(".html"));
-const records = htmlFiles.map(file => {
+const records = await Promise.all(htmlFiles.map(async file => {
   const source = fs.readFileSync(file, "utf8");
   const document = parse(source);
   const elements = [];
@@ -118,7 +122,12 @@ const records = htmlFiles.map(file => {
     }
     assert.equal(attribute(meta("twitter:image"), "content"), ogImage.href, `${file}: X/Twitter image differs from Open Graph image`);
     assert.equal(attribute(property("og:image:width"), "content"), "1200", `${file}: unexpected Open Graph image width`);
-    assert.equal(attribute(property("og:image:height"), "content"), "630", `${file}: unexpected Open Graph image height`);
+    assert.equal(attribute(property("og:image:height"), "content"), record.url.href === photographyPage.url ? "900" : "630", `${file}: unexpected Open Graph image height`);
+    if (record.url.href === photographyPage.url) {
+      const dimensions = await sharp(path.join(dist, ogImage.pathname)).metadata();
+      assert.equal(dimensions.width, 1200);
+      assert.equal(dimensions.height, 900);
+    }
   } else {
     assert.match(record.robots, /noindex/i, "404 page must remain noindex");
     assert.equal(attribute(canonical, "href"), undefined, "404 page must not canonicalize to another URL");
@@ -133,12 +142,12 @@ const records = htmlFiles.map(file => {
     }
   }
   return record;
-});
+}));
 
 const indexable = records.filter(record => !record.isNotFound);
 const titles = indexable.map(record => record.title.toLocaleLowerCase());
 assert.equal(new Set(titles).size, titles.length, "Page titles must be unique.");
-assert.equal(indexable.length, projects.length + 1, "Expected the homepage and one page per project.");
+assert.equal(indexable.length, projects.length + experiencePages.length + 2, "Expected the homepage, Photography, one page per project and one page per experience entry.");
 assert.equal(caseStudies.length + additionalProjectPages.length, projects.length, "Every listed project needs a page record.");
 const projectPagesByName = new Map([...caseStudies, ...additionalProjectPages].map(page => [page.name, page]));
 assert.equal(projectPagesByName.size, projects.length, "Project page names must map one-to-one to carousel projects.");
@@ -147,6 +156,15 @@ for (const project of projects) {
   assert.ok(page, `Missing project page data for ${project.name}`);
   assert.equal(project.caseStudy, `/projects/${page.slug}/`, `${project.name}: preview link must match its generated project route`);
   assert.ok(outputFileForUrl(new URL(project.caseStudy, site)), `${project.name}: project preview link target does not exist`);
+}
+
+assert.equal(experience.length, experiencePages.length, "Every carousel experience entry needs a matching experience page.");
+const experiencePagesBySlug = new Map(experiencePages.map(page => [page.slug, page]));
+assert.equal(experiencePagesBySlug.size, experiencePages.length, "Experience page slugs must be unique.");
+for (const item of experience) {
+  const slug = item.caseStudy?.match(/^\/experience\/([^/]+)\/$/)?.[1];
+  assert.ok(slug && experiencePagesBySlug.has(slug), `${item.name}: caseStudy link must match a generated experience page`);
+  assert.ok(outputFileForUrl(new URL(item.caseStudy, site)), `${item.name}: experience page link target does not exist`);
 }
 
 for (const record of indexable) {
@@ -247,7 +265,7 @@ assert.equal(new Set(sitemapUrls).size, sitemapUrls.length, "Sitemap contains du
 const expectedSitemap = new Set([...indexable.map(record => record.url.href), new URL(resumePath, site).href]);
 assert.deepEqual(new Set(sitemapUrls), expectedSitemap, "Sitemap URLs must match canonical pages plus the résumé PDF.");
 const expectedLastModified = new Map(indexable.map(record => {
-  const pageEntity = record.graph.find(node => node["@type"] === "WebPage" || node["@type"] === "ProfilePage");
+  const pageEntity = record.graph.find(node => ["WebPage", "ProfilePage", "ImageGallery"].includes(node["@type"]));
   return [record.url.href, pageEntity?.dateModified];
 }));
 expectedLastModified.set(new URL(resumePath, site).href, staticPageLastModified.resume);
@@ -263,7 +281,7 @@ for (const entry of entries) {
     assert.equal(imageUrl.protocol, "https:", `Sitemap image must use HTTPS: ${imageUrl.href}`);
     if (imageUrl.origin === site.origin) {
       assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(imageUrl.pathname.slice(1)))), `Sitemap image is missing: ${imageUrl.href}`);
-    } else {
+    } else if (!photographs.some(photo => photo.src === imageUrl.href)) {
       assert.fail(`Sitemap contains an unexpected external image: ${imageUrl.href}`);
     }
   }
@@ -271,6 +289,7 @@ for (const entry of entries) {
 
 const homeImages = [].concat(entries.find(entry => entry.loc === site.href)["image:image"] ?? []).map(image => image["image:loc"]);
 assert.equal(new Set(homeImages).size, homeImages.length, "Homepage image sitemap must not contain duplicate photos.");
+await validatePhotography({ home, page: records.find(record => record.url.href === photographyPage.url), entries, dist });
 
 const robots = fs.readFileSync(path.join(dist, "robots.txt"), "utf8");
 assert.match(robots, /^User-agent:\s*\*/m, "robots.txt is missing its wildcard user agent.");
