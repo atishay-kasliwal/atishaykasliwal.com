@@ -7,6 +7,7 @@ import { parse, parseFragment } from "parse5";
 import sharp from "sharp";
 import { additionalProjectPages, caseStudies, staticPageLastModified } from "../src/case-studies/data.js";
 import { projects } from "../src/projects.js";
+import { photographs } from "../src/photography.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -221,14 +222,75 @@ for (const [pathname, inlinks] of projectInlinks) {
 const generatedProjectIds = new Set(projectRecords.map(record => record.graph.find(node => node["@id"]?.endsWith("#project"))?.["@id"]));
 assert.deepEqual(listedProjectIds, generatedProjectIds, "Homepage project entities must resolve to project pages.");
 for (const record of projectRecords) {
-  const pageEntity = record.graph.find(node => node["@type"] === "WebPage");
+  // A page built around the person themselves (Beyond the Resume) is a ProfilePage whose
+  // mainEntity is the Person, not the project — everything else stays a plain WebPage.
+  const pageEntity = record.graph.find(node => node["@type"] === "WebPage" || node["@type"] === "ProfilePage");
   const projectEntity = record.graph.find(node => node["@id"]?.endsWith("#project"));
   assert.ok(pageEntity && projectEntity, `${record.file}: missing page or project entity`);
-  assert.equal(pageEntity.mainEntity?.["@id"], projectEntity["@id"], `${record.file}: page and project entities are not connected`);
+  if (pageEntity["@type"] === "ProfilePage") {
+    const personEntity = record.graph.find(node => node["@type"] === "Person");
+    assert.ok(personEntity, `${record.file}: ProfilePage must include a Person entity`);
+    assert.equal(pageEntity.mainEntity?.["@id"], personEntity["@id"], `${record.file}: ProfilePage mainEntity must be the Person`);
+  } else {
+    assert.equal(pageEntity.mainEntity?.["@id"], projectEntity["@id"], `${record.file}: page and project entities are not connected`);
+  }
   assert.equal(projectEntity.mainEntityOfPage?.["@id"], pageEntity["@id"], `${record.file}: project does not point back to its page`);
 }
 const homepageEntity = home.graph.find(node => node["@type"] === "ProfilePage");
 assert.equal(homepageEntity?.dateModified, staticPageLastModified.homepage, "Homepage schema dateModified must match the source-recorded date.");
+
+const galleryId = `${site.href}#photography`;
+const personId = `${site.href}#person`;
+const gallery = home.graph.find(node => node["@id"] === galleryId);
+assert.equal(gallery?.["@type"], "ImageGallery", "Homepage must expose its Photography gallery.");
+assert.equal(gallery.url, galleryId, "Photography gallery must use its section link.");
+assert.equal(gallery.creator?.["@id"], personId, "Photography gallery must credit the photographer.");
+assert.equal(gallery.isPartOf?.["@id"], homepageEntity["@id"], "Photography gallery must link to the homepage entity.");
+assert.ok([].concat(homepageEntity.hasPart ?? []).some(item => item["@id"] === galleryId), "Homepage must link to its Photography gallery.");
+const photographer = home.graph.find(node => node["@id"] === personId);
+assert.equal(photographer?.name, "Atishay Kasliwal", "Photographer must resolve to the portfolio owner.");
+const photoUrls = photographs.map(photo => new URL(photo.src, site).href);
+assert.equal(new Set(photoUrls).size, photographs.length, "Photography collection must not repeat an image.");
+const expectedImageIds = new Set(photoUrls.map(url => `${url}#image`));
+for (const property of ["image", "hasPart"]) {
+  const references = [].concat(gallery[property] ?? []);
+  assert.equal(references.length, photographs.length, `Gallery ${property} must include every photograph once.`);
+  assert.deepEqual(new Set(references.map(item => item["@id"])), expectedImageIds, `Gallery ${property} references must match its photographs.`);
+}
+const photoEntities = home.graph.filter(node => node["@type"] === "ImageObject" && node.isPartOf?.["@id"] === galleryId);
+assert.equal(photoEntities.length, photographs.length, "Every photograph needs an ImageObject entity.");
+const photoTrack = home.elements.find(node => attribute(node, "id") === "photography-carousel-track");
+assert.ok(photoTrack, "Homepage is missing its Photography carousel.");
+const staticPhotos = [];
+visit(photoTrack, node => {
+  if (node.tagName === "img") staticPhotos.push(node);
+});
+assert.equal(staticPhotos.length, photographs.length, "Every photograph must appear in the initial HTML without JavaScript.");
+for (const [index, photo] of photographs.entries()) {
+  const image = staticPhotos[index];
+  const photoUrl = photoUrls[index];
+  assert.equal(new URL(attribute(image, "src"), site).href, photoUrl, "Initial gallery must preserve the selected photo order.");
+  assert.equal(attribute(image, "alt"), photo.alt, `${photoUrl}: missing descriptive gallery alt text`);
+  assert.ok(photo.alt.trim(), `${photoUrl}: photo description is empty`);
+  assert.equal(attribute(image, "width"), String(photo.width), `${photoUrl}: incorrect gallery image width`);
+  assert.equal(attribute(image, "height"), String(photo.height), `${photoUrl}: incorrect gallery image height`);
+  assert.equal(attribute(image, "loading"), "lazy", `${photoUrl}: gallery must defer image loading`);
+  const entity = photoEntities.find(node => node.contentUrl === photoUrl);
+  assert.ok(entity, `${photoUrl}: missing ImageObject`);
+  assert.equal(entity["@id"], `${photoUrl}#image`, `${photoUrl}: incorrect image entity ID`);
+  assert.equal(entity.description, photo.alt, `${photoUrl}: image description differs from the visible image`);
+  assert.equal(entity.width, photo.width, `${photoUrl}: incorrect schema width`);
+  assert.equal(entity.height, photo.height, `${photoUrl}: incorrect schema height`);
+  assert.equal(entity.creator?.["@id"], personId, `${photoUrl}: missing photographer credit`);
+  assert.equal(entity.copyrightHolder?.["@id"], personId, `${photoUrl}: missing copyright holder`);
+  assert.equal(entity.creditText, photographer.name, `${photoUrl}: incorrect photographer credit`);
+  assert.equal(entity.copyrightNotice, photographer.name, `${photoUrl}: incorrect copyright notice`);
+  if (new URL(photoUrl).origin === site.origin) {
+    const metadata = await sharp(path.join(dist, new URL(photoUrl).pathname.slice(1))).metadata();
+    assert.equal(metadata.width, photo.width, `${photoUrl}: recorded photo width differs from the asset`);
+    assert.equal(metadata.height, photo.height, `${photoUrl}: recorded photo height differs from the asset`);
+  }
+}
 
 const xml = fs.readFileSync(path.join(dist, "sitemap.xml"), "utf8");
 const sitemap = new XMLParser({ ignoreAttributes: true, trimValues: true }).parse(xml).urlset;
@@ -252,8 +314,19 @@ for (const entry of entries) {
   const imageNodes = [].concat(entry["image:image"] ?? []);
   for (const imageNode of imageNodes) {
     const imageUrl = new URL(imageNode["image:loc"]);
-    assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(imageUrl.pathname.slice(1)))), `Sitemap image is missing: ${imageUrl.href}`);
+    assert.equal(imageUrl.protocol, "https:", `Sitemap image must use HTTPS: ${imageUrl.href}`);
+    if (imageUrl.origin === site.origin) {
+      assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(imageUrl.pathname.slice(1)))), `Sitemap image is missing: ${imageUrl.href}`);
+    } else {
+      assert.ok(photoUrls.includes(imageUrl.href), `Sitemap contains an undeclared external image: ${imageUrl.href}`);
+    }
   }
+}
+
+const homeImages = [].concat(entries.find(entry => entry.loc === site.href)["image:image"] ?? []).map(image => image["image:loc"]);
+assert.equal(new Set(homeImages).size, homeImages.length, "Homepage image sitemap must not contain duplicate photos.");
+for (const photoUrl of photoUrls) {
+  assert.ok(homeImages.includes(photoUrl), `Photography image is missing from the sitemap: ${photoUrl}`);
 }
 
 const robots = fs.readFileSync(path.join(dist, "robots.txt"), "utf8");
@@ -263,4 +336,4 @@ assert.match(robots, /Sitemap:\s*https:\/\/atishaykasliwal\.com\/sitemap\.xml/i,
 const headers = fs.readFileSync(path.join(dist, "_headers"), "utf8");
 assert.match(headers, /Strict-Transport-Security:\s*max-age=31536000/i, "Cloudflare Pages HSTS header is missing.");
 
-console.log(`SEO validation passed: ${indexable.length} indexable pages, ${projectRecords.length} project entities, ${sitemapUrls.length} sitemap URLs, metadata/schema/internal links/robots/headers valid.`);
+console.log(`SEO validation passed: ${indexable.length} indexable pages, ${projectRecords.length} project entities, ${photographs.length} photographs, ${sitemapUrls.length} sitemap URLs, metadata/schema/internal links/robots/headers valid.`);

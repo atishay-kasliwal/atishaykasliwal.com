@@ -9,6 +9,20 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = "https://atishaykasliwal.com";
 const PERSON = `${SITE}/#person`;
+// The full Person entity, kept in sync with the one in index.html by hand. Most project pages
+// only need the minimal stub below; the ProfilePage (Beyond the Resume) gets this full version
+// so Google finds the complete entity on that page too, not only the homepage.
+const PERSON_ENTITY = {
+  "@type": "Person",
+  "@id": PERSON,
+  name: "Atishay Kasliwal",
+  url: `${SITE}/`,
+  image: [`${SITE}/atishay-kasliwal-1x1.jpg`, `${SITE}/atishay-kasliwal-4x3.jpg`, `${SITE}/atishay-kasliwal-16x9.jpg`],
+  jobTitle: "Software & AI Engineer",
+  description:
+    "Full-stack and AI engineer with 5+ years in production, building distributed systems, LLM products and the interfaces on top of them.",
+  sameAs: ["https://github.com/atishay-kasliwal", "https://www.linkedin.com/in/atishay-kasliwal"],
+};
 
 const escape = (value = "") =>
   String(value).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -51,7 +65,11 @@ function structuredData(study, image) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebPage",
+        // A page built around one project stays a WebPage whose mainEntity is that project;
+        // a page built around the person themselves (currently just Beyond the Resume) is
+        // typed ProfilePage instead, with mainEntity pointing at the Person, per Google's
+        // ProfilePage guidance.
+        "@type": study.isProfilePage ? "ProfilePage" : "WebPage",
         "@id": `${url}#webpage`,
         url,
         name: study.seo.title,
@@ -59,7 +77,7 @@ function structuredData(study, image) {
         inLanguage: "en",
         isPartOf: { "@id": `${SITE}/#website` },
         about: { "@id": `${url}#project` },
-        mainEntity: { "@id": `${url}#project` },
+        mainEntity: { "@id": study.isProfilePage ? PERSON : `${url}#project` },
         primaryImageOfPage: { "@type": "ImageObject", url: image },
         breadcrumb: { "@id": `${url}#breadcrumb` },
         author: { "@id": PERSON },
@@ -74,7 +92,7 @@ function structuredData(study, image) {
         ],
       },
       project,
-      { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: `${SITE}/` },
+      study.isProfilePage ? PERSON_ENTITY : { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: `${SITE}/` },
     ],
   };
 }
@@ -105,6 +123,14 @@ function render(study, { number, total, next }) {
     })
     .join("\n            ");
 
+  const insight = study.note
+    ? `<section class="insight">
+          <h2 class="eyebrow">${escape(study.note.label ?? "Engineering note")}</h2>
+          <p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p>
+          <p>${escape(study.note.body)}</p>
+        </section>`
+    : "";
+
   const tiles = study.sections
     ? `<section class="tiles" aria-label="${escape(study.name)} project details">
 ${study.sections
@@ -115,7 +141,9 @@ ${study.sections
           </article>`,
   )
   .join("\n")}
-        </section>`
+        </section>
+
+        ${insight}`
     : `<section class="tiles" aria-label="Case study">
           <article class="tile">
             <h2 class="eyebrow">01 · Problem</h2>
@@ -144,11 +172,7 @@ ${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n"
           </article>
         </section>
 
-        <section class="insight">
-          <h2 class="eyebrow">Engineering note</h2>
-          <p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p>
-          <p>${escape(study.note.body)}</p>
-        </section>`;
+        ${insight}`;
 
   const nextLink = next
     ? `<a href="/projects/${next.slug}/">Next: ${escape(next.name)} <b aria-hidden="true">→</b></a>`
@@ -164,7 +188,11 @@ ${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n"
     <meta name="description" content="${escape(study.seo.description)}" />
     <meta name="author" content="Atishay Kasliwal" />
     <link rel="canonical" href="${url}" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Atishay Kasliwal" />
@@ -188,7 +216,7 @@ ${JSON.stringify(structuredData(study, og), null, 2)}
     <div class="wrap">
       <nav class="topbar" aria-label="Project navigation">
         <a href="/"><span aria-hidden="true">←</span> All work</a>
-        <span><span class="m-hide">Project </span>${pad(number)} / ${pad(total)}</span>
+        <span><span class="m-hide">${escape(study.kicker ?? "Project")} </span>${pad(number)} / ${pad(total)}</span>
         ${nextLink}
       </nav>
 
@@ -203,9 +231,11 @@ ${JSON.stringify(structuredData(study, og), null, 2)}
             <dl class="spec">
 ${study.spec.map(row => `              <div><dt>${escape(row.label)}</dt><dd>${row.html}</dd></div>`).join("\n")}
             </dl>
-            <ul class="stats">
+            ${study.stats.length
+              ? `<ul class="stats">
 ${study.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escape(s.label)}</span></li>`).join("\n")}
-            </ul>
+            </ul>`
+              : ""}
           </div>
 
           <div class="media-col">
@@ -248,16 +278,20 @@ ${study.links
 `;
 }
 
-function sitemap(studies, staticPageLastModified) {
+function sitemap(studies, staticPageLastModified, photographs) {
   const entry = (loc, images = [], lastModified) =>
     `  <url>\n    <loc>${loc}</loc>\n${lastModified ? `    <lastmod>${lastModified}</lastmod>\n` : ""}${images
-      .map(src => `    <image:image>\n      <image:loc>${SITE}${src}</image:loc>\n    </image:image>\n`)
+      .map(src => `    <image:image>\n      <image:loc>${escape(new URL(src, SITE).href)}</image:loc>\n    </image:image>\n`)
       .join("")}  </url>`;
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${[
-  entry(`${SITE}/`, ["/atishay-kasliwal.jpg"], staticPageLastModified.homepage),
+  entry(
+    `${SITE}/`,
+    ["/atishay-kasliwal.jpg", "/atishay-kasliwal-1x1.jpg", "/atishay-kasliwal-4x3.jpg", "/atishay-kasliwal-16x9.jpg", ...photographs.map(photo => photo.src)],
+    staticPageLastModified.homepage,
+  ),
   entry(`${SITE}/Atishay-Kasliwal-Resume.pdf`, [], staticPageLastModified.resume),
   ...studies.map(s => entry(pageUrl(s.slug), s.media.items.map(i => i.src), s.lastModified)),
 ].join("\n")}
@@ -281,7 +315,7 @@ function ogSource(study) {
   .foot { position: absolute; left: 64px; right: 64px; bottom: 44px; display: flex; justify-content: space-between; padding-top: 16px; border-top: 1px solid #2a2a27; font: 16px "Geist Mono", monospace; color: #848480; }
   .foot b { color: #8554ff; font-weight: 400; }
 </style></head><body>
-  <p class="label">Case study · ${escape(study.name)}</p>
+  <p class="label">${escape(study.kicker ?? "Case study")} · ${escape(study.name)}</p>
   <h1>${escape(study.headline)} <span>${escape(study.headlineSoft)}</span></h1>
   <img class="card" src="../../public${card}" alt="" />
   <div class="foot"><span>Atishay Kasliwal</span><span>atishaykasliwal.com/projects/${study.slug} <b>↗</b></span></div>
@@ -293,6 +327,7 @@ export async function buildCaseStudies() {
   const stamp = Date.now();
   const { caseStudies, additionalProjectPages, staticPageLastModified } = await import(`${pathToFileURL(path.join(ROOT, "src/case-studies/data.js")).href}?t=${stamp}`);
   const { projects } = await import(`${pathToFileURL(path.join(ROOT, "src/projects.js")).href}?t=${stamp}`);
+  const { photographs } = await import(`${pathToFileURL(path.join(ROOT, "src/photography.js")).href}?t=${stamp}`);
   const order = projects.map(p => p.name);
   const pageNames = new Set(caseStudies.map(study => study.name));
   const additionalStudies = additionalProjectPages.map(page => {
@@ -355,7 +390,7 @@ export async function buildCaseStudies() {
     fs.writeFileSync(path.join(ROOT, "scripts/og", `${study.slug}.html`), ogSource(study));
     inputs[study.slug] = file;
   });
-  fs.writeFileSync(path.join(ROOT, "public/sitemap.xml"), sitemap(studies, staticPageLastModified));
+  fs.writeFileSync(path.join(ROOT, "public/sitemap.xml"), sitemap(studies, staticPageLastModified, photographs));
   return inputs;
 }
 

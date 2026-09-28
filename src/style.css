@@ -346,7 +346,94 @@ html.scroll-story .scroll-cue {
 .work {
   min-width: 0;
 }
+.portfolio-sections {
+  min-width: 0;
+}
+.portfolio-sections [hidden] {
+  display: none !important;
+}
+.section-toggle {
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: auto;
+  min-height: 32px;
+  text-align: left;
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.035em;
+}
+.section-toggle > span:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+.section-toggle .muted {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.section-symbol {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #373734;
+  border-radius: 50%;
+  color: var(--muted);
+  transition: color 180ms, border-color 180ms;
+}
+.section-symbol::before,
+.section-symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+.section-symbol::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  transition: transform 180ms;
+}
+.section-toggle[aria-expanded="true"] .section-symbol::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+.section-toggle:hover .section-symbol {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+.work.is-collapsed .work-toolbar {
+  grid-template-columns: 1fr;
+  padding-bottom: 0;
+}
+.work + .work {
+  margin-top: 12px;
+}
+.work + .work::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 0 var(--gutter) 6px;
+  background: #2a2a27;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .section-panel:not([hidden]) {
+    animation: section-reveal 220ms ease-out;
+  }
+  @keyframes section-reveal {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
 .work-toolbar {
+  position: relative;
   padding: 0 var(--gutter) 21px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -355,6 +442,7 @@ html.scroll-story .scroll-cue {
   font-size: 10px;
 }
 .work-label {
+  min-height: 32px;
   margin: 0;
   font: inherit;
   text-transform: uppercase;
@@ -367,6 +455,8 @@ html.scroll-story .scroll-cue {
   letter-spacing: 0;
 }
 .project-counter {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -381,6 +471,9 @@ html.scroll-story .scroll-cue {
   background: #4d4d49;
 }
 .carousel-controls {
+  position: relative;
+  z-index: 1;
+  margin-right: 36px;
   justify-self: end;
   display: flex;
   gap: 8px;
@@ -532,7 +625,7 @@ html.scroll-story .scroll-cue {
   font-family: var(--mono);
   font-size: 9px;
   color: #747470;
-  margin: 29px var(--gutter) 0;
+  margin: 8px var(--gutter) 0;
   padding: 12px 0 max(15px, env(safe-area-inset-bottom));
   border-top: 1px solid #2a2a27;
 }
@@ -1245,36 +1338,55 @@ html.scroll-story .scroll-cue {
   overflow: hidden;
   background: #080808;
 }
-.preview-stage-bar {
-  position: absolute;
-  z-index: 5;
-  left: 14px;
-  right: 14px;
-  top: 13px;
-  display: flex;
-  justify-content: space-between;
-  color: #f0eee7a8;
-  font: 500 8px/1 var(--mono);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  mix-blend-mode: difference;
-}
-.preview-stage-bar span:first-child {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.preview-stage-bar i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
-}
 .preview-canvas {
   position: absolute;
   inset: 0;
   overflow: hidden;
+}
+.photography .project-art > img {
+  object-position: center;
+}
+.project-preview.is-photo-only .preview-layout {
+  display: block;
+}
+.project-preview.is-photo-only .preview-stage {
+  width: 100%;
+  height: 100%;
+}
+.project-preview.is-photo-only .project-art > img {
+  object-fit: cover;
+  object-position: center;
+}
+.project-preview.is-photo-only .preview-info,
+.project-preview.is-photo-only #dialog-index,
+.project-preview.is-photo-only .preview-copy,
+.project-preview.is-photo-only .preview-info-foot,
+.project-preview.is-photo-only .preview-window-close span {
+  display: none;
+}
+.project-preview.is-photo-only[data-mode="pinned"] .preview-info {
+  display: block;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0;
+  background: none;
+}
+.project-preview.is-photo-only .preview-info-head {
+  position: static;
+}
+.project-preview.is-photo-only .preview-window-close {
+  min-height: 32px;
+  margin: 0;
+  padding: 0;
+}
+.project-preview.is-photo-only .preview-window-close i {
+  width: 28px;
+  height: 28px;
+  border-color: #ffffff80;
+  background: #1119;
+  color: var(--ink);
+  font-size: 16px;
 }
 
 /* Phone-only pieces: status badge, bottom buttons, and the details sheet. */
@@ -1647,6 +1759,7 @@ html.scroll-story .scroll-cue {
     gap: 10px;
   }
   .work-label {
+    min-height: 44px;
     flex-direction: column;
     gap: 4px;
     font-size: 9px;
@@ -1654,10 +1767,25 @@ html.scroll-story .scroll-cue {
   .work-label .muted {
     font-size: 8px;
   }
+  .section-toggle {
+    min-height: 44px;
+    gap: 10px;
+  }
+  .section-toggle > span:first-child {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .work + .work {
+    margin-top: 8px;
+  }
+  .work + .work::before {
+    margin-bottom: 8px;
+  }
   .project-counter {
     display: none;
   }
   .carousel-controls {
+    margin-right: 32px;
     gap: 6px;
   }
   .carousel-controls button {
@@ -1704,7 +1832,7 @@ html.scroll-story .scroll-cue {
     display: grid;
     grid-template-columns: 1fr 1fr 48px;
     gap: 8px;
-    margin: 14px var(--gutter) 0;
+    margin: 8px var(--gutter) 0;
     padding: 10px 0 max(14px, env(safe-area-inset-bottom));
     border-top: 1px solid #2a2a27;
   }
@@ -1734,41 +1862,68 @@ html.scroll-story .scroll-cue {
   }
   .preview-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) var(--preview-info-height, 142px);
+    grid-template-rows: minmax(0, 1fr) var(--preview-info-height, 72px);
   }
   .preview-stage {
     grid-row: 1;
   }
+  /* A slim strip below the video: one row, top-aligned, no leftover space to bottom-align into. */
   .preview-info {
     grid-row: 2;
-    padding: 13px 14px 14px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto 1fr;
-    gap: 8px 12px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
   }
   .preview-info-head {
-    grid-column: 1/-1;
+    order: -1;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+  }
+  #dialog-index {
+    display: none;
   }
   .preview-window-close {
-    min-height: 28px;
-    margin: -7px -7px -7px 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .preview-window-close span {
+    display: none;
+  }
+  .preview-window-close i {
+    width: 20px;
+    height: 20px;
+    background: #10100fcc;
+    color: #efefec;
+    border-color: #55524b;
+    font-size: 11px;
   }
   .preview-copy {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
     min-width: 0;
     margin: 0;
     padding: 0;
-    align-self: end;
+    /* The close button floats over this corner and isn't in flow, so reserve its width. */
+    padding-right: 30px;
   }
   #dialog-category {
-    margin-bottom: 5px;
+    flex-shrink: 0;
+    margin-bottom: 0;
     font-size: 7px;
   }
   .preview-info h2 {
-    max-width: 14ch;
+    max-width: none;
     overflow: hidden;
-    font-size: clamp(20px, 6.4vw, 27px);
-    line-height: 1;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -1777,16 +1932,16 @@ html.scroll-story .scroll-cue {
     display: none;
   }
   .preview-info-foot {
-    align-self: end;
     display: block;
   }
   .preview-actions {
     flex-wrap: nowrap;
-    justify-content: flex-end;
+    gap: 6px;
   }
   .preview-open {
-    min-height: 32px;
-    padding: 7px 10px;
+    min-height: 24px;
+    padding: 4px 9px;
+    font-size: 8.5px;
     white-space: nowrap;
   }
   .preview-open.primary {
@@ -1797,7 +1952,7 @@ html.scroll-story .scroll-cue {
   /* Short phones, including most phones with browser bars showing. */
   .thumb-bar {
     grid-template-columns: 1fr 1fr 44px;
-    margin-top: 10px;
+    margin-top: 8px;
     padding-top: 8px;
   }
   .thumb-button {
@@ -1862,7 +2017,7 @@ html.scroll-story .scroll-cue {
     padding-bottom: 10px;
   }
   .site-footer {
-    margin-top: 13px;
+    margin-top: 8px;
   }
   .intro-mark {
     bottom: 22px;
@@ -1901,7 +2056,7 @@ html.scroll-story .scroll-cue {
   .intro-mark {
     display: none;
   }
-  .work {
+  .portfolio-sections {
     grid-column: 2;
     grid-row: 2;
     align-self: center;
@@ -1953,16 +2108,78 @@ html.scroll-story .scroll-cue {
   padding-bottom: 12vh;
   padding-bottom: 12dvh;
   place-items: center;
-  background: #181818;
+  background: #111;
   border-radius: 0 0 50% 50% / 0 0 12vh 12vh;
+  overflow: hidden;
   transform: translateY(0);
   transition: transform 800ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+/* --- intro backdrop layers: canvas, atmosphere, grain --- */
+.intro-canvas,
+.intro-glow,
+.intro-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.intro-canvas {
+  z-index: 0;
+}
+/* Faint pool of light under the greeting, plus an optional cursor halo. */
+.intro-glow {
+  z-index: 1;
+  background:
+    radial-gradient(
+      44vmax 30vmax at 50% 44%,
+      rgba(242, 242, 239, 0.05),
+      rgba(242, 242, 239, 0) 70%
+    );
+  /* Sits below full so the greeting-change swell has somewhere to go. */
+  opacity: 0.8;
+}
+.has-cursor-glow .intro-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    22vmax 22vmax at var(--cursor-x, 50%) var(--cursor-y, 44%),
+    rgba(242, 242, 239, 0.028),
+    rgba(242, 242, 239, 0) 68%
+  );
+}
+/* One pre-baked noise tile, never animated — just enough to kill the flatness. */
+.intro-grain {
+  z-index: 2;
+  opacity: 0.032;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+/* The greeting change nudges the atmosphere, it does not announce it. */
+.intro-glow.is-pulsing {
+  animation: intro-atmosphere 900ms ease-out;
+}
+@keyframes intro-atmosphere {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  28% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
 }
 .has-intro .intro-loader,
 .intro-loader.is-leaving {
   display: grid;
 }
 .loader-greeting {
+  position: relative;
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: clamp(14px, 1.5vw, 24px);
@@ -1984,6 +2201,7 @@ html.scroll-story .scroll-cue {
 }
 .skip-intro {
   position: absolute;
+  z-index: 3;
   bottom: calc(12vh + 24px);
   bottom: calc(12dvh + max(24px, env(safe-area-inset-bottom)));
   right: max(24px, env(safe-area-inset-right));
@@ -2002,13 +2220,45 @@ html.scroll-story .scroll-cue {
 .intro-loader.is-leaving .skip-intro {
   opacity: 0;
 }
+.intro-loader.is-leaving .intro-canvas,
+.intro-loader.is-leaving .intro-glow,
+.intro-loader.is-leaving .intro-grain {
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
 .portfolio {
   transition: transform 800ms cubic-bezier(0.22, 0.75, 0.22, 1);
 }
 .has-intro .portfolio {
   transform: translateY(32px);
 }
+@media (max-width: 700px) {
+  /* On a tall narrow phone, the desktop ellipse (sized off vmax, the larger
+     axis) goes flat and its low-alpha falloff reads as two hard rings instead
+     of a soft pool. A circular gradient sized off vmin, with more stops to
+     spread the falloff, keeps it soft at any aspect ratio. */
+  .intro-glow {
+    background: radial-gradient(
+      70vmin 70vmin at 50% 42%,
+      rgba(242, 242, 239, 0.06),
+      rgba(242, 242, 239, 0.03) 40%,
+      rgba(242, 242, 239, 0.012) 68%,
+      rgba(242, 242, 239, 0) 100%
+    );
+  }
+  .has-cursor-glow .intro-glow::after {
+    background: radial-gradient(
+      38vmin 38vmin at var(--cursor-x, 50%) var(--cursor-y, 44%),
+      rgba(242, 242, 239, 0.03),
+      rgba(242, 242, 239, 0.012) 45%,
+      rgba(242, 242, 239, 0) 75%
+    );
+  }
+}
 @media (prefers-reduced-motion: reduce) {
+  .intro-glow.is-pulsing {
+    animation: none;
+  }
   .cursor-marquee__track {
     animation: none;
   }

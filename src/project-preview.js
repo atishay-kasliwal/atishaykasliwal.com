@@ -13,6 +13,7 @@ export function createProjectPreview(projects, viewport) {
   const stack = preview.querySelector("#dialog-stack");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let index = -1;
+  let collection = projects;
   let pinned = false;
   let closeTimer;
   let openingFrame;
@@ -25,16 +26,24 @@ export function createProjectPreview(projects, viewport) {
     const top = landscape ? 12 : innerWidth > 700 ? 72 : 62;
     const bottom = landscape ? innerHeight - 12 : strip.top - 12;
     const availableHeight = Math.max(120, bottom - top);
-    const sidebar = phone ? 0 : landscape ? 220 : innerWidth > 900 ? 300 : 250;
-    const mobileInfo = phone ? innerHeight < 620 ? 118 : 142 : 0;
-    const width = Math.min(
+    const photo = collection[index]?.kind === "photo";
+    // Every photograph uses the same frame; CSS crops the image to fill it.
+    const aspectRatio = photo ? 16 / 9 : 270 / 166;
+    const sidebar = photo || phone ? 0 : landscape ? 220 : innerWidth > 900 ? 300 : 250;
+    // Phone: the video is the main focus, so the info strip stays as thin as it can.
+    const mobileInfo = !photo && phone ? innerHeight < 620 ? 64 : 72 : 0;
+    const width = photo ? Math.min(
+      innerWidth - (phone ? 20 : 32),
+      736,
+      availableHeight * aspectRatio,
+    ) : Math.min(
       innerWidth - (phone ? 20 : 32),
       phone ? 560 : 1180,
       Math.max(280, sidebar + (availableHeight - mobileInfo) * 270 / 166),
     );
     const height = phone
-      ? width * 166 / 270 + mobileInfo
-      : (width - sidebar) * 166 / 270;
+      ? width / aspectRatio + mobileInfo
+      : (width - sidebar) / aspectRatio;
     preview.style.setProperty("--preview-sidebar", `${sidebar}px`);
     preview.style.setProperty("--preview-info-height", `${mobileInfo}px`);
     preview.style.width = `${width}px`;
@@ -42,14 +51,16 @@ export function createProjectPreview(projects, viewport) {
     preview.style.top = `${top + Math.max(0, (availableHeight - height) / 2)}px`;
   }
 
-  function render(nextIndex) {
-    if (index === nextIndex) return;
+  function render(nextIndex, nextCollection) {
+    if (index === nextIndex && collection === nextCollection) return;
     index = nextIndex;
-    const project = projects[index];
-    projectIndex.textContent = `${String(index + 1).padStart(2, "0")} / ${String(projects.length).padStart(2, "0")}`;
-    category.textContent = project.category;
+    collection = nextCollection;
+    const project = collection[index];
+    preview.classList.toggle("is-photo-only", project.kind === "photo");
+    projectIndex.textContent = `${String(index + 1).padStart(2, "0")} / ${String(collection.length).padStart(2, "0")}`;
+    category.textContent = project.category ?? "";
     title.textContent = project.name;
-    description.textContent = project.description;
+    description.textContent = project.description ?? "";
     year.textContent = project.year ?? "—";
     art.className = `preview-canvas ${project.theme}`;
     // Live sites play a scroll recording; reduced-motion visitors keep the still screenshot.
@@ -57,7 +68,7 @@ export function createProjectPreview(projects, viewport) {
       ? `<video src="${project.video}" poster="${project.poster}" autoplay muted loop playsinline aria-hidden="true"></video>`
       : project.art;
     art.innerHTML = `<div class="project-art">${media}</div>`;
-    art.setAttribute("aria-label", `${project.name}. ${project.category}. ${project.description}`);
+    art.setAttribute("aria-label", project.alt ?? `${project.name}. ${project.category}. ${project.description}`);
     stack.textContent = project.stack ?? "";
     // Projects with a written case study link to it from the title bar.
     caseLink.hidden = !project.caseStudy;
@@ -84,18 +95,19 @@ export function createProjectPreview(projects, viewport) {
     } else {
       openLink.removeAttribute("href");
     }
-    document.querySelectorAll(".project-card").forEach(card => {
+    viewport.querySelectorAll(".project-card").forEach(card => {
       card.classList.toggle("is-previewed", Number(card.dataset.index) === index);
     });
   }
 
-  function show(nextIndex, pin = false, trigger = null) {
+  function show(nextIndex, pin = false, trigger = null, sourceViewport = viewport, items = projects) {
     if (pinned && !pin) return;
+    viewport = sourceViewport;
     clearTimeout(closeTimer);
     cancelAnimationFrame(openingFrame);
     pinned = pin;
     if (pin && trigger) returnFocus = trigger;
-    render(nextIndex);
+    render(nextIndex, items);
     position();
     preview.dataset.mode = pin ? "pinned" : "hover";
     if (pin) preview.removeAttribute("aria-hidden");
@@ -137,10 +149,11 @@ export function createProjectPreview(projects, viewport) {
   document.addEventListener("pointerdown", event => {
     if (pinned && !preview.contains(event.target) && !event.target.closest(".work")) close();
   });
-  new ResizeObserver(position).observe(viewport);
+  const resizeObserver = new ResizeObserver(position);
+  document.querySelectorAll(".carousel-viewport").forEach(strip => resizeObserver.observe(strip));
   return {
-    open: (nextIndex, trigger) => show(nextIndex, true, trigger),
-    hover: nextIndex => show(nextIndex),
+    open: (nextIndex, trigger, sourceViewport, items) => show(nextIndex, true, trigger, sourceViewport, items),
+    hover: (nextIndex, sourceViewport, items) => show(nextIndex, false, null, sourceViewport, items),
     leave: () => { if (!pinned) close(); },
     close,
   };
