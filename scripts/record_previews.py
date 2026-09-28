@@ -34,6 +34,10 @@ SCENES = {
     "insurance": "insurance.html",
     "cortex": "cortex.html",
     "fedtalk": "fedtalk.html",
+    "reel": "reel.html",
+    "kaggriculture": "kaggriculture.html",
+    "mmm": "mmm.html",
+    "raft": "raft.html",
 }
 SCENE_DIR = Path(__file__).resolve().parent / "scenes"
 
