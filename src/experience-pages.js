@@ -30,10 +30,10 @@ export const experiencePages = [
     media: {
       items: [
         {
-          label: "Main entrance",
-          src: "/experience/media/stony-brook-research/entrance.webp",
-          thumb: "/experience/media/stony-brook-research/entrance-thumb.webp",
-          alt: "Stony Brook University main entrance sign, West Campus",
+          label: "The quad",
+          src: "/experience/media/stony-brook-research/quad.webp",
+          thumb: "/experience/media/stony-brook-research/quad-thumb.webp",
+          alt: "Stony Brook's campus quad in autumn, fountain and academic buildings in view",
         },
         {
           label: "Student center",
@@ -42,16 +42,16 @@ export const experiencePages = [
           alt: "The Student Activities Center at dusk, with a Stony Brook Seawolves banner",
         },
         {
-          label: "The quad",
-          src: "/experience/media/stony-brook-research/quad.webp",
-          thumb: "/experience/media/stony-brook-research/quad-thumb.webp",
-          alt: "Stony Brook's campus quad in autumn, fountain and academic buildings in view",
-        },
-        {
           label: "Seawolves",
           src: "/experience/media/stony-brook-research/seawolves.webp",
           thumb: "/experience/media/stony-brook-research/seawolves-thumb.webp",
           alt: "A Stony Brook Seawolves banner on campus",
+        },
+        {
+          label: "Main entrance",
+          src: "/experience/media/stony-brook-research/entrance.webp",
+          thumb: "/experience/media/stony-brook-research/entrance-thumb.webp",
+          alt: "Stony Brook University main entrance sign, West Campus",
         },
       ],
     },
@@ -168,6 +168,12 @@ export const experiencePages = [
     media: {
       items: [
         {
+          label: "Brand",
+          src: "/experience/media/accolite/brand.webp",
+          thumb: "/experience/media/accolite/brand-thumb.webp",
+          alt: "Accolite brand mark",
+        },
+        {
           label: "Accolite",
           src: "/experience/media/accolite/logo.webp",
           thumb: "/experience/media/accolite/logo-thumb.webp",
@@ -178,12 +184,6 @@ export const experiencePages = [
           src: "/experience/media/accolite/mark.webp",
           thumb: "/experience/media/accolite/mark-thumb.webp",
           alt: "Announcement graphic: Bounteous × Accolite, end-to-end digital transformation",
-        },
-        {
-          label: "Brand",
-          src: "/experience/media/accolite/brand.webp",
-          thumb: "/experience/media/accolite/brand-thumb.webp",
-          alt: "Accolite brand mark",
         },
         {
           label: "Office",
@@ -239,16 +239,16 @@ export const experiencePages = [
     media: {
       items: [
         {
-          label: "Shriffle",
-          src: "/experience/media/shriffle/logo.webp",
-          thumb: "/experience/media/shriffle/logo-thumb.webp",
-          alt: "Shriffle Technologies Pvt. Ltd. logo",
-        },
-        {
           label: "Brand",
           src: "/experience/media/shriffle/brand-2.webp",
           thumb: "/experience/media/shriffle/brand-2-thumb.webp",
           alt: "Shriffle brand mark",
+        },
+        {
+          label: "Shriffle",
+          src: "/experience/media/shriffle/logo.webp",
+          thumb: "/experience/media/shriffle/logo-thumb.webp",
+          alt: "Shriffle Technologies Pvt. Ltd. logo",
         },
         {
           label: "Mark",
@@ -296,6 +296,12 @@ export const experiencePages = [
     media: {
       items: [
         {
+          label: "Commencement",
+          src: "/experience/media/stony-brook-university/stadium.webp",
+          thumb: "/experience/media/stony-brook-university/stadium-thumb.webp",
+          alt: "Stony Brook University stadium filled for commencement",
+        },
+        {
           label: "Campus",
           src: "/experience/media/stony-brook-university/sign.webp",
           thumb: "/experience/media/stony-brook-university/sign-thumb.webp",
@@ -306,12 +312,6 @@ export const experiencePages = [
           src: "/experience/media/stony-brook-university/graduation.webp",
           thumb: "/experience/media/stony-brook-university/graduation-thumb.webp",
           alt: "Commencement, May 21, 2026: Atishay Kasliwal receiving his diploma on stage",
-        },
-        {
-          label: "Commencement",
-          src: "/experience/media/stony-brook-university/stadium.webp",
-          thumb: "/experience/media/stony-brook-university/stadium-thumb.webp",
-          alt: "Stony Brook University stadium filled for commencement",
         },
       ],
     },
@@ -353,16 +353,16 @@ export const experiencePages = [
     media: {
       items: [
         {
-          label: "Campus",
-          src: "/experience/media/symbiosis-university/campus.webp",
-          thumb: "/experience/media/symbiosis-university/campus-thumb.webp",
-          alt: "Symbiosis University campus building",
-        },
-        {
           label: "Grounds",
           src: "/experience/media/symbiosis-university/campus-2.webp",
           thumb: "/experience/media/symbiosis-university/campus-2-thumb.webp",
           alt: "Symbiosis University campus grounds",
+        },
+        {
+          label: "Campus",
+          src: "/experience/media/symbiosis-university/campus.webp",
+          thumb: "/experience/media/symbiosis-university/campus-thumb.webp",
+          alt: "Symbiosis University campus building",
         },
         {
           label: "Buildings",

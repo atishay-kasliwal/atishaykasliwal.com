@@ -1170,30 +1170,10 @@ html.scroll-story .scroll-cue {
   color: #c2412d;
 }
 
-/* Experience & education cards: one shared layout (reusing .mock-nav / .mock-bottom),
-   a slightly different dark tint per entry so the row still reads with some variety. */
-.timeline {
-  color: #e9e8e3;
-}
-.timeline-a { background: #14171c; }
-.timeline-b { background: #121712; }
-.timeline-c { background: #17151c; }
-.timeline-d { background: #1c1512; }
-.timeline-e { background: #101418; }
-.timeline-f { background: #16140f; }
-.timeline .mock-nav b {
-  color: var(--accent);
-}
-.timeline-title {
-  position: absolute;
-  z-index: 2;
-  top: 32%;
-  left: 5%;
-  right: 5%;
-  font-size: 6.2cqw;
-  font-weight: 500;
-  line-height: 1.14;
-  letter-spacing: -0.03em;
+/* Experience & education cards: a real photo, same as a live-site project card.
+   Background shows while the screenshot loads. */
+.photo-card {
+  background: #111110;
 }
 
 /* Editorial project preview, opened on hover or click. */
