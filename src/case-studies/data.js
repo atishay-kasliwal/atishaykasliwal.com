@@ -403,7 +403,7 @@ export const caseStudies = [
     seo: {
       title: "Insurance Platform — Event-Driven Kafka Microservices · Atishay Kasliwal",
       description:
-        "How Atishay Kasliwal turned a Kafka streaming exercise into an event-driven insurance platform: CQRS, Elasticsearch, and a JWT-secured, rate-limited gateway.",
+        "How Atishay Kasliwal turned a Kafka streaming exercise into an event-driven insurance platform with CQRS, Elasticsearch and a rate-limited gateway.",
       language: "Java",
     },
     headline: "Every policy change becomes an event.",
@@ -479,7 +479,7 @@ export const caseStudies = [
     seo: {
       title: "FedTalk — Can an LLM Read the Fed? · Atishay Kasliwal",
       description:
-        "A research project by Atishay Kasliwal testing whether GPT-4o-mini can predict how markets react to FOMC statements, using transcripts, retrieved news and minute-level prices.",
+        "Atishay Kasliwal's research project testing whether GPT-4o-mini can predict market reaction to FOMC statements, using transcripts and minute-level prices.",
       language: "Python",
     },
     headline: "Can a language model read the Fed before the market does?",
@@ -556,7 +556,7 @@ export const caseStudies = [
     live: false,
     started: "2026-05-01", // first commit: "Add profile README"
     seo: {
-      title: "Atishay Kasliwal | Beyond the Resume",
+      title: "Beyond the Resume — Personal Profile · Atishay Kasliwal",
       description:
         "A closer look at Atishay Kasliwal's experience, the projects he's built, what he's working on now, and a few things outside of code, including photography.",
       language: "Markdown",
@@ -571,6 +571,14 @@ export const caseStudies = [
         label: "Status",
         html: '<b>Open source</b> · <a href="https://github.com/atishay-kasliwal/atishay-kasliwal">GitHub <span class="arrow">↗︎</span></a>',
       },
+      {
+        label: "LinkedIn",
+        html: '<a href="https://www.linkedin.com/in/atishay-kasliwal">linkedin.com/in/atishay-kasliwal <span class="arrow">↗︎</span></a>',
+      },
+      {
+        label: "Email",
+        html: '<a href="mailto:katishay@gmail.com">katishay@gmail.com</a>',
+      },
     ],
     stats: [],
     windowStack: "Markdown · GitHub",
@@ -584,22 +592,22 @@ export const caseStudies = [
           alt: "The homepage card for this project: Atishay Kasliwal's portrait, name, role, and a route through what he builds, ships, and cares about",
         },
         {
-          label: "The journey",
-          src: "/projects/media/developer-profile/journey.webp",
-          thumb: "/projects/media/developer-profile/journey-thumb.webp",
-          alt: "An abstract path through a few waypoints, standing in for the four roles behind the profile",
+          label: "Stony Brook",
+          src: "/experience/media/stony-brook-research/quad.webp",
+          thumb: "/experience/media/stony-brook-research/quad-thumb.webp",
+          alt: "Stony Brook's campus quad in autumn, where the research role behind this profile is based",
         },
         {
-          label: "Outside the code",
-          src: "/projects/media/developer-profile/light.webp",
-          thumb: "/projects/media/developer-profile/light-thumb.webp",
-          alt: "Soft light across a dark plane, standing in for the photography section of the profile",
+          label: "Accolite",
+          src: "/experience/media/accolite/brand.webp",
+          thumb: "/experience/media/accolite/brand-thumb.webp",
+          alt: "Accolite brand mark, one of the four roles behind this profile",
         },
         {
           label: "Toolkit",
           src: "/projects/media/developer-profile/toolkit.webp",
           thumb: "/projects/media/developer-profile/toolkit-thumb.webp",
-          alt: "The real toolkit table from the README, laid out as tags: languages, product, AI and data, infrastructure",
+          alt: "The real toolkit table from the README, shown with each tool's logo grouped by languages, product, AI and data, infrastructure",
         },
       ],
     },
@@ -610,7 +618,7 @@ export const caseStudies = [
       },
       {
         title: "Four jobs, and what I actually did in them",
-        body: "I've built research infrastructure at Stony Brook University, medical-imaging pipelines across 50,000+ scans at Wake Forest CAIR, and production microservices serving 100,000+ monthly users at Bounteous, plus billing systems handling 10,000+ daily transactions as an intern at Shriffle. I'd rather someone read that than a job title.",
+        body: "I've built research infrastructure at Stony Brook University, medical-imaging pipelines across 50,000+ scans at Wake Forest CAIR, and production microservices serving 100,000+ monthly users at Accolite, plus billing systems handling 10,000+ daily transactions as an intern at Shriffle. I'd rather someone read that than a job title.",
       },
       {
         title: "What I've actually built",
@@ -630,7 +638,7 @@ export const caseStudies = [
     seo: {
       title: "Atriveo Reel — Self-Hosted Comparison Videos · Atishay Kasliwal",
       description:
-        "How Atishay Kasliwal built Atriveo Reel: paste two clips, pick two moments, and get a 1080×1920 comparison video rendered by a worker that outlives the browser tab.",
+        "How Atishay Kasliwal built Atriveo Reel: paste two clips, pick two moments, and get a 1080×1920 comparison video rendered by a worker that outlives the tab.",
       language: "TypeScript",
     },
     headline: "Two clips in, one comparison reel out.",
@@ -782,7 +790,7 @@ export const caseStudies = [
     seo: {
       title: "Kaggriculture — A Farming-Game Agent, Built in Phases · Atishay Kasliwal",
       description:
-        "How Atishay Kasliwal built a Kaggle competition agent for a two-player farming game: a simulator that matches the real engine exactly, then a planner that searches ahead through it.",
+        "How Atishay Kasliwal built a Kaggle agent for a two-player farming game: a simulator matching the real engine, then a planner that searches ahead through it.",
       language: "Python",
     },
     headline: "An agent that plans ahead by simulating the real rules.",
@@ -858,7 +866,7 @@ export const caseStudies = [
     seo: {
       title: "Bayesian Marketing Mix Model · Atishay Kasliwal",
       description:
-        "How Atishay Kasliwal built a marketing mix model with adstock decay, Hill saturation curves, holdout and Monte Carlo validation, and ROAS-weighted budget allocation.",
+        "How Atishay Kasliwal built a marketing mix model with adstock decay, Hill saturation curves, holdout validation, and ROAS-weighted budget allocation.",
       language: "Python",
     },
     headline: "I modeled five channels to find the one that works.",

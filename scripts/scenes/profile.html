@@ -1,0 +1,96 @@
+<!doctype html>
+<!-- Preview scene for "Beyond the Resume": the same portrait + route-map composition
+     used as the card's static art (src/style.css .profile-*), animated so the preview
+     window isn't a still image like every other project's. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Beyond the Resume scene</title>
+<style>
+  @font-face { font-family: Geist; src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Geist Mono"; src: url("../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  html, body { margin: 0; }
+  body {
+    width: 1440px; height: 885px; overflow: hidden; position: relative;
+    font-family: Geist, sans-serif; color: #141412;
+    background: linear-gradient(112deg, #a8aaa5 0%, #b2b3ae 50%, #d0cec5 100%);
+  }
+  .veil { position: absolute; z-index: 1; left: 37%; top: 0; bottom: 0; width: 22%;
+    background: linear-gradient(90deg, transparent, #b3b4af 78%, #b3b4af); }
+  .rule { position: absolute; left: 50%; right: 5%; bottom: 8%; height: 1.5px; z-index: 1; background: #24242038; }
+  .portrait { position: absolute; left: 0; top: 0; width: 48%; height: 100%; object-fit: cover; object-position: center 18%; }
+  .copy { position: absolute; z-index: 2; left: 53%; right: 5%; top: 10%; display: flex; flex-direction: column; }
+  .copy small { margin-bottom: 79px; color: #4c4c47; font: 500 15px "Geist Mono", monospace; letter-spacing: 0.1em; display: flex; align-items: center; }
+  .copy small i { display: inline-block; width: 10px; height: 10px; margin-right: 7px; border-radius: 50%; background: #7548ff; }
+  .copy strong { font: 570 94px/0.88 Geist, sans-serif; letter-spacing: -0.075em; }
+  .copy em { margin-top: 30px; font: 540 27px Geist, sans-serif; font-style: normal; }
+  .copy > span.city { margin-top: 5px; color: #5d5d57; font: 17px "Geist Mono", monospace; }
+  .map { position: absolute; z-index: 2; left: 53%; right: 5%; top: 52%; height: 25%; opacity: 0.72; }
+  .map svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .map-grid { fill: none; stroke: #29292526; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .map-route { fill: none; stroke: #2828248f; stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .map circle { fill: #b5b6b0; stroke: #292925; stroke-width: 1.25; vector-effect: non-scaling-stroke; }
+  .map text { fill: #4e4e49; font: 500 13px "Geist Mono", monospace; letter-spacing: 0.11em; }
+  .pulse { fill: #7548ff; stroke: #7548ff; filter: drop-shadow(0 0 8px #7548ff77); }
+  .interests { position: absolute; z-index: 2; left: 53%; right: 15%; bottom: 4.5%;
+    display: flex; justify-content: space-between; color: #454540; font: 500 13px "Geist Mono", monospace; letter-spacing: 0.07em; }
+  .interests b { font-weight: 500; }
+</style>
+</head>
+<body data-loop="8000">
+  <img class="portrait" src="../../public/atishay-kasliwal.jpg" alt="" />
+  <div class="veil"></div>
+  <div class="rule"></div>
+  <div class="copy">
+    <small><i></i> 07 / PERSONAL PROFILE</small>
+    <strong>Atishay<br />Kasliwal</strong>
+    <em>Software &amp; AI Engineer</em>
+    <span class="city">New York, NY</span>
+  </div>
+  <div class="map">
+    <svg viewBox="0 0 420 150" preserveAspectRatio="none">
+      <path class="map-grid" d="M0 25H420M0 75H420M0 125H420M70 0V150M210 0V150M350 0V150" />
+      <path class="map-route" id="route" d="M34 106C82 106 92 45 143 45S202 112 257 112S321 55 386 55" />
+      <circle class="wp" data-i="0" cx="34" cy="106" r="5" />
+      <circle class="wp" data-i="1" cx="143" cy="45" r="5" />
+      <circle class="wp" data-i="2" cx="257" cy="112" r="5" />
+      <circle class="wp" data-i="3" cx="386" cy="55" r="5" />
+      <circle class="pulse" id="pulse" cx="34" cy="106" r="5" />
+      <text x="34" y="132">BUILD</text>
+      <text x="143" y="27">SHIP</text>
+      <text x="257" y="139">SYSTEMS</text>
+      <text x="386" y="37" text-anchor="end">FRAME</text>
+    </svg>
+  </div>
+  <div class="interests"><b>OPEN SOURCE</b><b>SYSTEMS</b><b>PHOTOGRAPHY</b></div>
+<script>
+  const LOOP = 8000, at = ms => ms / LOOP;
+
+  // The pulse travels the route once per loop, lighting each waypoint as it passes.
+  const points = [
+    [34, 106], [143, 45], [257, 112], [386, 55],
+  ];
+  const pulse = document.getElementById("pulse");
+  const seg = 2900 / points.length;
+  pulse.animate(
+    points.map(([x, y], i) => ({ offset: at(300 + i * seg + 40), cx: x, cy: y })),
+    { duration: LOOP, iterations: Infinity, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" }
+  );
+
+  document.querySelectorAll(".wp").forEach(circle => {
+    const i = Number(circle.dataset.i);
+    const at0 = 300 + i * seg + 60;
+    circle.animate([
+      { offset: 0, fill: "#b5b6b0" },
+      { offset: Math.max(0, at(at0 - 80)), fill: "#b5b6b0" },
+      { offset: at(at0), fill: "#7548ff" },
+      { offset: Math.min(1, at(at0 + 900)), fill: "#7548ff" },
+      { offset: Math.min(1, at(at0 + 1400)), fill: "#b5b6b0" },
+      { offset: 1, fill: "#b5b6b0" },
+    ], { duration: LOOP, iterations: Infinity });
+  });
+
+  document.fonts.ready.then(() => { window.sceneReady = true; });
+</script>
+</body>
+</html>

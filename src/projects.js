@@ -198,6 +198,8 @@ export const projects = [
     caseStudy: "/projects/developer-profile/",
     year: 2026,
     card: profileArt,
+    video: "/projects/video/profile.mp4",
+    poster: "/projects/video/profile-poster.webp",
     category: "Personal profile / Open source",
     stack: "Markdown · Open source · Systems",
     description:

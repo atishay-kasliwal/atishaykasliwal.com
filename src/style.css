@@ -620,8 +620,34 @@ html.scroll-story .scroll-cue {
   bottom: 6%;
   font-size: 1.8cqw;
 }
+.project-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 56%;
+  z-index: 1;
+  background: linear-gradient(to top, #000000a8, transparent);
+  pointer-events: none;
+}
+.card-title {
+  position: absolute;
+  z-index: 2;
+  left: 8px;
+  right: 34px;
+  bottom: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 570;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .card-tag {
   position: absolute;
+  z-index: 2;
   right: 5px;
   bottom: 5px;
   font-family: var(--mono);
@@ -630,11 +656,6 @@ html.scroll-story .scroll-cue {
   background: #111b;
   color: #fff;
   border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.project-card.is-active .card-tag {
-  opacity: 1;
 }
 .work-footer {
   display: flex;
