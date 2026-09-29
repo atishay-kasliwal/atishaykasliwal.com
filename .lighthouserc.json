@@ -7,7 +7,7 @@
         "http://localhost/projects/atriveo-tracker/",
         "http://localhost/projects/insurance-platform/"
       ],
-      "numberOfRuns": 1
+      "numberOfRuns": 3
     },
     "assert": {
       "assertions": {
