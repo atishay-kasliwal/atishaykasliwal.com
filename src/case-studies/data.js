@@ -552,7 +552,6 @@ export const caseStudies = [
     name: "Beyond the Resume",
     kicker: "Profile",
     schemaType: "CreativeWork",
-    isProfilePage: true,
     live: false,
     started: "2026-05-01", // first commit: "Add profile README"
     seo: {
