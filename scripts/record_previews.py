@@ -38,6 +38,7 @@ SCENES = {
     "kaggriculture": "kaggriculture.html",
     "mmm": "mmm.html",
     "raft": "raft.html",
+    "profile": "profile.html",
 }
 SCENE_DIR = Path(__file__).resolve().parent / "scenes"
 

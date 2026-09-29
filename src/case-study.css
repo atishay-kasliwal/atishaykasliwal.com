@@ -347,7 +347,9 @@ h1 .eyebrow {
 /* Four unboxed columns, like the homepage masthead. */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* Fills the row with equal columns for however many tiles exist (3 or 4),
+     instead of always reserving 4 and leaving a dangling empty column. */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 28px;
   margin-top: 20px;
   padding-top: 14px;

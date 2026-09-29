@@ -37,7 +37,8 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
       tabindex="-1" ${copy !== 1 ? 'aria-hidden="true"' : ""}
       aria-label="${photoOnly ? `${project.name}. Open photograph preview.` : `${project.name}, ${project.category}. Open project preview.`}">
       <span class="project-art">${project.card ?? project.art}</span>
-      ${photoOnly ? "" : `<span class="card-tag">${String(index + 1).padStart(2, "0")} / ${project.tag}</span>`}
+      ${photoOnly ? "" : `<span class="card-title">${project.name}</span>
+      <span class="card-tag">${String(index + 1).padStart(2, "0")} / ${project.tag}</span>`}
     </button>`,
       )
       .join(""),
