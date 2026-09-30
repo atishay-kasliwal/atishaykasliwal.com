@@ -67,7 +67,9 @@ export async function validatePhotography({ home, page, entries, dist }) {
       assert.equal(object.isPartOf?.["@id"], photographyPage.url);
       assert.equal(object.creditText, "Atishay Kasliwal");
       assert.equal(object.copyrightNotice, "Atishay Kasliwal");
-      for (const redundant of ["caption", "name", "license", "acquireLicensePage"]) assert.equal(object[redundant], undefined);
+      assert.equal(object.license, `${photographyPage.url}#rights`);
+      assert.equal(object.acquireLicensePage, "mailto:katishay@gmail.com");
+      for (const redundant of ["caption", "name"]) assert.equal(object[redundant], undefined);
     }
   }
   for (const photo of photographs) {
@@ -84,7 +86,13 @@ export async function validatePhotography({ home, page, entries, dist }) {
       }
     }
   }
-  assert.equal(page.graph.filter(node => node["@type"] === "Person").length, 0, "Use the canonical Person reference, not a new entity.");
+  // The standalone page is validated in isolation by Google, so it needs its own minimal Person
+  // stub for "creator" to resolve locally — the embedded homepage copy relies on the canonical
+  // Person already declared in the homepage's own JSON-LD instead.
+  const pagePersons = page.graph.filter(node => node["@type"] === "Person");
+  assert.equal(pagePersons.length, 1, "Photography page must declare exactly one Person stub.");
+  assert.equal(pagePersons[0]["@id"], person["@id"]);
+  assert.equal(pagePersons[0].name, person.name);
   assert.equal(home.graph.filter(node => node["@type"] === "ImageGallery").length, 0, "The homepage fragment is not a separate gallery page.");
   const galleries = page.graph.filter(node => node["@type"] === "ImageGallery");
   assert.equal(galleries.length, 1);
