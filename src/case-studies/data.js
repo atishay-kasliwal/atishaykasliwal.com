@@ -959,5 +959,5 @@ export const additionalProjectPages = [
 
 export const staticPageLastModified = {
   homepage: "2026-09-28",
-  resume: "2026-02-21",
+  resume: "2026-09-30",
 };
