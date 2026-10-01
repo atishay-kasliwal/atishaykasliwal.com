@@ -557,6 +557,10 @@ html.scroll-story .scroll-cue {
 }
 .project-card {
   position: relative;
+  display: block;
+  /* Link cards (see carousel-cards.js) drag with the carousel like the button cards. */
+  user-select: none;
+  -webkit-user-drag: none;
   width: var(--card-width);
   height: var(--card-height);
   flex-shrink: 0;

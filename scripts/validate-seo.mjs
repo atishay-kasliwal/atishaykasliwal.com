@@ -236,6 +236,19 @@ for (const record of projectRecords) {
 for (const [pathname, inlinks] of projectInlinks) {
   assert.ok(inlinks > 0, `Project page has no HTML inlinks: ${pathname}`);
 }
+// Every project and experience page must be one ordinary HTML link from the homepage
+// (the prerendered carousel cards), not only reachable through the sitemap or JavaScript.
+const homepageRecord = indexable.find(record => record.url.href === `${site.origin}/`);
+const homepageLinks = new Set(
+  homepageRecord.elements
+    .filter(node => node.tagName === "a" && attribute(node, "href"))
+    .map(node => new URL(attribute(node, "href"), homepageRecord.url))
+    .filter(target => target.origin === site.origin)
+    .map(target => target.pathname),
+);
+for (const record of indexable.filter(record => /[\\/](projects|experience)[\\/]/.test(record.file))) {
+  assert.ok(homepageLinks.has(record.url.pathname), `Homepage has no HTML link to ${record.url.pathname}`);
+}
 const generatedProjectIds = new Set(projectRecords.map(record => record.graph.find(node => node["@id"]?.endsWith("#project"))?.["@id"]));
 assert.deepEqual(listedProjectIds, generatedProjectIds, "Homepage project entities must resolve to project pages.");
 for (const record of projectRecords) {
