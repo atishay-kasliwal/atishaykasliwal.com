@@ -1,4 +1,5 @@
 import { setupCursorMarquee } from "./cursor-marquee.js";
+import { renderCarouselTrack } from "./carousel-cards.js";
 
 export function createProjectCarousel(work, { projects, projectPreview, photoOnly = false }) {
   const viewport = work.querySelector(".carousel-viewport");
@@ -28,21 +29,11 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   let clickResetTimer;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  // Three copies allow a continuous loop. Only the middle copy is exposed to assistive technology.
-  track.innerHTML = Array.from({ length: 3 }, (_, copy) =>
-    projects
-      .map(
-        (project, index) => `
-    <button class="project-card ${project.theme}" data-index="${index}" data-position="${copy * count + index}"
-      tabindex="-1" ${copy !== 1 ? 'aria-hidden="true"' : ""}
-      aria-label="${photoOnly ? `${project.name}. Open photograph preview.` : `${project.name}, ${project.category}. Open project preview.`}">
-      <span class="project-art">${project.card ?? project.art}</span>
-      ${photoOnly ? "" : `<span class="card-title">${project.name}</span>
-      <span class="card-tag">${String(index + 1).padStart(2, "0")} / ${project.tag}</span>`}
-    </button>`,
-      )
-      .join(""),
-  ).join("");
+  // The build prerenders the work and experience tracks (see vite.config.js); render the
+  // rest here, with the same markup.
+  if (track.dataset.prerendered !== "true") {
+    track.innerHTML = renderCarouselTrack(projects, { photoOnly });
+  }
 
   const cards = [...track.querySelectorAll(".project-card")];
   const hoverCapable = matchMedia("(hover: hover) and (pointer: fine)");
@@ -279,10 +270,22 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
       endDrag(event, true);
   });
   viewport.addEventListener("click", (event) => {
-    if (moved || busy) return;
     const card = event.target.closest(".project-card");
     if (!card) return;
+    // Cards with a page are links: let modified clicks open it natively.
+    const link = card.matches("a[href]");
+    if (link && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
+    event.preventDefault();
+    if (moved || busy) return;
     projectPreview.open(Number(card.dataset.index), card, viewport, projects);
+  });
+  // Space activated the card when it was a button; keep that for link cards.
+  viewport.addEventListener("keydown", (event) => {
+    if (event.key !== " ") return;
+    const card = event.target.closest?.("a.project-card");
+    if (!card) return;
+    event.preventDefault();
+    if (!busy) projectPreview.open(Number(card.dataset.index), card, viewport, projects);
   });
 
   viewport.addEventListener(

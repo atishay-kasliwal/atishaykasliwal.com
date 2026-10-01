@@ -42,6 +42,35 @@ export default defineConfig(async () => {
         },
       },
       {
+        // Prerender the work and experience carousels so their cards, and the links to
+        // every project and experience page, are in the homepage HTML before JavaScript.
+        name: "prerender-carousels",
+        transformIndexHtml: {
+          order: "pre",
+          async handler(html) {
+            const stamp = Date.now();
+            const load = file => import(`${pathToFileURL(path.resolve(file)).href}?t=${stamp}`);
+            const [{ renderCarouselTrack }, { projects }, { experience }] = await Promise.all([
+              load("src/carousel-cards.js"),
+              load("src/projects.js"),
+              load("src/experience.js"),
+            ]);
+            const fill = (source, id, items, options) => {
+              const empty = `<div class="carousel-track" id="${id}"></div>`;
+              return source.replace(
+                empty,
+                `<div class="carousel-track" id="${id}" data-prerendered="true">${renderCarouselTrack(items, options)}</div>`,
+              );
+            };
+            return fill(
+              fill(html, "carousel-track", projects, { eagerFirst: true }),
+              "experience-carousel-track",
+              experience,
+            );
+          },
+        },
+      },
+      {
         name: "case-studies",
         // Rebuild the pages when their data changes during development.
         configureServer(server) {
@@ -49,6 +78,9 @@ export default defineConfig(async () => {
             path.resolve("src/case-studies/data.js"),
             path.resolve("src/photography.js"),
             path.resolve("src/experience-pages.js"),
+            path.resolve("src/carousel-cards.js"),
+            path.resolve("src/projects.js"),
+            path.resolve("src/experience.js"),
             path.resolve("index.html"),
           ];
           server.watcher.add(data);
