@@ -58,6 +58,9 @@ document.querySelectorAll(".thumb").forEach(button => {
   button.addEventListener("click", () => {
     document.querySelectorAll(".thumb").forEach(other => other.setAttribute("aria-pressed", String(other === button)));
     stop();
+    // Experience photos carry a responsive srcset; project screens have a single source.
+    if (button.dataset.srcset) image.srcset = button.dataset.srcset;
+    else image.removeAttribute("srcset");
     image.src = button.dataset.src;
     image.alt = button.dataset.alt;
     screen.toggleAttribute("data-no-video", !button.hasAttribute("data-video"));

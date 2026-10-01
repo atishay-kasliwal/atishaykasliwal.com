@@ -444,7 +444,8 @@ h1 .eyebrow {
   padding: 12px 0 15px;
   border-top: 1px solid var(--line);
   font: 9px var(--mono);
-  color: #747470;
+  /* The site's muted grey: #747470 fell short of 4.5:1 contrast at this size. */
+  color: var(--muted);
 }
 .thumb-bar {
   display: none;
