@@ -251,9 +251,9 @@ viewer.addEventListener("keydown", event => {
     event.preventDefault();
     closePhoto();
   }
-  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
     event.preventDefault();
-    showPhoto(selected + (event.key === "ArrowRight" ? 1 : -1));
+    showPhoto(selected + (['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1));
   }
 });
 viewer.addEventListener('cancel', event => { event.preventDefault(); closePhoto(); });
