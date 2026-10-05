@@ -2631,3 +2631,4 @@ html.scroll-story .scroll-cue {
 .sheet-links a:nth-child(odd) { border-left: 0; }
 .sheet-links a:nth-child(n + 3) { border-top: 1px solid #2c2c29; }
 .contact .links { flex-wrap: wrap; }
+.sheet-links a:last-child:nth-child(odd) { grid-column: 1 / -1; }

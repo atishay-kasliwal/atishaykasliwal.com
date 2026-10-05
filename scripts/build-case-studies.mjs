@@ -205,6 +205,8 @@ ${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n"
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${escape(`${study.name}: ${study.headline}`)}" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@AtishayKasliwal" />
+    <meta name="twitter:creator" content="@AtishayKasliwal" />
     <meta name="twitter:title" content="${escape(study.seo.title)}" />
     <meta name="twitter:description" content="${escape(study.seo.description)}" />
     <meta name="twitter:image" content="${og}" />
