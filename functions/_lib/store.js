@@ -1,5 +1,5 @@
 // D1 implementation of the store used by the ingest logic and the public/admin routes.
-import { publicPhotos, publicView } from "../../src/photography-core/library.js";
+import { publicPhotos } from "../../src/photography-core/library.js";
 
 export function rowToPhoto(row, tags = []) {
   return {
@@ -32,8 +32,10 @@ export async function loadLibrary(db) {
   return rows.map(row => rowToPhoto(row, tagsById.get(row.id) ?? []));
 }
 
+// Returns full records filtered to public ones. Views are built only at the response boundary,
+// because selection and ranking re-check visibility and need the status and hidden fields.
 export async function loadPublicLibrary(db) {
-  return publicPhotos(await loadLibrary(db)).map(publicView);
+  return publicPhotos(await loadLibrary(db));
 }
 
 export function d1Store(db, now = () => new Date().toISOString()) {

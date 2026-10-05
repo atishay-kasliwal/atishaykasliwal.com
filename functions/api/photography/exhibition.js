@@ -1,4 +1,5 @@
 import { loadPublicLibrary } from "../../_lib/store.js";
+import { publicView } from "../../../src/photography-core/library.js";
 import { dailySelection } from "../../../src/photography-core/selection.js";
 import { layoutForSelection } from "../../../src/photography-core/layout.js";
 
@@ -9,7 +10,7 @@ export async function onRequestGet({ request, env }) {
     return Response.json({ error: "date must be YYYY-MM-DD" }, { status: 400 });
   }
   const library = await loadPublicLibrary(env.DB);
-  const selected = dailySelection(library, requested);
+  const selected = dailySelection(library, requested).map(publicView);
   const mobile = url.searchParams.get("mobile") === "1";
   const layout = layoutForSelection(selected, { key: requested, mobile });
   return Response.json(
