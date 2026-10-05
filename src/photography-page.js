@@ -61,15 +61,15 @@ function projectedTransform(from, to) {
   const dy = from.bounds.y + from.bounds.height / 2 - to.y - to.height / 2;
   return `perspective(1800px) translate3d(${dx}px, ${dy}px, 0) rotateY(-28deg) skewY(16deg) scale(${from.width / to.width}, ${from.height / to.height})`;
 }
-async function openPhoto() {
+async function openPhoto({ initial = false } = {}) {
   if (viewer.open || closing || !cards().length) return;
   interacted();
   const from = liftImage(selected);
-  viewer.showModal();
+  viewer.show();
   const to = lifted.image.getBoundingClientRect();
   canvas.classList.add('is-viewing');
   viewer.querySelector('[data-close-viewer]').focus({ preventScroll: true });
-  if (reducedMotion.matches) return;
+  if (initial || reducedMotion.matches) return;
   const opening = lifted.image.animate([
     { transform: projectedTransform(from, to) }, { transform: 'none' },
   ], { duration: 720, easing: 'cubic-bezier(.22,1,.36,1)' });
@@ -247,6 +247,10 @@ viewer.addEventListener('click', event => {
 viewer.querySelector("[data-previous-photo]").addEventListener("click", () => showPhoto(selected - 1));
 viewer.querySelector("[data-next-photo]").addEventListener("click", () => showPhoto(selected + 1));
 viewer.addEventListener("keydown", event => {
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closePhoto();
+  }
   if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
     event.preventDefault();
     showPhoto(selected + (event.key === "ArrowRight" ? 1 : -1));
@@ -289,4 +293,6 @@ async function loadUploads() {
     selectPhoto(hasInteracted ? Math.max(0, cards().indexOf(currentCard)) : Math.floor(cards().length / 2), { announce: false });
   } catch { /* The prerendered collection is complete when the API is unavailable. */ }
 }
-loadUploads();
+loadUploads().finally(() => {
+  if (!hasInteracted && matchMedia('(min-width: 701px)').matches) openPhoto({ initial: true });
+});
