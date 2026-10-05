@@ -2626,3 +2626,8 @@ html.scroll-story .scroll-cue {
 .intro-loader .skip-intro { bottom: max(24px, env(safe-area-inset-bottom)); }
 .portfolio { transition: none; }
 .has-intro .portfolio { transform: none; }
+
+.sheet-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sheet-links a:nth-child(odd) { border-left: 0; }
+.sheet-links a:nth-child(n + 3) { border-top: 1px solid #2c2c29; }
+.contact .links { flex-wrap: wrap; }

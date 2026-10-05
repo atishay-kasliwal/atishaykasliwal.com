@@ -1,3 +1,4 @@
+import { profileLinks } from "../src/profile-links.js";
 const SITE = "https://atishaykasliwal.com/";
 const PERSON = `${SITE}#person`;
 const escape = value => String(value).replace(/[&<>"]/g, character => ({
@@ -30,7 +31,7 @@ export function photographySchema(photographs, page, standalone = false) {
       // homepage embeds this same schema too, but it already declares the canonical Person
       // itself, and a second node with the same @id would be a duplicate on that page.
       ...(standalone ? [
-        { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: SITE },
+        { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: SITE, sameAs: profileLinks },
         {
           "@type": "ImageGallery",
           "@id": page.url,

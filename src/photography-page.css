@@ -128,3 +128,9 @@ html:has(.photo-viewer[open]) { overflow: hidden; }
   .photo-page-card img { width: 100%; max-width: 100%; max-height: none; }
   .stack-navigation { display: none; }
 }
+
+@media (max-width: 700px) {
+  .photography-socials { gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .photography-header { gap: 10px; }
+  .photography-header-left { gap: 10px; }
+}
