@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import sharp from "sharp";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = "https://atishaykasliwal.com";
@@ -48,6 +49,27 @@ function structuredData(entry) {
   };
 }
 
+// The screen shows at most ~600px wide on desktop and the full content width on phones, so a
+// 720px variant serves most visits; the original stays in the srcset for high-density screens.
+const SCREEN_VARIANT_WIDTH = 720;
+const SCREEN_SIZES = "(max-width: 700px) calc(100vw - 48px), 600px";
+
+async function addScreenVariants(entry) {
+  for (const item of entry.media.items) {
+    if (!item.src.endsWith(".webp")) continue;
+    const source = path.join(ROOT, "public", item.src);
+    const { width } = await sharp(source).metadata();
+    if (width <= SCREEN_VARIANT_WIDTH) continue;
+    const variant = item.src.replace(/\.webp$/, `-${SCREEN_VARIANT_WIDTH}.webp`);
+    const output = path.join(ROOT, "public", variant);
+    const stale = !fs.existsSync(output) || fs.statSync(output).mtimeMs < fs.statSync(source).mtimeMs;
+    if (stale) {
+      await sharp(source).resize({ width: SCREEN_VARIANT_WIDTH }).webp({ quality: 82 }).toFile(output);
+    }
+    item.srcset = `${variant} ${SCREEN_VARIANT_WIDTH}w, ${item.src} ${width}w`;
+  }
+}
+
 function render(entry, { number, total, next }) {
   const url = pageUrl(entry.slug);
   const [first] = entry.media.items;
@@ -57,7 +79,7 @@ function render(entry, { number, total, next }) {
   const thumbs = entry.media.items
     .map(
       (item, i) => `
-          <button class="thumb" type="button" aria-pressed="${i === 0}" data-src="${escape(item.src)}" data-alt="${escape(item.alt)}">
+          <button class="thumb" type="button" aria-pressed="${i === 0}" data-src="${escape(item.src)}"${item.srcset ? ` data-srcset="${escape(item.srcset)}"` : ""} data-alt="${escape(item.alt)}">
             <span>${pad(i + 1)} / ${escape(item.label)}</span>
             <img src="${escape(item.thumb)}" alt="" width="360" height="222" loading="lazy" decoding="async" />
           </button>`,
@@ -151,7 +173,7 @@ ${entry.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escap
                 ${primary ? `<div class="window-end"><a class="pill" href="${escape(primary.href)}" target="_blank" rel="noreferrer">${escape(primary.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a></div>` : ""}
               </div>
               <div class="screen" id="screen" data-no-video>
-                <img id="screen-img" src="${escape(first.src)}" alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />
+                <img id="screen-img" src="${escape(first.src)}"${first.srcset ? ` srcset="${escape(first.srcset)}" sizes="${SCREEN_SIZES}"` : ""} alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />
               </div>
             </figure>
             <div class="thumbs" role="group" aria-label="Photos">${thumbs}
@@ -198,6 +220,7 @@ export async function buildExperiencePages() {
   const outDir = path.join(ROOT, "experience");
   fs.rmSync(outDir, { recursive: true, force: true });
   const inputs = {};
+  for (const entry of experiencePages) await addScreenVariants(entry);
   experiencePages.forEach((entry, i) => {
     const next = experiencePages.length > 1 ? experiencePages[(i + 1) % experiencePages.length] : null;
     const html = render(entry, { number: i + 1, total: experiencePages.length, next });
