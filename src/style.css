@@ -2648,3 +2648,28 @@ html.scroll-story .scroll-cue {
   .photography-socials.social-logos { gap: 0; }
   .photography-socials.social-logos a.social-logo { width: 32px; min-width: 32px; }
 }
+
+/* Compact phone player and carousel controls. */
+@media (max-width: 700px) {
+  .vibe-panel {
+    width: calc(100% - 32px);
+    max-width: 340px;
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .vibe-heading { font-size: 9px; min-height: 20px; padding-right: 28px; }
+  .vibe-close { width: 28px; height: 28px; top: 12px; right: 10px; font-size: 19px; }
+  .vibe-close:focus-visible { outline: 1px solid #77776e; outline-offset: 0; }
+  .vibe-song { font-size: 22px; margin-top: 14px; line-height: 1.2; }
+  .vibe-artist { font-size: 10px; margin-top: 7px; }
+  .vibe-lyrics { font-size: 14px; margin-block: 16px; }
+  .vibe-progress { margin-top: 12px; margin-bottom: 8px; font-size: 9px; gap: 8px; }
+  .vibe-seek { height: 24px; }
+  .vibe-controls { padding-top: 10px; gap: 10px; }
+  .vibe-play { min-height: 36px; font-size: 11px; gap: 9px; }
+  .vibe-play [data-vibe-icon] { width: 30px; height: 30px; font-size: 10px; }
+  .vibe-playlist { min-height: 36px; font-size: 10px; padding-inline: 2px; }
+  .vibe-status { font-size: 9px; margin-top: 8px; }
+  .carousel-controls { gap: 5px; }
+  .carousel-controls button { width: 32px; height: 32px; font-size: 15px; }
+}
