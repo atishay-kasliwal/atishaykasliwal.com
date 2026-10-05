@@ -131,6 +131,8 @@ ${entry.sections
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@AtishayKasliwal" />
+    <meta name="twitter:creator" content="@AtishayKasliwal" />
     <meta name="twitter:title" content="${escape(entry.seo.title)}" />
     <meta name="twitter:description" content="${escape(entry.seo.description)}" />
     <meta name="twitter:image" content="${og}" />
