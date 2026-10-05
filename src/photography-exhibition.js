@@ -1,4 +1,5 @@
 import { packPhotos } from "./photography-core/pack.js";
+import { hashString } from "./photography-core/random.js";
 
 // Enhances the prerendered photography page with the live exhibition and search. If the API
 // is unavailable the static deck remains as it is, so search engines and no-JS visitors see
@@ -18,6 +19,7 @@ export function setupExhibition(root) {
   let currentMode = "exhibition";
   let exhibition = null;
   let shown = [];
+  let currentFeatured = 0;
 
   async function load(url) {
     if (cache.has(url)) return cache.get(url);
@@ -28,7 +30,8 @@ export function setupExhibition(root) {
     return body;
   }
 
-  function draw(photos, { animate }) {
+  function draw(source, { animate, featured = 0 }) {
+    const photos = [source[featured], ...source.filter((_, index) => index !== featured)].filter(Boolean);
     stage.hidden = false;
     stage.classList.add("is-live");
     const width = stage.clientWidth;
@@ -71,14 +74,15 @@ export function setupExhibition(root) {
         );
       }
     });
-    shown = photos;
+    shown = source;
   }
 
   async function showExhibition({ animate = true } = {}) {
     if (!exhibition) exhibition = await load(`/api/photography/exhibition?mobile=${mobile ? 1 : 0}`);
     currentMode = "exhibition";
     status.textContent = "";
-    draw(exhibition.photos, { animate });
+    currentFeatured = hashString(exhibition.date) % Math.max(1, exhibition.photos.length);
+    draw(exhibition.photos, { animate, featured: currentFeatured });
   }
 
   async function search(query) {
@@ -86,6 +90,7 @@ export function setupExhibition(root) {
     currentMode = "search";
     const photos = body.results.map(result => result.photo);
     status.textContent = photos.length ? `${photos.length} ${photos.length === 1 ? "photograph" : "photographs"}` : "Nothing matched that search.";
+    currentFeatured = 0;
     draw(photos, { animate: true });
   }
 
@@ -113,7 +118,7 @@ export function setupExhibition(root) {
 
   // Re-place photos when the viewport changes shape, using the same stored layout.
   new ResizeObserver(() => {
-    if (shown.length) draw(shown, { animate: false });
+    if (shown.length) draw(shown, { animate: false, featured: currentFeatured });
   }).observe(stage);
 
   showExhibition({ animate: false }).then(() => root.classList.add("exhibition-live")).catch(() => {});

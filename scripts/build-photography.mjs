@@ -76,7 +76,7 @@ export async function buildPhotography() {
       </div>
       <form class="exhibition-search" data-exhibition-search role="search" aria-label="Search the archive">
         <label class="visually-hidden" for="exhibition-input">Search the archive</label>
-        <input id="exhibition-input" data-exhibition-input type="search" autocomplete="off" placeholder="Search the archive..." enterkeyhint="search" />
+        <span class="glass-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></svg><input id="exhibition-input" data-exhibition-input type="search" autocomplete="off" enterkeyhint="search" /></span>
         <p class="exhibition-status" data-exhibition-status role="status" aria-live="polite"></p>
       </form>
       <div class="exhibition-stage" data-exhibition-stage hidden></div>
