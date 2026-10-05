@@ -1,4 +1,4 @@
-import { layoutFor } from "./photography-core/layout.js";
+import { packPhotos } from "./photography-core/pack.js";
 
 // Enhances the prerendered photography page with the live exhibition and search. If the API
 // is unavailable the static deck remains as it is, so search engines and no-JS visitors see
@@ -17,7 +17,7 @@ export function setupExhibition(root) {
   const cache = new Map();
   let currentMode = "exhibition";
   let exhibition = null;
-  let shown = { photos: [], layout: [] };
+  let shown = [];
 
   async function load(url) {
     if (cache.has(url)) return cache.get(url);
@@ -28,23 +28,7 @@ export function setupExhibition(root) {
     return body;
   }
 
-  // Positions are stored as fractions of the stage, so a resize keeps the composition intact.
-  // Each photo's box is clamped so nothing can extend past the stage's bottom or right edge.
-  function place(photo, entry, index, width, height) {
-    const ratio = photo.width / photo.height;
-    if (index === 0) {
-      const size = Math.min(width * 0.36, height * 0.66 * ratio);
-      const h = size / ratio;
-      return { left: (width - size) / 2, top: (height - h) / 2 - 10, width: size };
-    }
-    const size = Math.min(Math.max(width * entry.width / 100, 64), width * 0.4);
-    const h = size / ratio;
-    const left = Math.min(Math.max((entry.x / 100) * width, 0), width - size);
-    const top = Math.min(Math.max((entry.y / 100) * height, 0), Math.max(0, height - h - 6));
-    return { left, top, width: size };
-  }
-
-  function draw(photos, layout, { animate }) {
+  function draw(photos, { animate }) {
     stage.hidden = false;
     stage.classList.add("is-live");
     const width = stage.clientWidth;
@@ -62,8 +46,9 @@ export function setupExhibition(root) {
         node.remove();
       }
     }
+    const boxes = new Map(packPhotos(photos, { width, height, mobile }).map(box => [box.id, box]));
     photos.forEach((photo, index) => {
-      const entry = layout.find(item => item.id === photo.id) ?? { x: 50, y: 50, width: 24, depth: 0, rotation: 0 };
+      const box = boxes.get(photo.id);
       let node = existing.get(photo.id);
       if (!node) {
         node = document.createElement("figure");
@@ -72,37 +57,36 @@ export function setupExhibition(root) {
         node.innerHTML = `<img src="${photo.src}" alt="${escapeAttribute(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async" /><figcaption>${escapeAttribute(photo.tags?.join(" · ") ?? "")}</figcaption>`;
         stage.append(node);
       }
-      const box = place(photo, entry, index, width, height);
       node.classList.toggle("is-featured", index === 0);
       node.style.left = `${box.left}px`;
       node.style.top = `${box.top}px`;
       node.style.width = `${box.width}px`;
-      node.style.zIndex = index === 0 ? "30" : String(10 + entry.depth);
-      node.style.transform = index === 0 ? "none" : `rotate(${entry.rotation}deg)`;
+      node.style.height = `${box.height}px`;
+      node.style.zIndex = String(box.z);
+      node.style.transform = "none";
       if (animate && !reducedMotion.matches) {
         node.animate(
-          [{ opacity: 0, transform: `scale(0.94) rotate(${entry.rotation}deg)` }, { opacity: 1, transform: index === 0 ? "none" : `rotate(${entry.rotation}deg)` }],
+          [{ opacity: 0, transform: "scale(0.94)" }, { opacity: 1, transform: "none" }],
           { duration: DURATION, delay: index * 16, easing: "cubic-bezier(.22,.75,.22,1)", fill: "backwards" },
         );
       }
     });
-    shown = { photos, layout };
+    shown = photos;
   }
 
   async function showExhibition({ animate = true } = {}) {
     if (!exhibition) exhibition = await load(`/api/photography/exhibition?mobile=${mobile ? 1 : 0}`);
     currentMode = "exhibition";
     status.textContent = "";
-    draw(exhibition.photos, exhibition.layout, { animate });
+    draw(exhibition.photos, { animate });
   }
 
   async function search(query) {
     const body = await load(`/api/photography/search?q=${encodeURIComponent(query)}`);
     currentMode = "search";
     const photos = body.results.map(result => result.photo);
-    const layout = photos.map((photo, slot) => ({ id: photo.id, ...placement(photo, slot, query, mobile) }));
     status.textContent = photos.length ? `${photos.length} ${photos.length === 1 ? "photograph" : "photographs"}` : "Nothing matched that search.";
-    draw(photos, layout, { animate: true });
+    draw(photos, { animate: true });
   }
 
   form.addEventListener("submit", async event => {
@@ -129,17 +113,12 @@ export function setupExhibition(root) {
 
   // Re-place photos when the viewport changes shape, using the same stored layout.
   new ResizeObserver(() => {
-    if (shown.photos.length) draw(shown.photos, shown.layout, { animate: false });
+    if (shown.length) draw(shown, { animate: false });
   }).observe(stage);
 
   showExhibition({ animate: false }).then(() => root.classList.add("exhibition-live")).catch(() => {});
 }
 
-// Search placements reuse the layout function keyed by the query, so the same query always
-// arranges the same way, and the arrangement differs from the daily exhibition.
-function placement(photo, slot, query, mobile) {
-  return layoutFor(photo, { key: `search:${query.toLowerCase()}`, slot, mobile });
-}
 
 function escapeAttribute(value) {
   return String(value).replace(/[&<>"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
