@@ -9,6 +9,9 @@ import { setupInfoSheet } from "./info-sheet.js";
 import { setupScrollStory } from "./scroll-story.js";
 import { createProjectCarousel } from "./project-carousel.js";
 import { setupSectionAccordion } from "./section-accordion.js";
+import { setupDailyVibe } from "./daily-vibe.js";
+
+setupDailyVibe();
 
 const projectPreview = createProjectPreview(projects, document.querySelector("#carousel-viewport"));
 const carousels = [...document.querySelectorAll(".work")].map(work =>

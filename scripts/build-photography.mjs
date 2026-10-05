@@ -60,6 +60,11 @@ export async function buildPhotography() {
   <link rel="stylesheet" href="/src/photography-page.css" />
 </head>
 <body>
+  <div class="gallery-atmosphere" aria-hidden="true">
+    <span class="gallery-light gallery-light-warm"></span>
+    <span class="gallery-light gallery-light-cool"></span>
+    <span class="gallery-grain"></span>
+  </div>
   <main class="portfolio photography-portfolio">
     <header class="photography-header">
       <div class="photography-header-left">
@@ -94,6 +99,10 @@ export async function buildPhotography() {
     <button class="viewer-next" data-next-photo aria-label="Next photograph">→</button>
     <p data-viewer-caption class="visually-hidden" aria-live="polite"></p>
   </dialog>
+  <details class="photo-categories" data-photo-categories hidden>
+    <summary>Categories</summary>
+    <nav data-photo-filters aria-label="Filter photographs by category"></nav>
+  </details>
   <script type="module" src="/src/photography-page.js"></script>
 </body>
 </html>\n`;
