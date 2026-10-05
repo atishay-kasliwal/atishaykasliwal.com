@@ -163,3 +163,13 @@ html[data-photography-page],
 @media (prefers-reduced-motion: reduce) {
   .exhibit { transition: none; }
 }
+
+.photography-enhancing .photography-content { justify-content: flex-start; padding-top: 18px; gap: 14px; }
+.photography-enhancing .exhibition-search { justify-content: center; text-align: center; width: 100%; margin: 0; }
+.photography-enhancing .exhibition-search input { flex: 0 1 300px; max-width: 300px; text-align: center; }
+.exhibition-stage { height: calc(100svh - 230px); min-height: 300px; aspect-ratio: auto; margin: 0; }
+.exhibition-live .photography-heading { display: none; }
+@media (max-width: 700px) {
+  .exhibition-stage { height: calc(100svh - 250px); min-height: 280px; }
+}
+.exhibition-live .photo-deck-controls { display: none; }
