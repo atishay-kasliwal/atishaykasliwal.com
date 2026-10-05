@@ -34,6 +34,17 @@ export async function onRequestDelete({ request, env, params }) {
   await env.DB.prepare("UPDATE photos SET deleted_at = ? WHERE id = ?").bind(new Date().toISOString(), params.id).run();
   const displayKey = row.src?.includes("/display/") ? row.src.slice(row.src.indexOf("display/")) : null;
   const keys = [row.original_key, displayKey].filter(Boolean);
+  if (row.original_key) {
+    // Rotation creates versioned display URLs; permanent deletion removes
+    // those earlier display versions as well as the current image.
+    let cursor;
+    do {
+      const page = await env.PHOTOS.list({ prefix: `display/${params.id}`, cursor });
+      const historical = page.objects.map(object => object.key);
+      if (historical.length) await env.PHOTOS.delete(historical);
+      cursor = page.truncated ? page.cursor : undefined;
+    } while (cursor);
+  }
   if (keys.length) await env.PHOTOS.delete(keys);
   await env.DB.batch([
     env.DB.prepare("DELETE FROM photo_tags WHERE photo_id = ?").bind(params.id),

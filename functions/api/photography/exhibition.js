@@ -10,11 +10,12 @@ export async function onRequestGet({ request, env }) {
     return Response.json({ error: "date must be YYYY-MM-DD" }, { status: 400 });
   }
   const library = await loadPublicLibrary(env.DB);
-  const selected = dailySelection(library, requested).map(publicView);
+  const all = url.searchParams.get("all") === "1";
+  const selected = (all ? library : dailySelection(library, requested)).map(publicView);
   const mobile = url.searchParams.get("mobile") === "1";
   const layout = layoutForSelection(selected, { key: requested, mobile });
   return Response.json(
-    { date: requested, photos: selected, layout },
+    { date: requested, collection: all ? "all" : "daily", photos: selected, layout },
     { headers: { "Cache-Control": "public, max-age=60" } },
   );
 }

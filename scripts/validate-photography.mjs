@@ -44,7 +44,7 @@ export async function validatePhotography({ home, page, entries, dist }) {
       assert.equal(attribute(image, "alt"), photo.alt);
       assert.equal(Number(attribute(image, "width")), photo.width);
       assert.equal(Number(attribute(image, "height")), photo.height);
-      assert.equal(attribute(image, "loading"), record === page && index === 0 ? "eager" : "lazy");
+      assert.equal(attribute(image, "loading"), record === page && index === Math.floor(photographs.length / 2) ? "eager" : "lazy");
       if (photoVariants(photo).length) {
         assert.ok(attribute(image, "srcset"));
         assert.ok(attribute(image, "sizes"));

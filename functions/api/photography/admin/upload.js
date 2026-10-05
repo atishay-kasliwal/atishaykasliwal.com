@@ -1,7 +1,7 @@
 import { requireAdmin } from "../../../_lib/access.js";
 import { validateUpload, orientationOf } from "../../../../src/photography-core/upload.js";
 
-const EXTENSIONS = { jpeg: "jpg", png: "png", webp: "webp" };
+const EXTENSIONS = { jpeg: "jpg", png: "png", webp: "webp", heic: "heic" };
 
 async function contentId(bytes) {
   const digest = await crypto.subtle.digest("SHA-256", bytes);

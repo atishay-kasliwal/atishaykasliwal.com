@@ -70,3 +70,16 @@ test("search handler ranks colour queries by actual colour", async () => {
   const body = await response.json();
   assert.ok(body.results.length >= 1);
 });
+
+test('full collection returns all 87 visible photos without the daily selection limit', async () => {
+  const collection = Array.from({length:87},(_,i)=>row(`p${String(i).padStart(3,'0')}`));
+  const env = { DB: fakeDb([...collection,...rows.slice(2)],[]) };
+  const response = await exhibition({request:new Request('https://x.test/api/photography/exhibition?all=1'),env});
+  const body = await response.json();
+  assert.equal(body.collection,'all');
+  assert.equal(body.photos.length,87);
+  assert.deepEqual(body.photos.map(photo=>photo.id),collection.map(photo=>photo.id));
+  const daily = await exhibition({request:new Request('https://x.test/api/photography/exhibition'),env});
+  const selection=await daily.json();
+  assert.ok(selection.photos.length>=20&&selection.photos.length<=30);
+});
