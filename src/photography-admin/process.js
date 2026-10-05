@@ -7,7 +7,14 @@ const SAMPLE_EDGE = 96;
 // small sample, and a re-encoded display JPEG with no metadata: canvas output carries no EXIF
 // or GPS, so the public copy can never leak them.
 export async function processPhoto(file) {
-  const bitmap = await createImageBitmap(file);
+  let bitmap;
+  try {
+    bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  } catch (error) {
+    if (!/\.hei[cf]$/i.test(file.name) && !/^image\/(heic|heif)(-sequence)?$/i.test(file.type)) throw error;
+    const { heicTo } = await import("heic-to/csp");
+    bitmap = await heicTo({ blob: file, type: "bitmap" });
+  }
   const { width, height } = bitmap;
   const sample = scale(width, height, SAMPLE_EDGE);
   const sampleCanvas = new OffscreenCanvas(sample.width, sample.height);

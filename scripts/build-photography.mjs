@@ -9,7 +9,7 @@ const escape = value => String(value).replace(/[&<>"]/g, character => ({
 })[character]);
 
 export async function buildPhotography() {
-  const { photographs, photographyPage: page, photoMarkup, photographyDeckSizes } = await import(
+  const { photographs, photographyPage: page, photoMarkup } = await import(
     `${pathToFileURL(path.join(root, "src/photography.js")).href}?t=${Date.now()}`,
   );
   await generatePhotographyImages(photographs, page);
@@ -26,11 +26,12 @@ export async function buildPhotography() {
   const navigation = extract(/<nav class="thumb-bar"[\s\S]*?<\/nav>/);
   const sheet = extract(/<dialog id="info-sheet"[\s\S]*?<\/dialog>/);
   const icons = [...home.matchAll(/<link[^>]+(?:rel="icon"|rel="apple-touch-icon")[^>]*>/g)].map(match => match[0]).join("\n");
+  const initial = Math.floor(photographs.length / 2);
   const cards = photographs.map((photo, index) => {
-    const offset = index <= photographs.length / 2 ? index : index - photographs.length;
-    const distance = Math.abs(offset);
-    return `<a class="photo-page-card" href="${escape(photo.src)}" data-photo-index="${index}" data-near="${distance <= 4}" style="--offset:${offset};--distance:${distance};--turn:${Math.sign(offset) * -24}deg;z-index:${20 - distance}" aria-label="Photograph ${index + 1}: ${escape(photo.alt)}">
-      ${photoMarkup(photo, { lazy: index !== 0, sizes: photographyDeckSizes, preview: true })}
+    const offset = index - initial;
+    const side = Math.sign(offset);
+    return `<a class="photo-page-card${index === initial ? ' is-selected' : ''}" href="${escape(photo.src)}" data-photo-index="${index}" style="--offset:${offset};--side:${side};--depth:${Math.abs(offset)};z-index:${index === initial ? 100 : 50 - index}" aria-label="${escape(photo.alt)}">
+      ${photoMarkup(photo, { lazy: index !== initial, sizes: '(max-width: 700px) 72vw, (min-width: 1600px) 480px, 30vw', preview: true })}
     </a>`;
   }).join("\n");
   const social = new URL(page.socialImage, page.url).href;
@@ -61,41 +62,36 @@ export async function buildPhotography() {
   <!-- photography:metadata -->
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="/src/photography-page.css" />
-  <script>
-    document.documentElement.classList.add("photography-enhancing");
-    window.photographyFallback = setTimeout(() => document.documentElement.classList.remove("photography-enhancing"), 6000);
-  </script>
 </head>
 <body>
   <main class="portfolio photography-portfolio">
     ${masthead}
     <section class="photography-content" aria-labelledby="photography-title">
-      <div class="photography-heading">
-        <h1 id="photography-title">Photography</h1>
-        <p>Things that made me stop and take a picture.</p>
-      </div>
-      <form class="exhibition-search" data-exhibition-search role="search" aria-label="Search the archive">
-        <label class="visually-hidden" for="exhibition-input">Search the archive</label>
-        <span class="glass-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></svg><input id="exhibition-input" data-exhibition-input type="search" autocomplete="off" enterkeyhint="search" /></span>
-        <p class="exhibition-status" data-exhibition-status role="status" aria-live="polite"></p>
-      </form>
-      <div class="exhibition-stage" data-exhibition-stage hidden></div>
-      <div class="photo-deck" id="photo-deck" aria-label="Photographs">
+      <h1 id="photography-title" class="visually-hidden">Photography</h1>
+      <div class="photo-canvas" id="photo-deck" data-photo-canvas aria-label="Photographs" tabindex="0" aria-describedby="stack-help">
         ${cards}
       </div>
-      <div class="photo-deck-controls carousel-controls">
-        <button data-photo-previous aria-label="Previous photograph">←</button>
-        <p class="photo-page-counter" aria-live="polite" aria-atomic="true"><span data-photo-current>01</span><span class="counter-rule"></span><span class="muted">16</span></p>
-        <button data-photo-next aria-label="Next photograph">→</button>
-        <button data-photo-motion aria-label="Pause automatic photo changes" aria-pressed="false">Ⅱ</button>
+      <div class="stack-navigation">
+        <p id="stack-help">Scroll or drag to explore</p>
+        <div class="stack-controls">
+          <button data-stack-previous aria-label="Previous photograph">←</button>
+          <p data-stack-counter aria-live="polite" aria-atomic="true">${String(initial + 1).padStart(2, '0')} / ${String(photographs.length).padStart(2, '0')}</p>
+          <button data-stack-next aria-label="Next photograph">→</button>
+        </div>
       </div>
     </section>
     ${footer}
     ${navigation}
   </main>
   ${sheet}
+  <dialog class="photo-viewer" data-photo-viewer aria-label="Photograph viewer">
+    <button class="viewer-close" data-close-viewer aria-label="Close photograph">Close ×</button>
+    <button class="viewer-previous" data-previous-photo aria-label="Previous photograph">←</button>
+    <div class="viewer-media" data-viewer-media></div>
+    <button class="viewer-next" data-next-photo aria-label="Next photograph">→</button>
+    <p data-viewer-caption class="visually-hidden" aria-live="polite"></p>
+  </dialog>
   <script type="module" src="/src/photography-page.js"></script>
-  <script type="module" src="/src/photography-exhibition-init.js"></script>
 </body>
 </html>\n`;
   const file = path.join(root, "photography/index.html");

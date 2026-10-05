@@ -6,6 +6,7 @@ export async function onRequestGet({ request, env }) {
   if (!admin.ok) return Response.json({ error: "forbidden" }, { status: admin.status });
   const photos = (await loadLibrary(env.DB)).map(photo => ({
     id: photo.id,
+    origin: photo.origin,
     status: photo.status,
     hidden: photo.hidden,
     src: photo.src,

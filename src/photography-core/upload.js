@@ -10,6 +10,19 @@ export function sniffImageType(bytes) {
     String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
     String.fromCharCode(...bytes.slice(8, 12)) === "WEBP"
   ) return "webp";
+  // HEIC uses an ISO-BMFF ftyp box. Inspect the declared compatible brands,
+  // never the filename or MIME. Generic mif1 and AVIF/video brands alone are
+  // insufficient to identify a supported HEVC still photo.
+  if (bytes.length >= 20 && String.fromCharCode(...bytes.slice(4, 8)) === "ftyp") {
+    const length = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0);
+    if (length >= 20 && length <= bytes.length && length <= 4096 && length % 4 === 0) {
+      for (let offset = 8; offset < length; offset += 4) {
+        if (offset === 12) continue; // minor version, not a brand
+        const brand = String.fromCharCode(...bytes.slice(offset, offset + 4));
+        if (["heic", "heix", "hevc", "hevx"].includes(brand)) return "heic";
+      }
+    }
+  }
   return null;
 }
 
@@ -52,10 +65,14 @@ export function validateUpload({ original, display, metadata }) {
   if (display && display.length > MAX_DISPLAY_BYTES) errors.push("Display image is larger than 6 MB.");
   const originalType = original ? sniffImageType(original) : null;
   const displayType = display ? sniffImageType(display) : null;
-  if (original && !originalType) errors.push("Original is not a JPEG, PNG or WebP image.");
+  if (original && !originalType) errors.push("Original is not a JPEG, PNG, WebP or HEIC/HEIF image.");
   if (display && displayType !== "jpeg" && displayType !== "webp") errors.push("Display image must be JPEG or WebP.");
-  const dimensions = originalType ? readDimensions(original, originalType) : null;
-  if (originalType && !dimensions) errors.push("Original dimensions could not be read.");
+  const originalDimensions = originalType && originalType !== "heic" ? readDimensions(original, originalType) : null;
+  if (originalType && originalType !== "heic" && !originalDimensions) errors.push("Original dimensions could not be read.");
+  // Public records describe the orientation-correct, resized display image.
+  // This also handles iPhone JPEGs whose EXIF rotates the encoded original.
+  const dimensions = displayType ? readDimensions(display, displayType) : null;
+  if (display && (!dimensions || dimensions.width <= 0 || dimensions.height <= 0)) errors.push("Display dimensions could not be read.");
   const colors = Array.isArray(metadata?.colors) ? metadata.colors : [];
   if (colors.length > 12) errors.push("Too many colours supplied.");
   const alt = String(metadata?.alt ?? "").trim();

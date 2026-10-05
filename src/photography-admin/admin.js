@@ -12,6 +12,7 @@ const drop = document.querySelector("#drop");
 const fileInput = document.querySelector("#file");
 let photos = [];
 let filter = "all";
+const rotating = new Set();
 
 const label = {
   uploading: "Uploading",
@@ -57,6 +58,8 @@ function row({ thumb, title, meta, status, actions = [], tone = "" }) {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = action.label;
+    button.disabled = Boolean(action.disabled);
+    if (action.title) button.setAttribute("aria-label", action.title);
     button.addEventListener("click", action.run);
     holder.append(button);
   }
@@ -70,12 +73,15 @@ function renderLibrary() {
   for (const photo of visible) {
     const statusText = photo.status === "ready" ? (photo.hidden ? "Hidden" : "Visible") : photo.status === "pending" ? "Waiting for tagging" : "Failed";
     const tags = photo.tags?.length ? photo.tags.join(", ") : "no tags yet";
+    const busy = rotating.has(photo.id);
     const actions = [
+      { label: busy ? "Rotating…" : "Rotate ↻", title: "Rotate photo 90 degrees clockwise", disabled: busy || photo.origin !== "r2", run: () => rotatePhoto(photo) },
       {
         label: photo.hidden ? "Show" : "Hide",
+        disabled: busy,
         run: () => toggleHidden(photo),
       },
-      { label: "Delete", run: () => confirmDelete(photo) },
+      { label: "Delete", disabled: busy, run: () => confirmDelete(photo) },
     ];
     library.append(row({ thumb: photo.src, title: photo.id.slice(0, 8), meta: tags, status: statusText, actions, tone: photo.hidden ? "is-hidden" : "" }));
   }
@@ -102,6 +108,35 @@ async function toggleHidden(photo) {
     photo.hidden = !next;
     renderLibrary();
     say(error.message);
+  }
+}
+
+async function rotatePhoto(photo) {
+  if (rotating.has(photo.id)) return;
+  rotating.add(photo.id);
+  say(null);
+  renderLibrary();
+  let bitmap;
+  try {
+    const path = `/api/photography/admin/photos/${photo.id}/rotate`;
+    const response = await fetch(path, { credentials: 'same-origin' });
+    if (!response.ok) throw new Error((await response.json()).error || 'Could not load photo.');
+    const etag = response.headers.get('ETag');
+    bitmap = await createImageBitmap(await response.blob());
+    const canvas = new OffscreenCanvas(bitmap.height, bitmap.width);
+    const context = canvas.getContext('2d');
+    context.translate(canvas.width / 2, canvas.height / 2);
+    context.rotate(Math.PI / 2);
+    context.drawImage(bitmap, -bitmap.width / 2, -bitmap.height / 2);
+    const display = await canvas.convertToBlob({ type: 'image/jpeg', quality: .95 });
+    const saved = await api(path, { method: 'POST', headers: { 'Content-Type': 'image/jpeg', 'If-Match': etag }, body: display });
+    photo.src = saved.src;
+  } catch (error) {
+    say(error.message);
+  } finally {
+    bitmap?.close();
+    rotating.delete(photo.id);
+    renderLibrary();
   }
 }
 
@@ -170,8 +205,8 @@ async function uploadFile(file) {
 }
 
 async function uploadAll(files) {
-  const images = [...files].filter(file => /^image\/(jpeg|png|webp)$/.test(file.type));
-  if (!images.length) return say("Choose JPEG, PNG or WebP photographs.");
+  const images = [...files].filter(file => /^image\/(jpeg|png|webp|heic|heif)(-sequence)?$/i.test(file.type) || /\.(jpe?g|png|webp|heic|heif)$/i.test(file.name));
+  if (!images.length) return say("Choose JPEG, PNG, WebP or iPhone HEIC/HEIF photographs.");
   say(null);
   // One at a time keeps memory bounded on large originals and keeps the queue readable.
   for (const file of images) await uploadFile(file);
