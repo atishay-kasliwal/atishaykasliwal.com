@@ -37,7 +37,7 @@ export function setupExhibition(root) {
       const h = size / ratio;
       return { left: (width - size) / 2, top: (height - h) / 2 - 10, width: size };
     }
-    const size = Math.min(Math.max(width * entry.width / 100, 72), width * 0.34);
+    const size = Math.min(Math.max(width * entry.width / 100, 64), width * 0.4);
     const h = size / ratio;
     const left = Math.min(Math.max((entry.x / 100) * width, 0), width - size);
     const top = Math.min(Math.max((entry.y / 100) * height, 0), Math.max(0, height - h - 6));
