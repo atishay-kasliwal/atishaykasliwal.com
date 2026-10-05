@@ -17,6 +17,7 @@ export function setupExhibition(root) {
   const cache = new Map();
   let currentMode = "exhibition";
   let exhibition = null;
+  let shown = { photos: [], layout: [] };
 
   async function load(url) {
     if (cache.has(url)) return cache.get(url);
@@ -27,9 +28,27 @@ export function setupExhibition(root) {
     return body;
   }
 
-  function render(photos, layout, { animate }) {
+  // Positions are stored as fractions of the stage, so a resize keeps the composition intact.
+  // Each photo's box is clamped so nothing can extend past the stage's bottom or right edge.
+  function place(photo, entry, index, width, height) {
+    const ratio = photo.width / photo.height;
+    if (index === 0) {
+      const size = Math.min(width * 0.36, height * 0.66 * ratio);
+      const h = size / ratio;
+      return { left: (width - size) / 2, top: (height - h) / 2 - 10, width: size };
+    }
+    const size = Math.min(Math.max(width * entry.width / 100, 72), width * 0.34);
+    const h = size / ratio;
+    const left = Math.min(Math.max((entry.x / 100) * width, 0), width - size);
+    const top = Math.min(Math.max((entry.y / 100) * height, 0), Math.max(0, height - h - 6));
+    return { left, top, width: size };
+  }
+
+  function draw(photos, layout, { animate }) {
     stage.hidden = false;
     stage.classList.add("is-live");
+    const width = stage.clientWidth;
+    const height = stage.clientHeight;
     const existing = new Map([...stage.children].map(node => [node.dataset.id, node]));
     const wanted = new Set(photos.map(photo => photo.id));
     for (const [id, node] of existing) {
@@ -44,39 +63,37 @@ export function setupExhibition(root) {
       }
     }
     photos.forEach((photo, index) => {
-      const place = layout.find(entry => entry.id === photo.id);
+      const entry = layout.find(item => item.id === photo.id) ?? { x: 50, y: 50, width: 24, depth: 0, rotation: 0 };
       let node = existing.get(photo.id);
       if (!node) {
         node = document.createElement("figure");
         node.className = "exhibit";
         node.dataset.id = photo.id;
-        node.innerHTML = `<img src="${photo.src}" alt="${escapeAttribute(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async" />`;
+        node.innerHTML = `<img src="${photo.src}" alt="${escapeAttribute(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async" /><figcaption>${escapeAttribute(photo.tags?.join(" · ") ?? "")}</figcaption>`;
         stage.append(node);
       }
-      const before = node.getBoundingClientRect();
-      node.style.left = `${place.x}%`;
-      node.style.top = `${place.y}%`;
-      node.style.width = `${place.width}%`;
-      node.style.zIndex = String(10 + place.depth);
-      node.style.transform = `rotate(${place.rotation}deg)`;
+      const box = place(photo, entry, index, width, height);
+      node.classList.toggle("is-featured", index === 0);
+      node.style.left = `${box.left}px`;
+      node.style.top = `${box.top}px`;
+      node.style.width = `${box.width}px`;
+      node.style.zIndex = index === 0 ? "30" : String(10 + entry.depth);
+      node.style.transform = index === 0 ? "none" : `rotate(${entry.rotation}deg)`;
       if (animate && !reducedMotion.matches) {
-        const after = node.getBoundingClientRect();
         node.animate(
-          [
-            { transform: `translate(${before.left - after.left}px, ${before.top - after.top}px) rotate(${place.rotation}deg) scale(0.96)` },
-            { transform: `rotate(${place.rotation}deg)` },
-          ],
-          { duration: DURATION, delay: index * 14, easing: "cubic-bezier(.22,.75,.22,1)", fill: "backwards" },
+          [{ opacity: 0, transform: `scale(0.94) rotate(${entry.rotation}deg)` }, { opacity: 1, transform: index === 0 ? "none" : `rotate(${entry.rotation}deg)` }],
+          { duration: DURATION, delay: index * 16, easing: "cubic-bezier(.22,.75,.22,1)", fill: "backwards" },
         );
       }
     });
+    shown = { photos, layout };
   }
 
   async function showExhibition({ animate = true } = {}) {
     if (!exhibition) exhibition = await load(`/api/photography/exhibition?mobile=${mobile ? 1 : 0}`);
     currentMode = "exhibition";
     status.textContent = "";
-    render(exhibition.photos, exhibition.layout, { animate });
+    draw(exhibition.photos, exhibition.layout, { animate });
   }
 
   async function search(query) {
@@ -85,7 +102,7 @@ export function setupExhibition(root) {
     const photos = body.results.map(result => result.photo);
     const layout = photos.map((photo, slot) => ({ id: photo.id, ...placement(photo, slot, query, mobile) }));
     status.textContent = photos.length ? `${photos.length} ${photos.length === 1 ? "photograph" : "photographs"}` : "Nothing matched that search.";
-    render(photos, layout, { animate: true });
+    draw(photos, layout, { animate: true });
   }
 
   form.addEventListener("submit", async event => {
@@ -109,6 +126,11 @@ export function setupExhibition(root) {
   input.addEventListener("input", () => {
     if (!input.value && currentMode === "search") showExhibition();
   });
+
+  // Re-place photos when the viewport changes shape, using the same stored layout.
+  new ResizeObserver(() => {
+    if (shown.photos.length) draw(shown.photos, shown.layout, { animate: false });
+  }).observe(stage);
 
   showExhibition({ animate: false }).then(() => root.classList.add("exhibition-live")).catch(() => {});
 }

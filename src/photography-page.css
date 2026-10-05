@@ -173,3 +173,28 @@ html[data-photography-page],
   .exhibition-stage { height: calc(100svh - 250px); min-height: 280px; }
 }
 .exhibition-live .photo-deck-controls { display: none; }
+
+.photography-enhancing .photography-content { min-height: 0; overflow: hidden; }
+.exhibition-stage { flex: 1 1 0; height: auto; min-height: 240px; margin: 0; overflow: hidden; }
+.exhibit { position: absolute; margin: 0; transition: transform 0.35s cubic-bezier(.22,.75,.22,1), box-shadow 0.35s; }
+.exhibit img { display: block; width: 100%; height: auto; border-radius: 3px; box-shadow: 0 10px 26px #0009; }
+.exhibit figcaption {
+  position: absolute;
+  left: 0;
+  bottom: -26px;
+  font: 11px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 0.25s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.exhibit.is-featured figcaption { opacity: 1; color: var(--soft); bottom: -28px; }
+.exhibit:hover, .exhibit:focus-within { z-index: 60 !important; }
+.exhibit:hover figcaption, .exhibit:focus-within figcaption { opacity: 1; }
+.exhibit:hover:not(.is-featured) { transform: scale(1.04) !important; }
+@media (prefers-reduced-motion: reduce) { .exhibit, .exhibit figcaption { transition: none; } }
