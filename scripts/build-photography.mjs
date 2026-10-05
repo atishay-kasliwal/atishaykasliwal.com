@@ -14,17 +14,13 @@ export async function buildPhotography() {
   );
   await generatePhotographyImages(photographs, page);
   const home = await fs.readFile(path.join(root, "index.html"), "utf8");
-  // Share the portfolio chrome without maintaining another copy of profile/contact details.
+  // Share the portfolio footer while keeping the gallery header minimal.
   const extract = expression => {
     const match = home.match(expression);
     if (!match) throw new Error(`Missing shared portfolio markup: ${expression}`);
     return match[0];
   };
-  const masthead = extract(/<header class="masthead">[\s\S]*?<\/header>/)
-    .replace(/<h1 class="eyebrow">([\s\S]*?)<\/h1>/, '<a href="/" class="eyebrow home-link">$1</a>');
   const footer = extract(/<footer class="site-footer">[\s\S]*?<\/footer>/);
-  const navigation = extract(/<nav class="thumb-bar"[\s\S]*?<\/nav>/);
-  const sheet = extract(/<dialog id="info-sheet"[\s\S]*?<\/dialog>/);
   const icons = [...home.matchAll(/<link[^>]+(?:rel="icon"|rel="apple-touch-icon")[^>]*>/g)].map(match => match[0]).join("\n");
   const initial = Math.floor(photographs.length / 2);
   const cards = photographs.map((photo, index) => {
@@ -65,7 +61,16 @@ export async function buildPhotography() {
 </head>
 <body>
   <main class="portfolio photography-portfolio">
-    ${masthead}
+    <header class="photography-header">
+      <div class="photography-header-left">
+        <a href="/" class="home-link">← Back</a>
+        <time class="photography-clock" data-photography-clock aria-label="Current time in New York" title="New York time"></time>
+      </div>
+      <nav class="photography-socials" aria-label="Social links">
+        <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer">GitHub ↗︎</a>
+        <a href="https://www.linkedin.com/in/atishay-kasliwal" target="_blank" rel="noopener noreferrer">LinkedIn ↗︎</a>
+      </nav>
+    </header>
     <section class="photography-content" aria-labelledby="photography-title">
       <h1 id="photography-title" class="visually-hidden">Photography</h1>
       <div class="photo-canvas" id="photo-deck" data-photo-canvas aria-label="Photographs" tabindex="0" aria-describedby="stack-help">
@@ -81,9 +86,7 @@ export async function buildPhotography() {
       </div>
     </section>
     ${footer}
-    ${navigation}
   </main>
-  ${sheet}
   <dialog class="photo-viewer" data-photo-viewer aria-label="Photograph viewer">
     <button class="viewer-close" data-close-viewer aria-label="Close photograph">Close ×</button>
     <button class="viewer-previous" data-previous-photo aria-label="Previous photograph">←</button>

@@ -6,7 +6,7 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   const track = work.querySelector(".carousel-track");
   const workPanel = work.querySelector(".section-panel");
   const pauseButton = work.querySelector("[data-carousel-motion]");
-  const count = projects.length;
+  let count = projects.length;
   let selected = 0;
   let cursor = count + selected;
   let step = 0;
@@ -35,8 +35,9 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
     track.innerHTML = renderCarouselTrack(projects, { photoOnly });
   }
 
-  const cards = [...track.querySelectorAll(".project-card")];
+  let cards = [...track.querySelectorAll(".project-card")];
   const hoverCapable = matchMedia("(hover: hover) and (pointer: fine)");
+  function bindCardHover() {
   cards.forEach(card => {
     card.addEventListener("pointerenter", event => {
       if (hoverCapable.matches && event.pointerType === "mouse" && !dragging && !busy) {
@@ -45,6 +46,8 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
     });
     card.addEventListener("pointerleave", () => projectPreview.leave());
   });
+  }
+  bindCardHover();
   work.querySelector("[data-carousel-total]").textContent = String(count).padStart(
     2,
     "0",
@@ -326,6 +329,24 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   requestAnimationFrame(tick);
 
   return {
+    setPhotos(items) {
+      if (!photoOnly || !items.length) return;
+      const currentSource = projects[selected]?.src;
+      projectPreview.close({ immediate: true });
+      finishMovement();
+      projects = items;
+      count = items.length;
+      selected = Math.max(0, items.findIndex(item => item.src === currentSource));
+      cursor = count + selected;
+      offset = 0;
+      renderedCursor = -1;
+      track.innerHTML = renderCarouselTrack(items, { photoOnly: true });
+      cards = [...track.querySelectorAll('.project-card')];
+      bindCardHover();
+      work.querySelector('[data-carousel-total]').textContent = String(count).padStart(2, '0');
+      updateCaption();
+      measure();
+    },
     refresh() {
       hovered = false;
       keyboardFocused = false;
