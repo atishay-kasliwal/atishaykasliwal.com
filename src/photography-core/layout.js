@@ -23,7 +23,7 @@ export function layoutFor(photo, { key, slot, mobile = false }) {
     };
   }
 
-  const width = portrait ? 16 + random() * 8 : 26 + random() * 12;
+  const width = portrait ? 8 + random() * 12 : 12 + random() * 24;
   return {
     x: clamp(3 + spread * (94 - width), 0, 100 - width),
     y: clamp(6 + band * 78, 0, 84),
