@@ -74,6 +74,12 @@ export async function buildPhotography() {
         <h1 id="photography-title">Photography</h1>
         <p>Things that made me stop and take a picture.</p>
       </div>
+      <form class="exhibition-search" data-exhibition-search role="search" aria-label="Search the archive">
+        <label class="visually-hidden" for="exhibition-input">Search the archive</label>
+        <input id="exhibition-input" data-exhibition-input type="search" autocomplete="off" placeholder="Search the archive..." enterkeyhint="search" />
+        <p class="exhibition-status" data-exhibition-status role="status" aria-live="polite"></p>
+      </form>
+      <div class="exhibition-stage" data-exhibition-stage hidden></div>
       <div class="photo-deck" id="photo-deck" aria-label="Photographs">
         ${cards}
       </div>
@@ -89,6 +95,7 @@ export async function buildPhotography() {
   </main>
   ${sheet}
   <script type="module" src="/src/photography-page.js"></script>
+  <script type="module" src="/src/photography-exhibition-init.js"></script>
 </body>
 </html>\n`;
   const file = path.join(root, "photography/index.html");

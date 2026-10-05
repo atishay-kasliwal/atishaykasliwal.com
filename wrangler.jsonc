@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "atishay-kasliwal-github-io",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "photography",
+      "database_id": "3c828611-a65b-48b8-8f35-a1bd9c81b2d6",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "PHOTO_PUBLIC_BASE": "https://photos.atishaykasliwal.com",
+    "ACCESS_TEAM_DOMAIN": "blue-pine-d929.cloudflareaccess.com",
+    "ACCESS_AUD": "7449787b940d32dc305d6d18ae710e285610d463f4a292fac7ce8cc38cee4298",
+    "ADMIN_EMAILS": "katishay@gmail.com"
+  },
+  "r2_buckets": [
+    {
+      "binding": "PHOTOS",
+      "bucket_name": "photography-photos"
+    }
+  ]
+}
