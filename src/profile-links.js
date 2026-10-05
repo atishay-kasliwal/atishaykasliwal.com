@@ -4,4 +4,5 @@ export const profileLinks = [
   'https://www.instagram.com/atishay_kasliwal/',
   'https://x.com/AtishayKasliwal',
   'https://www.threads.net/@atishay_kasliwal',
+  'https://www.facebook.com/atishay.kasliwal',
 ];
