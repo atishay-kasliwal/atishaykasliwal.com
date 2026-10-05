@@ -21,7 +21,50 @@ const media = viewer.querySelector('[data-viewer-media]');
 const caption = viewer.querySelector('[data-viewer-caption]');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let selected = Math.floor(canvas.children.length / 2);
-const cards = () => [...collection.querySelectorAll('.photo-page-card')];
+const allCards = () => [...collection.querySelectorAll('.photo-page-card')];
+const cards = () => allCards().filter(card => !card.hidden);
+const categories = document.querySelector('[data-photo-categories]');
+const filters = document.querySelector('[data-photo-filters]');
+let activeCategory = 'all';
+let photoTags = new Map();
+
+function renderCategories() {
+  const counts = new Map();
+  allCards().forEach(card => {
+    for (const tag of new Set(photoTags.get(card.href) ?? [])) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  });
+  filters.replaceChildren();
+  const entries = [['all', allCards().length], ...[...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))];
+  entries.forEach(([tag, count]) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.setAttribute('aria-pressed', String(activeCategory === tag));
+    button.append(document.createTextNode(tag + ' '));
+    const total = document.createElement('sup');
+    total.textContent = count;
+    button.append(total);
+    button.addEventListener('click', () => filterPhotos(tag));
+    filters.append(button);
+  });
+  categories.hidden = counts.size === 0;
+}
+
+function filterPhotos(tag) {
+  if (closing) return;
+  interacted();
+  const current = cards()[selected];
+  const wasOpen = viewer.open;
+  flight?.cancel();
+  restoreImage();
+  activeCategory = tag;
+  allCards().forEach(card => { card.hidden = tag !== 'all' && !(photoTags.get(card.href) ?? []).includes(tag); });
+  const index = cards().indexOf(current);
+  selectPhoto(index < 0 ? Math.floor(cards().length / 2) : index);
+  if (wasOpen && cards().length) liftImage(selected);
+  renderCategories();
+  if (matchMedia('(max-width: 700px)').matches) categories.open = false;
+}
+categories.open = matchMedia('(min-width: 701px)').matches;
 let lifted = null;
 let flight = null;
 let closing = false;
@@ -270,6 +313,7 @@ async function loadUploads() {
     const response = await fetch("/api/photography/exhibition?all=1");
     if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) return;
     const body = await response.json();
+    photoTags = new Map((body.photos ?? []).map(photo => [new URL(photo.src, location.origin).href, photo.tags ?? []]));
     const currentCard = cards()[selected];
     if (body.collection === 'all') {
       const publicSources = new Set(body.photos.map(photo => photo.src));
@@ -291,6 +335,7 @@ async function loadUploads() {
     });
     // Keep delegation and the viewer's sequence shared across both canvases.
     selectPhoto(hasInteracted ? Math.max(0, cards().indexOf(currentCard)) : Math.floor(cards().length / 2), { announce: false });
+    renderCategories();
   } catch { /* The prerendered collection is complete when the API is unavailable. */ }
 }
 loadUploads().finally(() => {

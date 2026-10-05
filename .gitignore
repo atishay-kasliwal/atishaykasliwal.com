@@ -15,3 +15,6 @@ scripts/og/
 
 # Local Wrangler state
 .wrangler/
+
+# Local Vite cache
+.vite/

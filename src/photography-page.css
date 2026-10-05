@@ -66,6 +66,14 @@ html[data-photography-page] :focus-visible { outline: none; }
   transform: translate(-50%, -50%) translate3d(var(--drag-x), var(--drag-y), 100px) rotateY(-28deg) skewY(16deg);
   box-shadow: none;
 }
+.photo-page-card[hidden] { display: none; }
+.photo-categories { position: fixed; right: var(--gutter); bottom: 90px; z-index: 300; width: 120px; text-align: right; font: 12px/1.5 var(--mono); }
+.photo-categories[hidden] { display: none; }
+.photo-categories summary { cursor: pointer; color: var(--soft); padding: 8px 0; }
+.photo-categories nav { display: flex; flex-direction: column; align-items: flex-end; max-height: min(40dvh, 320px); overflow-y: auto; }
+.photo-categories button { min-height: 28px; padding: 3px 0 3px 8px; color: var(--muted); }
+.photo-categories button[aria-pressed="true"] { color: var(--ink); }
+.photo-categories sup { font-size: 8px; margin-left: 3px; }
 .photo-page-card img { display: block; width: auto; height: auto; max-width: var(--photo-width); max-height: min(42dvh, 380px); pointer-events: none; }
 .photo-canvas.is-viewing { --photo-width: clamp(185px, 20vw, 335px); --stack-gap: 41vw; --stack-rise: 25vh; }
 .photo-canvas.is-viewing .photo-page-card.is-selected { opacity: 0; }
@@ -89,6 +97,9 @@ html[data-photography-page] :focus-visible { outline: none; }
 .viewer-next { right: 8px; top: calc(50% - 22px); }
 html:has(.photo-viewer[open]) { overflow: hidden; }
 @media (max-width: 700px) {
+  .photo-categories { bottom: 66px; width: 130px; font-size: 10px; }
+  .photo-categories[open] { padding: 8px 12px; background: #111; border: 1px solid #2a2a27; }
+  .photo-categories button { min-height: 36px; }
   .photography-portfolio { min-height: 560px; }
   .photography-header { padding: 0 var(--gutter); }
   .photography-socials { gap: 12px; }

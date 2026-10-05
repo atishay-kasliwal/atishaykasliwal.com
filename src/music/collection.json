@@ -1,0 +1,36 @@
+{
+  "startDate": "2026-10-05",
+  "playlistUrl": "",
+  "songs": [
+    {
+      "id": "creep-avie-sheck",
+      "title": "Creep · Mom & I cover",
+      "artist": "Avie Sheck",
+      "lyric": "",
+      "audioUrl": "/music/creep-avie-sheck.mp3",
+      "playlistUrl": "https://www.youtube.com/watch?v=nZoHuoFQyrI&list=RDnZoHuoFQyrI"
+    },
+    {
+      "id": "kabira",
+      "title": "Kabira",
+      "artist": "Pritam · Yeh Jawaani Hai Deewani",
+      "lyric": "",
+      "playlistUrl": "https://www.youtube.com/watch?v=jHNNMj5bNQw&list=RDjHNNMj5bNQw",
+      "audioUrl": "/music/kabira.m4a"
+    },
+    {
+      "id": "hush",
+      "title": "Hush",
+      "artist": "The Marías",
+      "lyric": "",
+      "audioUrl": "/music/hush.m4a"
+    },
+    {
+      "id": "wat-wat-wat",
+      "title": "Wat Wat Wat",
+      "artist": "Tamasha",
+      "lyric": "",
+      "audioUrl": "/music/wat-wat-wat.m4a"
+    }
+  ]
+}

@@ -20,9 +20,14 @@ export async function validatePhotography({ home, page, entries, dist }) {
   assert.equal(page.description, photographyPage.description);
   assert.equal(elementsIn(page.headings[0]).filter(node => node.nodeName === "#text").map(node => node.value).join(""), "Photography");
   const link = home.elements.find(node => attribute(node, "id") === "photography-toggle");
-  assert.equal(link?.tagName, "a");
-  assert.equal(attribute(link, "href"), "/photography/");
+  assert.equal(link?.tagName, "button");
+  assert.equal(attribute(link, "data-section-toggle"), "");
   assert.equal(attribute(link, "aria-expanded"), "false");
+  assert.equal(attribute(link, "aria-controls"), "photography-panel");
+  const pageLink = home.elements.find(node => attribute(node, "id") === "photography-page-link");
+  assert.equal(pageLink?.tagName, "a");
+  assert.equal(attribute(pageLink, "href"), "/photography/");
+  assert.equal(attribute(pageLink, "data-section-toggle"), undefined);
   assert.equal(new Set(photographs.map(photo => photo.src)).size, 16, "Expected 16 unique photographs.");
   const localDimensions = new Map();
   for (const record of [home, page]) {
