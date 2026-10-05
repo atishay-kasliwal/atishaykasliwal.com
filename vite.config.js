@@ -25,10 +25,28 @@ export default defineConfig(async () => {
   return {
     build: {
       rollupOptions: {
-        input: { main: path.resolve("index.html"), ...pages, ...photography, ...experience.inputs },
+        input: {
+          main: path.resolve("index.html"),
+          ...pages,
+          ...photography,
+          ...experience.inputs,
+          "photography/admin/index": path.resolve("src/photography-admin/index.html"),
+        },
       },
     },
     plugins: [
+      {
+        // The admin entry is emitted at its source path; move it to the private route.
+        name: "photography-admin-route",
+        closeBundle() {
+          const from = path.resolve("dist/src/photography-admin/index.html");
+          const to = path.resolve("dist/photography/admin/index.html");
+          if (!fs.existsSync(from)) return;
+          fs.mkdirSync(path.dirname(to), { recursive: true });
+          fs.renameSync(from, to);
+          fs.rmSync(path.resolve("dist/src"), { recursive: true, force: true });
+        },
+      },
       {
         name: "photography-seo",
         transformIndexHtml: {

@@ -1,0 +1,23 @@
+// Starting tag vocabulary. The admin can extend it; Colab reads the live list from the site.
+export const DEFAULT_VOCABULARY = [
+  "car",
+  "architecture",
+  "city",
+  "street",
+  "night",
+  "sunset",
+  "sky",
+  "nature",
+  "water",
+  "people",
+  "animal",
+  "flower",
+  "landscape",
+  "rain",
+  "building",
+  "bridge",
+  "aircraft",
+  "boat",
+  "beach",
+  "forest",
+];
