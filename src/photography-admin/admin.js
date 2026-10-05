@@ -75,7 +75,8 @@ function renderLibrary() {
     const tags = photo.tags?.length ? photo.tags.join(", ") : "no tags yet";
     const busy = rotating.has(photo.id);
     const actions = [
-      { label: busy ? "Rotating…" : "Rotate ↻", title: "Rotate photo 90 degrees clockwise", disabled: busy || photo.origin !== "r2", run: () => rotatePhoto(photo) },
+      { label: "↺ Rotate left", title: "Rotate photo 90 degrees anticlockwise", disabled: busy || photo.origin !== "r2", run: () => rotatePhoto(photo, -1) },
+      { label: busy ? "Rotating…" : "Rotate right ↻", title: "Rotate photo 90 degrees clockwise", disabled: busy || photo.origin !== "r2", run: () => rotatePhoto(photo, 1) },
       {
         label: photo.hidden ? "Show" : "Hide",
         disabled: busy,
@@ -111,7 +112,7 @@ async function toggleHidden(photo) {
   }
 }
 
-async function rotatePhoto(photo) {
+async function rotatePhoto(photo, direction) {
   if (rotating.has(photo.id)) return;
   rotating.add(photo.id);
   say(null);
@@ -126,7 +127,7 @@ async function rotatePhoto(photo) {
     const canvas = new OffscreenCanvas(bitmap.height, bitmap.width);
     const context = canvas.getContext('2d');
     context.translate(canvas.width / 2, canvas.height / 2);
-    context.rotate(Math.PI / 2);
+    context.rotate(direction * Math.PI / 2);
     context.drawImage(bitmap, -bitmap.width / 2, -bitmap.height / 2);
     const display = await canvas.convertToBlob({ type: 'image/jpeg', quality: .95 });
     const saved = await api(path, { method: 'POST', headers: { 'Content-Type': 'image/jpeg', 'If-Match': etag }, body: display });

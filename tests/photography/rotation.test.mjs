@@ -8,6 +8,8 @@ test('rotated display swaps dimensions without resizing', async () => {
   const original = await sharp({create:{width:80,height:40,channels:3,background:'#337799'}}).jpeg().toBuffer();
   const rotated = await sharp(original).rotate(90).jpeg().toBuffer();
   assert.deepEqual(validateRotation(original,rotated),{ok:true,dimensions:{width:40,height:80}});
+  const anticlockwise = await sharp(original).rotate(-90).jpeg().toBuffer();
+  assert.deepEqual(validateRotation(original,anticlockwise),{ok:true,dimensions:{width:40,height:80}});
   assert.equal(validateRotation(original,original).ok,false);
   const resized=await sharp(original).resize(20,40).jpeg().toBuffer();
   assert.equal(validateRotation(original,resized).ok,false);
