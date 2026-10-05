@@ -112,3 +112,54 @@ html[data-photography-page],
 @media (prefers-reduced-motion: reduce) {
   .photography-enhancing .photo-page-card { transition: none; }
 }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.exhibition-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 16px;
+  margin: 0 0 14px;
+  font: 14px var(--mono);
+}
+.exhibition-search input {
+  flex: 1 1 220px;
+  max-width: 340px;
+  background: transparent;
+  color: var(--ink);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 6px 0;
+  font: inherit;
+  border-radius: 0;
+}
+.exhibition-search input::placeholder { color: var(--muted); }
+.exhibition-search input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.exhibition-status { margin: 0; color: var(--muted); }
+.exhibition-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 18px;
+}
+.exhibition-stage[hidden] { display: none; }
+.exhibit {
+  position: absolute;
+  margin: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px #0008;
+  transform-origin: center;
+}
+.exhibit img { display: block; width: 100%; height: auto; }
+.exhibition-live .photo-deck { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .exhibit { transition: none; }
+}

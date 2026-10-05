@@ -102,6 +102,9 @@ const records = await Promise.all(htmlFiles.map(async file => {
   assert.ok(head, `${file}: missing <head>`);
   assert.ok(attribute(html, "lang"), `${file}: missing document language`);
   assert.ok(record.title, `${file}: missing title`);
+  // Private pages (the photography admin) are noindex and excluded from every public check.
+  const isPrivate = !isNotFound && /noindex/i.test(record.robots);
+  if (isPrivate) return record;
   if (!isNotFound) {
     assert.ok(record.description, `${file}: missing meta description`);
     assert.equal(record.canonical, record.url.href, `${file}: canonical does not match the page URL`);
@@ -144,7 +147,7 @@ const records = await Promise.all(htmlFiles.map(async file => {
   return record;
 }));
 
-const indexable = records.filter(record => !record.isNotFound);
+const indexable = records.filter(record => !record.isNotFound && !/noindex/i.test(record.robots));
 const titles = indexable.map(record => record.title.toLocaleLowerCase());
 assert.equal(new Set(titles).size, titles.length, "Page titles must be unique.");
 assert.equal(indexable.length, projects.length + experiencePages.length + 2, "Expected the homepage, Photography, one page per project and one page per experience entry.");
