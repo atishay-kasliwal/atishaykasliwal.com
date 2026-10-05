@@ -10,8 +10,10 @@ import { setupScrollStory } from "./scroll-story.js";
 import { createProjectCarousel } from "./project-carousel.js";
 import { setupSectionAccordion } from "./section-accordion.js";
 import { setupDailyVibe } from "./daily-vibe.js";
+import { setupPageMascot } from "./page-mascot.js";
 
 setupDailyVibe();
+setupPageMascot();
 
 const projectPreview = createProjectPreview(projects, document.querySelector("#carousel-viewport"));
 const carousels = [...document.querySelectorAll(".work")].map(work =>
