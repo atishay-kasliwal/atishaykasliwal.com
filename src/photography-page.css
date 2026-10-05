@@ -11,14 +11,19 @@ html[data-photography-page], [data-photography-page] body {
   height: 100dvh;
   min-height: 640px;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
-.photography-portfolio .home-link { font: 10.5px/1 var(--mono); color: var(--muted); }
-.photography-content { position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column; padding-top: 24px; }
+.photography-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 var(--gutter); }
+.photography-header-left { display: flex; align-items: center; gap: 20px; }
+.photography-clock { font: 12px/1.4 var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+.photography-socials { display: flex; align-items: center; gap: 20px; }
+.photography-socials a { display: inline-flex; align-items: center; min-height: 44px; font: 12px/1.4 var(--mono); color: var(--soft); white-space: nowrap; }
+.photography-portfolio .home-link { display: inline-flex; align-items: center; min-height: 44px; font: 12px/1.4 var(--mono); color: var(--soft); }
+.photography-content { position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column; padding-top: 0; padding-bottom: 48px; }
 .photo-canvas {
   --photo-width: clamp(250px, 26vw, 440px);
-  --stack-gap: clamp(185px, 27vw, 490px);
-  --stack-rise: clamp(85px, 13vh, 160px);
+  --stack-gap: clamp(185px, 24vw, 440px);
+  --stack-rise: clamp(65px, 10vh, 125px);
   --step-x: 8px;
   --step-y: -6px;
   position: relative;
@@ -78,30 +83,28 @@ html[data-photography-page] :focus-visible { outline: none; }
 .viewer-media { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 0; }
 .photo-viewer img { display: block; width: min(58vw, calc(67dvh * var(--viewer-ratio, 1.5))); max-width: 58vw; max-height: 67dvh; height: auto; object-fit: contain; }
 .photo-viewer button { position: absolute; min-width: 44px; min-height: 44px; font: 12px var(--mono); }
-.viewer-close { top: max(96px, env(safe-area-inset-top)); right: 24px; }
+.viewer-close { top: max(22px, env(safe-area-inset-top)); right: var(--gutter); }
 .viewer-previous { left: 8px; top: calc(50% - 22px); }
 .viewer-next { right: 8px; top: calc(50% - 22px); }
 html:has(.photo-viewer[open]) { overflow: hidden; }
 @media (max-width: 700px) {
   .photography-portfolio { min-height: 560px; }
-  .photography-portfolio .home-link { margin-bottom: 3px; font: 500 15px/1.3 var(--sans); text-transform: none; letter-spacing: -.01em; color: var(--ink); }
-  .photography-portfolio .home-link::before { display: none; }
-  .photography-portfolio .phone-status { border: 0; padding: 5px 0; font-size: 11px; }
-  .photography-portfolio .masthead .info-column p:not(.lead) { display: block; }
-  .photography-content { padding-top: 12px; }
-  .photo-canvas { --photo-width: 72vw; --stack-gap: 47vw; --stack-rise: 125px; --step-x: 7px; --step-y: -8px; perspective: 1400px; }
+  .photography-header { padding: 0 var(--gutter); }
+  .photography-socials { gap: 12px; }
+  .photography-header a { font-size: 10px; }
+  .photography-header-left { gap: 12px; }
+  .photography-clock { font-size: 10px; }
+  .photo-canvas { --photo-width: 72vw; --stack-gap: 56vw; --stack-rise: clamp(70px, 14dvh, 115px); --step-x: 5px; --step-y: -4px; perspective: 1400px; }
+  .photo-page-card img { max-height: 34dvh; }
   .photo-canvas.is-viewing { --photo-width: 44vw; --stack-gap: 52vw; --stack-rise: 25dvh; }
   .stack-navigation { bottom: 0; flex-direction: row; gap: 8px; padding-bottom: 0; font-size: 8px; }
   .stack-navigation > p { white-space: nowrap; font-size: 8px; line-height: 1.5; }
   .stack-controls { gap: 2px; }
   .stack-controls p { min-width: 40px; font-size: 9px; }
   .stack-controls button { font-size: 14px; }
-  .photography-portfolio .thumb-bar { margin-top: 0; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-  .photography-portfolio .thumb-button { min-height: 44px; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: var(--ink); }
-  .photography-portfolio .thumb-button.primary:hover { background: transparent; color: #fff; }
   .photo-viewer { padding: 90px 0; }
   .photo-viewer img { width: min(90vw, calc(62dvh * var(--viewer-ratio, 1.5))); max-width: 90vw; max-height: 62dvh; }
-  .viewer-close { top: max(78px, env(safe-area-inset-top)); }
+  .viewer-close { top: max(16px, env(safe-area-inset-top)); }
   .viewer-previous { left: 0; min-width: 32px; }
   .viewer-next { right: 0; min-width: 32px; }
 }

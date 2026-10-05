@@ -1,14 +1,18 @@
 import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
-import { setupInfoSheet } from "./info-sheet.js";
 import { photoMarkup } from "./photography.js";
 
-setupInfoSheet();
-const time = document.querySelector("#local-time");
-const formatter = new Intl.DateTimeFormat("en-GB", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", hour12: false });
-function updateTime() { const now = new Date(); time.dateTime = now.toISOString(); time.textContent = formatter.format(now); }
-updateTime();
-setInterval(updateTime, 10000);
+const clock = document.querySelector('[data-photography-clock]');
+const clockFormat = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+});
+function updateClock() {
+  const now = new Date();
+  clock.dateTime = now.toISOString();
+  clock.textContent = clockFormat.format(now);
+}
+updateClock();
+setInterval(updateClock, 1000);
 
 const canvas = document.querySelector("[data-photo-canvas]");
 const collection = canvas.parentElement;
@@ -34,7 +38,7 @@ function restoreImage() {
 }
 function liftImage(index) {
   restoreImage();
-  selectPhoto((index + cards().length) % cards().length, { announce: false });
+  selectPhoto(index, { announce: false });
   const card = cards()[selected];
   const image = card.querySelector('img');
   const bounds = image.getBoundingClientRect();
@@ -58,7 +62,7 @@ function projectedTransform(from, to) {
   return `perspective(1800px) translate3d(${dx}px, ${dy}px, 0) rotateY(-28deg) skewY(16deg) scale(${from.width / to.width}, ${from.height / to.height})`;
 }
 async function openPhoto() {
-  if (viewer.open || closing) return;
+  if (viewer.open || closing || !cards().length) return;
   interacted();
   const from = liftImage(selected);
   viewer.showModal();
@@ -124,9 +128,10 @@ function selectPhoto(index, { announce = true } = {}) {
     previous.disabled = next.disabled = true;
     return;
   }
-  selected = Math.max(0, Math.min(photos.length - 1, index));
+  selected = ((index % photos.length) + photos.length) % photos.length;
   photos.forEach((card, position) => {
-    const offset = position - selected;
+    // Arrange the archive as a ring so neighbours stay adjacent at the seam.
+    const offset = ((position - selected + Math.floor(photos.length / 2) + photos.length) % photos.length) - Math.floor(photos.length / 2);
     card.style.setProperty('--offset', offset);
     card.style.setProperty('--side', Math.sign(offset));
     card.style.setProperty('--depth', Math.abs(offset));
@@ -141,8 +146,7 @@ function selectPhoto(index, { announce = true } = {}) {
   });
   counter.setAttribute('aria-live', announce ? 'polite' : 'off');
   counter.textContent = `${String(selected + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
-  previous.disabled = selected === 0;
-  next.disabled = selected === photos.length - 1;
+  previous.disabled = next.disabled = photos.length < 2;
 }
 previous.addEventListener('click', () => { interacted(); selectPhoto(selected - 1); });
 next.addEventListener('click', () => { interacted(); selectPhoto(selected + 1); });
@@ -169,7 +173,7 @@ let wheelTotal = 0;
 let lastWheel = 0;
 let wheelLatched = false;
 canvas.addEventListener('wheel', event => {
-  if (event.ctrlKey || viewer.open) return;
+  if (event.ctrlKey || viewer.open || cards().length < 2) return;
   const delta = (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY)
     * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? canvas.clientHeight : 1);
   if (!delta) return;
@@ -181,7 +185,6 @@ canvas.addEventListener('wheel', event => {
     wheelLatched = false;
   }
   lastWheel = now;
-  if ((delta < 0 && selected === 0) || (delta > 0 && selected === cards().length - 1)) return;
   event.preventDefault();
   interacted();
   wheelTotal += delta;
@@ -217,8 +220,7 @@ canvas.addEventListener('pointermove', event => {
   cancelAnimationFrame(dragFrame);
   dragFrame = requestAnimationFrame(() => {
     if (!drag) return;
-    const atEdge = (selected === 0 && dx > 0) || (selected === cards().length - 1 && dx < 0);
-    const travel = atEdge ? dx * .22 : dx;
+    const travel = dx;
     canvas.style.setProperty('--drag-x', `${travel}px`);
     canvas.style.setProperty('--drag-y', `${travel * -.18}px`);
   });
