@@ -61,7 +61,8 @@ def main():
     items = []
     for photo in payload["pending"]:
         try:
-            raw = requests.get(photo["src"], timeout=60)
+            source = photo["src"] if photo["src"].startswith("http") else f"{SITE_URL}{photo['src']}"
+            raw = requests.get(source, timeout=60)
             raw.raise_for_status()
             image = Image.open(io.BytesIO(raw.content)).convert("RGB")
             tags, caption = tag_image(image, vocabulary, model, processor, device)
