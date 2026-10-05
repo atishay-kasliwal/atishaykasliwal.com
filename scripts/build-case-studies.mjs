@@ -1,3 +1,4 @@
+import { profileLinks } from "../src/profile-links.js";
 // Renders every project page to projects/<slug>/index.html as prerendered HTML. Also writes
 // public/sitemap.xml and the share-card sources in scripts/og/.
 // Runs from vite.config.js on every dev start and build; the generated files are not committed.
@@ -21,7 +22,7 @@ const PERSON_ENTITY = {
   jobTitle: "Software & AI Engineer",
   description:
     "Full-stack and AI engineer with 5+ years in production, building distributed systems, LLM products and the interfaces on top of them.",
-  sameAs: ["https://github.com/atishay-kasliwal", "https://www.linkedin.com/in/atishay-kasliwal"],
+  sameAs: profileLinks,
 };
 
 const escape = (value = "") =>
@@ -92,7 +93,7 @@ function structuredData(study, image) {
         ],
       },
       project,
-      study.isProfilePage ? PERSON_ENTITY : { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: `${SITE}/` },
+      study.isProfilePage ? PERSON_ENTITY : { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: `${SITE}/`, sameAs: profileLinks },
     ],
   };
 }

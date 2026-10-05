@@ -1,3 +1,4 @@
+import { profileLinks } from "../src/profile-links.js";
 // Renders every entry in src/experience-pages.js to experience/<slug>/index.html.
 // Same visual system as scripts/build-case-studies.mjs (same case-study.css, same
 // hero/tiles/thumbs markup), trimmed for a work/education entry: no stats-heavy
@@ -44,7 +45,7 @@ function structuredData(entry) {
           { "@type": "ListItem", position: 2, name: entry.name, item: url },
         ],
       },
-      { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: `${SITE}/` },
+      { "@type": "Person", "@id": PERSON, name: "Atishay Kasliwal", url: `${SITE}/`, sameAs: profileLinks },
     ],
   };
 }

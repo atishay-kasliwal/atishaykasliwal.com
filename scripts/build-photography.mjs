@@ -74,6 +74,7 @@ export async function buildPhotography() {
       <nav class="photography-socials" aria-label="Social links">
         <a href="https://github.com/atishay-kasliwal" target="_blank" rel="noopener noreferrer">GitHub ↗︎</a>
         <a href="https://www.linkedin.com/in/atishay-kasliwal" target="_blank" rel="noopener noreferrer">LinkedIn ↗︎</a>
+        <a href="https://www.instagram.com/atishay_kasliwal/" target="_blank" rel="noopener noreferrer">Instagram ↗︎</a>
       </nav>
     </header>
     <section class="photography-content" aria-labelledby="photography-title">
