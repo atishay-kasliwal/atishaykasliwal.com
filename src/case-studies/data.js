@@ -951,6 +951,221 @@ export const caseStudies = [
       body: "generate_data.py builds all 156 weeks with a seeded random generator, so TV's -11.9% ROI and email's +1,152% aren't a real company's numbers, they're what the model recovers when the true relationship is already known. The question is whether the method finds that answer, not the dollar figures.",
     },
   },
+  {
+    slug: "chaal-tech",
+    name: "Chaal.tech",
+    live: true,
+    started: "2026-10-26", // repo created
+    seo: {
+      title: "Chaal.tech — Teen Patti With No Sign-Up · Atishay Kasliwal",
+      description:
+        "How Atishay Kasliwal evolved Chaal.tech: a no-sign-up teen patti game with an authoritative Cloudflare Durable Object per room and eight rule sets.",
+      language: "JavaScript",
+    },
+    headline: "Create a room, share the link, start playing.",
+    headlineSoft: "The server holds the cards, so nobody has to trust a client.",
+    lede:
+      "Chaal.tech is a browser teen patti game that needs no account. I built on an open-source SvelteKit game and moved the rules to an authoritative server: one SQLite-backed Cloudflare Durable Object per room, native WebSockets, and confidential room state stored durably.",
+    spec: [
+      { label: "Stack", html: "<b>SvelteKit · Tailwind · DaisyUI</b> · Cloudflare Workers" },
+      {
+        label: "Status",
+        html: '<b>Live</b> · <a href="https://chaal.tech">chaal.tech <span class="arrow">↗︎</span></a>',
+      },
+    ],
+    stats: [
+      { value: "8", label: "teen patti rule sets" },
+      { value: "3", label: "extra games" },
+      { value: "0", label: "accounts needed" },
+    ],
+    windowStack: "SvelteKit · Cloudflare Durable Objects",
+    links: [{ label: "Open site", href: "https://chaal.tech" }],
+    media: {
+      video: "/projects/video/chaal.mp4",
+      items: [
+        {
+          label: "Overview",
+          src: "/projects/video/chaal-poster.webp",
+          thumb: "/projects/video/chaal-poster.webp",
+          alt: "Chaal.tech: the landing page with a fan of playing cards and the line Good cards. Better company.",
+          video: true,
+        },
+      ],
+    },
+    problem: {
+      title: "Playing with friends shouldn't start with a sign-up.",
+      body: "A quick game of teen patti usually means installing an app or creating an account, and a game whose rules run in the browser can't keep a hand confidential.",
+    },
+    solution: {
+      title: "A room per link, with the rules on the server.",
+      body: "Each room is its own Durable Object, so state is durable and isolated. Classic, Muflis, AK47, Joker, Lowest Joker, 999, 2 Card and 4 Card each have a server rules module, and poker, blackjack and rummy share the same room transport. Optional camera and audio use LiveKit, and the game stays playable without them.",
+    },
+    engineering: {
+      nodes: [
+        [
+          { name: "SvelteKit UI", detail: "Cloudflare Pages" },
+          { name: "WebSocket", detail: "native" },
+        ],
+        [
+          { name: "Room", detail: "Durable Object" },
+          { name: "Rules module", detail: "per game" },
+        ],
+      ],
+      note: "One Durable Object per room keeps confidential hands on the server and survives restarts.",
+    },
+    decisions: [
+      "<b>Authoritative server</b>: clients only send intents",
+      "<b>One Durable Object per room</b> with SQLite storage",
+      "<b>Rules modules</b> per variant, shared transport",
+      "<b>LiveKit media is optional</b>: the game works without it",
+    ],
+    note: {
+      strong: "No sign-up is a product decision, not a shortcut.",
+      soft: "A room link is the whole onboarding.",
+      body: "Players create a room, share the link and start playing. Room state lives in the Durable Object, so there is no account system to run.",
+    },
+  },
+  {
+    slug: "atriaa",
+    name: "Atriaa",
+    live: false,
+    started: "2026-10-20", // repo created
+    seo: {
+      title: "Atriaa — ER Waiting-Room Intelligence · Atishay Kasliwal",
+      description:
+        "How Atishay Kasliwal built Atriaa: a multi-agent hospital command center that flags ER patients whose readings worsen after triage.",
+      language: "Python",
+    },
+    headline: "Triage happens once. Atria keeps watching.",
+    headlineSoft: "It flags who is getting worse. A nurse decides what happens next.",
+    lede:
+      "Atriaa is a real-time hospital intelligence and attention-prioritization command center. Patients check in on their phone, nurses set priority and record re-checks, and Atria flags anyone whose readings worsen on every check. It never changes priority itself. All patients are synthetic and it is not a medical device.",
+    spec: [
+      { label: "Stack", html: "<b>Next.js · FastAPI</b> · Tiger Data (TimescaleDB) · Gemini" },
+      {
+        label: "Status",
+        html: '<b>Open source</b> · <a href="https://github.com/atishay-kasliwal/Atriaa">GitHub <span class="arrow">↗︎</span></a>',
+      },
+    ],
+    stats: [
+      { value: "3", label: "views: patient, nurse, front desk" },
+      { value: "8", label: "sample patients" },
+      { value: "0", label: "automatic priority changes" },
+    ],
+    windowStack: "Next.js · FastAPI · TimescaleDB",
+    links: [{ label: "View code", href: "https://github.com/atishay-kasliwal/Atriaa" }],
+    media: {
+      items: [
+        {
+          label: "Overview",
+          src: "/projects/video/atriaa-poster.webp",
+          thumb: "/projects/video/atriaa-poster.webp",
+          alt: "Atriaa: an ER waiting-room list with a red alert on a patient whose readings are worsening",
+        },
+      ],
+    },
+    problem: {
+      title: "A patient can get worse while waiting.",
+      body: "Triage assigns a priority at the door, but readings keep changing while people sit in the waiting room, and a busy nurse station can miss the trend.",
+    },
+    solution: {
+      title: "Watch the trend, leave the decision to the nurse.",
+      body: "Atria raises an alert when heart rate, SpO2 and pain worsen on every re-check, and puts that patient first on its attention list. The nurse acknowledges it and can raise priority. Ask Atria answers questions about the waiting room with Gemini, citing tickets, readings and times, and falls back to a labeled deterministic answer if the model fails or cites a number not in the evidence.",
+    },
+    engineering: {
+      nodes: [
+        [
+          { name: "Next.js app", detail: "patient · nurse" },
+          { name: "FastAPI", detail: "Atria API" },
+        ],
+        [
+          { name: "Postgres + Timescale", detail: "vitals hypertable" },
+          { name: "Gemini", detail: "Ask Atria" },
+        ],
+      ],
+      note: "The store can be swapped between in-memory (tests), Tiger and Supabase.",
+    },
+    decisions: [
+      "<b>Atria never changes priority</b>: it alerts, a nurse acts",
+      "<b>Alerts reopen</b> if a newer reading keeps worsening",
+      "<b>Grounded answers</b>: unsupported numbers trigger a labeled fallback",
+      "<b>Synthetic data only</b>, not a medical device",
+    ],
+    note: {
+      strong: "The model can explain, but it can't decide.",
+      soft: "Priority stays a human call.",
+      body: "Every alert and answer is tied to readings a nurse can check. The demo loads eight fictional patients and replays scripted re-checks so the trend is visible.",
+    },
+  },
+  {
+    slug: "medscan",
+    name: "Medscan",
+    live: false,
+    started: "2026-10-25", // repo created
+    seo: {
+      title: "Medscan — Health and Billing Answers From a QR Code · Atishay Kasliwal",
+      description:
+        "How Atishay Kasliwal built the Medscan proof of concept: fragmented health and billing data turned into answers and a QR-linked report.",
+      language: "Python",
+    },
+    headline: "How many visits, what I paid, what I still owe.",
+    headlineSoft: "Answered from connected records, with a QR code on the report.",
+    lede:
+      "Medscan is a proof of concept for connecting fragmented healthcare and billing data and turning it into answers for you or your family. A report carries a QR code that opens public knowledge search or authenticated, authorized Secure Help. It uses synthetic data only and is not a production healthcare system.",
+    spec: [
+      { label: "Stack", html: "<b>Python · PostgreSQL · Neo4j</b> · Expo · AWS Lambda" },
+      { label: "Status", html: "<b>Proof of concept</b> · private repository" },
+    ],
+    stats: [
+      { value: "4", label: "modules with their own schemas" },
+      { value: "2", label: "help paths: general and secure" },
+      { value: "0", label: "real patient records" },
+    ],
+    windowStack: "Python · PostgreSQL · Neo4j",
+    links: [],
+    media: {
+      items: [
+        {
+          label: "Overview",
+          src: "/projects/video/medscan-poster.webp",
+          thumb: "/projects/video/medscan-poster.webp",
+          alt: "Medscan: a report summary with a QR code showing visits, amount paid and amount owed",
+        },
+      ],
+    },
+    problem: {
+      title: "Health and billing records don't talk to each other.",
+      body: "The answer to a simple question, such as how many visits you had, what you paid and what you still owe, is spread across systems that never meet.",
+    },
+    solution: {
+      title: "One context layer over separate modules.",
+      body: "Health, Billing, Access and Reports each own a Postgres schema, and nothing reads another module's tables. The context layer reaches them over HTTP clients, and a derived Neo4j graph adds relationship context. General Help works from curated knowledge search, while Secure Help requires a verified identity and patient access.",
+    },
+    engineering: {
+      nodes: [
+        [
+          { name: "QR scanner", detail: "Expo" },
+          { name: "Context layer", detail: "intent routing" },
+        ],
+        [
+          { name: "Health · Billing", detail: "Postgres schemas" },
+          { name: "Graph worker", detail: "Neo4j projection" },
+        ],
+      ],
+      note: "Postgres stays authoritative. The graph is a replaceable projection, and general help never touches it.",
+    },
+    decisions: [
+      "<b>Module boundaries</b> enforced by tests",
+      "<b>Postgres is the source of truth</b>, Neo4j is derived",
+      "<b>Secure Help</b> needs identity and patient access",
+      "<b>Synthetic data only</b>, no AI dependency in the POC",
+    ],
+    note: {
+      strong: "A QR code is the doorway, not the permission.",
+      soft: "Private questions still need an authorized identity.",
+      body: "Scanning opens general help safely. Anything about a person's records goes through authentication and a patient-access check first.",
+    },
+  },
 ];
 
 export const additionalProjectPages = [

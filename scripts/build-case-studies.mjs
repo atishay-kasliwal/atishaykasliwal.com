@@ -53,12 +53,14 @@ function structuredData(study, image) {
       sameAs: study.links.filter(l => l.href.includes("github.com")).map(l => l.href),
     });
   } else {
+    // A private proof of concept has no public link, so it carries no url or repository.
+    const [link] = study.links;
     Object.assign(project, {
       "@type": study.schemaType ?? "SoftwareSourceCode",
-      url: study.links[0].href,
+      ...(link ? { url: link.href } : {}),
     });
     if (project["@type"] === "SoftwareSourceCode") {
-      project.codeRepository = study.links[0].href;
+      if (link) project.codeRepository = link.href;
       if (study.seo.language) project.programmingLanguage = study.seo.language;
     }
   }
@@ -246,7 +248,7 @@ ${study.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escap
               <div class="window-bar">
                 <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
                 <p class="window-title">${escape(study.name)}</p>
-                <div class="window-end"><span>${escape(study.windowStack)}</span><a class="pill" href="${escape(primary.href)}">${escape(primary.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a></div>
+                <div class="window-end"><span>${escape(study.windowStack)}</span>${primary ? `<a class="pill" href="${escape(primary.href)}">${escape(primary.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a>` : ""}</div>
               </div>
               <div class="screen" id="screen"${hasVideo ? ' tabindex="0" role="button" aria-label="Play the screen recording"' : ""}${first.video ? "" : ' data-no-video'}>
                 <img id="screen-img" src="${escape(first.src)}" alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />

@@ -2678,3 +2678,24 @@ html.scroll-story .scroll-cue {
   .carousel-controls { gap: 5px; }
   .carousel-controls button { width: 32px; height: 32px; font-size: 15px; }
 }
+
+/* Code-only cards: Chaal.tech, Atriaa, Medscan. */
+.ops-card-art { position: relative; width: 100%; height: 100%; overflow: hidden; color: #f1f1ee; }
+.ops-card-art.atriaa { background: #0b1418; }
+.ops-card-art.medscan { background: #f3f4f1; color: #1b2320; }
+.ops-card-head { position: absolute; z-index: 4; top: 6%; left: 5%; right: 5%; display: flex; align-items: center; justify-content: space-between; font: 1.65cqw var(--mono); letter-spacing: 0.06em; }
+.ops-card-head b { font: 650 3cqw var(--sans); letter-spacing: -0.05em; }
+.ops-card-head span { opacity: 0.7; }
+.ops-card-head span i { display: inline-block; width: 0.55cqw; height: 0.55cqw; margin-right: 0.5cqw; border-radius: 50%; background: #55d79e; box-shadow: 0 0 1cqw #55d79e88; }
+.ops-card-foot { position: absolute; left: 5%; right: 5%; bottom: 6%; display: flex; gap: 2.5cqw; font: 500 1.15cqw var(--mono); letter-spacing: 0.06em; opacity: 0.6; }
+.ops-card-queue { position: absolute; inset: 22% 5% 18%; display: grid; align-content: center; gap: 1.2cqw; }
+.ops-card-queue p { display: grid; grid-template-columns: 5cqw 1fr auto; align-items: center; gap: 1.4cqw; margin: 0; padding: 1.5cqw 1.8cqw; border: 0.12cqw solid #24343a; border-radius: 0.8cqw; background: #111e23; font: 1.5cqw var(--mono); }
+.ops-card-queue p b { font: 650 2.4cqw var(--sans); }
+.ops-card-queue p em { font-style: normal; color: #7c9a9f; }
+.ops-card-queue p.alert { border-color: #d6544b; background: #2a1517; }
+.ops-card-queue p.alert em { color: #ff8379; }
+.ops-card-report { position: absolute; inset: 24% 5% 20%; display: flex; align-items: center; gap: 4cqw; }
+.ops-card-qr { flex: none; width: 17cqw; height: 17cqw; background: conic-gradient(#1b2320 25%, #f3f4f1 0 50%, #1b2320 0 75%, #f3f4f1 0) 0 0 / 3.4cqw 3.4cqw; border: 1cqw solid #fff; outline: 0.15cqw solid #cfd3cc; }
+.ops-card-report small { display: block; font: 1.3cqw var(--mono); letter-spacing: 0.08em; color: #6a7570; }
+.ops-card-report strong { display: block; margin: 0.6cqw 0; font: 650 6cqw/1 var(--sans); letter-spacing: -0.06em; }
+.ops-card-report span { font: 1.55cqw var(--mono); color: #6a7570; }
