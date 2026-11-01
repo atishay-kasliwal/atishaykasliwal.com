@@ -192,6 +192,24 @@
     </image:image>
   </url>
   <url>
+    <loc>https://atishaykasliwal.com/projects/chaal-tech/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/chaal-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriaa/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/atriaa-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/medscan/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/medscan-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://atishaykasliwal.com/experience/stony-brook-research/</loc>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/stony-brook-research/quad.webp</image:loc>

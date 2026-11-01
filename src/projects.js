@@ -1,4 +1,4 @@
-// Eleven projects from github.com/atishay-kasliwal.
+// Fourteen projects from github.com/atishay-kasliwal.
 // `art` is the card and preview-window artwork: a screenshot for live products,
 // an HTML/CSS composition for code-only repos. `stack` sits in the preview window's
 // title bar; `url` adds an "Open site ↗︎" link, or "View code ↗︎" for a GitHub URL.
@@ -90,6 +90,28 @@ const raftArt = `
       <svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M50 18L24 44M50 18L76 44M24 44H76" /><circle cx="50" cy="18" r="1.2" /><circle cx="24" cy="44" r="1.2" /><circle cx="76" cy="44" r="1.2" /></svg>
     </div>
     <div class="raft-card-log"><span>04</span><b>PAYMENT_ISSUED · CLM-001</b><i>PAID · COMMITTED</i></div>
+  </div>`;
+
+const atriaaArt = `
+  <div class="ops-card-art atriaa">
+    <div class="ops-card-head"><b>Atria</b><span><i></i> WAITING ROOM</span></div>
+    <div class="ops-card-queue">
+      <p class="alert"><b>#6</b><span>Rising HR · SpO2 · pain</span><em>ALERT</em></p>
+      <p><b>#1</b><span>Stable on every re-check</span><em>P1</em></p>
+      <p><b>#2</b><span>Stable on every re-check</span><em>P2</em></p>
+      <p><b>#3</b><span>Re-check due</span><em>P3</em></p>
+    </div>
+    <div class="ops-card-foot"><span>SYNTHETIC PATIENTS</span><span>NEVER CHANGES PRIORITY</span></div>
+  </div>`;
+
+const medscanArt = `
+  <div class="ops-card-art medscan">
+    <div class="ops-card-head"><b>Medscan</b><span><i></i> POC · SYNTHETIC DATA</span></div>
+    <div class="ops-card-report">
+      <span class="ops-card-qr" aria-hidden="true"></span>
+      <div><small>YOUR YEAR IN CARE</small><strong>12 visits</strong><span>$840 paid · $120 owed</span></div>
+    </div>
+    <div class="ops-card-foot"><span>HEALTH</span><span>BILLING</span><span>ACCESS</span><span>GRAPH</span></div>
   </div>`;
 
 export const projects = [
@@ -269,5 +291,50 @@ export const projects = [
     description:
       "A replicated insurance event log built on Raft, with quorum writes, leader election, idempotent commands, durable storage, snapshots, and automatic failover.",
     art: raftArt,
+  },
+  {
+    name: "Chaal.tech",
+    url: "https://chaal.tech",
+    tag: "LIVE",
+    theme: "chaal",
+    caseStudy: "/projects/chaal-tech/",
+    year: 2026,
+    card: shot("cards/chaal.webp"),
+    video: "/projects/video/chaal.mp4",
+    poster: "/projects/video/chaal-poster.webp",
+    category: "Multiplayer game / Live",
+    stack: "SvelteKit · Cloudflare Durable Objects · WebSockets",
+    description:
+      "Teen patti in the browser with no sign-up: create a room, share the link, and play. An authoritative server per room, eight Classic and variant rule sets, plus poker, blackjack and rummy.",
+    art: shot("screens/chaal.webp"),
+  },
+  {
+    name: "Atriaa",
+    url: "https://github.com/atishay-kasliwal/Atriaa",
+    tag: "CODE",
+    theme: "atriaa",
+    caseStudy: "/projects/atriaa/",
+    year: 2026,
+    card: atriaaArt,
+    poster: "/projects/video/atriaa-poster.webp",
+    category: "Healthcare AI / Open source",
+    stack: "Next.js · FastAPI · TimescaleDB · Gemini",
+    description:
+      "A multi-agent hospital intelligence command center that keeps watching ER patients after triage, flags anyone whose readings worsen on every re-check, and leaves priority decisions to the nurse.",
+    art: atriaaArt,
+  },
+  {
+    name: "Medscan",
+    tag: "POC",
+    theme: "medscan",
+    caseStudy: "/projects/medscan/",
+    year: 2026,
+    card: medscanArt,
+    poster: "/projects/video/medscan-poster.webp",
+    category: "Healthcare data / Proof of concept",
+    stack: "Python · PostgreSQL · Neo4j · Expo",
+    description:
+      "Connects fragmented health and billing data into answers (visits, what you paid, what you still owe) and a report with a QR code that opens sourced help, on synthetic data only.",
+    art: medscanArt,
   },
 ];
