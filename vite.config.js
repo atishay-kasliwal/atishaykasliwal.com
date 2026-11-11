@@ -7,6 +7,28 @@ import { buildPhotography } from "./scripts/build-photography.mjs";
 import { renderPhotographySeo } from "./scripts/photography-seo.mjs";
 import { buildExperiencePages } from "./scripts/build-experience-pages.mjs";
 
+// Google Analytics 4. Runs only on the production host, so local development, Lighthouse CI and
+// Pages preview deployments are not counted, and loads gtag.js once the page is idle so it stays
+// off the critical rendering path.
+const GA_MEASUREMENT_ID = "G-RX5HTCRR3X";
+const analyticsSnippet = `(function (w, d) {
+  if (!/^(www\\.)?atishaykasliwal\\.com$/.test(location.hostname)) return;
+  w.dataLayer = w.dataLayer || [];
+  w.gtag = function () { w.dataLayer.push(arguments); };
+  w.gtag("js", new Date());
+  w.gtag("config", "${GA_MEASUREMENT_ID}");
+  function load() {
+    var script = d.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}";
+    d.head.appendChild(script);
+  }
+  w.addEventListener("load", function () {
+    if ("requestIdleCallback" in w) w.requestIdleCallback(load, { timeout: 3000 });
+    else setTimeout(load, 1500);
+  }, { once: true });
+})(window, document);`;
+
 // Appends the experience/education pages' <url> entries to the sitemap that
 // buildCaseStudies() already wrote, rather than each script owning its own file.
 function mergeExperienceSitemap(entries) {
@@ -35,6 +57,15 @@ export default defineConfig(async () => {
       },
     },
     plugins: [
+      {
+        // Every public page gets the analytics tag; the private photography admin does not.
+        name: "google-analytics",
+        apply: "build",
+        transformIndexHtml(html, ctx) {
+          if (ctx.filename.includes(`${path.sep}photography-admin${path.sep}`)) return html;
+          return [{ tag: "script", children: analyticsSnippet, injectTo: "head" }];
+        },
+      },
       {
         // The admin entry is emitted at its source path; move it to the private route.
         name: "photography-admin-route",

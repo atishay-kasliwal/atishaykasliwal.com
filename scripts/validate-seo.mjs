@@ -202,6 +202,11 @@ for (const record of records) {
   assert.ok(!/href=["']mailto:/i.test(unprotected), `${record.file}: wrap mailto links in <!--email_off--> ... <!--/email_off-->`);
 }
 
+// The Google Analytics tag was lost once in a rebuild without anyone noticing.
+for (const record of indexable) {
+  assert.ok(fs.readFileSync(record.file, "utf8").includes("G-RX5HTCRR3X"), `${record.file}: missing the Google Analytics tag`);
+}
+
 for (const markup of projects.flatMap(project => [project.card, project.art]).filter(value => typeof value === "string")) {
   const fragment = parseFragment(markup);
   const artworkImages = [];
