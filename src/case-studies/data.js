@@ -401,7 +401,7 @@ export const caseStudies = [
     live: false,
     started: "2024-05-07", // first commit: "first microservice: twitter to kafka service"
     seo: {
-      title: "Insurance Platform — Event-Driven Kafka Microservices · Atishay Kasliwal",
+      title: "Insurance Platform — Kafka Microservices · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal turned a Kafka streaming exercise into an event-driven insurance platform with CQRS, Elasticsearch and a rate-limited gateway.",
       language: "Java",
@@ -576,7 +576,7 @@ export const caseStudies = [
       },
       {
         label: "Email",
-        html: '<a href="mailto:katishay@gmail.com">katishay@gmail.com</a>',
+        html: '<!--email_off--><a href="mailto:katishay@gmail.com">katishay@gmail.com</a><!--/email_off-->',
       },
     ],
     stats: [],
@@ -635,7 +635,7 @@ export const caseStudies = [
     live: false,
     started: "2026-08-10", // first commit: "Atriveo Reel: vertical comparison reels, self-hosted"
     seo: {
-      title: "Atriveo Reel — Self-Hosted Comparison Videos · Atishay Kasliwal",
+      title: "Atriveo Reel — Vertical Comparison Videos · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriveo Reel: paste two clips, pick two moments, and get a 1080×1920 comparison video rendered by a worker that outlives the tab.",
       language: "TypeScript",
@@ -787,7 +787,7 @@ export const caseStudies = [
     live: false,
     started: "2026-08-06", // first commit: "Phase 1: environment setup, PASS/single-crop agents, crop profitability measurement"
     seo: {
-      title: "Kaggriculture — A Farming-Game Agent, Built in Phases · Atishay Kasliwal",
+      title: "Kaggriculture — A Farming-Game Agent · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built a Kaggle agent for a two-player farming game: a simulator matching the real engine, then a planner that searches ahead through it.",
       language: "Python",
@@ -1103,7 +1103,7 @@ export const caseStudies = [
     live: false,
     started: "2026-10-25", // repo created
     seo: {
-      title: "Medscan — Health and Billing Answers From a QR Code · Atishay Kasliwal",
+      title: "Medscan — Health and Billing Answers · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built the Medscan proof of concept: fragmented health and billing data turned into answers and a QR-linked report.",
       language: "Python",

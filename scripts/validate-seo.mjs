@@ -195,6 +195,13 @@ for (const record of indexable) {
   }
 }
 
+// Cloudflare Email Obfuscation rewrites bare mailto links to /cdn-cgi/l/email-protection, which
+// returns 404 to crawlers and is reported as a broken internal link.
+for (const record of records) {
+  const unprotected = fs.readFileSync(record.file, "utf8").replace(/<!--email_off-->[\s\S]*?<!--\/email_off-->/g, "");
+  assert.ok(!/href=["']mailto:/i.test(unprotected), `${record.file}: wrap mailto links in <!--email_off--> ... <!--/email_off-->`);
+}
+
 for (const markup of projects.flatMap(project => [project.card, project.art]).filter(value => typeof value === "string")) {
   const fragment = parseFragment(markup);
   const artworkImages = [];

@@ -1,13 +1,14 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./dist",
+      "startServerCommand": "node scripts/lhci-server.mjs",
+      "startServerReadyPattern": "listening",
       "url": [
-        "http://localhost/",
-        "http://localhost/projects/atriveo-tracker/",
-        "http://localhost/projects/insurance-platform/",
-        "http://localhost/projects/fedtalk/",
-        "http://localhost/experience/stony-brook-research/"
+        "http://127.0.0.1:4318/",
+        "http://127.0.0.1:4318/projects/atriveo-tracker/",
+        "http://127.0.0.1:4318/projects/insurance-platform/",
+        "http://127.0.0.1:4318/projects/fedtalk/",
+        "http://127.0.0.1:4318/experience/stony-brook-research/"
       ],
       "numberOfRuns": 3
     },

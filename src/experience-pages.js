@@ -9,7 +9,7 @@ export const experiencePages = [
     kicker: "Work",
     started: "2024-11-01",
     seo: {
-      title: "Software Engineer, Research — Stony Brook University · Atishay Kasliwal",
+      title: "Software Engineer, Research — Stony Brook · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's research role at Stony Brook University: event-driven research infrastructure, production AI services, and real-time analytical interfaces.",
     },
@@ -279,7 +279,7 @@ export const experiencePages = [
     kicker: "Education",
     started: "2024-08-01",
     seo: {
-      title: "M.S. in Data Science — Stony Brook University · Atishay Kasliwal",
+      title: "M.S. in Data Science — Stony Brook · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's M.S. in Data Science at Stony Brook University, 2024 to 2026: statistical learning, big data algorithms, data management, and a semester on natural language processing.",
     },
@@ -336,7 +336,7 @@ export const experiencePages = [
     kicker: "Education",
     started: "2018-05-01",
     seo: {
-      title: "B.Tech, Computer Science — Symbiosis University · Atishay Kasliwal",
+      title: "B.Tech CS — Symbiosis University · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's B.Tech in Computer Science and Information Technology at Symbiosis University, 2018 to 2022.",
     },
