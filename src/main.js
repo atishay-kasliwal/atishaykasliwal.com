@@ -9,6 +9,11 @@ import { setupInfoSheet } from "./info-sheet.js";
 import { setupScrollStory } from "./scroll-story.js";
 import { createProjectCarousel } from "./project-carousel.js";
 import { setupSectionAccordion } from "./section-accordion.js";
+import { setupClockTimes, setupGithubFeed, setupRelativeTimes } from "./github-activity.js";
+
+setupRelativeTimes();
+setupClockTimes();
+setupGithubFeed();
 
 const projectPreview = createProjectPreview(projects, document.querySelector("#carousel-viewport"));
 const carousels = [...document.querySelectorAll(".work")].map(work =>
@@ -52,20 +57,5 @@ setupScrollStory({
   onScroll: delta => carousels.forEach(carousel => carousel.onScroll(delta)),
 });
 
-// Shows the time where Atishay is, not the visitor's local time.
-const time = document.querySelector("#local-time");
-const newYorkTime = new Intl.DateTimeFormat("en-GB", {
-  timeZone: "America/New_York",
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: false,
-});
-function updateTime() {
-  const now = new Date();
-  time.dateTime = now.toISOString();
-  time.textContent = newYorkTime.format(now);
-}
-updateTime();
-setInterval(updateTime, 10000);
 setupInfoSheet();
 startIntro();

@@ -4,6 +4,7 @@ Notes on where content lives and how generated assets are rebuilt. See the [READ
 
 ## Content
 
+- The homepage GitHub block (latest push, 30-day activity, PRs merged upstream, and the recent-activity panel) is rendered from `src/github-activity.json`. `npm run github:activity` refreshes it using `GITHUB_TOKEN` or the GitHub CLI's login; the deploy workflow runs it daily and on every push, keeping the committed snapshot if GitHub is unavailable. Rendering is in `src/github-activity.js`; company names for organisations are set in `scripts/fetch-github-activity.mjs`.
 - `src/projects.js` contains the featured projects: links, stacks, descriptions, and artwork. Live-product screenshots are in `public/projects/`.
 - Carousel card images are in `public/projects/cards/`. The preview window plays a looping video from `public/projects/video/`: a scroll recording for live sites (Tracker, Bio, Job Search) and an animated HTML scene from `scripts/scenes/` for the rest (Insurance, Cortex, FedTalk). To re-record them after a site or scene changes:
 

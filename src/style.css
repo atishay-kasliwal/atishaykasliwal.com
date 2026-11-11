@@ -84,8 +84,9 @@ h3 {
 }
 /* Columns size to their text and spread evenly, so the last one ends at the right edge. */
 .masthead {
+  /* Two compact blocks at the two edges, the same distance from each: name left, GitHub right. */
   display: grid;
-  grid-template-columns: repeat(4, max-content);
+  grid-template-columns: repeat(2, max-content);
   justify-content: space-between;
   gap: 28px;
   padding: 0 var(--gutter);
@@ -145,32 +146,56 @@ h3 {
   color: var(--soft);
   font-weight: 400;
 }
-/* Small headshot beside the two lines under the name, as on Elliott Mangham's site. */
+/* Name block, mirroring the GitHub block on the right: the photo stands in for the label dot and
+   spans both rows; the name and availability share the label row, the role sits beneath. */
 .info-column.has-photo {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(0, 1fr);
   column-gap: 11px;
   align-content: start;
 }
 .info-column.has-photo > .eyebrow {
-  grid-column: 1 / -1;
+  grid-column: 2;
+  grid-row: 1;
+}
+.info-column.has-photo > .eyebrow:before {
+  display: none;
+}
+.info-column.has-photo > .lead {
+  grid-column: 2 / -1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  grid-row: 2;
+  white-space: nowrap;
+}
+/* "Open to work" follows the name on the label row. */
+.info-column.has-photo > .masthead-status {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: start;
+  align-self: start;
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #a5b8a1;
 }
 /* The whole photo, uncropped, at its own 718×929 shape. */
 .masthead-photo {
-  grid-row: 2 / span 2;
+  grid-column: 1;
+  grid-row: 1 / span 2;
   align-self: center;
   width: 34px;
   height: 44px;
   border-radius: 4px;
   object-fit: cover;
   box-shadow: 0 0 0 1px #2c2c29;
-}
-.availability {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-left: 8px;
-  color: #a5b8a1;
 }
 .status-dot {
   display: inline-block;
@@ -1707,10 +1732,7 @@ html.scroll-story .scroll-cue {
   }
 }
 @media (max-width: 960px) and (min-width: 701px) {
-  /* Too narrow for four columns in a row: two by two. */
   .masthead {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: normal;
     gap: 18px 28px;
   }
   .preview-info {
@@ -1765,6 +1787,10 @@ html.scroll-story .scroll-cue {
     color: var(--ink);
   }
   .masthead h1.eyebrow:before {
+    display: none;
+  }
+  /* The phone top bar already has the "Open to work" pill. */
+  .info-column.has-photo > .masthead-status {
     display: none;
   }
   /* Phones keep the slim top bar; the photo is in the details sheet instead. */
@@ -2172,12 +2198,12 @@ html.scroll-story .scroll-cue {
   }
   .masthead {
     grid-column: 1/-1;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .eyebrow {
     margin-bottom: 6px;
   }
-  .info-column > :not(.eyebrow, .lead) {
+  .info-column > :not(.eyebrow, .lead, .github-trigger, .github-feed) {
     display: none;
   }
   .intro {
@@ -2507,7 +2533,6 @@ html.scroll-story .scroll-cue {
 .sheet-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .sheet-links a:nth-child(odd) { border-left: 0; }
 .sheet-links a:nth-child(n + 3) { border-top: 1px solid #2c2c29; }
-.contact .links { flex-wrap: wrap; }
 .sheet-links a:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
 /* Compact, consistently sized social marks with full keyboard and touch targets. */
@@ -2525,6 +2550,93 @@ html.scroll-story .scroll-cue {
   .photography-socials.social-logos { gap: 0; }
   .photography-socials.social-logos a.social-logo { width: 32px; min-width: 32px; }
 }
+
+/* GitHub column: one button. The logo replaces the label dot, the latest push and its time share
+   the label line, and the 30-day graph stretches to the block's full width beneath. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.info-column.github { position: relative; }
+.github-trigger { display: grid; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.github-trigger:focus-visible { outline: 1px solid var(--muted); outline-offset: 6px; border-radius: 4px; }
+.github-eyebrow { white-space: nowrap; min-width: 0; }
+.github-eyebrow:before { display: none; }
+.github-mark { display: block; flex: none; width: 12px; height: 12px; color: var(--soft); }
+.github-push { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--soft); }
+.github-sep { flex: none; color: var(--muted); }
+.info-column .github-eyebrow > time { flex: none; font: inherit; letter-spacing: inherit; color: var(--muted); }
+.github-totals { display: flex; align-items: center; gap: 10px; min-height: 21px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+/* flex-basis 0 keeps the graph out of the column's width, so it fills whatever the label line sets. */
+.github-spark { display: flex; align-items: flex-end; gap: 2px; flex: 1 1 0; min-width: 72px; height: 13px; }
+.github-spark i { flex: 1; height: calc(var(--h) * 100%); border-radius: 0; background: color-mix(in srgb, var(--soft) calc(28% + var(--level) * 52%), transparent); transform-origin: bottom; }
+.github-spark .is-current { background: var(--ink); box-shadow: 0 0 6px #efefec55; }
+.github-merged { display: inline-flex; align-items: center; gap: 6px; color: var(--soft); }
+.github-merged-icon { width: 12px; height: 12px; fill: var(--accent); }
+.github-chevron { width: 8px; height: 5px; flex: none; color: var(--muted); transition: transform 0.2s ease; }
+.github-trigger:hover .github-spark i:not(.is-current) { background: color-mix(in srgb, var(--soft) calc(45% + var(--level) * 45%), transparent); }
+.github-trigger:hover .github-push,
+.github-trigger:hover .github-totals { color: var(--ink); }
+.github-trigger[aria-expanded="true"] .github-chevron { transform: rotate(180deg); color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.has-intro) .github-spark i { animation: github-bar-rise 0.7s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * 22ms) both; }
+  html:not(.has-intro) .github-spark .is-current { animation: github-bar-rise 0.7s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * 22ms) both, github-today 2.6s ease-in-out 1.4s infinite; }
+  .github-feed:not([hidden]) { animation: github-feed-in 0.18s ease-out; }
+}
+@keyframes github-bar-rise { from { transform: scaleY(0); } }
+@keyframes github-today { 50% { opacity: 0.35; } }
+@keyframes github-feed-in { from { opacity: 0; transform: translateY(-6px); } }
+
+/* History panel: a small notification tray that stays out of the way of the page. */
+.github-feed { position: absolute; top: calc(100% + 12px); right: 0; z-index: 60; width: 320px; display: flex; flex-direction: column; background: #151514f2; border: 1px solid #2a2a27; border-radius: 12px; box-shadow: 0 16px 40px #0009; backdrop-filter: blur(12px); overflow: hidden; }
+.github-feed[hidden] { display: none; }
+.github-feed-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 14px; border-bottom: 1px solid #242421; }
+.info-column .github-feed-head p { margin: 0; font: 9.5px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; color: var(--muted); }
+.info-column .github-feed-head .eyebrow { gap: 7px; color: var(--soft); }
+.info-column .github-feed-head .eyebrow:before { width: 5px; height: 5px; }
+/* The list scrolls inside the tray; each event is its own small card. */
+.github-feed-list { display: grid; gap: 6px; max-height: 296px; margin: 0; padding: 8px; list-style: none; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #3a3a36 transparent; }
+.github-feed-list:focus-visible { outline: 1px solid var(--muted); outline-offset: -1px; }
+.github-event a { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; background: #1b1b19; border: 1px solid #262623; border-radius: 8px; transition: border-color 0.15s, background 0.15s; }
+.github-event a:hover,
+.github-event a:focus-visible { background: #20201e; border-color: #3a3a36; outline: none; }
+.github-event-logo { width: 24px; height: 24px; border-radius: 6px; background: #262623; box-shadow: 0 0 0 1px #ffffff12; object-fit: cover; }
+.github-event-body { display: grid; gap: 3px; min-width: 0; }
+.info-column .github-event-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; line-height: 1.4; color: var(--ink); }
+.info-column .github-event-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 9.5px/1.4 var(--mono); color: var(--muted); }
+.github-event-kind { display: inline-flex; align-items: center; gap: 5px; vertical-align: top; text-transform: uppercase; letter-spacing: 0.08em; color: var(--soft); }
+.github-event-icon { width: 11px; height: 11px; flex: none; fill: var(--muted); }
+.is-merged .github-event-icon { fill: var(--accent); }
+.is-opened .github-event-icon,
+.is-issue .github-event-icon { fill: #a5b8a1; }
+.github-event-when { display: grid; justify-items: end; gap: 3px; font: 9.5px/1.4 var(--mono); white-space: nowrap; }
+.info-column .github-event-when time { font: inherit; }
+.info-column .github-event-when [data-relative] { color: var(--soft); }
+.info-column .github-event-when [data-clock] { color: #6b6b66; }
+.github-slash { margin-inline: 0.15em; color: var(--muted); }
+.github-push-logo { width: 13px; height: 13px; margin: 0 6px 0 4px; border-radius: 3px; vertical-align: -2px; box-shadow: 0 0 0 1px #ffffff14; }
+.github-feed-foot { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-top: 1px solid #242421; }
+.info-column .github-feed-foot a { font: 9.5px/1.4 var(--mono); letter-spacing: 0.04em; color: var(--muted); }
+.info-column .github-feed-foot a:hover { color: var(--ink); }
+.github-feed-foot .arrow { color: var(--accent); }
+
+/* The phone sheet uses the same data as plain text links. */
+.sheet-facts .github-spark { display: none; }
+
+/* GitHub Sponsors button: GitHub's bordered button and pink heart (Octicon heart, © GitHub, Inc.,
+   MIT License), set in the site's mono type. */
+.sponsor-button { display: inline-flex; align-items: center; gap: 7px; min-height: 28px; padding: 0 11px; border: 1px solid #34342f; border-radius: 6px; background: #1a1a18; font: 500 10.5px/1 var(--mono); letter-spacing: 0.04em; color: var(--soft); transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.sponsor-button svg { width: 13px; height: 13px; flex: none; fill: #db61a2; transition: transform 0.2s ease; }
+.sponsor-button:hover { background: #222220; border-color: #4a4a44; color: var(--ink); }
+.sponsor-button:hover svg { transform: scale(1.12); }
+.sponsor-button:focus-visible { outline: 1px solid var(--muted); outline-offset: 2px; }
+
+/* Email and social links sit in the footer, between the copyright and the sponsor button. */
+.site-footer { align-items: center; padding-block: 6px max(8px, env(safe-area-inset-bottom)); }
+.footer-socials.social-logos { gap: 0; }
+.site-footer .social-logos a.social-logo { width: 28px; min-width: 28px; height: 28px; min-height: 28px; color: #848480; }
+.site-footer .social-logos .social-logo svg { width: 13px; height: 13px; }
+.site-footer .social-logos .resume-link { min-height: 28px; margin-left: 6px; padding-inline: 6px; font: inherit; color: #848480; }
+.site-footer .social-logos .resume-link:hover,
+.site-footer .footer-email:hover { color: var(--ink); }
+.site-footer .footer-email { display: inline-flex; align-items: center; min-height: 28px; margin-right: 10px; font: inherit; color: #b6b5ae; }
 
 /* Compact phone carousel controls. */
 @media (max-width: 700px) {

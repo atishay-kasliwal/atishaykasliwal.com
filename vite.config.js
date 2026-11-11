@@ -91,6 +91,24 @@ export default defineConfig(async () => {
         },
       },
       {
+        // GitHub status lines from the committed snapshot, so the build never calls GitHub.
+        name: "github-activity",
+        transformIndexHtml: {
+          order: "pre",
+          async handler(html) {
+            if (!html.includes("<!-- github:column -->")) return html;
+            const stamp = Date.now();
+            const { renderGithubColumn, renderGithubFact } = await import(
+              `${pathToFileURL(path.resolve("src/github-activity.js")).href}?t=${stamp}`
+            );
+            const activity = JSON.parse(fs.readFileSync(path.resolve("src/github-activity.json"), "utf8"));
+            return html
+              .replace("<!-- github:column -->", renderGithubColumn(activity))
+              .replace("<!-- github:fact -->", renderGithubFact(activity));
+          },
+        },
+      },
+      {
         // Prerender the work and experience carousels so their cards, and the links to
         // every project and experience page, are in the homepage HTML before JavaScript.
         name: "prerender-carousels",
@@ -131,6 +149,7 @@ export default defineConfig(async () => {
             path.resolve("src/projects.js"),
             path.resolve("src/experience.js"),
             path.resolve("index.html"),
+            path.resolve("src/github-activity.json"),
           ];
           server.watcher.add(data);
           server.watcher.on("change", async file => {

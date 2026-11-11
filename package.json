@@ -14,7 +14,8 @@
     "lhci": "npx --yes @lhci/cli@0.15.1 autorun",
     "images:responsive": "node scripts/generate-responsive-thumbnails.mjs",
     "images:photography": "node scripts/generate-photography-images.mjs",
-    "test:photography": "node --test \"tests/photography/*.test.mjs\""
+    "test:photography": "node --test \"tests/photography/*.test.mjs\"",
+    "github:activity": "node scripts/fetch-github-activity.mjs"
   },
   "devDependencies": {
     "fast-xml-parser": "^5.11.1",

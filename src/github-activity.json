@@ -1,0 +1,547 @@
+{
+  "login": "atishay-kasliwal",
+  "profileUrl": "https://github.com/atishay-kasliwal",
+  "fetchedAt": "2026-11-11T22:42:02.514Z",
+  "lastPush": {
+    "repo": "atishay-kasliwal/atishaykasliwal.com",
+    "url": "https://github.com/atishay-kasliwal/atishaykasliwal.com",
+    "at": "2026-11-11T22:40:58Z"
+  },
+  "recent": [
+    {
+      "kind": "pushed",
+      "repo": "atishay-kasliwal/atishaykasliwal.com",
+      "url": "https://github.com/atishay-kasliwal/atishaykasliwal.com",
+      "at": "2026-11-11T22:40:58Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "dsx-ai-factory/nvkr",
+      "url": "https://github.com/dsx-ai-factory/nvkr",
+      "at": "2026-11-11T21:35:44Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "mezmo/aura",
+      "number": 866,
+      "title": "fix(examples): build math-mcp at the upstream median and zero-division fix",
+      "url": "https://github.com/mezmo/aura/pull/866#issuecomment-6807526964",
+      "at": "2026-11-11T21:32:26Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "mezmo/aura",
+      "url": "https://github.com/mezmo/aura",
+      "at": "2026-11-11T21:32:05Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "kiali/kiali",
+      "number": 6113,
+      "title": "server.port also sets the pod listening port ",
+      "url": "https://github.com/kiali/kiali/issues/6113#issuecomment-6806996577",
+      "at": "2026-11-11T21:04:21Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "kiali/kiali",
+      "number": 10523,
+      "title": "Confirm revoked access before tearing down a cluster cache",
+      "url": "https://github.com/kiali/kiali/pull/10523#issuecomment-6806970168",
+      "at": "2026-11-11T21:02:56Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "kiali/kiali",
+      "url": "https://github.com/kiali/kiali",
+      "at": "2026-11-11T21:02:55Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "EthanHenrickson/math-mcp",
+      "number": 9,
+      "title": "Fix median sorting as strings and report division by zero as an error",
+      "url": "https://github.com/EthanHenrickson/math-mcp/pull/9",
+      "at": "2026-11-11T17:29:19Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvke",
+      "number": 2263,
+      "title": "[Bug]: `UpdateNodeConditions` writes the node row and re-enqueues the node when nothing changed",
+      "url": "https://github.com/dsx-ai-factory/nvke/issues/2263#issuecomment-6801622912",
+      "at": "2026-11-11T16:42:04Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "podman-desktop/podman-desktop",
+      "number": 20152,
+      "title": "chore(lint): flag dialogs configured with more than three buttons",
+      "url": "https://github.com/podman-desktop/podman-desktop/pull/20152#issuecomment-6801436524",
+      "at": "2026-11-11T16:33:59Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "podman-desktop/podman-desktop",
+      "url": "https://github.com/podman-desktop/podman-desktop",
+      "at": "2026-11-11T16:33:49Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 385,
+      "title": "[Feature]: Expose object-publication verification through CLI and SDK",
+      "url": "https://github.com/dsx-ai-factory/nvkr/issues/385#issuecomment-6800843171",
+      "at": "2026-11-11T16:08:14Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 482,
+      "title": "docs(adr-26): gate the combined-Definition cutover on output equivalence",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/482#issuecomment-6800152741",
+      "at": "2026-11-11T15:38:36Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 481,
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/481#discussion_r4539909295",
+      "at": "2026-11-11T15:38:32Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 482,
+      "title": "docs(adr-26): gate the combined-Definition cutover on output equivalence",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/482",
+      "at": "2026-11-11T15:25:48Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 409,
+      "title": "docs(adr-26): gate the combined-Definition cutover on output equivalence, not a fixed count",
+      "url": "https://github.com/dsx-ai-factory/nvkr/issues/409#issuecomment-6799655410",
+      "at": "2026-11-11T15:17:23Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 481,
+      "title": "feat(release): compare two release inventories with release diff",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/481",
+      "at": "2026-11-11T14:48:12Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "atishay-kasliwal/atishay-kasliwal",
+      "url": "https://github.com/atishay-kasliwal/atishay-kasliwal",
+      "at": "2026-11-11T05:16:17Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 470,
+      "title": "feat(definition): add definition init for starter executable Definitions",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/470",
+      "at": "2026-11-11T02:30:25Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 469,
+      "title": "feat(release): filter release browse by kind and platform",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/469",
+      "at": "2026-11-11T02:14:40Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 470,
+      "title": "feat(definition): add definition init for starter executable Definitions",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/470#issuecomment-6784256088",
+      "at": "2026-11-11T01:27:27Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 469,
+      "title": "feat(release): filter release browse by kind and platform",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/469#issuecomment-6783812377",
+      "at": "2026-11-11T01:02:49Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "dsx-ai-factory/nvke",
+      "url": "https://github.com/dsx-ai-factory/nvke",
+      "at": "2026-11-11T01:02:42Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "redhat-developer/mapt",
+      "url": "https://github.com/redhat-developer/mapt",
+      "at": "2026-11-11T00:39:51Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "EthanHenrickson/math-mcp",
+      "url": "https://github.com/EthanHenrickson/math-mcp",
+      "at": "2026-11-11T00:37:43Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "numaproj/numaflow",
+      "number": 3761,
+      "title": "feat: expose per-edge watermark as a pipeline daemon metric",
+      "url": "https://github.com/numaproj/numaflow/pull/3761#issuecomment-6782828320",
+      "at": "2026-11-11T00:06:08Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "redhat-developer/mapt",
+      "number": 967,
+      "title": "fix(runners): use the target's platform for the runner setup",
+      "url": "https://github.com/redhat-developer/mapt/pull/967",
+      "at": "2026-11-11T00:05:18Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "podman-desktop/podman-desktop",
+      "number": 20152,
+      "title": "chore(lint): flag dialogs configured with more than three buttons",
+      "url": "https://github.com/podman-desktop/podman-desktop/pull/20152",
+      "at": "2026-11-11T00:02:11Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "numaproj/numaflow",
+      "url": "https://github.com/numaproj/numaflow",
+      "at": "2026-11-10T23:43:00Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "cockpit-project/cockpit",
+      "number": 23924,
+      "title": "Fix two browser console warnings: unload listeners and the terminal theme select",
+      "url": "https://github.com/cockpit-project/cockpit/pull/23924",
+      "at": "2026-11-10T23:14:03Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "cockpit-project/cockpit",
+      "url": "https://github.com/cockpit-project/cockpit",
+      "at": "2026-11-10T23:14:01Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "redhat-developer/mapt",
+      "number": 966,
+      "title": "feat(gitlab): pass an egress proxy to the runner's jobs",
+      "url": "https://github.com/redhat-developer/mapt/pull/966",
+      "at": "2026-11-10T23:01:59Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 390,
+      "title": "Create a starter executable Definition from existing catalog components",
+      "url": "https://github.com/dsx-ai-factory/nvkr/issues/390#issuecomment-6781546262",
+      "at": "2026-11-10T22:54:23Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "cockpit-project/cockpit",
+      "number": 23865,
+      "title": "Errors in browser console s/b fixed...",
+      "url": "https://github.com/cockpit-project/cockpit/issues/23865#issuecomment-6781440217",
+      "at": "2026-11-10T22:48:34Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "redhat-developer/mapt",
+      "number": 954,
+      "title": "[bug] ibm-power: job containers run at MTU 1500 on a 1450 network",
+      "url": "https://github.com/redhat-developer/mapt/issues/954#issuecomment-6781439883",
+      "at": "2026-11-10T22:48:33Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "redhat-developer/mapt",
+      "number": 953,
+      "title": "[enhancement] glrunner: allow a proxy configuration for job containers",
+      "url": "https://github.com/redhat-developer/mapt/issues/953#issuecomment-6781439505",
+      "at": "2026-11-10T22:48:32Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "mezmo/aura",
+      "number": 904,
+      "title": "fix(orchestration): write result artifacts without the persistence lock",
+      "url": "https://github.com/mezmo/aura/pull/904",
+      "at": "2026-11-10T22:44:35Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "podman-desktop/podman-desktop",
+      "number": 20128,
+      "title": "feat(welcome): balance the extension grid and make the cards more compact ",
+      "url": "https://github.com/podman-desktop/podman-desktop/pull/20128#issuecomment-6781302740",
+      "at": "2026-11-10T22:41:58Z"
+    },
+    {
+      "kind": "replied",
+      "repo": "kiali/kiali",
+      "number": 10465,
+      "title": "Add 'since' and 'to' parameters to the get_logs tool",
+      "url": "https://github.com/kiali/kiali/issues/10465#issuecomment-6780435817",
+      "at": "2026-11-10T22:01:04Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "mezmo/aura",
+      "number": 903,
+      "title": "doc(orchestration): say what result_preview is, not how it is built",
+      "url": "https://github.com/mezmo/aura/pull/903",
+      "at": "2026-11-10T21:49:10Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "mezmo/aura",
+      "number": 902,
+      "title": "fix(orchestration): keep the first attempt's answer on a blank retry",
+      "url": "https://github.com/mezmo/aura/pull/902",
+      "at": "2026-11-10T21:47:20Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "atishay-kasliwal/atriveo-app",
+      "url": "https://github.com/atishay-kasliwal/atriveo-app",
+      "at": "2026-11-10T18:47:18Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "mezmo/aura",
+      "number": 888,
+      "title": "fix(orchestration): keep a long result without a memory_dir",
+      "url": "https://github.com/mezmo/aura/pull/888",
+      "at": "2026-11-10T18:35:07Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "redhat-developer/mapt",
+      "number": 960,
+      "title": "fix(context): check the results folder before creating anything",
+      "url": "https://github.com/redhat-developer/mapt/pull/960",
+      "at": "2026-11-10T10:27:27Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "redhat-developer/mapt",
+      "number": 959,
+      "title": "fix(serverless): pass the context to one-time delayed tasks",
+      "url": "https://github.com/redhat-developer/mapt/pull/959",
+      "at": "2026-11-10T10:26:00Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "redhat-developer/mapt",
+      "number": 958,
+      "title": "fix(ibmcloud): stop password aging locking users out of SSH",
+      "url": "https://github.com/redhat-developer/mapt/pull/958",
+      "at": "2026-11-10T10:25:17Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "anefzaoui/misterdownloadmanager",
+      "number": 489,
+      "title": "Bring Download File Info to the front on macOS (#484)",
+      "url": "https://github.com/anefzaoui/misterdownloadmanager/pull/489",
+      "at": "2026-11-10T06:17:34Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "anefzaoui/misterdownloadmanager",
+      "url": "https://github.com/anefzaoui/misterdownloadmanager",
+      "at": "2026-11-10T06:06:49Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "anefzaoui/misterdownloadmanager",
+      "number": 477,
+      "title": "Use system-installed yt-dlp on Linux and macOS",
+      "url": "https://github.com/anefzaoui/misterdownloadmanager/pull/477",
+      "at": "2026-11-10T04:24:32Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "anefzaoui/misterdownloadmanager",
+      "number": 483,
+      "title": "Fix video button staying visible after mouse focus",
+      "url": "https://github.com/anefzaoui/misterdownloadmanager/pull/483",
+      "at": "2026-11-10T04:05:05Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 461,
+      "title": "test(cli): count both catalog show and run list public leaves",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/461",
+      "at": "2026-11-10T03:02:12Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 460,
+      "title": "feat(run): list recorded local Runs in one attempts root",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/460",
+      "at": "2026-11-10T02:11:49Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "dsx-ai-factory/nvkr",
+      "number": 453,
+      "title": "feat(catalog): explain one component with catalog show",
+      "url": "https://github.com/dsx-ai-factory/nvkr/pull/453",
+      "at": "2026-11-10T02:09:12Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "mezmo/aura",
+      "number": 868,
+      "title": "fix(orchestration): keep an earlier attempt's output on a hard error",
+      "url": "https://github.com/mezmo/aura/pull/868",
+      "at": "2026-11-09T22:29:43Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "kiali/kiali",
+      "number": 10523,
+      "title": "Confirm revoked access before tearing down a cluster cache",
+      "url": "https://github.com/kiali/kiali/pull/10523",
+      "at": "2026-11-09T22:16:06Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "kiali/kiali",
+      "number": 10514,
+      "title": "Bound kube cache reads with a timeout",
+      "url": "https://github.com/kiali/kiali/pull/10514",
+      "at": "2026-11-09T21:18:25Z"
+    },
+    {
+      "kind": "opened",
+      "repo": "dsx-ai-factory/nvke",
+      "number": 2246,
+      "title": "fix(qualify): drop a failure cause that a later value mismatch outdates",
+      "url": "https://github.com/dsx-ai-factory/nvke/pull/2246",
+      "at": "2026-11-09T21:03:10Z"
+    },
+    {
+      "kind": "issue",
+      "repo": "anefzaoui/misterdownloadmanager",
+      "number": 484,
+      "title": "macOS: download window opens behind the browser after clicking a download link",
+      "url": "https://github.com/anefzaoui/misterdownloadmanager/issues/484",
+      "at": "2026-11-09T20:03:32Z"
+    },
+    {
+      "kind": "pushed",
+      "repo": "Seagey/couch-tv",
+      "url": "https://github.com/Seagey/couch-tv",
+      "at": "2026-11-09T17:46:52Z"
+    },
+    {
+      "kind": "merged",
+      "repo": "Seagey/couch-tv",
+      "number": 60,
+      "title": "LG: the build fetches the TV's own icon for apps with no bundled logo",
+      "url": "https://github.com/Seagey/couch-tv/pull/60",
+      "at": "2026-11-09T17:44:44Z"
+    }
+  ],
+  "owners": {
+    "atishay-kasliwal": {
+      "name": null,
+      "avatar": "https://avatars.githubusercontent.com/u/61780293?v=4&s=48"
+    },
+    "dsx-ai-factory": {
+      "name": "NVIDIA",
+      "avatar": "https://avatars.githubusercontent.com/u/311157577?v=4&s=48"
+    },
+    "mezmo": {
+      "name": "Mezmo",
+      "avatar": "https://avatars.githubusercontent.com/u/539207?v=4&s=48"
+    },
+    "kiali": {
+      "name": "Kiali",
+      "avatar": "https://avatars.githubusercontent.com/u/36001875?v=4&s=48"
+    },
+    "EthanHenrickson": {
+      "name": null,
+      "avatar": "https://avatars.githubusercontent.com/u/109119138?v=4&s=48"
+    },
+    "podman-desktop": {
+      "name": "Podman Desktop",
+      "avatar": "https://avatars.githubusercontent.com/u/129859460?v=4&s=48"
+    },
+    "redhat-developer": {
+      "name": "Red Hat",
+      "avatar": "https://avatars.githubusercontent.com/u/11033755?v=4&s=48"
+    },
+    "numaproj": {
+      "name": "Numaproj",
+      "avatar": "https://avatars.githubusercontent.com/u/103071366?v=4&s=48"
+    },
+    "cockpit-project": {
+      "name": "Cockpit",
+      "avatar": "https://avatars.githubusercontent.com/u/5765104?v=4&s=48"
+    },
+    "anefzaoui": {
+      "name": null,
+      "avatar": "https://avatars.githubusercontent.com/u/1832078?v=4&s=48"
+    },
+    "Seagey": {
+      "name": null,
+      "avatar": "https://avatars.githubusercontent.com/u/199005374?v=4&s=48"
+    }
+  },
+  "contributionsLast30Days": 988,
+  "dailyContributions": [
+    1,
+    9,
+    19,
+    36,
+    25,
+    5,
+    31,
+    8,
+    39,
+    68,
+    64,
+    34,
+    112,
+    103,
+    125,
+    48,
+    12,
+    48,
+    0,
+    20,
+    12,
+    33,
+    22,
+    16,
+    9,
+    6,
+    5,
+    32,
+    20,
+    26
+  ],
+  "mergedUpstream": {
+    "pullRequests": 35,
+    "repositories": 13,
+    "url": "https://github.com/search?type=pullrequests&q=is%3Apr%20author%3Aatishay-kasliwal%20is%3Amerged%20-user%3Aatishay-kasliwal"
+  }
+}
