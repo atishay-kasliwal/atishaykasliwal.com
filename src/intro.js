@@ -61,7 +61,9 @@ export function startIntro() {
     timer = setTimeout(() => showGreeting(index + 1), greeting.duration);
   }
 
-  if (motion.matches) {
+  // Skipped when returning from another page of the site (see the inline script in index.html),
+  // or when the visitor prefers reduced motion.
+  if (motion.matches || !document.documentElement.classList.contains("has-intro")) {
     cleanup();
     return;
   }

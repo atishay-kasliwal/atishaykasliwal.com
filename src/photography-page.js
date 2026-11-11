@@ -2,18 +2,6 @@ import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
 import { photoMarkup } from "./photography.js";
 
-const clock = document.querySelector('[data-photography-clock]');
-const clockFormat = new Intl.DateTimeFormat('en-GB', {
-  timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
-});
-function updateClock() {
-  const now = new Date();
-  clock.dateTime = now.toISOString();
-  clock.textContent = clockFormat.format(now);
-}
-updateClock();
-setInterval(updateClock, 1000);
-
 const canvas = document.querySelector("[data-photo-canvas]");
 const collection = canvas.parentElement;
 const viewer = document.querySelector("[data-photo-viewer]");
@@ -212,28 +200,50 @@ canvas.addEventListener('keydown', event => {
     : selected + (['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1));
   canvas.focus({ preventScroll: true });
 });
+// Scrolling steps through photographs, in the stack and in the open viewer: one step per
+// deliberate scroll. A trackpad swipe keeps sending decaying momentum events for a second or more,
+// so those never add steps, but a fresh swipe during that momentum speeds up again and counts. A
+// mouse wheel sends one same-sized event per notch, so every notch counts. Pausing or reversing
+// direction always starts a new step.
 let wheelTotal = 0;
 let lastWheel = 0;
+let lastMagnitude = 0;
+let lastStep = 0;
 let wheelLatched = false;
-canvas.addEventListener('wheel', event => {
-  if (event.ctrlKey || viewer.open || cards().length < 2) return;
+function wheelStep(event) {
   const delta = (Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY)
     * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? canvas.clientHeight : 1);
-  if (!delta) return;
+  if (!delta) return 0;
   const now = performance.now();
-  // A trackpad burst, including its decaying momentum, advances once. A new
-  // gesture starts after idle; reversing direction remains immediately usable.
-  if (now - lastWheel > 180 || (wheelTotal && Math.sign(delta) !== Math.sign(wheelTotal))) {
+  const magnitude = Math.abs(delta);
+  const idle = now - lastWheel > 160;
+  const reversed = wheelTotal && Math.sign(delta) !== Math.sign(wheelTotal);
+  const freshSwipe = magnitude > lastMagnitude * 1.4 + 2 && now - lastStep > 180;
+  const nextNotch = magnitude >= 50 && magnitude === lastMagnitude && now - lastStep > 90;
+  if (idle || reversed || (wheelLatched && (freshSwipe || nextNotch))) {
     wheelTotal = 0;
     wheelLatched = false;
   }
   lastWheel = now;
+  lastMagnitude = magnitude;
   event.preventDefault();
   interacted();
   wheelTotal += delta;
-  if (wheelLatched || Math.abs(wheelTotal) < 45) return;
+  if (wheelLatched || Math.abs(wheelTotal) < 45) return 0;
   wheelLatched = true;
-  selectPhoto(selected + Math.sign(wheelTotal));
+  lastStep = now;
+  return Math.sign(wheelTotal);
+}
+canvas.addEventListener('wheel', event => {
+  if (event.ctrlKey || viewer.open || cards().length < 2) return;
+  const step = wheelStep(event);
+  if (step) selectPhoto(selected + step);
+}, { passive: false });
+// While a photograph is open, scrolling anywhere moves to the previous or next one.
+window.addEventListener('wheel', event => {
+  if (event.ctrlKey || !viewer.open || closing || cards().length < 2) return;
+  const step = wheelStep(event);
+  if (step) showPhoto(selected + step);
 }, { passive: false });
 let drag;
 let dragFrame;
