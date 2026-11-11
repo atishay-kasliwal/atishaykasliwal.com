@@ -3,7 +3,7 @@
   --mono: "Geist Mono Variable", ui-monospace, Menlo, monospace;
   font-family: var(--sans);
   color: #efefec;
-  background: #111;
+  background: #000;
   --ink: #efefec;
   --soft: #b6b5ae;
   --muted: #848480;
@@ -586,7 +586,7 @@ html.scroll-story .scroll-cue {
   transform: scale(1);
   box-shadow:
     0 0 0 2px #eee,
-    0 0 0 4px #111;
+    0 0 0 4px #000;
 }
 .project-art {
   position: relative;
@@ -2246,7 +2246,7 @@ html.scroll-story .scroll-cue {
   padding-bottom: 12vh;
   padding-bottom: 12dvh;
   place-items: center;
-  background: #111;
+  background: #000;
   border-radius: 0 0 50% 50% / 0 0 12vh 12vh;
   overflow: hidden;
   transform: translateY(0);
@@ -2552,3 +2552,6 @@ html.scroll-story .scroll-cue {
 .ops-card-report small { display: block; font: 1.3cqw var(--mono); letter-spacing: 0.08em; color: #6a7570; }
 .ops-card-report strong { display: block; margin: 0.6cqw 0; font: 650 6cqw/1 var(--sans); letter-spacing: -0.06em; }
 .ops-card-report span { font: 1.55cqw var(--mono); color: #6a7570; }
+
+/* Plain black background: the gallery lighting and grain layer is switched off. */
+.gallery-atmosphere { display: none; }
