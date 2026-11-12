@@ -18,3 +18,6 @@ scripts/og/
 
 # Local Vite cache
 .vite/
+
+# Raw AI-generated card art; the site uses the converted copies in public/projects/cards/
+/all_generated_portfolio_thumbnails/

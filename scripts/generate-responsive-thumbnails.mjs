@@ -6,7 +6,7 @@ import sharp from "sharp";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const variants = [
   ...["clip-a", "clip-b"].map(name => ({ source: `public/projects/media/atriveo-reel/${name}.webp`, widths: [480, 960] })),
-  ...["bio", "cortex", "fedtalk", "insurance", "jobs", "tracker"].map(name => ({ source: `public/projects/cards/${name}.webp`, widths: [640] })),
+  ...["atriaa", "beyond", "bio", "chaal", "cortex", "fedtalk", "insurance", "insureraft", "jobs", "kaggriculture", "medscan", "mmm", "reel", "tracker"].map(name => ({ source: `public/projects/cards/${name}.webp`, widths: [640] })),
   { source: "public/projects/media/bayesian-mmm/actual_vs_predicted.webp", widths: [480, 960] },
   { source: "public/atishay-kasliwal.jpg", widths: [256, 512] },
 ];

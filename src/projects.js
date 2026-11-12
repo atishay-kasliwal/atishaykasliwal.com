@@ -17,34 +17,6 @@ const shot = file => {
   return `<img src="${src}" srcset="/projects/cards/${name}-640.webp 640w, ${src} 1080w" sizes="305px" width="1080" height="664" alt="" decoding="async" />`;
 };
 
-// Keep the portrait as the original photograph. It is the foundation of the
-// composition: the surrounding surface extends its neutral studio background.
-const profileArt = `
-  <span class="profile-layout" aria-hidden="true">
-    <img class="profile-portrait" width="718" height="929" src="/atishay-kasliwal.jpg" srcset="/atishay-kasliwal-256.webp 256w, /atishay-kasliwal-512.webp 512w, /atishay-kasliwal.jpg 718w" sizes="256px" alt="" decoding="async" />
-    <span class="profile-copy">
-      <small><i></i> 07 / PERSONAL PROFILE</small>
-      <strong>Atishay<br />Kasliwal</strong>
-      <em>Software &amp; AI Engineer</em>
-      <span>New York, NY</span>
-    </span>
-    <span class="profile-map">
-      <svg viewBox="0 0 420 150" preserveAspectRatio="none">
-        <path class="profile-map-grid" d="M0 25H420M0 75H420M0 125H420M70 0V150M210 0V150M350 0V150" />
-        <path class="profile-map-route" d="M34 106C82 106 92 45 143 45S202 112 257 112S321 55 386 55" />
-        <circle class="profile-map-pulse" cx="34" cy="106" r="5" />
-        <circle cx="143" cy="45" r="5" />
-        <circle cx="257" cy="112" r="5" />
-        <circle cx="386" cy="55" r="5" />
-        <text x="34" y="132">BUILD</text>
-        <text x="143" y="27">SHIP</text>
-        <text x="257" y="139">SYSTEMS</text>
-        <text x="386" y="37" text-anchor="end">FRAME</text>
-      </svg>
-    </span>
-    <span class="profile-interests"><b>OPEN SOURCE</b><b>SYSTEMS</b><b>PHOTOGRAPHY</b></span>
-  </span>`;
-
 const reelArt = `
   <div class="reel-card-art">
     <div class="reel-card-top"><b>ATRIVEO <em>REEL</em></b><span><i></i> READY TO RENDER</span></div>
@@ -219,7 +191,7 @@ export const projects = [
     theme: "profile",
     caseStudy: "/projects/developer-profile/",
     year: 2026,
-    card: profileArt,
+    card: shot("cards/beyond.webp"),
     video: "/projects/video/profile-intro.mp4",
     poster: "/projects/video/profile-poster.webp",
     category: "Personal profile / Open source",
@@ -235,7 +207,7 @@ export const projects = [
     theme: "reel",
     caseStudy: "/projects/atriveo-reel/",
     year: 2026,
-    card: reelArt,
+    card: shot("cards/reel.webp"),
     video: "/projects/video/reel.mp4",
     poster: "/projects/video/reel-poster.webp",
     category: "Media tooling / Open source",
@@ -251,7 +223,7 @@ export const projects = [
     theme: "kaggriculture",
     caseStudy: "/projects/kaggriculture/",
     year: 2026,
-    card: kaggricultureArt,
+    card: shot("cards/kaggriculture.webp"),
     video: "/projects/video/kaggriculture.mp4",
     poster: "/projects/video/kaggriculture-poster.webp",
     category: "Game-agent research / Open source",
@@ -267,7 +239,7 @@ export const projects = [
     theme: "mmm",
     caseStudy: "/projects/bayesian-marketing-mix/",
     year: 2026,
-    card: mmmArt,
+    card: shot("cards/mmm.webp"),
     video: "/projects/video/mmm.mp4",
     poster: "/projects/video/mmm-poster.webp",
     category: "Applied statistics / Open source",
@@ -283,7 +255,7 @@ export const projects = [
     theme: "raft",
     caseStudy: "/projects/insureraft/",
     year: 2026,
-    card: raftArt,
+    card: shot("cards/insureraft.webp"),
     video: "/projects/video/raft.mp4",
     poster: "/projects/video/raft-poster.webp",
     category: "Consensus systems / Open source",
@@ -315,7 +287,7 @@ export const projects = [
     theme: "atriaa",
     caseStudy: "/projects/atriaa/",
     year: 2026,
-    card: atriaaArt,
+    card: shot("cards/atriaa.webp"),
     poster: "/projects/video/atriaa-poster.webp",
     category: "Healthcare AI / Open source",
     stack: "Next.js · FastAPI · TimescaleDB · Gemini",
@@ -329,7 +301,7 @@ export const projects = [
     theme: "medscan",
     caseStudy: "/projects/medscan/",
     year: 2026,
-    card: medscanArt,
+    card: shot("cards/medscan.webp"),
     poster: "/projects/video/medscan-poster.webp",
     category: "Healthcare data / Proof of concept",
     stack: "Python · PostgreSQL · Neo4j · Expo",
