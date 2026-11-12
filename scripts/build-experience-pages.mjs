@@ -1,5 +1,4 @@
 import { profileLinks } from "../src/profile-links.js";
-import { relatedSection } from "../src/related-pages.js";
 // Renders every entry in src/experience-pages.js to experience/<slug>/index.html.
 // Same visual system as scripts/build-case-studies.mjs (same case-study.css, same
 // hero/tiles/thumbs markup), trimmed for a work/education entry: no stats-heavy
@@ -55,7 +54,7 @@ function structuredData(entry) {
 // The screen shows at most ~600px wide on desktop and the full content width on phones, so a
 // 720px variant serves most visits; the original stays in the srcset for high-density screens.
 const SCREEN_VARIANT_WIDTH = 720;
-const SCREEN_SIZES = "(max-width: 700px) calc(100vw - 48px), 600px";
+const SCREEN_SIZES = "(max-width: 700px) calc(100vw - 36px), min(1232px, calc(100vw - 48px))";
 
 async function addScreenVariants(entry) {
   for (const item of entry.media.items) {
@@ -89,16 +88,26 @@ function render(entry, { number, total, next }) {
     )
     .join("");
 
-  const tiles = `<section class="tiles" aria-label="${escape(entry.name)} details">
-${entry.sections
-  .map(
-    (section, i) => `          <article class="tile">
-            <h2 class="eyebrow">${pad(i + 1)} · ${escape(section.title)}</h2>
-            <p>${escape(section.body)}</p>
-          </article>`,
-  )
-  .join("\n")}
-        </section>`;
+  const lead = text => String(text).split(/(?<=[.!?])\s+(?=[A-Z0-9“"])/)[0];
+  const panels = entry.sections.slice(0, 4)
+    .map((section, i) => `<section class="panel point">
+          <span class="eyebrow">${pad(i + 1)}</span>
+          <h2>${escape(section.title)}</h2><p>${escape(lead(section.body))}</p>
+        </section>`)
+    .join("\n        ");
+
+  const fullStory = `<details class="story">
+          <summary>Read the full story</summary>
+          <div class="story-body">
+            <p class="lede">${escape(entry.lede)}</p>
+            ${entry.sections.map(section => `<h2>${escape(section.title)}</h2><p>${escape(section.body)}</p>`).join("")}
+          </div>
+        </details>`;
+
+
+  const actions = entry.links
+    .map((l, i) => `<a class="btn${i === 0 ? " primary" : ""}" href="${escape(l.href)}" target="_blank" rel="noreferrer">${escape(l.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a>`)
+    .join("");
 
   const nextLink = next
     ? `<a href="/experience/${next.slug}/">Next: ${escape(next.name)} <b aria-hidden="true">→</b></a>`
@@ -113,7 +122,7 @@ ${entry.sections
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111111" />
+    <meta name="theme-color" content="#000000" />
     <title>${escape(entry.seo.title)}</title>
     <meta name="description" content="${escape(entry.seo.description)}" />
     <meta name="author" content="Atishay Kasliwal" />
@@ -153,42 +162,30 @@ ${JSON.stringify(structuredData(entry), null, 2)}
       </nav>
 
       <main class="content">
-        <section class="hero">
-          <div class="story">
-            <h1>
-              <span class="eyebrow">${escape(entry.kicker)}</span>
-              ${escape(entry.headline)} <span class="soft">${escape(entry.headlineSoft)}</span>
-            </h1>
-            <p class="lede">${escape(entry.lede)}</p>
-            <dl class="spec">
-${entry.spec.map(row => `              <div><dt>${escape(row.label)}</dt><dd>${row.html}</dd></div>`).join("\n")}
-            </dl>
-            ${entry.stats.length
-              ? `<ul class="stats">
-${entry.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escape(s.label)}</span></li>`).join("\n")}
-            </ul>`
-              : ""}
+        <section class="stage" aria-label="${escape(entry.name)}">
+          <div class="screen" id="screen" data-no-video>
+            <img id="screen-img" src="${escape(first.src)}"${first.srcset ? ` srcset="${escape(first.srcset)}" sizes="${SCREEN_SIZES}"` : ""} alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />
           </div>
-
-          <div class="media-col">
-            <figure class="window">
-              <div class="window-bar">
-                <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
-                <p class="window-title">${escape(entry.name)}</p>
-                ${primary ? `<div class="window-end"><a class="pill" href="${escape(primary.href)}" target="_blank" rel="noreferrer">${escape(primary.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a></div>` : ""}
-              </div>
-              <div class="screen" id="screen" data-no-video>
-                <img id="screen-img" src="${escape(first.src)}"${first.srcset ? ` srcset="${escape(first.srcset)}" sizes="${SCREEN_SIZES}"` : ""} alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />
-              </div>
-            </figure>
-            <div class="thumbs" role="group" aria-label="Photos">${thumbs}
-            </div>
+          <div class="stage-text">
+            <h1><span class="eyebrow">${escape(entry.kicker)}</span><span class="name">${escape(entry.name)}</span><span class="line">${escape(entry.headline)}</span></h1>
+            <div class="actions">${actions}</div>
           </div>
         </section>
+        ${entry.media.items.length > 1 ? `<div class="thumbs" role="group" aria-label="Photos" style="--count:${entry.media.items.length}">${thumbs}</div>` : ""}
 
-        ${tiles}
+        <section class="glance">
+          ${entry.stats.length
+            ? `<ul class="stats">${entry.stats.map(s => `<li><b>${escape(s.value)}</b><span>${escape(s.label)}</span></li>`).join("")}</ul>`
+            : ""}
+          <p class="stackline">${entry.spec.map(row => row.html).join('<span class="sep" aria-hidden="true">/</span>')}</p>
+        </section>
 
-        ${relatedSection(`/experience/${entry.slug}/`)}
+        <div class="panels points">
+        ${panels}
+        </div>
+
+        ${fullStory}
+
       </main>
 
       <nav class="thumb-bar" aria-label="${escape(entry.name)} links">

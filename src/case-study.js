@@ -2,27 +2,22 @@ import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
 import "./case-study.css";
 
-// The screen shows the carousel card image; hovering (or tapping) plays the scroll recording, as on
-// the homepage. The thumbnails swap what the screen shows. The video only downloads on first play.
+// The stage shows the product. Where a project has a recording it plays on arrival, muted and
+// looping, unless the visitor prefers reduced motion; clicking the stage pauses or resumes it.
+// The thumbnails switch between the recording and the stills.
 const screen = document.getElementById("screen");
 const image = document.getElementById("screen-img");
 const video = document.getElementById("screen-video");
-const hint = screen?.querySelector(".hint");
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-const canHover = matchMedia("(hover: hover)").matches;
-
-if (hint && !canHover) hint.textContent = "Tap to play";
 
 function hasVideo() {
   return Boolean(video) && !screen.hasAttribute("data-no-video");
 }
 
 function play() {
-  if (!hasVideo() || reducedMotion.matches) return;
+  if (!hasVideo()) return;
   if (!video.src) video.src = video.dataset.src;
-  video.currentTime = 0;
-  video.play().catch(() => {});
-  screen.classList.add("is-playing");
+  video.play().then(() => screen.classList.add("is-playing")).catch(() => {});
 }
 
 function stop() {
@@ -31,25 +26,13 @@ function stop() {
   screen.classList.remove("is-playing");
 }
 
-function toggle() {
-  if (screen.classList.contains("is-playing")) stop();
-  else play();
-}
-
 if (screen && video) {
-  screen.addEventListener("pointerenter", event => {
-    if (event.pointerType === "mouse") play();
-  });
-  screen.addEventListener("pointerleave", event => {
-    if (event.pointerType === "mouse") stop();
-  });
-  screen.addEventListener("click", event => {
-    if (event.pointerType !== "mouse") toggle();
-  });
+  if (!reducedMotion.matches) play();
+  screen.addEventListener("click", () => (video.paused ? play() : stop()));
   screen.addEventListener("keydown", event => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      toggle();
+      video.paused ? play() : stop();
     }
   });
 }
@@ -67,6 +50,7 @@ document.querySelectorAll(".thumb").forEach(button => {
     if (video) {
       screen.setAttribute("tabindex", hasVideo() ? "0" : "-1");
       screen.setAttribute("role", hasVideo() ? "button" : "presentation");
+      if (hasVideo()) play();
     }
   });
 });

@@ -45,7 +45,7 @@ export const caseStudies = [
       items: [
         {
           label: "Live site",
-          src: "/projects/cards/tracker.webp",
+          src: "/projects/screens/tracker.webp",
           thumb: "/projects/media/atriveo-tracker/live-thumb.webp",
           alt: "Atriveo Tracker's landing page on a tablet: “Your job search, organized.”",
           video: true,
@@ -147,7 +147,7 @@ export const caseStudies = [
       items: [
         {
           label: "Overview",
-          src: "/projects/cards/cortex.webp",
+          src: "/projects/screens/cortex.webp",
           thumb: "/projects/media/atriveo-cortex/card-thumb.webp",
           alt: "Atriveo Cortex's “Your work, remembered.” screen at the front of a ribbon of past screens",
           video: true,
@@ -235,7 +235,7 @@ export const caseStudies = [
       items: [
         {
           label: "Live site",
-          src: "/projects/cards/bio.webp",
+          src: "/projects/screens/bio.webp",
           thumb: "/projects/media/atriveo-bio/card-thumb.webp",
           alt: "Atriveo Bio's landing page split into floating layers: navigation, “Know when you'll perform at your best”, and the readiness card",
           video: true,
@@ -335,7 +335,7 @@ export const caseStudies = [
       items: [
         {
           label: "Live site",
-          src: "/projects/cards/jobs.webp",
+          src: "/projects/screens/jobs.webp",
           thumb: "/projects/media/atriveo-job-search/card-thumb.webp",
           alt: "Atriveo Job Search pipeline drawn as a blueprint: scrape, score, review, tailor, compile, apply",
           video: true,
