@@ -1,7 +1,6 @@
 # Search engines and AI assistants are welcome to read, index and cite this site.
 # A plain-text summary for language models lives at https://atishaykasliwal.com/llms.txt
 User-agent: *
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 # AI crawlers, named so each one finds an explicit allow rule.
