@@ -1,4 +1,5 @@
 import { profileLinks } from "../src/profile-links.js";
+import { relatedSection } from "../src/related-pages.js";
 // Renders every project page to projects/<slug>/index.html as prerendered HTML. Also writes
 // public/sitemap.xml and the share-card sources in scripts/og/.
 // Runs from vite.config.js on every dev start and build; the generated files are not committed.
@@ -264,6 +265,8 @@ ${study.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escap
         </section>
 
         ${tiles}
+
+        ${relatedSection(`/projects/${study.slug}/`)}
       </main>
 
       <nav class="thumb-bar" aria-label="${escape(study.name)} links">

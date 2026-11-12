@@ -281,7 +281,7 @@ export const experiencePages = [
     seo: {
       title: "M.S. in Data Science — Stony Brook · Atishay Kasliwal",
       description:
-        "Atishay Kasliwal's M.S. in Data Science at Stony Brook University, 2024 to 2026: statistical learning, big data algorithms, data management, and a semester on natural language processing.",
+        "Atishay Kasliwal's M.S. in Data Science at Stony Brook University (2024 to 2026): statistical learning, big data algorithms, data management and NLP.",
     },
     headline: "The degree behind the LLM work.",
     headlineSoft: "Stony Brook University, 2024 to 2026.",

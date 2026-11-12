@@ -711,7 +711,7 @@ export const caseStudies = [
     live: false,
     started: "2026-04-28", // first commit: "Initial commit: InsureRaft distributed insurance data transfer system"
     seo: {
-      title: "InsureRaft — Replicated Insurance Event Log · Atishay Kasliwal",
+      title: "InsureRaft — Raft Insurance Event Log · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built InsureRaft: a Raft-replicated log of insurance events in C++ on NuRaft, where the log itself is the audit trail.",
       language: "C++",
@@ -787,9 +787,12 @@ export const caseStudies = [
     live: false,
     started: "2026-08-06", // first commit: "Phase 1: environment setup, PASS/single-crop agents, crop profitability measurement"
     seo: {
-      title: "Kaggriculture — A Farming-Game Agent · Atishay Kasliwal",
+      // People reach this page searching "kaggriculture", "kaggriculture kaggle", "kaggriculture
+      // competition" and "kaggriculture github" (Search Console, Aug-Nov 2026), so the title and
+      // snippet answer those first.
+      title: "Kaggriculture Kaggle Agent and Strategy · Atishay Kasliwal",
       description:
-        "How Atishay Kasliwal built a Kaggle agent for a two-player farming game: a simulator matching the real engine, then a planner that searches ahead through it.",
+        "Kaggriculture is a two-player Kaggle farming competition. How the game works, and an agent that simulates the real engine and plans ahead. Code on GitHub.",
       language: "Python",
     },
     headline: "An agent that plans ahead by simulating the real rules.",

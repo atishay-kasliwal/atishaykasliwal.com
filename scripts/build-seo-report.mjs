@@ -88,7 +88,11 @@ function inspect(file) {
     if (!fileForPath(target.pathname)) broken.push(target.pathname);
   }
 
-  const words = visibleText(doc).split(/\s+/).filter(w => /[a-z0-9]/i.test(w)).length;
+  const textWords = visibleText(doc).split(/\s+/).filter(w => /[a-z0-9]/i.test(w)).length;
+  // On an image gallery Google reads the alt text as the page's content, so it counts too.
+  const altWords = images.map(n => attr(n, "alt") ?? "").join(" ").split(/\s+/).filter(w => /[a-z0-9]/i.test(w)).length;
+  const isGallery = schemaTypes.includes("ImageGallery");
+  const words = textWords + (isGallery ? altWords : 0);
   const isPrivate = /noindex/i.test(robots);
   const isNotFound = path.basename(file) === "404.html";
   const inSitemap = sitemap.get(url) ?? null;
@@ -120,7 +124,7 @@ function inspect(file) {
       checks.push(check("sitemap", "In sitemap", inSitemap ? "pass" : "fail",
         inSitemap ? `Listed${inSitemap.lastmod ? `, last modified ${inSitemap.lastmod}` : ""}${inSitemap.images ? `, ${inSitemap.images} images` : ""}.` : "Not in sitemap.xml, so Google may find it late."));
       checks.push(check("content", "Content length", words < 150 ? "warn" : "pass",
-        words < 150 ? `${words} words. Thin pages rank poorly.` : `${words} words.`));
+        `${words < 150 ? `${words} words. Thin pages rank poorly.` : `${words} words.`}${isGallery ? ` Includes ${altWords} words of image alt text.` : ""}`));
     }
     checks.push(check("lang", "Language", lang ? "pass" : "warn", lang ? `lang="${lang}"` : "No lang attribute on <html>."));
   }
@@ -230,11 +234,13 @@ try {
   const { projects } = await import(path.join(root, "src", "projects.js"));
   const pageForRepo = new Map(projects.filter(p => p.url?.startsWith("https://github.com/")).map(p => [p.url.toLowerCase().replace(/\/$/, ""), `${SITE}${p.caseStudy}`]));
   const own = repos.filter(r => !r.fork && !r.archived);
-  const missing = own.filter(r => !(r.homepage ?? "").includes("atishaykasliwal.com"));
+  // A repo that links to its own live product is fine. Flag empty Website fields, and ones that
+  // only point back into GitHub.
+  const missing = own.filter(r => !r.homepage || /^https?:\/\/(www\.)?github\.com\//.test(r.homepage));
   if (own.length && missing.length) {
     suggest({
       id: "github-backlinks", impact: "medium", area: "Traffic", effort: "Quick fix",
-      title: `${missing.length} of ${own.length} GitHub repos do not link to the site`,
+      title: `${missing.length} of ${own.length} GitHub repos have no Website link`,
       why: "Recruiters land on your repos first. A repo's Website field is the one link on that page pointing back to your portfolio, and it tells search engines the repo and the site belong to the same person.",
       steps: missing.slice(0, 30).map(r => `${r.name}: set Website to ${pageForRepo.get(r.html_url.toLowerCase()) ?? `${SITE}/`}${r.homepage ? ` (now ${r.homepage})` : ""}`),
       where: "GitHub repo settings, or ask Claude to set them with the GitHub CLI",

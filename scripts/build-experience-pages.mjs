@@ -1,4 +1,5 @@
 import { profileLinks } from "../src/profile-links.js";
+import { relatedSection } from "../src/related-pages.js";
 // Renders every entry in src/experience-pages.js to experience/<slug>/index.html.
 // Same visual system as scripts/build-case-studies.mjs (same case-study.css, same
 // hero/tiles/thumbs markup), trimmed for a work/education entry: no stats-heavy
@@ -185,6 +186,8 @@ ${entry.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escap
         </section>
 
         ${tiles}
+
+        ${relatedSection(`/experience/${entry.slug}/`)}
       </main>
 
       <nav class="thumb-bar" aria-label="${escape(entry.name)} links">
