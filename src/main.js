@@ -25,7 +25,7 @@ const carousels = [...document.querySelectorAll(".work")].map(work =>
       : work.classList.contains("experience")
         ? experience
         : work.classList.contains("open-source")
-          ? [...volunteer, ...events, ...openSource]
+          ? [...openSource, ...volunteer, ...events]
           : projects,
     projectPreview,
     photoOnly: work.classList.contains("photography"),
