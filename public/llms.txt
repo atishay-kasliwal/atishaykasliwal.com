@@ -2,7 +2,7 @@
 
 > Software and AI engineer in New York with 5+ years in production: distributed systems, LLM products, and the web interfaces on top of them. M.S. in Data Science, Stony Brook University (2026). Building Atriveo. Open to software engineering and AI/ML engineering roles.
 
-Atishay spent three years at Accolite as a senior software engineer, shipping microservices for fintech, telecom and commerce clients that handled $1M+ in transactions for 100,000+ monthly users. Then came AI work. A research engineering role at Stony Brook built LLM services and the infrastructure behind them, and an AI engineering internship at Wake Forest's Center for Artificial Intelligence Research served medical-imaging models over 50,000+ scans. Most new work ships under Atriveo, a set of small live products for job seekers, health data and personal memory. Languages: Java, Python, Go, TypeScript, C++. Infrastructure: AWS, GCP, Kubernetes, Kafka, Terraform, Postgres.
+Atishay spent three years at Accolite as a senior software engineer, shipping microservices for fintech, telecom and commerce clients that handled $1M+ in transactions for 100,000+ monthly users. Then came AI work. A research engineering role at Stony Brook built LLM services and the infrastructure behind them, and an AI engineering internship at Wake Forest's Center for Artificial Intelligence Research served medical-imaging models over 50,000+ scans. Most new work ships under Atriveo, a set of small live products for job seekers, health data and personal memory. Strongest in Python, Java and TypeScript, with merged open source work in Go and Rust.
 
 Contact: katishay@gmail.com
 
@@ -11,12 +11,32 @@ Contact: katishay@gmail.com
 - [Resume (PDF)](https://atishaykasliwal.com/Atishay-Kasliwal-Resume.pdf)
 - [Portfolio](https://atishaykasliwal.com/)
 
+## Skills
+
+- Languages: Python, Java, TypeScript, JavaScript, SQL, Go, Rust, C++. Go and Rust come from merged pull requests in Kiali, Red Hat mapt, NVIDIA NVKR, Numaflow and Mezmo Aura. C++ from InsureRaft, a Raft consensus log.
+- Backend and APIs: FastAPI, Spring Boot, Spring Cloud, Hono, REST, GraphQL, WebSockets, microservices, event-driven architecture, CQRS and event sourcing.
+- Frontend: React, Next.js, SvelteKit, TypeScript, Chrome extensions, Expo.
+- Databases and streaming: PostgreSQL, DynamoDB, Redis, Elasticsearch, TimescaleDB, Neo4j, SQLite, Kafka, Airflow, AWS SQS and SNS.
+- Cloud and infrastructure: AWS (Lambda, EC2, S3, DynamoDB, SQS, SNS), GCP, Cloudflare Workers and Durable Objects, Docker, Kubernetes, Terraform, Firebase.
+- CI/CD and observability: Jenkins, GitHub Actions, Git, Prometheus, Grafana, Zipkin, ELK.
+- AI and machine learning: LLM applications, retrieval-augmented generation, multi-agent systems, local models, PyTorch, scikit-learn, OpenAI GPT-4o, Whisper, Gemini, Pinecone, medical-imaging and radiomics pipelines, Bayesian modeling, Monte Carlo simulation.
+- Distributed systems: Raft consensus with leader election and snapshots, replication and failover, caching, P99 latency tuning, idempotent event processing.
+- Security: Spring Security, OAuth2, JWT, BCrypt, rate limiting, HIPAA-compliant data handling.
+- AI-assisted development: Claude Code, GitHub Copilot, Cursor, Codex CLI, with security and vulnerability review built into the SDLC.
+
 ## Experience
 
 - [Senior Software Engineer, Accolite (Aug 2021 to Aug 2024)](https://atishaykasliwal.com/experience/accolite/): 20+ production microservices across fintech, telecom and commerce, supporting $1M+ in transactions and 100,000+ monthly users at 99.9% uptime. Built a secure insurance data vault across 15+ providers and standardized CI/CD for 8 teams.
 - [Software Engineer, Research, Stony Brook University (Nov 2024 to May 2026)](https://atishaykasliwal.com/experience/stony-brook-research/): Event-driven research infrastructure and production AI services. An async backend ingests 10,000+ FOMC intervals. LLM service changes cut inference timeouts by 80%, and DevOps work took one experiment loop from 6 hours to 90 seconds.
 - [Artificial Intelligence Engineer, Wake Forest CAIR (May 2025 to Aug 2025)](https://atishaykasliwal.com/experience/wake-forest-cair/): Cloud-native PyTorch model serving on GCP with Terraform, across 50,000+ medical-imaging scans and 10 TB of data. Automated curation cut preprocessing from 4 hours to 18 minutes at 95% radiologist concordance.
 - [Software Engineer Intern, Shriffle (Aug 2020 to May 2021)](https://atishaykasliwal.com/experience/shriffle/): Spring Boot billing services processing $50,000 a day, a real-time React operations dashboard that cut support tickets 30%, and test coverage raised to 99%.
+
+## Scale and results
+
+- Fidelity, through Accolite: an event-driven ETL pipeline in Java, Spring Boot, Kafka and Airflow ingesting 250K+ daily transactions from 10+ enterprise integrations into PostgreSQL.
+- Accolite: reworked Redis caching and Elasticsearch layers for 100K+ users, cutting P99 latency 40% with zero Sev1 incidents across Jenkins deployments. Secured 10+ Fidelity microservices with Spring Security, OAuth2 and JWT.
+- Stony Brook: a React, TypeScript and FastAPI platform that cut multi-model FOMC review from 30+ minutes to under 3 minutes for 2,000+ users. FastAPI microservices on DynamoDB serve structured financial data at 300 ms P99.
+- Atriveo: 1,000+ active users and 2K+ daily queries at 99.9% uptime on Cloudflare Workers. The Chrome extension holds a 5.0-star rating and captures applications from 20+ ATS platforms. Ingestion processes 1K+ new job postings a day and filters out 75% of the noise.
 
 ## Education
 
