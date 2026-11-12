@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#000000" />
+  <title>SEO admin</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #000; --surface: #0f0f0e; --raised: #1a1a19; --line: #242422; --line-strong: #383835;
+      --ink: #efefec; --soft: #b6b5ae; --muted: #848480;
+      --good: #0ca30c; --warn: #fab219; --bad: #d03b3b; --bad-text: #ef6a6a; --accent: #8554ff;
+      --sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+      --mono: "Geist Mono Variable", "Geist Mono", ui-monospace, Menlo, monospace;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 13px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+
+    /* One screen: header, a strip of numbers, then three panels that scroll on their own. */
+    .app { height: 100vh; display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: 12px; padding: 14px 18px 16px; max-width: 1680px; margin: 0 auto; }
+    .top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+    .top h1 { margin: 0; display: flex; align-items: center; gap: 9px; font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .top h1 i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    .top .meta { flex: 1; min-width: 200px; }
+    .top nav { display: flex; gap: 14px; font: 12px var(--mono); color: var(--muted); }
+    .meta { font: 11.5px var(--mono); color: var(--muted); }
+
+    .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; }
+    .kpi { padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); min-width: 0; }
+    .kpi span { display: block; font: 500 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi b { display: block; margin-top: 6px; font-size: 20px; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+    .kpi small { display: block; margin-top: 4px; font: 11px var(--mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi .up { color: var(--good); } .kpi .down { color: var(--bad-text); }
+    .kpi.cta { border-style: dashed; cursor: pointer; text-align: left; background: transparent; }
+    .kpi.cta b { font-size: 14px; font-weight: 600; letter-spacing: 0; color: var(--ink); }
+
+    .panels { display: grid; grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.35fr) minmax(320px, 1fr); gap: 12px; min-height: 0; }
+    .panel { display: flex; flex-direction: column; min-height: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
+    .panel > header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .scroll { overflow: auto; min-height: 0; flex: 1; }
+
+    /* Fix-next list */
+    .items { list-style: none; margin: 0; padding: 6px; display: grid; gap: 4px; }
+    .items button { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: start; padding: 9px 10px; border: 1px solid transparent; border-radius: 9px; background: transparent; text-align: left; cursor: pointer; }
+    .items button:hover { background: var(--raised); }
+    .items button[aria-current="true"] { background: var(--raised); border-color: var(--line-strong); }
+    .items b { font-weight: 550; font-size: 13px; line-height: 1.35; }
+    .items small { grid-column: 2; font: 11px var(--mono); color: var(--muted); }
+    .group { padding: 10px 10px 2px; font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+    .ico { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; font: 700 10px/1 var(--mono); color: #0b0b0b; background: var(--c); margin-top: 1px; }
+    .high { --c: var(--bad); } .medium { --c: var(--warn); } .low { --c: #5e5e5a; } .low.ico { color: var(--ink); }
+    .pass { --c: var(--good); } .warn { --c: var(--warn); } .fail { --c: var(--bad); }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 4px; border-radius: 999px; font: 600 10.5px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: color-mix(in srgb, var(--c) 14%, transparent); }
+    .pill.high { color: var(--bad-text); } .pill.medium { color: var(--warn); } .pill.low { color: var(--soft); } .pill.pass { color: var(--good); } .pill.warn { color: var(--warn); } .pill.fail { color: var(--bad-text); }
+    .pill .ico { width: 15px; height: 15px; font-size: 9px; margin: 0; }
+
+    /* Detail */
+    .detail { padding: 16px 18px 20px; }
+    .detail h2 { margin: 10px 0 8px; font-size: 18px; font-weight: 600; letter-spacing: -.02em; line-height: 1.25; }
+    .detail .tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 11.5px var(--mono); color: var(--muted); }
+    .detail p { margin: 0 0 12px; color: var(--soft); }
+    .detail h3 { margin: 16px 0 8px; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .detail ol { margin: 0; padding-left: 20px; color: var(--soft); }
+    .detail li { margin: 5px 0; overflow-wrap: anywhere; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { padding: 3px 9px; border: 1px solid var(--line-strong); border-radius: 999px; font: 11.5px var(--mono); color: var(--soft); background: transparent; cursor: pointer; }
+    .chip:hover { border-color: var(--soft); color: var(--ink); }
+    .checks { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .checks div { display: grid; grid-template-columns: 118px 130px 1fr; gap: 10px; align-items: baseline; padding: 7px 12px; background: var(--bg); }
+    .checks p { margin: 0; overflow-wrap: anywhere; }
+    dl { display: grid; grid-template-columns: 120px 1fr; gap: 5px 12px; margin: 0; }
+    dt { color: var(--muted); font: 11.5px var(--mono); } dd { margin: 0; color: var(--soft); overflow-wrap: anywhere; }
+    .btn { border: 1px solid var(--line-strong); background: transparent; color: var(--soft); border-radius: 999px; padding: 6px 12px; font: 11.5px var(--mono); cursor: pointer; }
+    .btn:hover { color: var(--ink); border-color: var(--soft); }
+    .psi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .setup ol { padding-left: 20px; } .setup li { margin: 6px 0; }
+    code { font: 11.5px var(--mono); color: var(--ink); background: var(--raised); padding: 1px 5px; border-radius: 4px; }
+
+    /* Data tabs */
+    .tabs { display: flex; gap: 2px; padding: 6px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+    .tabs button { border: 0; background: transparent; color: var(--muted); padding: 6px 10px; border-radius: 7px; font: 11.5px var(--mono); cursor: pointer; white-space: nowrap; }
+    .tabs button[aria-selected="true"] { background: var(--raised); color: var(--ink); }
+    table { width: 100%; border-collapse: collapse; }
+    th { position: sticky; top: 0; text-align: left; font: 500 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line); }
+    td { padding: 7px 12px; border-top: 1px solid var(--line); color: var(--soft); overflow-wrap: anywhere; vertical-align: top; }
+    td.num, th.num { text-align: right; font-family: var(--mono); color: var(--ink); white-space: nowrap; }
+    td.path { max-width: 0; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .flag, .flag-space { display: inline-grid; width: 14px; height: 14px; font-size: 8px; margin: 0 6px 0 0; vertical-align: -2px; }
+    tr.click { cursor: pointer; } tr.click:hover td { background: var(--raised); }
+    .ai-tag { font: 600 9.5px var(--mono); color: var(--accent); margin-left: 4px; }
+    .dots { display: inline-flex; gap: 3px; }
+    .dot { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 4px; background: color-mix(in srgb, var(--c) 22%, transparent); color: var(--c); font: 700 9px var(--mono); }
+    .score { font: 600 12px var(--mono); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--c); }
+    .check-list { list-style: none; margin: 0; padding: 10px 12px; display: grid; gap: 10px; }
+    .check-list li { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+    .check-list b { font-weight: 550; } .check-list p { margin: 2px 0 0; color: var(--soft); font-size: 12.5px; }
+    .empty { padding: 16px; color: var(--muted); }
+    .key { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; color: var(--muted); font-size: 11.5px; }
+    .key input { width: 220px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); border-radius: 7px; padding: 5px 9px; font: 11.5px var(--mono); }
+
+    @media (max-width: 1100px) {
+      .app { height: auto; }
+      .panels { grid-template-columns: 1fr; }
+      .panel { max-height: 70vh; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1><i aria-hidden="true"></i>SEO / Admin</h1>
+    <span class="meta" id="meta">Loading…</span>
+    <nav><a href="/photography/admin/">Photos</a><a href="/" target="_blank" rel="noopener">Live site ↗</a></nav>
+  </div>
+  <section class="strip" id="strip" aria-label="Key numbers"></section>
+  <div class="panels">
+    <section class="panel" aria-labelledby="fix-h">
+      <header><span id="fix-h">Fix next</span><span id="fix-count"></span></header>
+      <div class="scroll"><ul class="items" id="items"></ul></div>
+    </section>
+    <section class="panel" aria-live="polite">
+      <header><span id="detail-h">Details</span></header>
+      <div class="scroll"><div class="detail" id="detail"></div></div>
+    </section>
+    <section class="panel">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="scroll" id="tab-body" role="tabpanel"></div>
+    </section>
+  </div>
+</div>
+
+<script type="module">
+const ICON = { pass: "✓", warn: "!", fail: "×", high: "!", medium: "!", low: "·" };
+const WORD = { pass: "Pass", warn: "Warning", fail: "Fail", high: "High impact", medium: "Medium", low: "Low" };
+const SHORT = { title: "T", description: "D", canonical: "C", h1: "H", og: "O", schema: "S", alt: "A", links: "L", sitemap: "M" };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = n => n == null ? "—" : n >= 10000 ? `${(n / 1000).toFixed(1)}K` : Math.round(n).toLocaleString();
+const pct = n => n == null ? "—" : `${(n * 100).toFixed(n < 0.1 ? 1 : 0)}%`;
+const dur = s => s == null ? "—" : s >= 60 ? `${Math.floor(s / 60)}m ${Math.round(s % 60)}s` : `${Math.round(s)}s`;
+const band = n => n == null ? "low" : n >= 90 ? "pass" : n >= 50 ? "warn" : "fail";
+const pill = k => `<span class="pill ${k}"><span class="ico ${k}">${ICON[k]}</span>${WORD[k]}</span>`;
+const store = { get(k) { try { return localStorage.getItem(k) ?? ""; } catch { return ""; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+const AI = /chatgpt|openai|perplexity|claude|anthropic|gemini|copilot|you\.com|phind|deepseek/i;
+
+const [report, insights] = await Promise.all([
+  fetch("report.json", { cache: "no-store" }).then(r => r.json()).catch(() => null),
+  fetch("/api/photography/admin/insights", { cache: "no-store" }).then(r => (r.ok ? r.json() : { unavailable: r.status })).catch(() => ({ unavailable: "offline" })),
+]);
+if (!report) { document.getElementById("meta").textContent = "Could not load report.json (written by scripts/build-seo-report.mjs after each build)."; throw new Error("no report"); }
+const ga = insights?.analytics, gsc = insights?.searchConsole;
+const connected = Boolean(ga || gsc);
+document.getElementById("meta").textContent = `Built ${new Date(report.generatedAt).toLocaleString()}${report.commit ? ` · ${report.commit}` : ""} · traffic ${connected ? `live, ${new Date(insights.generatedAt).toLocaleTimeString()}` : "not connected"}`;
+
+const suggestions = [...(insights?.suggestions ?? []), ...report.suggestions]
+  .sort((a, b) => ({ high: 0, medium: 1, low: 2 })[a.impact] - ({ high: 0, medium: 1, low: 2 })[b.impact]);
+
+// ---------- Strip ----------
+const delta = (cur, prev) => {
+  if (!prev) return "<small>no earlier data</small>";
+  const c = (cur - prev) / prev;
+  return `<small class="${c >= 0 ? "up" : "down"}">${c >= 0 ? "▲" : "▼"} ${Math.abs(c * 100).toFixed(0)}% vs prior 28d</small>`;
+};
+const kpi = (label, value, sub) => `<div class="kpi"><span>${label}</span><b>${value}</b>${sub ?? ""}</div>`;
+const n = k => suggestions.filter(s => s.impact === k).length;
+let strip = kpi("To fix", `${n("high") + n("medium")}`, `<small>${n("high")} high · ${n("medium")} medium · ${n("low")} low</small>`);
+if (ga) {
+  const c = ga.current, p = ga.previous;
+  const ai = ga.aiReferrals.reduce((s, r) => s + r.sessions, 0);
+  strip += kpi("Visitors · 28d", fmt(c.users), delta(c.users, p.users)) + kpi("Sessions", fmt(c.sessions), delta(c.sessions, p.sessions))
+    + kpi("Engaged", pct(c.engagementRate), delta(c.engagementRate, p.engagementRate)) + kpi("Avg. time", dur(c.avgDuration), delta(c.avgDuration, p.avgDuration))
+    + kpi("From AI assistants", fmt(ai), `<small>${ga.aiReferrals.map(r => esc(r.source)).join(", ") || "none yet"}</small>`);
+}
+if (gsc) {
+  const t = gsc.totals;
+  strip += kpi("Google clicks", fmt(t.clicks), "<small>last 28d</small>") + kpi("Impressions", fmt(t.impressions), `<small>${pct(t.ctr)} click rate</small>`)
+    + kpi("Avg. position", t.position ? t.position.toFixed(1) : "—", "<small>lower is better</small>");
+}
+if (!connected) {
+  const ai = suggestions.find(s => s.id === "ai-blocked");
+  strip += kpi("Pages checked", report.summary.indexable, `<small>avg score ${report.summary.averageScore}/100</small>`)
+    + kpi("AI crawlers", ai ? "Blocked" : "Allowed", `<small>${ai ? "Cloudflare edge rules" : "live check passed"}</small>`)
+    + kpi("llms.txt", report.siteChecks.find(c => c.id === "llms")?.status === "pass" ? "Live" : "Missing", "<small>AI summary file</small>")
+    + `<button class="kpi cta" type="button" id="connect"><span>Traffic</span><b>Connect Google →</b><small>visitors, sources, searches</small></button>`;
+}
+document.getElementById("strip").innerHTML = strip;
+
+// ---------- Detail views ----------
+const detailEl = document.getElementById("detail");
+const detailH = document.getElementById("detail-h");
+const pageByPath = new Map(report.pages.map(p => [p.path, p]));
+let current = null;
+
+function showSuggestion(s) {
+  current = s;
+  detailH.textContent = "What to fix";
+  detailEl.innerHTML = `<div class="tags">${pill(s.impact)}<span>${esc(s.effort)}</span><span>· ${esc(s.area)}</span>${s.source === "live" ? "<span>· from live traffic</span>" : ""}</div>
+    <h2>${esc(s.title)}</h2><p>${esc(s.why)}</p>
+    ${s.steps.length ? `<h3>How to fix</h3><ol>${s.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : ""}
+    ${s.where ? `<h3>Where</h3><p>${esc(s.where)}</p>` : ""}
+    ${s.pages.length ? `<h3>Affected pages (${s.pages.length})</h3><div class="chips">${s.pages.map(p => `<button class="chip" type="button" data-page="${esc(p)}">${esc(p)}</button>`).join("")}</div>` : ""}`;
+  markCurrent();
+}
+
+const field = (k, v) => `<dt>${k}</dt><dd>${v == null || v === "" || (Array.isArray(v) && !v.length) ? '<span style="color:var(--muted)">—</span>' : esc(Array.isArray(v) ? v.join(", ") : v)}</dd>`;
+function showPage(path) {
+  const p = pageByPath.get(path); if (!p) return;
+  current = { page: path };
+  detailH.textContent = "Page";
+  const related = suggestions.filter(s => s.pages.includes(path));
+  detailEl.innerHTML = `<div class="tags">${p.score == null ? "" : `<span class="score ${band(p.score)}">${p.score}</span>`}<span>${esc(p.kind)}</span><a href="${esc(p.url)}" target="_blank" rel="noopener">open ↗</a></div>
+    <h2>${esc(p.path)}</h2><p>${esc(p.title ?? "(no title)")}</p>
+    ${related.length ? `<h3>Suggestions for this page</h3><div class="chips">${related.map(s => `<button class="chip" type="button" data-suggestion="${esc(s.id)}">${esc(s.title)}</button>`).join("")}</div>` : ""}
+    ${p.checks.length ? (() => {
+      const row = c => `<div>${pill(c.status)}<b>${esc(c.label)}</b><p>${esc(c.detail)}</p></div>`;
+      const bad = p.checks.filter(c => c.status !== "pass"), good = p.checks.filter(c => c.status === "pass");
+      return `${bad.length ? `<h3>Needs work</h3><div class="checks">${bad.map(row).join("")}</div>` : ""}
+        <details style="margin-top:12px"><summary class="meta" style="cursor:pointer">${good.length} check${good.length === 1 ? "" : "s"} pass</summary><div class="checks" style="margin-top:8px">${good.map(row).join("")}</div></details>`;
+    })() : `<p>Private page (noindex), left out of SEO checks on purpose.</p>`}
+    <h3>Tags</h3><dl>${field("Description", p.description)}${field("Canonical", p.canonical)}${field("H1", p.h1)}${field("og:image", p.og["og:image"])}${field("Schema", p.schemaTypes)}${field("Words", p.words)}${field("Internal links", p.internalLinks)}${field("Sitemap", p.sitemap ? `listed${p.sitemap.lastmod ? `, ${p.sitemap.lastmod}` : ""}` : "not listed")}</dl>
+    ${p.indexable ? `<h3>Speed (PageSpeed Insights, mobile)</h3><button class="btn" type="button" data-psi="${esc(p.url)}">Run test</button><div id="psi-out"></div>
+      <label class="key">API key (optional, browser only)<input id="psi-key" type="password" autocomplete="off" spellcheck="false" value="${esc(store.get("psi-key"))}" /></label>` : ""}`;
+  markCurrent();
+}
+
+function showSetup() {
+  current = { setup: true };
+  detailH.textContent = "Connect traffic";
+  const why = insights?.unavailable ? (insights.unavailable === 401 || insights.unavailable === 403 ? "The traffic API needs the Cloudflare Access sign-in, so it only runs on the deployed admin." : "The traffic API is not reachable from this preview.") : insights?.errors?.auth ? `Google rejected the service account: ${esc(insights.errors.auth)}` : "Google Analytics and Search Console are not connected yet.";
+  detailEl.innerHTML = `<div class="setup"><h2>Show visitors, sources and searches</h2><p>${why} Once connected, the strip above shows visitors, engagement, AI-assistant referrals and Google search numbers, and the list on the left gains suggestions from real traffic.</p><ol>
+    <li><a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a>: create a project, enable the <b>Google Analytics Data API</b> and <b>Google Search Console API</b>.</li>
+    <li>IAM &amp; Admin → Service accounts → create one → Keys → Add key → JSON.</li>
+    <li>Google Analytics → Admin → Property access management: add the service account email as <b>Viewer</b>. Copy the numeric <b>Property ID</b> from Property settings.</li>
+    <li>Search Console → Settings → Users and permissions: add the same email (Restricted).</li>
+    <li>In the repo: <code>npx wrangler pages secret put GOOGLE_SERVICE_ACCOUNT_JSON</code> and <code>npx wrangler pages secret put GA4_PROPERTY_ID</code>, then redeploy.</li>
+  </ol><p class="meta">Analytics was restored on Nov 11, 2026 after a gap since September, so early numbers will be thin.</p></div>`;
+  markCurrent();
+}
+
+// ---------- Fix-next list ----------
+const itemsEl = document.getElementById("items");
+document.getElementById("fix-count").textContent = `${suggestions.length} items`;
+const groups = [["high", "Costing you now"], ["medium", "Fix soon"], ["low", "Polish"]];
+itemsEl.innerHTML = groups.map(([k, label]) => {
+  const list = suggestions.filter(s => s.impact === k);
+  return list.length ? `<li class="group">${label}</li>${list.map(s => `<li><button type="button" data-suggestion="${esc(s.id)}"><span class="ico ${s.impact}">${ICON[s.impact]}</span><b>${esc(s.title)}</b><small>${esc(s.effort)} · ${esc(s.area)}${s.pages.length ? ` · ${s.pages.length} page${s.pages.length > 1 ? "s" : ""}` : ""}</small></button></li>`).join("")}` : "";
+}).join("") || `<li class="empty">Nothing to fix right now.</li>`;
+function markCurrent() {
+  itemsEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", String(current?.id === b.dataset.suggestion)));
+}
+
+// ---------- Tabs ----------
+const tabs = [
+  ["pages", "Pages"], ["sources", "Sources"], ["searches", "Searches"], ["landing", "Landing"], ["checklist", "Checklist"],
+];
+let tab = store.get("seo-tab") || "pages";
+if (!tabs.some(([k]) => k === tab)) tab = "pages";
+const tabsEl = document.getElementById("tabs");
+const bodyEl = document.getElementById("tab-body");
+tabsEl.innerHTML = tabs.map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${k === tab}">${l}</button>`).join("");
+const tableHtml = (head, rows, empty) => rows.length
+  ? `<table><thead><tr>${head.map(([h, num]) => `<th${num ? ' class="num"' : ""}>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`
+  : `<p class="empty">${empty}</p>`;
+const notConnected = what => `<div class="empty">${what} appear here once Google is connected. <button class="btn" type="button" data-setup>How to connect</button></div>`;
+const has = id => suggestions.some(s => s.id === id);
+const check = (done, title, text) => `<li><span class="ico ${done === null ? "low" : done ? "pass" : "medium"}">${done === null ? "?" : done ? "✓" : "!"}</span><div><b>${title}</b><p>${text}</p></div></li>`;
+
+function renderTab() {
+  tabsEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+  if (tab === "sources") {
+    if (!ga) { bodyEl.innerHTML = notConnected("Visitor sources"); return; }
+    const total = ga.sources.reduce((s, r) => s + r.sessions, 0) || 1;
+    bodyEl.innerHTML = tableHtml([["Source"], ["Sessions", 1], ["Share", 1], ["Engaged", 1]],
+      ga.sources.map(r => `<tr><td>${esc(r.source)} / ${esc(r.medium)}${AI.test(r.source) ? '<span class="ai-tag">AI</span>' : ""}</td><td class="num">${fmt(r.sessions)}</td><td class="num">${pct(r.sessions / total)}</td><td class="num">${pct(r.engagementRate)}</td></tr>`), "No sessions yet.")
+      + tableHtml([["Country"], ["Visitors", 1]], ga.countries.map(r => `<tr><td>${esc(r.country)}</td><td class="num">${fmt(r.users)}</td></tr>`), "");
+  } else if (tab === "searches") {
+    if (!gsc) { bodyEl.innerHTML = notConnected("Google searches"); return; }
+    bodyEl.innerHTML = tableHtml([["Search"], ["Clicks", 1], ["Impr.", 1], ["CTR", 1], ["Pos.", 1]],
+      gsc.queries.map(q => `<tr><td>${esc(q.key)}</td><td class="num">${fmt(q.clicks)}</td><td class="num">${fmt(q.impressions)}</td><td class="num">${pct(q.ctr)}</td><td class="num">${q.position.toFixed(1)}</td></tr>`), "No searches yet. New sites take a few weeks.");
+  } else if (tab === "landing") {
+    if (!ga) { bodyEl.innerHTML = notConnected("Landing pages"); return; }
+    bodyEl.innerHTML = tableHtml([["Page"], ["Sessions", 1], ["Engaged", 1], ["Time", 1]],
+      ga.landingPages.map(r => `<tr class="click" data-page="${esc(r.page)}"><td>${esc(r.page)}</td><td class="num">${fmt(r.sessions)}</td><td class="num">${pct(r.engagementRate)}</td><td class="num">${dur(r.avgDuration)}</td></tr>`), "No landing pages yet.");
+  } else if (tab === "pages") {
+    const flagged = new Set(suggestions.flatMap(s => s.pages));
+    const pages = [...report.pages].filter(p => p.indexable).sort((a, b) => (flagged.has(b.path) - flagged.has(a.path)) || (a.score - b.score) || a.path.localeCompare(b.path));
+    bodyEl.innerHTML = tableHtml([["Page"], ["Needs work"], ["Score", 1]], pages.map(p => {
+      const bad = p.checks.filter(c => c.status !== "pass");
+      return `<tr class="click" data-page="${esc(p.path)}"><td class="path" title="${esc(p.path)}">${flagged.has(p.path) ? '<span class="ico medium flag">!</span>' : '<span class="flag-space"></span>'}${esc(p.path.replace(/^\/(projects|experience)\//, "$1/"))}</td><td style="white-space:nowrap">${bad.length ? `<span class="dots">${bad.map(c => `<span class="dot ${c.status}" title="${esc(c.label)}: ${esc(c.detail)}">${SHORT[c.id] ?? "•"}</span>`).join("")}</span>` : '<span style="color:var(--muted)">—</span>'}</td><td class="num"><span class="score ${band(p.score)}">${p.score ?? "—"}</span></td></tr>`;
+    }), "")
+      + `<p class="meta" style="padding:8px 12px">! = page named in a suggestion. Needs work: T title · D description · C canonical · H heading · O social · S schema · A alt · L links · M sitemap. Click a row for its full checks.</p>`;
+  } else {
+    const aiSessions = ga ? ga.aiReferrals.reduce((s, r) => s + r.sessions, 0) : null;
+    bodyEl.innerHTML = `<ul class="check-list">
+      <li class="group" style="padding:0">Google search</li>
+      ${check(true, "Verified in Search Console", "Submit sitemap.xml under Sitemaps; check the Pages report for exclusions.")}
+      ${check(!has("description-long") && !has("description-short") && !has("title-long"), "Titles and snippets that earn the click", "Under 60 and 160 characters, saying who you are and what the page proves.")}
+      ${check(gsc ? !has("branded") : null, "Rank for skills, not only your name", "Project pages that name the problem, stack and result rank for recruiter searches.")}
+      ${check(!has("dead-ends"), "Related pages linked together", "Experience ↔ projects built there.")}
+      ${check(!has("github-backlinks"), "Links back from GitHub and LinkedIn", "Repo Website fields, profile README, LinkedIn Contact info and Featured.")}
+      ${check(null, "Bing Webmaster Tools", "Import from Search Console. Bing feeds ChatGPT search, Copilot and DuckDuckGo.")}
+      <li class="group" style="padding:0">AI assistants</li>
+      ${check(!has("ai-blocked"), "AI crawlers allowed", "Controlled in Cloudflare AI Crawl Control; checked live on every build.")}
+      ${check(!has("llms"), "llms.txt summary", "Experience, products, skills and contributions at /llms.txt.")}
+      ${check(true, "Person structured data", "Job title, employers, schools, skills, profiles.")}
+      ${check(null, "Same facts everywhere", "Titles, dates and numbers identical on site, LinkedIn, GitHub and résumé.")}
+      ${check(aiSessions === null ? null : aiSessions > 0, "Visits from AI assistants", aiSessions === null ? "Connect Google Analytics to measure." : `${aiSessions} in the last 28 days.`)}
+    </ul>`;
+  }
+}
+tabsEl.addEventListener("click", e => { const k = e.target.closest("[data-tab]")?.dataset.tab; if (k) { tab = k; store.set("seo-tab", k); renderTab(); } });
+renderTab();
+
+// ---------- Interactions ----------
+document.addEventListener("click", e => {
+  const s = e.target.closest("[data-suggestion]"); if (s) { showSuggestion(suggestions.find(x => x.id === s.dataset.suggestion)); return; }
+  const p = e.target.closest("[data-page]"); if (p) { showPage(p.dataset.page); return; }
+  if (e.target.closest("[data-setup], #connect")) { showSetup(); return; }
+  const psi = e.target.closest("[data-psi]"); if (psi) { psi.disabled = true; runPsi(psi.dataset.psi).finally(() => { psi.disabled = false; }); }
+});
+document.addEventListener("change", e => { if (e.target.id === "psi-key") store.set("psi-key", e.target.value.trim()); });
+
+async function runPsi(url) {
+  const out = document.getElementById("psi-out");
+  out.innerHTML = `<p class="meta" style="margin-top:8px">Running Lighthouse… 20 to 40 seconds.</p>`;
+  const api = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
+  api.searchParams.set("url", url); api.searchParams.set("strategy", "mobile");
+  for (const c of ["performance", "seo", "accessibility", "best-practices"]) api.searchParams.append("category", c);
+  const key = store.get("psi-key"); if (key) api.searchParams.set("key", key);
+  try {
+    const res = await fetch(api); const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message ?? res.statusText);
+    const cats = data.lighthouseResult.categories;
+    const tiles = [["Performance", "performance"], ["SEO", "seo"], ["Accessibility", "accessibility"], ["Best practices", "best-practices"]]
+      .map(([l, k]) => { const v = Math.round((cats[k]?.score ?? 0) * 100); return `<div class="kpi"><span>${l}</span><b>${v}</b><small>${WORD[band(v)] ?? ""}</small></div>`; }).join("");
+    const opps = Object.values(data.lighthouseResult.audits).filter(a => a.details?.type === "opportunity" && a.score !== null && a.score < 0.9).slice(0, 4).map(a => `${a.title}${a.displayValue ? ` (${a.displayValue})` : ""}`);
+    out.innerHTML = `<div class="psi-grid">${tiles}</div>${opps.length ? `<h3>To speed it up</h3><ol>${opps.map(o => `<li>${esc(o)}</li>`).join("")}</ol>` : ""}`;
+  } catch (err) { out.innerHTML = `<p class="meta" style="margin-top:8px">PageSpeed failed: ${esc(err.message)}${/quota/i.test(err.message) ? " Add a free API key below." : ""}</p>`; }
+}
+
+// Open on the most important thing.
+if (suggestions.length) showSuggestion(suggestions[0]); else if (!connected) showSetup();
+</script>
+</body>
+</html>

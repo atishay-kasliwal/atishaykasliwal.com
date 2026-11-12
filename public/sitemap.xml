@@ -75,9 +75,9 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-tracker/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/cards/tracker.webp</image:loc>
+      <image:loc>https://atishaykasliwal.com/projects/screens/tracker.webp</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/atriveo-tracker/landing.webp</image:loc>
@@ -91,9 +91,9 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-cortex/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/cards/cortex.webp</image:loc>
+      <image:loc>https://atishaykasliwal.com/projects/screens/cortex.webp</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/screens/cortex.webp</image:loc>
@@ -101,15 +101,16 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/chaal-tech/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/chaal-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-bio/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/cards/bio.webp</image:loc>
+      <image:loc>https://atishaykasliwal.com/projects/screens/bio.webp</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/atriveo-bio/features.webp</image:loc>
@@ -123,9 +124,9 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-job-search/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/cards/jobs.webp</image:loc>
+      <image:loc>https://atishaykasliwal.com/projects/screens/jobs.webp</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/atriveo-job-search/features.webp</image:loc>
@@ -139,24 +140,28 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/kaggriculture/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/kaggriculture-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/fedtalk/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/fedtalk-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/insurance-platform/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/insurance-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/developer-profile/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/developer-profile/card.webp</image:loc>
     </image:image>
@@ -172,30 +177,35 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-reel/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/reel-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/insureraft/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/raft-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/atriaa/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/atriaa-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/medscan/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/medscan-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://atishaykasliwal.com/projects/bayesian-marketing-mix/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/mmm-poster.webp</image:loc>
     </image:image>
@@ -211,6 +221,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/experience/stony-brook-research/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/stony-brook-research/quad.webp</image:loc>
     </image:image>
@@ -226,6 +237,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/experience/wake-forest-cair/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/wake-forest-cair/chapel.webp</image:loc>
     </image:image>
@@ -241,6 +253,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/experience/accolite/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/accolite/brand.webp</image:loc>
     </image:image>
@@ -256,6 +269,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/experience/shriffle/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/shriffle/brand-2.webp</image:loc>
     </image:image>
@@ -268,6 +282,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/experience/stony-brook-university/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/stony-brook-university/stadium.webp</image:loc>
     </image:image>
@@ -280,6 +295,7 @@
   </url>
   <url>
     <loc>https://atishaykasliwal.com/experience/symbiosis-university/</loc>
+    <lastmod>2026-11-12</lastmod>
     <image:image>
       <image:loc>https://atishaykasliwal.com/experience/media/symbiosis-university/campus-2.webp</image:loc>
     </image:image>

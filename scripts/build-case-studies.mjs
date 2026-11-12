@@ -126,56 +126,56 @@ function render(study, { number, total, next }) {
     })
     .join("\n            ");
 
-  const insight = study.note
-    ? `<section class="insight">
-          <h2 class="eyebrow">${escape(study.note.label ?? "Engineering note")}</h2>
-          <p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p>
-          <p>${escape(study.note.body)}</p>
-        </section>`
-    : "";
+  const strip = html => String(html).replace(/<[^>]+>/g, "");
+  // Product-first page: the recording, the numbers, two short lines and the architecture are on
+  // the page; the long-form story is folded into "Read the full story" (still in the HTML).
+  // First sentence of a paragraph: enough to finish the thought on the page.
+  const lead = text => String(text).split(/(?<=[.!?])\s+(?=[A-Z0-9“"])/)[0];
 
-  const tiles = study.sections
-    ? `<section class="tiles" aria-label="${escape(study.name)} project details">
-${study.sections
-  .map(
-    (section, i) => `          <article class="tile">
-            <h2 class="eyebrow">${pad(i + 1)} · ${escape(section.title)}</h2>
-            <p>${escape(section.body)}</p>
-          </article>`,
-  )
-  .join("\n")}
-        </section>
+  const panel = (cls, label, inner) => `<section class="panel ${cls}">
+          <span class="eyebrow">${label}</span>
+          ${inner}
+        </section>`;
 
-        ${insight}`
-    : `<section class="tiles" aria-label="Case study">
-          <article class="tile">
-            <h2 class="eyebrow">01 · Problem</h2>
-            <p class="tile-title">${escape(study.problem.title)}</p>
-            <p>${escape(study.problem.body)}</p>
-          </article>
-          <article class="tile">
-            <h2 class="eyebrow">02 · Solution</h2>
-            <p class="tile-title">${escape(study.solution.title)}</p>
-            <p>${escape(study.solution.body)}</p>
-          </article>
-          <article class="tile">
-            <h2 class="eyebrow">03 · Engineering</h2>
-            <div class="diagram" role="img" aria-label="${escape(
+  const panels = study.sections
+    ? study.sections.slice(0, 4).map((section, i) => panel("point", `${pad(i + 1)}`, `<h2>${escape(section.title)}</h2><p>${escape(lead(section.body))}</p>`)).join("\n        ")
+    : [
+        panel("storyline", "The story", `<div class="beat"><span>Problem</span><h2>${escape(study.problem.title)}</h2><p>${escape(lead(study.problem.body))}</p></div>
+          <div class="beat"><span>Built</span><h2>${escape(study.solution.title)}</h2><p>${escape(lead(study.solution.body))}</p></div>`),
+        study.engineering?.nodes?.length
+          ? panel("arch", "How it works", `<div class="diagram" role="img" aria-label="${escape(
               study.engineering.nodes.map(row => row.map(n => `${n.name} (${n.detail})`).join(", ")).join("; "),
             )}">
             ${nodes}
-            </div>
-            <p>${escape(study.engineering.note)}</p>
-          </article>
-          <article class="tile">
-            <h2 class="eyebrow">04 · Key decisions</h2>
-            <ul class="checks">
-${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n")}
-            </ul>
-          </article>
-        </section>
+          </div>
+          ${study.engineering.note ? `<p>${escape(lead(study.engineering.note))}</p>` : ""}`)
+          : "",
+        study.decisions?.length
+          ? panel("decisions", "Key decisions", `<ul class="chips">${study.decisions.map(d => `<li>${escape(strip(d.match(/<b>(.*?)<\/b>/)?.[1] ?? d))}</li>`).join("")}</ul>`)
+          : "",
+        study.note
+          ? panel("quote", escape(study.note.label ?? "Engineering note"), `<p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p>`)
+          : "",
+      ].join("\n        ");
 
-        ${insight}`;
+  const fullStory = `<details class="story">
+          <summary>Read the full story</summary>
+          <div class="story-body">
+            <p class="lede">${escape(study.lede)}</p>
+            ${study.sections
+              ? study.sections.map(section => `<h2>${escape(section.title)}</h2><p>${escape(section.body)}</p>`).join("")
+              : `<h2>${escape(study.problem.title)}</h2><p>${escape(study.problem.body)}</p>
+            <h2>${escape(study.solution.title)}</h2><p>${escape(study.solution.body)}</p>
+            ${study.engineering?.note ? `<h2>Engineering</h2><p>${escape(study.engineering.note)}</p>` : ""}
+            ${study.decisions?.length ? `<h2>Key decisions</h2><ul class="checks">${study.decisions.map(d => `<li><span>${d}</span></li>`).join("")}</ul>` : ""}`}
+            ${study.note ? `<h2>${escape(study.note.label ?? "Engineering note")}</h2><p class="note">${escape(study.note.strong)} <span class="soft">${escape(study.note.soft)}</span></p><p>${escape(study.note.body)}</p>` : ""}
+          </div>
+        </details>`;
+
+
+  const actions = study.links
+    .map((l, i) => `<a class="btn${i === 0 ? " primary" : ""}" href="${escape(l.href)}">${escape(l.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a>`)
+    .join("");
 
   const nextLink = next
     ? `<a href="/projects/${next.slug}/">Next: ${escape(next.name)} <b aria-hidden="true">→</b></a>`
@@ -186,7 +186,7 @@ ${study.decisions.map(d => `              <li><span>${d}</span></li>`).join("\n"
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111111" />
+    <meta name="theme-color" content="#000000" />
     <title>${escape(study.seo.title)}</title>
     <meta name="description" content="${escape(study.seo.description)}" />
     <meta name="author" content="Atishay Kasliwal" />
@@ -226,44 +226,31 @@ ${JSON.stringify(structuredData(study, og), null, 2)}
       </nav>
 
       <main class="content">
-        <section class="hero">
-          <div class="story">
-            <h1>
-              <span class="eyebrow">${escape(study.name)}</span>
-              ${escape(study.headline)} <span class="soft">${escape(study.headlineSoft)}</span>
-            </h1>
-            <p class="lede">${escape(study.lede)}</p>
-            <dl class="spec">
-${study.spec.map(row => `              <div><dt>${escape(row.label)}</dt><dd>${row.html}</dd></div>`).join("\n")}
-            </dl>
-            ${study.stats.length
-              ? `<ul class="stats">
-${study.stats.map(s => `              <li><b>${escape(s.value)}</b><span>${escape(s.label)}</span></li>`).join("\n")}
-            </ul>`
-              : ""}
+        <section class="stage" aria-label="${escape(study.name)}">
+          <div class="screen" id="screen"${hasVideo ? ' tabindex="0" role="button" aria-label="Pause or play the screen recording"' : ""}${first.video ? "" : ' data-no-video'}>
+            <img id="screen-img" src="${escape(first.src)}" alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />
+            ${hasVideo ? `<video id="screen-video" data-src="${escape(study.media.video)}" muted loop playsinline preload="none" aria-hidden="true"></video>` : ""}
           </div>
-
-          <div class="media-col">
-            <figure class="window">
-              <div class="window-bar">
-                <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
-                <p class="window-title">${escape(study.name)}</p>
-                <div class="window-end"><span>${escape(study.windowStack)}</span>${primary ? `<a class="pill" href="${escape(primary.href)}">${escape(primary.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a>` : ""}</div>
-              </div>
-              <div class="screen" id="screen"${hasVideo ? ' tabindex="0" role="button" aria-label="Play the screen recording"' : ""}${first.video ? "" : ' data-no-video'}>
-                <img id="screen-img" src="${escape(first.src)}" alt="${escape(first.alt)}" width="1080" height="664" fetchpriority="high" />
-                ${hasVideo ? `<video id="screen-video" data-src="${escape(study.media.video)}" muted loop playsinline preload="none" aria-hidden="true"></video>
-                <span class="hint" aria-hidden="true">Hover to play</span>` : ""}
-              </div>
-            </figure>
-            <div class="thumbs" role="group" aria-label="Screens">${thumbs}${
-              study.media.note ? `\n            <p class="thumbs-note">${escape(study.media.note)}</p>` : ""
-            }
-            </div>
+          <div class="stage-text">
+            <h1><span class="eyebrow">${escape(study.kicker ?? "Project")}</span><span class="name">${escape(study.name)}</span><span class="line">${escape(study.headline)}</span></h1>
+            <div class="actions">${actions}</div>
           </div>
         </section>
+        ${study.media.items.length > 1 ? `<div class="thumbs" role="group" aria-label="Screens" style="--count:${study.media.items.length}">${thumbs}</div>` : ""}
 
-        ${tiles}
+        <section class="glance">
+          ${study.stats.length
+            ? `<ul class="stats">${study.stats.map(s => `<li><b>${escape(s.value)}</b><span>${escape(s.label)}</span></li>`).join("")}</ul>`
+            : ""}
+          <p class="stackline">${study.spec.map(row => row.html).join('<span class="sep" aria-hidden="true">/</span>')}</p>
+        </section>
+
+        <div class="panels${study.sections ? " points" : ""}">
+        ${panels}
+        </div>
+
+        ${fullStory}
+
       </main>
 
       <nav class="thumb-bar" aria-label="${escape(study.name)} links">

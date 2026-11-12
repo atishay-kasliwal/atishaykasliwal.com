@@ -1,0 +1,87 @@
+# Atishay Kasliwal
+
+> Software and AI engineer in New York with 5+ years in production: distributed systems, LLM products, and the web interfaces on top of them. M.S. in Data Science, Stony Brook University (2026). Building Atriveo. Open to software engineering and AI/ML engineering roles.
+
+Atishay spent three years at Accolite as a senior software engineer, shipping microservices for fintech, telecom and commerce clients that handled $1M+ in transactions for 100,000+ monthly users. Then came AI work. A research engineering role at Stony Brook built LLM services and the infrastructure behind them, and a software engineering role at Wake Forest's Center for Artificial Intelligence Research built an AI radiology platform over 10K+ MRI studies. Most new work ships under Atriveo, a set of small live products for job seekers, health data and personal memory. Strongest in Python, Java and TypeScript, with merged open source work in Go and Rust.
+
+Contact: katishay@gmail.com
+
+- [LinkedIn](https://www.linkedin.com/in/atishay-kasliwal)
+- [GitHub](https://github.com/atishay-kasliwal)
+- [Resume (PDF)](https://atishaykasliwal.com/Atishay-Kasliwal-Resume.pdf)
+- [Portfolio](https://atishaykasliwal.com/)
+
+## Skills
+
+- Languages: Python, Java, TypeScript, JavaScript, SQL, Go, Rust, C++. Go and Rust come from merged pull requests in Kiali, Red Hat mapt, NVIDIA NVKR, Numaflow and Mezmo Aura. C++ from InsureRaft, a Raft consensus log.
+- Backend and APIs: FastAPI, Spring Boot, Spring Cloud, Hono, REST, GraphQL, WebSockets, microservices, event-driven architecture, CQRS and event sourcing.
+- Frontend: React, Next.js, SvelteKit, TypeScript, Chrome extensions, Expo.
+- Databases and streaming: PostgreSQL, DynamoDB, Redis, Elasticsearch, TimescaleDB, Neo4j, SQLite, Kafka, Airflow, AWS SQS and SNS.
+- Cloud and infrastructure: AWS (Lambda, EC2, S3, DynamoDB, SQS, SNS), GCP, Cloudflare Workers and Durable Objects, Docker, Kubernetes, Terraform, Firebase.
+- CI/CD and observability: Jenkins, GitHub Actions, Git, Prometheus, Grafana, Zipkin, ELK.
+- AI and machine learning: LLM applications, retrieval-augmented generation, multi-agent systems, local models, PyTorch, scikit-learn, OpenAI GPT-4o, Whisper, Gemini, Pinecone, medical-imaging and radiomics pipelines, Bayesian modeling, Monte Carlo simulation.
+- Distributed systems: Raft consensus with leader election and snapshots, replication and failover, caching, P99 latency tuning, idempotent event processing.
+- Security: Spring Security, OAuth2, JWT, BCrypt, rate limiting, HIPAA-compliant data handling.
+- AI-assisted development: Claude Code, GitHub Copilot, Cursor, Codex CLI, with security and vulnerability review built into the SDLC.
+
+## Experience
+
+- [Senior Software Engineer, Accolite (Aug 2021 to Aug 2024)](https://atishaykasliwal.com/experience/accolite/): 20+ production microservices across fintech, telecom and commerce, supporting $1M+ in transactions and 100,000+ monthly users at 99.9% uptime. Built a secure insurance data vault across 15+ providers, cut Fidelity latency about 35% and improved scalability about 30%, and took deploys from 6 hours to 90 seconds for 20 engineers with Jenkins, Docker and Kubernetes. Conducted 500+ technical interviews.
+- [Software Engineer, Research, Stony Brook University (Nov 2024 to May 2026)](https://atishaykasliwal.com/experience/stony-brook-research/): Research infrastructure and production AI services. The research platform grew from 200+ to about 1,000 daily users. FedTalk, which reads FOMC statements with Whisper and Pinecone retrieval, reached about 68% directional accuracy across 13 FOMC sessions in an earlier evaluation. A separate sentiment benchmark scored 80.8% on 1,159 five-minute intervals.
+- [Software Engineer, Wake Forest CAIR (May 2025 to Aug 2025)](https://atishaykasliwal.com/experience/wake-forest-cair/): An AI radiology platform on GCP over 10K+ MRI studies for a 20-person physician-research team. A PyTorch tumor segmentation model reached 90%+ mask accuracy and cut manual outlining from about 3 hours to 2 minutes per scan. A separate stroke study reached 87% predictive accuracy on 450+ MRI studies, and the latest pipeline processed 2,250 cases in under 5 minutes each, down from about 20.
+- [Software Engineer Intern, Shriffle (Aug 2020 to May 2021)](https://atishaykasliwal.com/experience/shriffle/): Spring Boot billing services processing $50,000 a day, telecom backend integrations in Java and REST, a real-time React operations dashboard that cut support tickets 30%, and test coverage raised to 99%.
+
+## Scale and results
+
+- Fidelity, through Accolite: a high-volume financial-data backend on Kafka, Airflow and PostgreSQL, secured with Spring Security, OAuth2 and JWT. Work across Fidelity cut latency about 35% and improved scalability about 30%.
+- Accolite CI/CD: Jenkins, Docker and Kubernetes for 20 engineers, deploys from 6 hours to 90 seconds, 20+ releases a month. In-house, an ERP onboarding module for 3,000 employees.
+- Stony Brook: a research platform that grew to about 1,000 daily users, with Kafka and FastAPI on Google Cloud.
+- Wake Forest CAIR: tumor segmentation from about 3 hours to 2 minutes per scan across a 10K+ MRI study corpus.
+- Atriveo: 1,000+ active users and 2K+ daily queries at 99.9% uptime on Cloudflare Workers. The Chrome extension holds a 5.0-star rating and captures applications from 20+ ATS platforms. Ingestion processes 1K+ new job postings a day and filters out 75% of the noise.
+
+## Education
+
+- [M.S. in Data Science, Stony Brook University (2024 to 2026)](https://atishaykasliwal.com/experience/stony-brook-university/): Statistical learning, big data algorithms, data management, and applied mathematics for NLP.
+- [B.Tech in Computer Science, Symbiosis University (2018 to 2022)](https://atishaykasliwal.com/experience/symbiosis-university/)
+
+## Live products
+
+- [Atriveo Tracker](https://atishaykasliwal.com/projects/atriveo-tracker/): Job application tracking. A Chrome extension captures each application, and one dashboard covers referrals, assessments and trends. React, Hono, Postgres. Live at https://tracker.atriveo.com.
+- [Atriveo Cortex](https://atishaykasliwal.com/projects/atriveo-cortex/): An AI working-memory layer on ScreenPipe that turns screen and audio history into projects, commitments and ideas, using a local model. TypeScript, Hono.
+- [Atriveo Bio](https://atishaykasliwal.com/projects/atriveo-bio/): A wearable intelligence API that turns Apple Health data into an explainable readiness score, personal baselines and deep-work forecasts. TypeScript, Postgres, OpenAPI.
+- [Atriveo Job Search](https://atishaykasliwal.com/projects/atriveo-job-search/): A self-hosted pipeline that scrapes LinkedIn, Greenhouse and Lever every hour, scores roles against a profile, and tailors a one-page resume with a local LLM. Python, TypeScript.
+- [Chaal.tech](https://atishaykasliwal.com/projects/chaal-tech/): Multiplayer teen patti in the browser with no sign-up. One authoritative server per room on Cloudflare Durable Objects, eight rule sets, plus poker, blackjack and rummy. SvelteKit, WebSockets.
+
+## Systems and research
+
+- [InsureRaft](https://atishaykasliwal.com/projects/insureraft/): A replicated insurance event log on Raft in C++, with quorum writes, leader election, idempotent commands, snapshots and automatic failover.
+- [Insurance Platform](https://atishaykasliwal.com/projects/insurance-platform/): Event-driven microservices moving policy data from third-party insurers to a payment gateway, using CQRS and event sourcing on Kafka and Elasticsearch. Spring Boot.
+- [FedTalk](https://atishaykasliwal.com/projects/fedtalk/): Research on whether an LLM can predict short-horizon market reactions to FOMC statements, from transcripts, retrieved news and minute-level prices. GPT-4o, Whisper, Pinecone.
+- [Atriaa](https://atishaykasliwal.com/projects/atriaa/): A multi-agent hospital command center that keeps watching ER patients after triage and flags anyone whose readings worsen, leaving priority calls to the nurse. Next.js, FastAPI, TimescaleDB, Gemini.
+- [Kaggriculture](https://atishaykasliwal.com/projects/kaggriculture/): A research platform for a competitive farming-game economy: deterministic simulator, opponent modeling, planner search and replay analysis.
+- [Bayesian Marketing Mix](https://atishaykasliwal.com/projects/bayesian-marketing-mix/): An end-to-end marketing mix model over 156 weeks with adstock, saturation, holdout validation, uncertainty simulation and budget allocation.
+- [Atriveo Reel](https://atishaykasliwal.com/projects/atriveo-reel/): A self-hosted editor that turns two clips into a vertical comparison reel, with durable background rendering. Next.js, FFmpeg, Remotion.
+- [Medscan](https://atishaykasliwal.com/projects/medscan/): A proof of concept connecting health and billing data into plain answers about visits and costs, on synthetic data only. Python, PostgreSQL, Neo4j.
+
+## Open source contributions
+
+Merged pull requests in projects run by other teams, as of November 2026:
+
+- [Keycloak](https://github.com/keycloak/keycloak/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): Named the masthead options toggle shown on narrow screens.
+- [Kiali](https://github.com/kiali/kiali/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): Bounded kube cache reads with a timeout so a lost cluster can't block a read forever.
+- [Cockpit](https://github.com/cockpit-project/cockpit/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 2 merged, including making the terminal scrollbar visible again.
+- [Numaflow](https://github.com/numaproj/numaflow/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 4 merged, plus 2 in numaflow-rs, including rejecting scale.min above scale.max on a MonoVertex.
+- [Red Hat mapt](https://github.com/redhat-developer/mapt/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 4 merged, including a fix for password aging locking users out of SSH on IBM Cloud.
+- [Mezmo Aura](https://github.com/mezmo/aura/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 9 merged in a Rust SRE agent platform.
+- [NVIDIA NVKR](https://github.com/dsx-ai-factory/nvkr/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 5 merged, including the catalog show command.
+- [PR-Agent](https://github.com/The-PR-Agent/pr-agent/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): Recorded which config keys PR comments can override.
+
+## Volunteering
+
+- All Things Open 2026, Raleigh: Conference volunteer for registration, vendor set-up and merchandise.
+- Apex Friendship High School, Apex NC: Speech and debate tournament volunteer and judge.
+
+## Optional
+
+- [Photography](https://atishaykasliwal.com/photography/): Personal photography.
+- [Beyond the Resume](https://atishaykasliwal.com/projects/developer-profile/): The GitHub profile, with work history and life outside it.
