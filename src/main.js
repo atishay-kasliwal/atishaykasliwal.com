@@ -3,6 +3,8 @@ import "@fontsource-variable/geist-mono";
 import { projects } from "./projects.js";
 import { photographs, photoMarkup } from "./photography.js";
 import { experience } from "./experience.js";
+import { openSource } from "./open-source.js";
+import { volunteer, events } from "./volunteer.js";
 import { startIntro } from "./intro.js";
 import { createProjectPreview } from "./project-preview.js";
 import { setupInfoSheet } from "./info-sheet.js";
@@ -22,7 +24,9 @@ const carousels = [...document.querySelectorAll(".work")].map(work =>
       ? photographs
       : work.classList.contains("experience")
         ? experience
-        : projects,
+        : work.classList.contains("open-source")
+          ? [...volunteer, ...events, ...openSource]
+          : projects,
     projectPreview,
     photoOnly: work.classList.contains("photography"),
   }),

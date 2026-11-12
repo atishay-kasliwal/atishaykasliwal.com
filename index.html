@@ -293,6 +293,48 @@
           </div>
         </section>
         <section
+          class="work open-source"
+          aria-label="Volunteer and open source carousel"
+          aria-roledescription="carousel"
+        >
+          <div class="work-toolbar">
+            <h2 class="work-label">
+              <button class="section-toggle" id="open-source-toggle" data-section-toggle aria-expanded="false" aria-controls="open-source-panel">
+                <span>Volunteer <span class="muted">/ Open source</span></span>
+                <span class="section-symbol" aria-hidden="true"></span>
+              </button>
+            </h2>
+            <div class="project-counter" data-section-extra="open-source-panel" aria-live="polite" aria-atomic="true">
+              <span id="open-source-current-index" data-carousel-current>01</span><span class="counter-rule"></span
+              ><span class="muted" id="open-source-total-count" data-carousel-total>33</span>
+            </div>
+            <div class="carousel-controls" data-section-extra="open-source-panel">
+              <span class="drag-hint">Drag or scroll to explore</span>
+              <button
+                id="open-source-toggle-carousel-motion" data-carousel-motion
+                aria-label="Pause automatic carousel movement"
+              >
+                Ⅱ</button
+              ><button id="open-source-previous" data-carousel-previous aria-label="Previous project">←</button
+              ><button id="open-source-next" data-carousel-next aria-label="Next project">→</button>
+            </div>
+          </div>
+          <div class="section-panel" id="open-source-panel" hidden role="region" aria-labelledby="open-source-toggle">
+          <div
+            class="carousel-viewport"
+            id="open-source-carousel-viewport"
+            tabindex="0"
+            aria-label="Volunteering and open source projects. Use left and right arrow keys to browse."
+          >
+            <div class="carousel-track" id="open-source-carousel-track"></div>
+          </div>
+          <div class="work-footer">
+            <p id="open-source-selected-project" data-carousel-caption>All Things Open <span>— Volunteer · Raleigh, NC</span></p>
+            <button id="open-source-open-project" data-carousel-open>View project <span>↗︎</span></button>
+          </div>
+          </div>
+        </section>
+        <section
           class="work photography is-collapsed"
           id="photography"
           aria-label="Photography carousel"
