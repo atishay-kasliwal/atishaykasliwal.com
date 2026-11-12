@@ -70,7 +70,6 @@ export async function buildPhotography() {
   <main class="portfolio photography-portfolio">
     <header class="photography-header">
       <a href="/" class="home-link">← Back</a>
-      <p class="photography-intro">Photographs by Atishay Kasliwal: city streets and skylines, landscapes and everyday moments.</p>
     </header>
     <section class="photography-content" aria-labelledby="photography-title">
       <h1 id="photography-title" class="visually-hidden">Photography</h1>

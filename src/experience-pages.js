@@ -10,7 +10,7 @@ export const experiencePages = [
     started: "2024-11-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Software Engineer, Research — Stony Brook · Atishay Kasliwal",
+      title: "Software Engineer, Research - Stony Brook · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's research role at Stony Brook University: event-driven research infrastructure, production AI services, and real-time analytical interfaces.",
     },
@@ -82,7 +82,7 @@ export const experiencePages = [
     started: "2025-05-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Software Engineer — Wake Forest CAIR · Atishay Kasliwal",
+      title: "Software Engineer - Wake Forest CAIR · Atishay Kasliwal",
       description:
         "Atishay Kasliwal at Wake Forest CAIR: an AI radiology platform on GCP over 10K+ MRI studies that cut tumor segmentation from 3 hours to 2 minutes.",
     },
@@ -150,7 +150,7 @@ export const experiencePages = [
     started: "2021-08-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Senior Software Engineer — Accolite · Atishay Kasliwal",
+      title: "Senior Software Engineer - Accolite · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's three years at Accolite: 20+ production microservices across fintech, telecom and commerce, supporting 100,000+ monthly users.",
     },
@@ -222,7 +222,7 @@ export const experiencePages = [
     started: "2020-08-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Software Engineer Intern — Shriffle · Atishay Kasliwal",
+      title: "Software Engineer Intern - Shriffle · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's internship at Shriffle: billing microservices processing $50,000 in daily revenue, and a real-time operations dashboard.",
     },
@@ -284,7 +284,7 @@ export const experiencePages = [
     started: "2024-08-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "M.S. in Data Science — Stony Brook · Atishay Kasliwal",
+      title: "M.S. in Data Science - Stony Brook · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's M.S. in Data Science at Stony Brook University (2024 to 2026): statistical learning, big data algorithms, data management and NLP.",
     },
@@ -342,7 +342,7 @@ export const experiencePages = [
     started: "2018-05-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "B.Tech CS — Symbiosis University · Atishay Kasliwal",
+      title: "B.Tech CS - Symbiosis University · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's B.Tech in Computer Science and Information Technology at Symbiosis University, 2018 to 2022.",
     },

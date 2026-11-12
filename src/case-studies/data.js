@@ -11,7 +11,7 @@ export const caseStudies = [
     started: "2026-02-22", // first tracker commit: "Add dashboard page with owner login"
     lastModified: "2026-11-12",
     seo: {
-      title: "Atriveo Tracker — Job Application Tracker · Atishay Kasliwal",
+      title: "Atriveo Tracker - Job Application Tracker · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriveo Tracker: a Chrome extension that saves job applications from 60 job sites in one click, and the dashboard behind it.",
       category: "BusinessApplication",
@@ -112,7 +112,7 @@ export const caseStudies = [
     started: "2026-06-16", // first commit: "Initial commit: Atriveo Cortex extraction inspector"
     lastModified: "2026-11-12",
     seo: {
-      title: "Atriveo Cortex — AI Working Memory · Atishay Kasliwal",
+      title: "Atriveo Cortex - AI Working Memory · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriveo Cortex: local screen history turned into work sessions, projects and commitments, published to a private web dashboard.",
       category: "ProductivityApplication",
@@ -202,7 +202,7 @@ export const caseStudies = [
     started: "2026-06-19", // first commit: "Initial public release of Cortex Bio."
     lastModified: "2026-11-12",
     seo: {
-      title: "Atriveo Bio — Wearable Readiness API · Atishay Kasliwal",
+      title: "Atriveo Bio - Wearable Readiness API · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriveo Bio: an API that turns Apple Health data into an explainable readiness score, personal baselines and deep-work forecasts.",
       category: "HealthApplication",
@@ -302,7 +302,7 @@ export const caseStudies = [
     lastModified: "2026-11-12",
     started: "2026-03-25", // job-pipeline's first commit; open-sourced as Atriveo-JD-Extractor on 2026-06-24
     seo: {
-      title: "Atriveo Job Search — Self-Hosted Pipeline · Atishay Kasliwal",
+      title: "Atriveo Job Search - Self-Hosted Pipeline · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriveo Job Search: hourly job scraping, a 0–10 fit score, and one-page résumés tailored by a local LLM on your own machine.",
       category: "BusinessApplication",
@@ -402,7 +402,7 @@ export const caseStudies = [
     started: "2024-05-07", // first commit: "first microservice: twitter to kafka service"
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Insurance Platform — Kafka Microservices · Atishay Kasliwal",
+      title: "Insurance Platform - Kafka Microservices · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal turned a Kafka streaming exercise into an event-driven insurance platform with CQRS, Elasticsearch and a rate-limited gateway.",
       language: "Java",
@@ -479,7 +479,7 @@ export const caseStudies = [
     started: "2026-07-02", // repo history squashed to one commit: "FedTalk: FOMC statement sentiment analysis..."
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "FedTalk — Can an LLM Read the Fed? · Atishay Kasliwal",
+      title: "FedTalk - Can an LLM Read the Fed? · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's research project testing whether GPT-4o-mini can predict market reaction to FOMC statements, using transcripts and minute-level prices.",
       language: "Python",
@@ -558,7 +558,7 @@ export const caseStudies = [
     started: "2026-05-01", // first commit: "Add profile README"
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Beyond the Resume — Personal Profile · Atishay Kasliwal",
+      title: "Beyond the Resume - Personal Profile · Atishay Kasliwal",
       description:
         "A closer look at Atishay Kasliwal's experience, the projects he's built, what he's working on now, and a few things outside of code, including photography.",
       language: "Markdown",
@@ -639,7 +639,7 @@ export const caseStudies = [
     started: "2026-08-10", // first commit: "Atriveo Reel: vertical comparison reels, self-hosted"
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Atriveo Reel — Vertical Comparison Videos · Atishay Kasliwal",
+      title: "Atriveo Reel - Vertical Comparison Videos · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriveo Reel: paste two clips, pick two moments, and get a 1080×1920 comparison video rendered by a worker that outlives the tab.",
       language: "TypeScript",
@@ -716,7 +716,7 @@ export const caseStudies = [
     started: "2026-04-28", // first commit: "Initial commit: InsureRaft distributed insurance data transfer system"
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "InsureRaft — Raft Insurance Event Log · Atishay Kasliwal",
+      title: "InsureRaft - Raft Insurance Event Log · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built InsureRaft: a Raft-replicated log of insurance events in C++ on NuRaft, where the log itself is the audit trail.",
       language: "C++",
@@ -968,7 +968,7 @@ export const caseStudies = [
     started: "2026-10-26", // repo created
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Chaal.tech — Teen Patti With No Sign-Up · Atishay Kasliwal",
+      title: "Chaal.tech - Teen Patti With No Sign-Up · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal evolved Chaal.tech: a no-sign-up teen patti game with an authoritative Cloudflare Durable Object per room and eight rule sets.",
       language: "JavaScript",
@@ -1043,7 +1043,7 @@ export const caseStudies = [
     started: "2026-10-20", // repo created
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Atriaa — ER Waiting-Room Intelligence · Atishay Kasliwal",
+      title: "Atriaa - ER Waiting-Room Intelligence · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built Atriaa: a multi-agent hospital command center that flags ER patients whose readings worsen after triage.",
       language: "Python",
@@ -1116,7 +1116,7 @@ export const caseStudies = [
     started: "2026-10-25", // repo created
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Medscan — Health and Billing Answers · Atishay Kasliwal",
+      title: "Medscan - Health and Billing Answers · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built the Medscan proof of concept: fragmented health and billing data turned into answers and a QR-linked report.",
       language: "Python",

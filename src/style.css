@@ -2629,6 +2629,13 @@ html.scroll-story .scroll-cue {
 
 /* Email and social links sit in the footer, between the copyright and the sponsor button. */
 .site-footer { align-items: center; padding-block: 6px max(8px, env(safe-area-inset-bottom)); }
+/* Three columns with equal outer tracks, so the email and icons sit at the true centre whatever
+   the copyright and sponsor widths are (space-between pushed them right of centre). */
+@media (min-width: 701px) {
+  .site-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 16px; }
+  .site-footer > :first-child { justify-self: start; }
+  .site-footer > :last-child { justify-self: end; }
+}
 .footer-socials.social-logos { gap: 0; }
 .site-footer .social-logos a.social-logo { width: 28px; min-width: 28px; height: 28px; min-height: 28px; color: #848480; }
 .site-footer .social-logos .social-logo svg { width: 13px; height: 13px; }
