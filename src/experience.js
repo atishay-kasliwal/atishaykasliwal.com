@@ -2,7 +2,8 @@
 // project: name, category, tag, theme, card (art), plus caseStudy linking to the full
 // /experience/<slug>/ page (see src/experience-pages.js).
 // `card`/`art` use the same real photos as the lead image on each entry's own page
-// (see src/experience-pages.js's media.items[0]), not an invented illustration.
+// (see src/experience-pages.js's media.items[0]), not an invented illustration. Shriffle is the
+// exception: its card is a styled cover, since the only real images are brand marks.
 const entry = ({ slug, tag, role, place, start, end, photo, thumb, alt, description }) => {
   const card = `<img src="/experience/media/${slug}/${photo}-thumb.webp" width="${thumb[0]}" height="${thumb[1]}" alt="" decoding="async" />`;
   const art = `<img src="/experience/media/${slug}/${photo}.webp" alt="" decoding="async" />`;
@@ -70,9 +71,9 @@ export const experience = [
     place: "Shriffle",
     start: "Aug 2020",
     end: "May 2021",
-    photo: "brand-2",
-    thumb: [360, 180],
-    alt: "Shriffle brand mark",
+    photo: "card",
+    thumb: [720, 405],
+    alt: "A laptop with code, wireframe sketches and a coffee on a dark desk, titled Shriffle",
     description:
       "Billing microservices in Spring Boot processing $50,000 in daily revenue, a real-time React operations dashboard that cut support tickets 30%, and automated test coverage raised to 99% ahead of production deploys.",
   }),

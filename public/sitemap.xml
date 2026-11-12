@@ -90,12 +90,6 @@
     </image:image>
   </url>
   <url>
-    <loc>https://atishaykasliwal.com/projects/insurance-platform/</loc>
-    <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/video/insurance-poster.webp</image:loc>
-    </image:image>
-  </url>
-  <url>
     <loc>https://atishaykasliwal.com/projects/atriveo-cortex/</loc>
     <lastmod>2026-09-27</lastmod>
     <image:image>
@@ -103,6 +97,12 @@
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/screens/cortex.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/chaal-tech/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/chaal-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -138,9 +138,21 @@
     </image:image>
   </url>
   <url>
+    <loc>https://atishaykasliwal.com/projects/kaggriculture/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/kaggriculture-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://atishaykasliwal.com/projects/fedtalk/</loc>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/video/fedtalk-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/insurance-platform/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/insurance-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -165,9 +177,21 @@
     </image:image>
   </url>
   <url>
-    <loc>https://atishaykasliwal.com/projects/kaggriculture/</loc>
+    <loc>https://atishaykasliwal.com/projects/insureraft/</loc>
     <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/video/kaggriculture-poster.webp</image:loc>
+      <image:loc>https://atishaykasliwal.com/projects/video/raft-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/atriaa/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/atriaa-poster.webp</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://atishaykasliwal.com/projects/medscan/</loc>
+    <image:image>
+      <image:loc>https://atishaykasliwal.com/projects/video/medscan-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -183,30 +207,6 @@
     </image:image>
     <image:image>
       <image:loc>https://atishaykasliwal.com/projects/media/bayesian-mmm/budget_allocation.webp</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://atishaykasliwal.com/projects/insureraft/</loc>
-    <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/video/raft-poster.webp</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://atishaykasliwal.com/projects/chaal-tech/</loc>
-    <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/video/chaal-poster.webp</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://atishaykasliwal.com/projects/atriaa/</loc>
-    <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/video/atriaa-poster.webp</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://atishaykasliwal.com/projects/medscan/</loc>
-    <image:image>
-      <image:loc>https://atishaykasliwal.com/projects/video/medscan-poster.webp</image:loc>
     </image:image>
   </url>
   <url>
