@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - master
-  # Daily redeploy with fresh GitHub activity for the homepage.
+  # Hourly redeploy with fresh GitHub activity for the homepage.
   schedule:
-    - cron: "17 10 * * *"
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 jobs:

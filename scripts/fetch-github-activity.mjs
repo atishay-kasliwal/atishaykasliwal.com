@@ -1,7 +1,7 @@
 // Writes src/github-activity.json: the latest public push, daily contributions for the last
 // 30 days, pull requests merged into other people's repositories, and a short history of
 // recent pull requests, pushes, issues, replies and reviews. The build renders the homepage status line from this file, so builds never call
-// GitHub. The deploy workflow refreshes it daily; if a fetch fails, the existing file is kept.
+// GitHub. The deploy workflow refreshes it hourly; if a fetch fails, the existing file is kept.
 //
 // Auth: GITHUB_TOKEN, or the GitHub CLI's token locally.
 import { execSync } from "node:child_process";
