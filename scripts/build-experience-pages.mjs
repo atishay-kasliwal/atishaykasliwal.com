@@ -37,6 +37,7 @@ function structuredData(entry) {
         mainEntity: { "@id": PERSON },
         breadcrumb: { "@id": `${url}#breadcrumb` },
         author: { "@id": PERSON },
+        ...(entry.lastModified ? { dateModified: entry.lastModified } : {}),
       },
       {
         "@type": "BreadcrumbList",
@@ -211,7 +212,7 @@ function sitemapEntries(entries) {
       const images = entry.media.items
         .map(item => `    <image:image>\n      <image:loc>${escape(new URL(item.src, SITE).href)}</image:loc>\n    </image:image>\n`)
         .join("");
-      return `  <url>\n    <loc>${pageUrl(entry.slug)}</loc>\n${images}  </url>`;
+      return `  <url>\n    <loc>${pageUrl(entry.slug)}</loc>\n${entry.lastModified ? `    <lastmod>${entry.lastModified}</lastmod>\n` : ""}${images}  </url>`;
     })
     .join("\n");
 }

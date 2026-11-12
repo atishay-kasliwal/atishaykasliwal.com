@@ -9,7 +9,7 @@ export const caseStudies = [
     name: "Atriveo Tracker",
     live: true,
     started: "2026-02-22", // first tracker commit: "Add dashboard page with owner login"
-    lastModified: "2026-09-27",
+    lastModified: "2026-11-12",
     seo: {
       title: "Atriveo Tracker — Job Application Tracker · Atishay Kasliwal",
       description:
@@ -110,7 +110,7 @@ export const caseStudies = [
     name: "Atriveo Cortex",
     live: true,
     started: "2026-06-16", // first commit: "Initial commit: Atriveo Cortex extraction inspector"
-    lastModified: "2026-09-27",
+    lastModified: "2026-11-12",
     seo: {
       title: "Atriveo Cortex — AI Working Memory · Atishay Kasliwal",
       description:
@@ -200,7 +200,7 @@ export const caseStudies = [
     name: "Atriveo Bio",
     live: true,
     started: "2026-06-19", // first commit: "Initial public release of Cortex Bio."
-    lastModified: "2026-09-27",
+    lastModified: "2026-11-12",
     seo: {
       title: "Atriveo Bio — Wearable Readiness API · Atishay Kasliwal",
       description:
@@ -299,7 +299,7 @@ export const caseStudies = [
     slug: "atriveo-job-search",
     name: "Atriveo Job Search",
     live: true,
-    lastModified: "2026-09-27",
+    lastModified: "2026-11-12",
     started: "2026-03-25", // job-pipeline's first commit; open-sourced as Atriveo-JD-Extractor on 2026-06-24
     seo: {
       title: "Atriveo Job Search — Self-Hosted Pipeline · Atishay Kasliwal",
@@ -400,6 +400,7 @@ export const caseStudies = [
     name: "Insurance Platform",
     live: false,
     started: "2024-05-07", // first commit: "first microservice: twitter to kafka service"
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Insurance Platform — Kafka Microservices · Atishay Kasliwal",
       description:
@@ -476,6 +477,7 @@ export const caseStudies = [
     name: "FedTalk",
     live: false,
     started: "2026-07-02", // repo history squashed to one commit: "FedTalk: FOMC statement sentiment analysis..."
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "FedTalk — Can an LLM Read the Fed? · Atishay Kasliwal",
       description:
@@ -554,6 +556,7 @@ export const caseStudies = [
     schemaType: "CreativeWork",
     live: false,
     started: "2026-05-01", // first commit: "Add profile README"
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Beyond the Resume — Personal Profile · Atishay Kasliwal",
       description:
@@ -634,6 +637,7 @@ export const caseStudies = [
     name: "Atriveo Reel",
     live: false,
     started: "2026-08-10", // first commit: "Atriveo Reel: vertical comparison reels, self-hosted"
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Atriveo Reel — Vertical Comparison Videos · Atishay Kasliwal",
       description:
@@ -710,6 +714,7 @@ export const caseStudies = [
     name: "InsureRaft",
     live: false,
     started: "2026-04-28", // first commit: "Initial commit: InsureRaft distributed insurance data transfer system"
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "InsureRaft — Raft Insurance Event Log · Atishay Kasliwal",
       description:
@@ -786,6 +791,7 @@ export const caseStudies = [
     name: "Kaggriculture",
     live: false,
     started: "2026-08-06", // first commit: "Phase 1: environment setup, PASS/single-crop agents, crop profitability measurement"
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       // People reach this page searching "kaggriculture", "kaggriculture kaggle", "kaggriculture
       // competition" and "kaggriculture github" (Search Console, Aug-Nov 2026), so the title and
@@ -865,6 +871,7 @@ export const caseStudies = [
     name: "Bayesian Marketing Mix",
     live: false,
     started: "2026-04-28", // first commit: "Initial project setup — structure, README, requirements"
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Bayesian Marketing Mix Model · Atishay Kasliwal",
       description:
@@ -959,6 +966,7 @@ export const caseStudies = [
     name: "Chaal.tech",
     live: true,
     started: "2026-10-26", // repo created
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Chaal.tech — Teen Patti With No Sign-Up · Atishay Kasliwal",
       description:
@@ -1033,6 +1041,7 @@ export const caseStudies = [
     name: "Atriaa",
     live: false,
     started: "2026-10-20", // repo created
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Atriaa — ER Waiting-Room Intelligence · Atishay Kasliwal",
       description:
@@ -1105,6 +1114,7 @@ export const caseStudies = [
     name: "Medscan",
     live: false,
     started: "2026-10-25", // repo created
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Medscan — Health and Billing Answers · Atishay Kasliwal",
       description:

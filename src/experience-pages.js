@@ -8,6 +8,7 @@ export const experiencePages = [
     name: "Software Engineer, Research",
     kicker: "Work",
     started: "2024-11-01",
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Software Engineer, Research — Stony Brook · Atishay Kasliwal",
       description:
@@ -79,6 +80,7 @@ export const experiencePages = [
     name: "Artificial Intelligence Engineer",
     kicker: "Work",
     started: "2025-05-01",
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "AI Engineer — Wake Forest CAIR · Atishay Kasliwal",
       description:
@@ -146,6 +148,7 @@ export const experiencePages = [
     name: "Senior Software Engineer",
     kicker: "Work",
     started: "2021-08-01",
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Senior Software Engineer — Accolite · Atishay Kasliwal",
       description:
@@ -196,11 +199,11 @@ export const experiencePages = [
     sections: [
       {
         title: "Twenty services, three industries",
-        body: "Designed and built 20+ production microservices across fintech, telecom and commerce using Java, Python and Spring Boot, supporting $1M+ in transactions and 100,000+ monthly active users at 99.9% uptime.",
+        body: "Designed and built 20+ production microservices across fintech, telecom and commerce using Java, Python and Spring Boot, supporting $1M+ in transactions and 100,000+ monthly active users at 99.9% uptime. For Fidelity, that included an event-driven ETL pipeline on Kafka, Airflow and Spring Boot that ingests 250,000+ daily transactions from 10+ enterprise integrations into PostgreSQL.",
       },
       {
         title: "A vault for insurance data",
-        body: "Designed a secure insurance data vault on AWS Lambda and SQL across 15+ providers, with 100% authentication coverage and onboarding 3x faster than before.",
+        body: "Designed a secure insurance data vault on AWS Lambda and SQL across 15+ providers, with 100% authentication coverage and onboarding 3x faster than before. Security work went further: 10+ Fidelity microservices secured with Spring Security, OAuth2 and JWT, and a serverless Python platform on AWS Lambda automating async workflows for 3,000+ users.",
       },
       {
         title: "Reliability at the TCP layer",
@@ -208,7 +211,7 @@ export const experiencePages = [
       },
       {
         title: "CI/CD across 8 teams",
-        body: "Standardized CI/CD and canary releases across 8 teams, preventing 12+ incidents before they reached production.",
+        body: "Standardized CI/CD and canary releases across 8 teams, preventing 12+ incidents before they reached production. On the front end, a React and TypeScript CRM on Spring Boot cut page load time by 35% for 5,000+ users across customer-facing teams.",
       },
     ],
   },
@@ -217,6 +220,7 @@ export const experiencePages = [
     name: "Software Engineer Intern",
     kicker: "Work",
     started: "2020-08-01",
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "Software Engineer Intern — Shriffle · Atishay Kasliwal",
       description:
@@ -278,6 +282,7 @@ export const experiencePages = [
     name: "M.S. in Data Science",
     kicker: "Education",
     started: "2024-08-01",
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "M.S. in Data Science — Stony Brook · Atishay Kasliwal",
       description:
@@ -335,6 +340,7 @@ export const experiencePages = [
     name: "B.Tech, Computer Science",
     kicker: "Education",
     started: "2018-05-01",
+    lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
       title: "B.Tech CS — Symbiosis University · Atishay Kasliwal",
       description:
