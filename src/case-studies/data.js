@@ -620,7 +620,7 @@ export const caseStudies = [
       },
       {
         title: "Four jobs, and what I actually did in them",
-        body: "I've built research infrastructure at Stony Brook University, medical-imaging pipelines across 50,000+ scans at Wake Forest CAIR, and production microservices serving 100,000+ monthly users at Accolite, plus billing systems handling 10,000+ daily transactions as an intern at Shriffle. I'd rather someone read that than a job title.",
+        body: "I've built research infrastructure at Stony Brook University, a medical-imaging platform over 10K+ MRI studies at Wake Forest CAIR, and production microservices serving 100,000+ monthly users at Accolite, plus billing systems handling 10,000+ daily transactions as an intern at Shriffle. I'd rather someone read that than a job title.",
       },
       {
         title: "What I've actually built",

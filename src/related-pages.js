@@ -8,7 +8,7 @@ const P = {
   sbuResearch: ["/experience/stony-brook-research/", "Software Engineer, Research, Stony Brook"],
   sbu: ["/experience/stony-brook-university/", "M.S. in Data Science, Stony Brook"],
   symbiosis: ["/experience/symbiosis-university/", "B.Tech, Symbiosis University"],
-  cair: ["/experience/wake-forest-cair/", "AI Engineer, Wake Forest CAIR"],
+  cair: ["/experience/wake-forest-cair/", "Software Engineer, Wake Forest CAIR"],
   tracker: ["/projects/atriveo-tracker/", "Atriveo Tracker"],
   jobs: ["/projects/atriveo-job-search/", "Atriveo Job Search"],
   bio: ["/projects/atriveo-bio/", "Atriveo Bio"],

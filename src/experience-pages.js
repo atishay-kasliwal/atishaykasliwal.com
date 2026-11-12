@@ -23,9 +23,9 @@ export const experiencePages = [
       { label: "Dates", html: "<b>November 2024</b> – May 2026" },
     ],
     stats: [
-      { value: "10K+", label: "FOMC intervals ingested" },
-      { value: "62%", label: "directional accuracy" },
-      { value: "80%", label: "cut in inference timeouts" },
+      { value: "~1,000", label: "daily platform users" },
+      { value: "~68%", label: "FedTalk directional accuracy, 13 FOMC sessions" },
+      { value: "80.8%", label: "sentiment accuracy, 1,159 intervals" },
     ],
     links: [{ label: "Visit Stony Brook University", href: "https://www.stonybrook.edu" }],
     media: {
@@ -59,45 +59,45 @@ export const experiencePages = [
     sections: [
       {
         title: "An async backend for a research pace",
-        body: "The platform ingests more than 10,000 FOMC intervals through Django REST and asynchronous processing on NoSQL storage, built to enable macro prediction models that reach 62% directional accuracy.",
+        body: "The platform ingests more than 10,000 FOMC intervals through Django REST and asynchronous processing on NoSQL storage, the research data the models are built on.",
       },
       {
         title: "Production AI, not a demo",
         body: "LLM service components run in production with connection pooling and circuit breakers, cutting inference timeouts by 80% and stabilizing 10,000+ daily embeddings for live NLP signal generation.",
       },
       {
-        title: "Interfaces for people, not just for me",
-        body: "React and D3.js front-end features give more than 20 people across 3 departments real-time data visualization with sub-2-second performance, so the research is legible to people who didn't build the pipeline.",
+        title: "A platform people use daily",
+        body: "The broader research platform, with Kafka and FastAPI behind a front end on Google Cloud, grew from 200+ daily users to about 1,000, alongside a smaller internal workflow for 5 researchers and analysts.",
       },
       {
-        title: "Iteration speed as an engineering problem",
-        body: "DevOps changes, Docker, CI/CD, CloudWatch, took one experiment loop from 6 hours to 90 seconds, at 99% uptime. That change alone is what made the rest of the work practical to iterate on.",
+        title: "FedTalk, measured honestly",
+        body: "FedTalk reads FOMC statements with Whisper transcription and Pinecone retrieval and predicts the market's reaction at 1, 5 and 10 minutes. An earlier evaluation across 13 FOMC sessions reached about 68% directional accuracy. A separate sentiment benchmark scored 80.8% on 1,159 five-minute intervals.",
       },
     ],
   },
   {
     slug: "wake-forest-cair",
-    name: "Artificial Intelligence Engineer",
+    name: "Software Engineer",
     kicker: "Work",
     started: "2025-05-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "AI Engineer — Wake Forest CAIR · Atishay Kasliwal",
+      title: "Software Engineer — Wake Forest CAIR · Atishay Kasliwal",
       description:
-        "Atishay Kasliwal's summer at Wake Forest CAIR: cloud-native PyTorch model serving across 50,000+ medical-imaging scans and 10 TB of data.",
+        "Atishay Kasliwal at Wake Forest CAIR: an AI radiology platform on GCP over 10K+ MRI studies that cut tumor segmentation from 3 hours to 2 minutes.",
     },
-    headline: "50,000 scans, and a pipeline that had to trust its own labels.",
+    headline: "From three hours of tumor outlining to two minutes.",
     headlineSoft: "Wake Forest CAIR, May to August 2025.",
     lede:
-      "A summer at the Center for Artificial Intelligence Research, serving PyTorch models on GCP against a real hospital-scale imaging dataset, where the hard part wasn't the model, it was making 50,000 scans and 10 TB of data trustworthy enough to train on.",
+      "A summer at the Center for Artificial Intelligence Research building one medical-imaging platform on GCP, with separate brain-tumor, stroke and processing workstreams, for a 20-person physician-research team. The hard part was making 10K+ heterogeneous MRI studies consistent enough to trust.",
     spec: [
       { label: "Where", html: "<b>Wake Forest CAIR</b> · Winston-Salem, NC" },
       { label: "Dates", html: "<b>May 2025</b> – August 2025" },
     ],
     stats: [
-      { value: "50,000+", label: "imaging scans processed" },
-      { value: "10 TB", label: "of data" },
-      { value: "95%", label: "radiologist concordance" },
+      { value: "10K+", label: "MRI studies in the platform" },
+      { value: "3 h → 2 min", label: "tumor segmentation per scan" },
+      { value: "90%+", label: "tumor mask accuracy" },
     ],
     links: [{ label: "Visit Wake Forest School of Medicine", href: "https://school.wakehealth.edu" }],
     media: {
@@ -130,16 +130,16 @@ export const experiencePages = [
     },
     sections: [
       {
-        title: "Model serving at hospital scale",
-        body: "Cloud-native AI services served PyTorch models on GCP with Terraform, processing more than 50,000 medical-imaging scans and 10 TB of data, not as a one-off batch job but as infrastructure meant to keep running.",
+        title: "One platform, upload to insight",
+        body: "An MRI upload triggers preprocessing (registration, denoising, alignment to one plane), AI tumor segmentation, PyRadiomics features, patient similarity search and survival analysis, ending in a React and TypeScript dashboard where physicians review and correct masks. The corpus spans 10K+ studies from 5 to 10 years of history.",
       },
       {
-        title: "The real work was the labels",
-        body: "Automated data curation with MNI152 standardization, using Python, NiBabel and SimpleITK, reduced preprocessing from 4 hours to 18 minutes per case and reached 95% radiologist concordance, the number that actually mattered.",
+        title: "Segmentation in minutes",
+        body: "A PyTorch segmentation model on N4ITK bias-corrected MRI reached 90%+ tumor mask accuracy and cut manual outlining from about 3 hours to 2 minutes per scan. SimpleITK pipelines standardized 5 modalities (T1, T2, DWI, heatmap, FLAIR) out of 10+ scan types, with Apache Airflow ETL building research-ready cohorts and 200+ radiomic biomarkers.",
       },
       {
-        title: "Monitoring that earns trust",
-        body: "Delivered monitoring tools alongside the pipeline, holding P99 latency at 1.6 seconds, so the team could see the system behave in production, not just read a paper metric.",
+        title: "Stroke study and the latest pipeline",
+        body: "A separate stroke study ingested, cleaned and preprocessed 450+ DICOM MRI studies, extracted 500+ features and reached 87% predictive accuracy for doctors, residents and researchers. The latest processing pipeline handled 2,250 cases, cutting end-to-end processing from about 20 minutes to under 5.",
       },
     ],
   },
@@ -199,11 +199,11 @@ export const experiencePages = [
     sections: [
       {
         title: "Twenty services, three industries",
-        body: "Designed and built 20+ production microservices across fintech, telecom and commerce using Java, Python and Spring Boot, supporting $1M+ in transactions and 100,000+ monthly active users at 99.9% uptime. For Fidelity, that included an event-driven ETL pipeline on Kafka, Airflow and Spring Boot that ingests 250,000+ daily transactions from 10+ enterprise integrations into PostgreSQL.",
+        body: "Designed and built 20+ production microservices across fintech, telecom and commerce using Java, Python and Spring Boot, supporting $1M+ in transactions and 100,000+ monthly active users at 99.9% uptime. For Fidelity, that included a high-volume financial-data backend on Kafka, Airflow and PostgreSQL, and work across Fidelity that cut latency about 35% and improved scalability about 30%.",
       },
       {
         title: "A vault for insurance data",
-        body: "Designed a secure insurance data vault on AWS Lambda and SQL across 15+ providers, with 100% authentication coverage and onboarding 3x faster than before. Security work went further: 10+ Fidelity microservices secured with Spring Security, OAuth2 and JWT, and a serverless Python platform on AWS Lambda automating async workflows for 3,000+ users.",
+        body: "Designed a secure insurance data vault on AWS Lambda and SQL across 15+ providers, with 100% authentication coverage and onboarding 3x faster than before. Fidelity's backend services were secured with Spring Security, OAuth2 and JWT. In-house, an ERP onboarding module served 3,000 employees, and Slack bots filed ERP timesheets from natural-language weekly updates.",
       },
       {
         title: "Reliability at the TCP layer",
@@ -211,7 +211,7 @@ export const experiencePages = [
       },
       {
         title: "CI/CD across 8 teams",
-        body: "Standardized CI/CD and canary releases across 8 teams, preventing 12+ incidents before they reached production. On the front end, a React and TypeScript CRM on Spring Boot cut page load time by 35% for 5,000+ users across customer-facing teams.",
+        body: "Standardized CI/CD and canary releases across 8 teams, preventing 12+ incidents before they reached production. A Jenkins, Docker and Kubernetes pipeline for 20 engineers took deploys from 6 hours to 90 seconds, at 20+ releases a month. Along the way: 500+ technical interviews, and interns mentored into full-time roles.",
       },
     ],
   },
@@ -265,7 +265,7 @@ export const experiencePages = [
     sections: [
       {
         title: "Billing, at real volume",
-        body: "Shipped billing microservices in Java and Spring Boot REST APIs on GCP, processing $50,000 in daily revenue, real money moving through code I'd written.",
+        body: "Shipped billing microservices in Java and Spring Boot REST APIs on GCP, processing $50,000 in daily revenue, real money moving through code I'd written. I also programmed telecom backend integrations in Java and REST for client provisioning workflows.",
       },
       {
         title: "A dashboard people actually used",

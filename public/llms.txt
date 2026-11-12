@@ -2,7 +2,7 @@
 
 > Software and AI engineer in New York with 5+ years in production: distributed systems, LLM products, and the web interfaces on top of them. M.S. in Data Science, Stony Brook University (2026). Building Atriveo. Open to software engineering and AI/ML engineering roles.
 
-Atishay spent three years at Accolite as a senior software engineer, shipping microservices for fintech, telecom and commerce clients that handled $1M+ in transactions for 100,000+ monthly users. Then came AI work. A research engineering role at Stony Brook built LLM services and the infrastructure behind them, and an AI engineering internship at Wake Forest's Center for Artificial Intelligence Research served medical-imaging models over 50,000+ scans. Most new work ships under Atriveo, a set of small live products for job seekers, health data and personal memory. Strongest in Python, Java and TypeScript, with merged open source work in Go and Rust.
+Atishay spent three years at Accolite as a senior software engineer, shipping microservices for fintech, telecom and commerce clients that handled $1M+ in transactions for 100,000+ monthly users. Then came AI work. A research engineering role at Stony Brook built LLM services and the infrastructure behind them, and a software engineering role at Wake Forest's Center for Artificial Intelligence Research built an AI radiology platform over 10K+ MRI studies. Most new work ships under Atriveo, a set of small live products for job seekers, health data and personal memory. Strongest in Python, Java and TypeScript, with merged open source work in Go and Rust.
 
 Contact: katishay@gmail.com
 
@@ -26,16 +26,17 @@ Contact: katishay@gmail.com
 
 ## Experience
 
-- [Senior Software Engineer, Accolite (Aug 2021 to Aug 2024)](https://atishaykasliwal.com/experience/accolite/): 20+ production microservices across fintech, telecom and commerce, supporting $1M+ in transactions and 100,000+ monthly users at 99.9% uptime. Built a secure insurance data vault across 15+ providers and standardized CI/CD for 8 teams.
-- [Software Engineer, Research, Stony Brook University (Nov 2024 to May 2026)](https://atishaykasliwal.com/experience/stony-brook-research/): Event-driven research infrastructure and production AI services. An async backend ingests 10,000+ FOMC intervals. LLM service changes cut inference timeouts by 80%, and DevOps work took one experiment loop from 6 hours to 90 seconds.
-- [Artificial Intelligence Engineer, Wake Forest CAIR (May 2025 to Aug 2025)](https://atishaykasliwal.com/experience/wake-forest-cair/): Cloud-native PyTorch model serving on GCP with Terraform, across 50,000+ medical-imaging scans and 10 TB of data. Automated curation cut preprocessing from 4 hours to 18 minutes at 95% radiologist concordance.
-- [Software Engineer Intern, Shriffle (Aug 2020 to May 2021)](https://atishaykasliwal.com/experience/shriffle/): Spring Boot billing services processing $50,000 a day, a real-time React operations dashboard that cut support tickets 30%, and test coverage raised to 99%.
+- [Senior Software Engineer, Accolite (Aug 2021 to Aug 2024)](https://atishaykasliwal.com/experience/accolite/): 20+ production microservices across fintech, telecom and commerce, supporting $1M+ in transactions and 100,000+ monthly users at 99.9% uptime. Built a secure insurance data vault across 15+ providers, cut Fidelity latency about 35% and improved scalability about 30%, and took deploys from 6 hours to 90 seconds for 20 engineers with Jenkins, Docker and Kubernetes. Conducted 500+ technical interviews.
+- [Software Engineer, Research, Stony Brook University (Nov 2024 to May 2026)](https://atishaykasliwal.com/experience/stony-brook-research/): Research infrastructure and production AI services. The research platform grew from 200+ to about 1,000 daily users. FedTalk, which reads FOMC statements with Whisper and Pinecone retrieval, reached about 68% directional accuracy across 13 FOMC sessions in an earlier evaluation. A separate sentiment benchmark scored 80.8% on 1,159 five-minute intervals.
+- [Software Engineer, Wake Forest CAIR (May 2025 to Aug 2025)](https://atishaykasliwal.com/experience/wake-forest-cair/): An AI radiology platform on GCP over 10K+ MRI studies for a 20-person physician-research team. A PyTorch tumor segmentation model reached 90%+ mask accuracy and cut manual outlining from about 3 hours to 2 minutes per scan. A separate stroke study reached 87% predictive accuracy on 450+ MRI studies, and the latest pipeline processed 2,250 cases in under 5 minutes each, down from about 20.
+- [Software Engineer Intern, Shriffle (Aug 2020 to May 2021)](https://atishaykasliwal.com/experience/shriffle/): Spring Boot billing services processing $50,000 a day, telecom backend integrations in Java and REST, a real-time React operations dashboard that cut support tickets 30%, and test coverage raised to 99%.
 
 ## Scale and results
 
-- Fidelity, through Accolite: an event-driven ETL pipeline in Java, Spring Boot, Kafka and Airflow ingesting 250K+ daily transactions from 10+ enterprise integrations into PostgreSQL.
-- Accolite: reworked Redis caching and Elasticsearch layers for 100K+ users, cutting P99 latency 40% with zero Sev1 incidents across Jenkins deployments. Secured 10+ Fidelity microservices with Spring Security, OAuth2 and JWT.
-- Stony Brook: a React, TypeScript and FastAPI platform that cut multi-model FOMC review from 30+ minutes to under 3 minutes for 2,000+ users. FastAPI microservices on DynamoDB serve structured financial data at 300 ms P99.
+- Fidelity, through Accolite: a high-volume financial-data backend on Kafka, Airflow and PostgreSQL, secured with Spring Security, OAuth2 and JWT. Work across Fidelity cut latency about 35% and improved scalability about 30%.
+- Accolite CI/CD: Jenkins, Docker and Kubernetes for 20 engineers, deploys from 6 hours to 90 seconds, 20+ releases a month. In-house, an ERP onboarding module for 3,000 employees.
+- Stony Brook: a research platform that grew to about 1,000 daily users, with Kafka and FastAPI on Google Cloud.
+- Wake Forest CAIR: tumor segmentation from about 3 hours to 2 minutes per scan across a 10K+ MRI study corpus.
 - Atriveo: 1,000+ active users and 2K+ daily queries at 99.9% uptime on Cloudflare Workers. The Chrome extension holds a 5.0-star rating and captures applications from 20+ ATS platforms. Ingestion processes 1K+ new job postings a day and filters out 75% of the noise.
 
 ## Education

@@ -36,12 +36,12 @@ export const experience = [
     thumb: [360, 240],
     alt: "Stony Brook's campus quad in autumn",
     description:
-      "Event-driven research infrastructure and production AI services: an async backend ingesting 10,000+ FOMC intervals, LLM service components that cut inference timeouts 80%, and DevOps changes that took one experiment loop from 6 hours to 90 seconds.",
+      "Research infrastructure and production AI services: a platform that grew to about 1,000 daily users, and FedTalk, which reached about 68% directional accuracy reading FOMC statements across 13 sessions.",
   }),
   entry({
     slug: "wake-forest-cair",
     tag: "WORK",
-    role: "Artificial Intelligence Engineer",
+    role: "Software Engineer",
     place: "Wake Forest CAIR",
     start: "May 2025",
     end: "Aug 2025",
@@ -49,7 +49,7 @@ export const experience = [
     thumb: [360, 202],
     alt: "Wait Chapel on Wake Forest's campus",
     description:
-      "Cloud-native PyTorch model serving on GCP and Terraform across 50,000+ medical-imaging scans and 10 TB of data, with automated curation that cut preprocessing from 4 hours to 18 minutes at 95% radiologist concordance.",
+      "An AI radiology platform on GCP over 10K+ MRI studies: PyTorch tumor segmentation at 90%+ mask accuracy that cut manual outlining from 3 hours to 2 minutes, for a 20-person physician-research team.",
   }),
   entry({
     slug: "accolite",
