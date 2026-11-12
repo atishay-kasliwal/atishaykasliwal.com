@@ -1,3 +1,5 @@
+import versions from "./asset-versions.json" with { type: "json" };
+
 // Fourteen projects from github.com/atishay-kasliwal.
 // `art` is the card and preview-window artwork: a screenshot for live products,
 // an HTML/CSS composition for code-only repos. `stack` sits in the preview window's
@@ -10,11 +12,14 @@
 // `year` (first commit, or repo creation when history was squashed) shows in the cursor marquee.
 // `caseStudy` links the preview window to the project's page (see src/case-studies/data.js).
 // The card button and preview window carry the accessible name, so the image itself is decorative.
+// Each URL carries a fingerprint of the file (scripts/asset-versions.mjs), so a replaced image is
+// never served from a stale browser or edge cache.
+const versioned = file => `/projects/${file}${versions[file] ? `?v=${versions[file]}` : ""}`;
 const shot = file => {
-  const src = `/projects/${file}`;
+  const src = versioned(file);
   if (!file.startsWith("cards/")) return `<img src="${src}" alt="" decoding="async" />`;
   const name = file.slice("cards/".length).replace(/\.webp$/, "");
-  return `<img src="${src}" srcset="/projects/cards/${name}-640.webp 640w, ${src} 1080w" sizes="305px" width="1080" height="664" alt="" decoding="async" />`;
+  return `<img src="${src}" srcset="${versioned(`cards/${name}-640.webp`)} 640w, ${src} 1080w" sizes="305px" width="1080" height="664" alt="" decoding="async" />`;
 };
 
 const reelArt = `

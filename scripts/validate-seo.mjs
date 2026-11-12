@@ -178,7 +178,8 @@ for (const record of indexable) {
     assert.ok(attribute(image, "width") && attribute(image, "height"), `${record.file}: image is missing dimensions`);
     const src = attribute(image, "src");
     if (src?.startsWith("/")) {
-      assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(src.slice(1)))), `${record.file}: missing image ${src}`);
+      // A ?v= fingerprint (scripts/asset-versions.mjs) is not part of the file name.
+      assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(src.slice(1).split("?")[0]))), `${record.file}: missing image ${src}`);
     }
   }
   for (const anchor of record.elements.filter(node => node.tagName === "a")) {
@@ -217,12 +218,12 @@ for (const markup of projects.flatMap(project => [project.card, project.art]).fi
     assert.notEqual(attribute(image, "alt"), undefined, "Carousel artwork image is missing alt text.");
     const src = attribute(image, "src");
     if (src?.startsWith("/")) {
-      assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(src.slice(1)))), `Carousel artwork source is missing: ${src}`);
+      assert.ok(fs.existsSync(path.join(dist, decodeURIComponent(src.slice(1).split("?")[0]))), `Carousel artwork source is missing: ${src}`);
     }
     for (const candidate of (attribute(image, "srcset") ?? "").split(",").map(item => item.trim()).filter(Boolean)) {
       const [source, descriptor] = candidate.split(/\s+/);
       if (!source.startsWith("/")) continue;
-      const imagePath = path.join(dist, decodeURIComponent(source.slice(1)));
+      const imagePath = path.join(dist, decodeURIComponent(source.slice(1).split("?")[0]));
       assert.ok(fs.existsSync(imagePath), `Carousel srcset image is missing: ${source}`);
       const metadata = await sharp(imagePath).metadata();
       assert.equal(Number.parseInt(descriptor, 10), metadata.width, `Carousel srcset width does not match ${source}`);
