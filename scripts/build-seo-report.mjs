@@ -198,23 +198,19 @@ try {
     return /^Disallow:\s*\/\s*$/im.test(group) ? agents : [];
   });
   const blockedAi = AI_BOTS.filter(bot => blockedAgents.some(a => a.toLowerCase() === bot.toLowerCase()));
-  const edge = {};
-  for (const bot of ["GPTBot", "ClaudeBot"]) {
-    edge[bot] = await fetch(`${SITE}/`, { headers: { "User-Agent": `Mozilla/5.0 (compatible; ${bot}/1.0)` }, signal: AbortSignal.timeout(8000) }).then(r => r.status).catch(() => null);
-  }
-  const edgeBlocked = Object.entries(edge).filter(([, status]) => status === 403).map(([bot]) => bot);
+  // A request that only claims to be GPTBot from a build machine is rightly refused by Cloudflare
+  // as an impersonator, so the edge can't be tested from here. Judge by the public robots.txt,
+  // and point to AI Crawl Control's metrics, which identify real crawlers by IP.
   const noTraining = /Content-Signal:[^\n]*ai-train=no/i.test(liveRobots);
-  if (blockedAi.length || edgeBlocked.length || noTraining) {
+  if (blockedAi.length || noTraining) {
     suggest({
       id: "ai-blocked", impact: "high", area: "AI assistants", effort: "Your action",
       title: "AI assistants are blocked from reading your site",
-      why: `The live robots.txt fully blocks ${blockedAi.length ? blockedAi.join(", ") : "AI crawlers"}${edgeBlocked.length ? `, and Cloudflare answers ${edgeBlocked.join(" and ")} with 403 before they reach the site` : ""}${noTraining ? ". It also signals ai-train=no" : ""}. When a recruiter asks ChatGPT or Claude about you, those assistants have nothing first-hand to go on. Your own robots.txt allows them; Cloudflare's managed rules override it.`,
+      why: `The live robots.txt ${blockedAi.length ? `fully blocks ${blockedAi.join(", ")}` : "allows crawling"}${noTraining ? " and signals ai-train=no" : ""}. When a recruiter asks ChatGPT or Claude about you, those assistants have nothing first-hand to go on. Your own robots.txt allows them; Cloudflare's Bot Preference Sync prepends its own rules.`,
       steps: [
-        "Cloudflare dashboard → atishaykasliwal.com → AI Crawl Control.",
-        "Crawlers tab: set AI crawlers to Allow.",
-        "Turn off the managed robots.txt so your own file is served as written.",
-        "Security → Bots: turn off Bot Fight Mode if it is on.",
-        "Redeploy or wait for the daily build; this suggestion disappears once the live checks pass.",
+        "Cloudflare dashboard → atishaykasliwal.com → AI Crawl Control → Overview: turn off Enable Bot Preference Sync.",
+        "AI Crawl Control → Security: set blocked AI crawlers to Allow.",
+        "Check AI Crawl Control → Metrics a day later: real GPTBot and ClaudeBot requests should show as allowed.",
       ],
       where: "Cloudflare dashboard",
     });
