@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - master
-  # Hourly redeploy with fresh GitHub activity for the homepage.
+  # Daily redeploy so the homepage's prerendered GitHub snapshot stays recent. The live panel
+  # comes from functions/api/github-activity.js; GitHub often skips scheduled runs, so they
+  # can't be relied on for freshness.
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17 10 * * *"
   workflow_dispatch:
 
 jobs:

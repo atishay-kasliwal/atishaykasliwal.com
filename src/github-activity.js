@@ -1,6 +1,7 @@
 // Renders the homepage GitHub column from src/github-activity.json (written by
 // scripts/fetch-github-activity.mjs). The build prerenders the markup; in the browser,
-// setupRelativeTimes() turns dates into "3h ago" and setupGithubFeed() opens the history panel.
+// setupRelativeTimes() turns dates into "3h ago", setupGithubFeed() opens the history panel, and
+// setupLiveGithub() swaps in newer activity from /api/github-activity.
 
 const escape = value => String(value).replace(/[&<>"]/g, character => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;",
@@ -101,7 +102,7 @@ export function renderGithubColumn(activity) {
     `${number(mergedUpstream.pullRequests)} pull requests merged upstream`,
   ].filter(Boolean).join(", ");
   return `<h2 class="visually-hidden">GitHub</h2>
-          <button class="github-trigger" type="button" aria-expanded="false" aria-controls="github-feed" aria-label="GitHub activity: ${escape(label)}. Show recent history">
+          <button class="github-trigger" type="button" data-fetched-at="${escape(activity.fetchedAt ?? "")}" aria-expanded="false" aria-controls="github-feed" aria-label="GitHub activity: ${escape(label)}. Show recent history">
             <span class="eyebrow github-eyebrow">${githubMark}${lastPush ? `<span class="github-push">Pushed ${logo(source(activity, lastPush.repo).avatar, "github-push-logo", true)}${sourceLabel(source(activity, lastPush.repo))}</span><span class="github-sep">·</span>${time(lastPush.at)}` : ""}</span>
             <span class="github-totals">${sparkline(activity.dailyContributions)}<span class="github-merged">${mergeIcon}${number(mergedUpstream.pullRequests)}</span>${chevron}</span>
           </button>
@@ -126,7 +127,7 @@ export function renderGithubFact(activity) {
   const push = lastPush ? `<a href="${escape(lastPush.url)}" ${external}>Pushed to ${sourceLabel(source(activity, lastPush.repo))}</a> · ${time(lastPush.at)}` : "";
   const contributions = `<a href="${escape(profileUrl)}" ${external}>${number(total)} in the last 30 days</a>`;
   const merged = `<a href="${escape(mergedUpstream.url)}" ${external}>${number(mergedUpstream.pullRequests)} PRs merged upstream <span class="arrow" aria-hidden="true">↗︎</span></a>`;
-  return `<div>
+  return `<div class="github-fact">
           <dt>GitHub</dt>
           <dd>${push || contributions}<br /><span>${push ? `${contributions} · ` : ""}${merged}</span></dd>
         </div>`;
@@ -177,4 +178,47 @@ export function setupGithubFeed() {
   feed.addEventListener("focusout", event => {
     if (event.relatedTarget && !feed.contains(event.relatedTarget) && event.relatedTarget !== trigger) setOpen(false);
   });
+}
+
+// The prerendered block is as old as the last deploy. Fetch the live activity and, if it is newer,
+// re-render in place: the button and panel keep their elements (and listeners, and open state).
+export async function setupLiveGithub() {
+  const trigger = document.querySelector(".github-trigger");
+  const feed = trigger && document.getElementById(trigger.getAttribute("aria-controls"));
+  if (!feed) return;
+  let activity;
+  try {
+    const response = await fetch("/api/github-activity");
+    if (!response.ok) return;
+    activity = await response.json();
+  } catch {
+    return;
+  }
+  if (!activity?.fetchedAt || !(activity.fetchedAt > (trigger.dataset.fetchedAt ?? ""))) return;
+
+  const fresh = document.createElement("div");
+  fresh.innerHTML = renderGithubColumn(activity);
+  const freshTrigger = fresh.querySelector(".github-trigger");
+  // Keep the bars (and their entrance animation) unless the counts changed.
+  const spark = trigger.querySelector(".github-spark");
+  const freshSpark = freshTrigger.querySelector(".github-spark");
+  if (spark && freshSpark && spark.outerHTML === freshSpark.outerHTML) freshSpark.replaceWith(spark);
+  trigger.replaceChildren(...freshTrigger.childNodes);
+  trigger.setAttribute("aria-label", freshTrigger.getAttribute("aria-label"));
+  trigger.dataset.fetchedAt = activity.fetchedAt;
+  const scroll = feed.querySelector(".github-feed-list")?.scrollTop ?? 0;
+  feed.innerHTML = fresh.querySelector(".github-feed").innerHTML;
+  feed.querySelector(".github-feed-list").scrollTop = scroll;
+  const updated = [trigger, feed];
+
+  const fact = document.querySelector(".github-fact");
+  if (fact) {
+    fresh.innerHTML = renderGithubFact(activity);
+    fact.innerHTML = fresh.firstElementChild.innerHTML;
+    updated.push(fact);
+  }
+  for (const root of updated) {
+    setupRelativeTimes(root);
+    setupClockTimes(root);
+  }
 }

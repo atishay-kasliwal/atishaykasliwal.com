@@ -11,11 +11,12 @@ import { setupInfoSheet } from "./info-sheet.js";
 import { setupScrollStory } from "./scroll-story.js";
 import { createProjectCarousel } from "./project-carousel.js";
 import { setupSectionAccordion } from "./section-accordion.js";
-import { setupClockTimes, setupGithubFeed, setupRelativeTimes } from "./github-activity.js";
+import { setupClockTimes, setupGithubFeed, setupLiveGithub, setupRelativeTimes } from "./github-activity.js";
 
 setupRelativeTimes();
 setupClockTimes();
 setupGithubFeed();
+setupLiveGithub();
 
 const projectPreview = createProjectPreview(projects, document.querySelector("#carousel-viewport"));
 const carousels = [...document.querySelectorAll(".work")].map(work =>
