@@ -1,6 +1,6 @@
 // Serves the production build for Lighthouse CI the way Cloudflare Pages does: clean URLs, the
-// custom 404 page, and a fixture for the one Pages Function the public pages call. A plain static
-// server answers that API with a 404, which Lighthouse reports as a console error.
+// custom 404 page, and fixtures for the Pages Functions the public pages call. A plain static
+// server answers those APIs with a 404, which Lighthouse reports as a console error.
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
@@ -32,6 +32,8 @@ const exhibition = JSON.stringify({
   photos: photographs.map(({ src, alt, width, height }) => ({ src, alt, width, height, tags: [] })),
 });
 
+const githubActivity = path.resolve(dist, "../src/github-activity.json");
+
 function resolve(pathname) {
   const file = path.join(dist, decodeURIComponent(pathname));
   if (!file.startsWith(dist)) return null;
@@ -43,6 +45,12 @@ function resolve(pathname) {
 http
   .createServer((request, response) => {
     const { pathname } = new URL(request.url, "http://localhost");
+    // The live GitHub activity: the snapshot the build rendered, so the page keeps it as it is.
+    if (pathname === "/api/github-activity") {
+      response.writeHead(200, { "content-type": "application/json" });
+      fs.createReadStream(githubActivity).pipe(response);
+      return;
+    }
     if (pathname === "/api/photography/exhibition") {
       response.writeHead(200, { "content-type": "application/json" });
       response.end(exhibition);
