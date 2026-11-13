@@ -11,12 +11,21 @@ import { setupInfoSheet } from "./info-sheet.js";
 import { setupScrollStory } from "./scroll-story.js";
 import { createProjectCarousel } from "./project-carousel.js";
 import { setupSectionAccordion } from "./section-accordion.js";
-import { setupClockTimes, setupGithubFeed, setupLiveGithub, setupRelativeTimes } from "./github-activity.js";
+import { setupClockTimes, setupGithubFeed, setupRelativeTimes } from "./github-feed.js";
 
 setupRelativeTimes();
 setupClockTimes();
 setupGithubFeed();
-setupLiveGithub();
+// The prerendered activity is already on screen, so the live copy waits until a little after the
+// page has loaded. "load" alone is too early: it fires before the intro paints the first project
+// card, and fetching then competes with that image for bandwidth.
+const refreshGithub = () =>
+  setTimeout(() => {
+    const run = () => import("./github-activity.js").then(({ setupLiveGithub }) => setupLiveGithub());
+    "requestIdleCallback" in window ? requestIdleCallback(run) : run();
+  }, 2000);
+if (document.readyState === "complete") refreshGithub();
+else addEventListener("load", refreshGithub, { once: true });
 
 const projectPreview = createProjectPreview(projects, document.querySelector("#carousel-viewport"));
 const carousels = [...document.querySelectorAll(".work")].map(work =>
