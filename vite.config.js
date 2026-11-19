@@ -73,19 +73,15 @@ export default defineConfig(async () => {
         },
       },
       {
-        // The photography admin is emitted at its source path; move it to its route.
-        // The /admin/ pages never ship as static files: Pages matches Functions on the raw URL
+        // Private admin pages never ship as static files: Pages matches Functions on the raw URL
         // but serves assets from the decoded one, so a static copy could be fetched as
         // /%61dmin/resume/ without passing functions/admin/_middleware.js. Their built HTML goes
         // into a generated module that functions/admin/[[path]].js serves after the Access check.
         name: "admin-routes",
         closeBundle() {
-          const photography = [path.resolve("dist/src/photography-admin/index.html"), path.resolve("dist/photography/admin/index.html")];
-          if (fs.existsSync(photography[0])) {
-            fs.mkdirSync(path.dirname(photography[1]), { recursive: true });
-            fs.renameSync(...photography);
-          }
           const pages = {};
+          const photography = path.resolve("dist/src/photography-admin/index.html");
+          if (fs.existsSync(photography)) pages.photography = fs.readFileSync(photography, "utf8");
           for (const name of ["resume", "responses"]) {
             const file = path.resolve(`dist/src/admin/${name}/index.html`);
             if (fs.existsSync(file)) pages[name] = fs.readFileSync(file, "utf8");
@@ -97,6 +93,7 @@ export default defineConfig(async () => {
           }
           fs.rmSync(path.resolve("dist/src"), { recursive: true, force: true });
           fs.rmSync(path.resolve("dist/admin"), { recursive: true, force: true });
+          fs.rmSync(path.resolve("dist/photography/admin"), { recursive: true, force: true });
         },
       },
       {

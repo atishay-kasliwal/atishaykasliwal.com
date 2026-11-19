@@ -156,6 +156,26 @@ test("the admin pages are served by the Function after the Access check, never a
   // And nothing in the build output serves them.
   const fs = await import("node:fs");
   assert.equal(fs.existsSync(new URL("../../dist/admin", import.meta.url)), false);
+  assert.equal(fs.existsSync(new URL("../../dist/photography/admin", import.meta.url)), false);
+  const { onRequestGet: photography } = await import("../../functions/photography/admin/[[path]].js");
+  for (const path of ["/photography/admin/", "/photography/admin/index.html", "/photography/admin%2F", "/%70hotography/admin/", "/photography/admin/seo/", "/photography/admin/seo/report.json"]) {
+    const request = new Request(`${SITE}${path}`);
+    assert.equal((await photography({ request, env })).status, 401, path);
+  }
+  const request = new Request(`${SITE}/photography/admin/`, { headers: { "Cf-Access-Jwt-Assertion": await access.token("owner@example.com") } });
+  const photoPage = await photography({ request, env });
+  assert.equal(photoPage.status, 200);
+  assert.match(await photoPage.text(), /<title>Photography admin<\/title>/);
+  assert.equal(photoPage.headers.get("Cache-Control"), "no-store");
+  assert.match(photoPage.headers.get("Content-Security-Policy"), /frame-ancestors 'none'/);
+  const authHeaders = { "Cf-Access-Jwt-Assertion": await access.token("owner@example.com") };
+  const seoPage = await photography({ request: new Request(`${SITE}/photography/admin/seo/`, { headers: authHeaders }), env });
+  assert.equal(seoPage.status, 200);
+  assert.match(await seoPage.text(), /<title>SEO admin<\/title>/);
+  assert.match(seoPage.headers.get("Content-Security-Policy"), /script-src 'self' 'sha256-/);
+  const report = await photography({ request: new Request(`${SITE}/photography/admin/seo/report.json`, { headers: authHeaders }), env });
+  assert.equal(report.status, 200);
+  assert.ok((await report.json()).summary.pages > 0);
 });
 
 test("before anything is published the bundled PDF and the built profile are served", async () => {

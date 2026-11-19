@@ -12,6 +12,7 @@
     "test:profile": "node --test \"tests/profile/*.test.mjs\"",
     "test:profile:browser": "node scripts/test-profile-browser.mjs",
     "test:resume": "node --test \"tests/resume/*.test.mjs\"",
+    "test:admin:browser": "node scripts/test-admin-browser.mjs",
     "profile:contributions": "node scripts/fetch-open-source-contributions.mjs",
     "test": "npm run build && npm run validate:seo && npm run validate:profile && npm run test:photography && npm run test:github-feedback && npm run test:profile && npm run test:resume",
     "seo:sitemap:live": "seo crawl --sitemap-url https://atishaykasliwal.com/sitemap.xml --health --format json --output artifacts/seo-sitemap.json",

@@ -1,9 +1,8 @@
 import { requireAdmin } from "../_lib/access.js";
 import { PRIVATE_HEADERS } from "../_lib/admin.js";
 
-// The admin pages (/admin/resume/, /admin/responses/) are static files, but they are only served
-// after the Access JWT is verified here, so the pages stay private even if the Access application
-// in front of /admin/* were misconfigured.
+// Admin HTML lives in the Functions bundle and is served only after JWT verification.
+// This also keeps pages private if the Access application in front is misconfigured.
 const PAGE_POLICY = [
   "default-src 'self'",
   "script-src 'self'",
