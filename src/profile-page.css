@@ -1,0 +1,495 @@
+/* /profile/: the complete professional profile. Built on case-study.css (same tokens, frame,
+   topbar, buttons, footer and phone thumb bar): #000, Geist, #efefec / #b6b5ae / #848480 text,
+   #2a2a27 hairlines, purple only on dots and arrows. Everything is plain, visible HTML: no
+   collapsed sections, so a reader without JavaScript or a crawler sees the whole profile. */
+
+.profile {
+  gap: 72px;
+  padding-top: 24px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.profile code {
+  font: 12.5px var(--mono);
+  color: var(--soft);
+}
+.profile a:not(.btn) {
+  text-decoration: underline;
+  text-decoration-color: #4a4a45;
+  text-underline-offset: 3px;
+}
+.profile a:not(.btn):hover {
+  text-decoration-color: var(--soft);
+}
+.profile .more a,
+.profile .toc a {
+  text-decoration: none;
+}
+.profile .more b,
+.profile .entry a b {
+  color: var(--accent);
+  font-weight: inherit;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  display: grid;
+  gap: 26px;
+  max-width: 920px;
+}
+.hero h1 .line .soft {
+  color: var(--muted);
+}
+.open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 11px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+.open .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a5b8a1; /* the homepage status dot */
+}
+.summary {
+  display: grid;
+  gap: 12px;
+  max-width: 68ch;
+}
+.summary p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+.summary p:first-child {
+  color: var(--ink);
+  font-size: 19px;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 28px;
+}
+.facts div {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.facts dt {
+  font: 10.5px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.facts dd {
+  margin: 6px 0 0;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+.facts.api {
+  grid-template-columns: 1fr;
+}
+
+/* ---------- On this page ---------- */
+.toc ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid #34342f;
+  border-radius: 999px;
+  font-size: 13.5px;
+  color: var(--soft);
+}
+.toc a:hover {
+  border-color: var(--soft);
+  color: var(--ink);
+}
+
+/* ---------- Sections ---------- */
+.block {
+  display: grid;
+  gap: 22px;
+  scroll-margin-top: 16px;
+}
+.block > h2 {
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: clamp(26px, 2.6vw, 34px);
+  font-weight: 450;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+.block h3 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.intro,
+.soft-text {
+  max-width: 72ch;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.intro b {
+  color: var(--soft);
+  font-weight: 500;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.grid .panel h3 {
+  font-size: 21px;
+}
+
+/* ---------- Entries: roles, degrees, projects ---------- */
+.entry {
+  display: grid;
+  gap: 14px;
+  padding: 26px 30px 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+}
+.entry > p,
+.entry li {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+.entry header {
+  display: grid;
+  gap: 4px;
+}
+.where {
+  font-size: 15px;
+  color: var(--soft);
+}
+.where b {
+  color: var(--ink);
+  font-weight: 500;
+}
+.when {
+  font: 12px/1.6 var(--mono);
+  color: var(--muted);
+}
+.highlights {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 0 18px;
+}
+.highlights b {
+  color: var(--ink);
+  font-weight: 500;
+}
+.label {
+  margin-right: 6px;
+  font: 10.5px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.entry > .uses,
+.entry > .flow,
+.entry > .story-line,
+.panel .uses {
+  font-size: 14px;
+}
+.more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  font-size: 14px;
+  color: var(--soft);
+}
+.more .sep {
+  margin: 0 12px;
+  color: #3e3e3a;
+}
+
+/* Numbers with their evidence status beside them. */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px 22px;
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+}
+.metrics li {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.metrics b {
+  font-size: 26px;
+  font-weight: 450;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.metrics span:not(.status) {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* Evidence status: a dot and a word. Purple for public evidence, a hollow ring for self-reported. */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  font: 10px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  vertical-align: 2px;
+}
+.metrics .status {
+  margin-left: 0;
+}
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.status-self-reported::before,
+.status-needs-review::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--muted);
+}
+
+/* ---------- Skills and strengths ---------- */
+.skill-group {
+  display: grid;
+  gap: 14px;
+}
+.skill-group > h3 {
+  font: 11px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.skills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skills > li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px 20px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+}
+.skill-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 8px;
+}
+.skill-head .status {
+  margin-left: 0;
+}
+.skill-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.skill-uses {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--soft);
+}
+.skill-uses .soft {
+  display: block;
+  color: var(--muted);
+}
+.strengths {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skill-group .strengths {
+  padding: 22px 26px 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+}
+.strengths > li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.strengths > li {
+  display: grid;
+  gap: 6px;
+  padding-top: 14px;
+  border-top: 1px solid #1f1f1d;
+}
+.strengths b {
+  font-size: 15.5px;
+  font-weight: 500;
+}
+.examples {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0 0 0 18px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+
+/* ---------- Open source ---------- */
+.oss-counts b {
+  font-size: 34px;
+}
+.repos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.repo {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 22px 24px 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+  font-size: 14.5px;
+  color: var(--soft);
+}
+.repo b {
+  color: var(--ink);
+  font-weight: 500;
+}
+.repo > p > a b {
+  color: var(--accent);
+}
+.prs {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.prs .soft {
+  font: 11px var(--mono);
+  color: var(--muted);
+}
+.list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0 0 0 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+.list b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---------- Tablets and phones ---------- */
+@media (max-width: 1000px) {
+  .grid,
+  .repos {
+    grid-template-columns: 1fr;
+  }
+  .skills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .profile {
+    gap: 52px;
+    padding-top: 8px;
+  }
+  .profile .actions {
+    display: flex;
+  }
+  .summary p {
+    font-size: 16px;
+  }
+  .summary p:first-child {
+    font-size: 17px;
+  }
+  .entry,
+  .skill-group .strengths,
+  .repo {
+    padding: 20px 18px 22px;
+    border-radius: 14px;
+  }
+  .skills {
+    grid-template-columns: 1fr;
+  }
+  .more {
+    display: grid;
+    gap: 8px;
+  }
+  .more .sep {
+    display: none;
+  }
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .metrics b {
+    font-size: 22px;
+  }
+  .status {
+    margin-left: 6px;
+  }
+  .thumb-bar {
+    grid-template-columns: 1fr 1fr 48px;
+  }
+}

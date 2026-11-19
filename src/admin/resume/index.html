@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#111111" />
+  <title>Résumé admin</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/src/photography-admin/admin.css" />
+  <link rel="stylesheet" href="/src/admin/admin.css" />
+</head>
+<body>
+  <main class="admin wide" id="admin">
+    <header class="admin-head">
+      <p class="admin-title"><i aria-hidden="true"></i>Admin / Résumé</p>
+      <div id="nav"></div>
+    </header>
+
+    <section aria-labelledby="published-title">
+      <h2 class="label" id="published-title">Published at <span class="mono" id="public-path">/Atishay-Kasliwal-Resume.pdf</span></h2>
+      <div class="card" id="published"><p class="muted">Loading…</p></div>
+    </section>
+
+    <section class="section" aria-labelledby="upload-title">
+      <h2 class="label" id="upload-title">Upload a new version</h2>
+      <div class="drop" id="drop">
+        <p class="drop-title">Drop a PDF here</p>
+        <p class="drop-sub">or <button type="button" id="choose">choose a file</button>. PDF only, up to <span id="limit">5 MB</span>. Uploading stores a private version; nothing is published until you choose to.</p>
+        <input id="file" type="file" accept="application/pdf,.pdf" hidden />
+      </div>
+      <p class="notice" id="notice" role="status" aria-live="polite" hidden></p>
+    </section>
+
+    <section class="section" id="review-section" aria-labelledby="review-title" hidden>
+      <h2 class="label" id="review-title">Review</h2>
+      <div class="review" id="review"></div>
+    </section>
+
+    <section class="section" aria-labelledby="versions-title">
+      <h2 class="label" id="versions-title">Versions</h2>
+      <div class="table-wrap"><table class="data" id="versions"></table></div>
+      <p class="empty" id="versions-empty" hidden>No versions uploaded yet.</p>
+    </section>
+
+    <section class="section" aria-labelledby="history-title">
+      <h2 class="label" id="history-title">Upload and publication history</h2>
+      <div class="table-wrap"><table class="data" id="history"></table></div>
+      <p class="empty" id="history-empty" hidden>No activity yet.</p>
+    </section>
+  </main>
+  <script type="module" src="/src/admin/resume/resume.js"></script>
+</body>
+</html>

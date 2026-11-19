@@ -8,7 +8,8 @@
         "http://127.0.0.1:4318/projects/atriveo-tracker/",
         "http://127.0.0.1:4318/projects/insurance-platform/",
         "http://127.0.0.1:4318/projects/fedtalk/",
-        "http://127.0.0.1:4318/experience/stony-brook-research/"
+        "http://127.0.0.1:4318/experience/stony-brook-research/",
+        "http://127.0.0.1:4318/profile/"
       ],
       "numberOfRuns": 3
     },

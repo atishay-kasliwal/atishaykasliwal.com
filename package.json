@@ -8,14 +8,22 @@
     "build": "node scripts/asset-versions.mjs && vite build && node scripts/build-seo-report.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "validate:seo": "node scripts/validate-seo.mjs",
-    "test": "npm run build && npm run validate:seo && npm run test:photography",
+    "validate:profile": "node scripts/validate-profile.mjs",
+    "test:profile": "node --test \"tests/profile/*.test.mjs\"",
+    "test:profile:browser": "node scripts/test-profile-browser.mjs",
+    "test:resume": "node --test \"tests/resume/*.test.mjs\"",
+    "profile:contributions": "node scripts/fetch-open-source-contributions.mjs",
+    "test": "npm run build && npm run validate:seo && npm run validate:profile && npm run test:photography && npm run test:github-feedback && npm run test:profile && npm run test:resume",
     "seo:sitemap:live": "seo crawl --sitemap-url https://atishaykasliwal.com/sitemap.xml --health --format json --output artifacts/seo-sitemap.json",
     "seo:crawl:live": "seo crawl https://atishaykasliwal.com --max-pages 100 --max-depth 8 --format json --output artifacts/seo-crawl.json",
     "lhci": "npx --yes @lhci/cli@0.15.1 autorun",
     "images:responsive": "node scripts/generate-responsive-thumbnails.mjs",
     "images:photography": "node scripts/generate-photography-images.mjs",
     "test:photography": "node --test \"tests/photography/*.test.mjs\"",
-    "github:activity": "node scripts/fetch-github-activity.mjs"
+    "github:activity": "node scripts/fetch-github-activity.mjs",
+    "test:github-feedback": "node --test \"tests/github-feedback/*.test.mjs\"",
+    "github:feedback:import": "node scripts/import-github-feedback.mjs",
+    "github:feedback:summaries": "node scripts/import-github-feedback-summaries.mjs"
   },
   "devDependencies": {
     "fast-xml-parser": "^5.11.1",
@@ -27,6 +35,7 @@
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
-    "heic-to": "^1.6.5"
+    "heic-to": "^1.6.5",
+    "unpdf": "2.2.1"
   }
 }

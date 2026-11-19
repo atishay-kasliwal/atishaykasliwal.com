@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atishaykasliwal.com/api/profile.schema.json",
+  "title": "Atishay Kasliwal public professional profile",
+  "description": "Schema for https://atishaykasliwal.com/api/profile.json, version 1.x. Additive changes keep the major version; removing or renaming a field raises it. Every skill, strength, metric and project links to evidence; verificationStatus says how far that evidence goes.",
+  "type": "object",
+  "required": ["$schema", "schemaVersion", "lastUpdated", "canonicalUrl", "humanReadableUrl", "verificationStatuses", "profile", "experience", "education", "skillCategories", "skills", "professionalStrengths", "projects", "achievements", "openSourceSummary", "community", "openSourceContributions", "openSourceReviews", "evidence"],
+  "additionalProperties": false,
+  "$defs": {
+    "status": { "type": "string", "enum": ["verified", "publicly_verifiable", "self_reported", "needs_review"] },
+    "isoDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "yearMonth": { "type": "string", "pattern": "^\\d{4}(-\\d{2})?$" },
+    "url": { "type": "string", "pattern": "^https://" },
+    "evidenceIds": { "type": "array", "items": { "type": "string", "pattern": "^[a-z-]+:" } },
+    "location": {
+      "type": ["object", "null"],
+      "required": ["locality", "region", "country"],
+      "properties": { "locality": { "type": "string" }, "region": { "type": "string" }, "country": { "type": "string", "pattern": "^[A-Z]{2}$" } }
+    },
+    "metric": {
+      "type": "object",
+      "required": ["value", "label", "verificationStatus", "evidence"],
+      "properties": {
+        "value": { "type": "string" },
+        "label": { "type": "string" },
+        "verificationStatus": { "$ref": "#/$defs/status" },
+        "evidence": { "$ref": "#/$defs/evidenceIds" }
+      }
+    },
+    "titledText": {
+      "type": "object",
+      "required": ["title", "detail"],
+      "properties": { "title": { "type": "string" }, "detail": { "type": "string" } }
+    },
+    "subject": {
+      "type": "object",
+      "required": ["type", "id", "name", "url", "evidence", "verificationStatus"],
+      "properties": {
+        "type": { "type": "string", "enum": ["project", "experience", "education", "open_source_repository", "code_reviews", "document", "repository"] },
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "url": { "$ref": "#/$defs/url" },
+        "evidence": { "$ref": "#/$defs/evidenceIds" },
+        "verificationStatus": { "$ref": "#/$defs/status" }
+      }
+    },
+    "role": {
+      "type": "object",
+      "required": ["id", "location", "startDate", "endDate", "current", "summary", "description", "highlights", "metrics", "url", "skills", "evidence", "dateModified"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "startDate": { "$ref": "#/$defs/yearMonth" },
+        "endDate": { "oneOf": [{ "$ref": "#/$defs/yearMonth" }, { "type": "null" }] },
+        "current": { "type": "boolean" },
+        "location": { "$ref": "#/$defs/location" },
+        "summary": { "type": "string" },
+        "description": { "type": "string" },
+        "highlights": { "type": "array", "items": { "$ref": "#/$defs/titledText" } },
+        "metrics": { "type": "array", "items": { "$ref": "#/$defs/metric" } },
+        "url": { "$ref": "#/$defs/url" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "$ref": "#/$defs/evidenceIds" },
+        "dateModified": { "$ref": "#/$defs/isoDate" }
+      }
+    }
+  },
+  "properties": {
+    "$schema": { "const": "https://atishaykasliwal.com/api/profile.schema.json" },
+    "schemaVersion": { "type": "string", "pattern": "^1\\.\\d+$" },
+    "lastUpdated": { "$ref": "#/$defs/isoDate" },
+    "canonicalUrl": { "const": "https://atishaykasliwal.com/api/profile.json" },
+    "humanReadableUrl": { "const": "https://atishaykasliwal.com/profile/" },
+    "verificationStatuses": {
+      "type": "object",
+      "required": ["verified", "publicly_verifiable", "self_reported", "needs_review"],
+      "additionalProperties": { "type": "string" }
+    },
+    "profile": {
+      "type": "object",
+      "required": ["id", "name", "headline", "description", "summary", "location", "openToWork", "contact", "profiles", "resume", "specializations", "urls"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "headline": { "type": "string" },
+        "description": { "type": "string" },
+        "summary": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "openToWork": { "type": "boolean" },
+        "currentFocus": { "type": "string" },
+        "contact": {
+          "type": "object",
+          "required": ["email", "website"],
+          "additionalProperties": false,
+          "properties": { "email": { "type": "string", "pattern": "^[^@\\s]+@[^@\\s]+$" }, "website": { "$ref": "#/$defs/url" } }
+        },
+        "profiles": { "type": "array", "items": { "type": "object", "required": ["network", "url"], "properties": { "network": { "type": "string" }, "url": { "$ref": "#/$defs/url" } } } },
+        "resume": {
+          "type": "object",
+          "description": "The résumé at its stable URL. version identifies the exact PDF served: source is 'bundled' for the file shipped with the deploy, 'published' for one published later from the site admin (since 1.1).",
+          "required": ["url", "format", "lastModified"],
+          "properties": {
+            "url": { "$ref": "#/$defs/url" },
+            "format": { "const": "application/pdf" },
+            "lastModified": { "$ref": "#/$defs/isoDate" },
+            "version": {
+              "type": "object",
+              "required": ["id", "sha256", "publishedAt", "source"],
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+                "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "publishedAt": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}T" },
+                "source": { "type": "string", "enum": ["bundled", "published"] }
+              }
+            }
+          }
+        },
+        "specializations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "summary", "verificationStatus", "supportedBy"],
+            "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "summary": { "type": "string" }, "verificationStatus": { "$ref": "#/$defs/status" }, "supportedBy": { "type": "array", "minItems": 1 } }
+          }
+        },
+        "urls": { "type": "object", "required": ["homepage", "profilePage", "api", "schema"] }
+      }
+    },
+    "experience": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [{ "$ref": "#/$defs/role" }],
+        "type": "object",
+        "required": ["title", "organization"],
+        "properties": {
+          "title": { "type": "string" },
+          "employmentType": { "type": "string", "enum": ["internship"] },
+          "organization": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" }, "url": { "$ref": "#/$defs/url" }, "alternateNames": { "type": "array", "items": { "type": "string" } } } }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [{ "$ref": "#/$defs/role" }],
+        "type": "object",
+        "required": ["institution", "degree", "field", "credential"],
+        "properties": {
+          "institution": { "type": "object", "required": ["name"] },
+          "degree": { "type": "string" },
+          "field": { "type": ["string", "null"] },
+          "credential": { "type": "string" }
+        }
+      }
+    },
+    "skillCategories": {
+      "type": "array",
+      "items": { "type": "object", "required": ["id", "name"], "properties": { "id": { "type": "string" }, "name": { "type": "string" } } }
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "category", "verificationStatus", "usedIn"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "verificationStatus": { "$ref": "#/$defs/status" },
+          "usedIn": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "allOf": [{ "$ref": "#/$defs/subject" }], "type": "object", "required": ["implementation"], "properties": { "implementation": { "type": "string" } } }
+          }
+        }
+      }
+    },
+    "professionalStrengths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "category", "description", "verificationStatus", "examples", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string" },
+          "category": { "type": "string", "enum": ["Communication", "Leadership", "Mentoring", "Collaboration", "Problem solving", "Professional skills"] },
+          "description": { "type": "string" },
+          "verificationStatus": { "$ref": "#/$defs/status" },
+          "examples": { "type": "array", "minItems": 1, "items": { "allOf": [{ "$ref": "#/$defs/subject" }], "type": "object", "required": ["example"], "properties": { "example": { "type": "string" } } } },
+          "evidence": { "$ref": "#/$defs/evidenceIds" }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "status", "category", "summary", "description", "technologies", "metrics", "links", "repositoryVisibility", "skills", "evidence", "dateModified"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["live", "open_source", "proof_of_concept", "profile"] },
+          "startedOn": { "oneOf": [{ "$ref": "#/$defs/isoDate" }, { "type": "null" }] },
+          "problem": { "oneOf": [{ "$ref": "#/$defs/titledText" }, { "type": "null" }] },
+          "solution": { "oneOf": [{ "$ref": "#/$defs/titledText" }, { "type": "null" }] },
+          "engineeringChallenge": { "oneOf": [{ "$ref": "#/$defs/titledText" }, { "type": "null" }] },
+          "architecture": { "type": ["object", "null"] },
+          "technicalDecisions": { "type": "array", "items": { "type": "string" } },
+          "technologies": { "type": "array", "items": { "type": "string" } },
+          "metrics": { "type": "array", "items": { "$ref": "#/$defs/metric" } },
+          "links": {
+            "type": "object",
+            "required": ["caseStudy", "repository", "liveSite"],
+            "properties": { "caseStudy": { "$ref": "#/$defs/url" }, "repository": { "type": ["string", "null"] }, "liveSite": { "type": ["string", "null"] } }
+          },
+          "repositoryVisibility": { "type": "string", "enum": ["public", "private", "not_linked"] },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "evidence": { "$ref": "#/$defs/evidenceIds" },
+          "dateModified": { "$ref": "#/$defs/isoDate" }
+        }
+      }
+    },
+    "achievements": {
+      "type": "array",
+      "items": { "type": "object", "required": ["id", "title", "verificationStatus", "evidence"], "properties": { "verificationStatus": { "$ref": "#/$defs/status" }, "evidence": { "$ref": "#/$defs/evidenceIds" } } }
+    },
+    "openSourceSummary": {
+      "type": "object",
+      "required": ["verifiedAt", "source", "pullRequests", "mergedRepositories", "reviewsGiven", "note"],
+      "properties": {
+        "pullRequests": { "type": "object", "required": ["total", "merged", "open", "closedUnmerged"] },
+        "mergedRepositories": { "type": "array", "items": { "type": "object", "required": ["repository", "merged", "mergedPullRequestsUrl", "skills"] } }
+      }
+    },
+    "community": { "type": "array" },
+    "openSourceContributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "organization", "repository", "number", "title", "url", "status", "openedAt", "mergedAt", "closedAt", "skills", "verificationStatus", "evidence"],
+        "properties": {
+          "type": { "const": "pull_request" },
+          "url": { "type": "string", "pattern": "^https://github\\.com/[^/]+/[^/]+/pull/\\d+$" },
+          "status": { "type": "string", "enum": ["merged", "open", "closed_unmerged"] },
+          "changeKind": { "type": ["string", "null"] },
+          "verificationStatus": { "const": "verified" }
+        }
+      }
+    },
+    "openSourceReviews": {
+      "type": "array",
+      "items": { "type": "object", "required": ["id", "repository", "number", "url", "pullRequestStatus", "verificationStatus"] }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title", "url", "publiclyAccessible", "verificationStatus"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z-]+:" },
+          "type": { "type": "string", "enum": ["case_study", "repository", "live_product", "experience_page", "education_page", "pull_request", "merged_pull_requests", "pull_request_reviews", "document"] },
+          "url": { "$ref": "#/$defs/url" },
+          "publiclyAccessible": { "const": true },
+          "verificationStatus": { "$ref": "#/$defs/status" }
+        }
+      }
+    }
+  }
+}

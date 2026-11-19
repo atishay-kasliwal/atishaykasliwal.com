@@ -21,6 +21,12 @@
     {
       "binding": "PHOTOS",
       "bucket_name": "photography-photos"
+    },
+    {
+      // Private: no public domain or r2.dev access. Résumé versions uploaded from /admin/resume;
+      // only functions/Atishay-Kasliwal-Resume.pdf.js serves the published one.
+      "binding": "RESUMES",
+      "bucket_name": "portfolio-resumes"
     }
   ]
 }

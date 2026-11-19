@@ -1186,6 +1186,6 @@ export const additionalProjectPages = [
 ];
 
 export const staticPageLastModified = {
-  homepage: "2026-09-28",
+  homepage: "2026-11-19", // Full profile link, open source carousel in the HTML, generated Person
   resume: "2026-09-30",
 };

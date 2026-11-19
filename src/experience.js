@@ -8,6 +8,12 @@ const entry = ({ slug, tag, role, place, start, end, photo, thumb, alt, descript
   const card = `<img src="/experience/media/${slug}/${photo}-thumb.webp" width="${thumb[0]}" height="${thumb[1]}" alt="" decoding="async" />`;
   const art = `<img src="/experience/media/${slug}/${photo}.webp" alt="" decoding="async" />`;
   return {
+    // Structured fields for the canonical profile (src/profile/build.js); the carousel ignores them.
+    slug,
+    role,
+    place,
+    start,
+    end,
     name: role,
     category: `${place} · ${start} – ${end}`,
     tag,

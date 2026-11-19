@@ -6,6 +6,8 @@ Atishay spent three years at Accolite as a senior software engineer, shipping mi
 
 Contact: katishay@gmail.com
 
+- [Full professional profile](https://atishaykasliwal.com/profile/): experience, education, skills linked to evidence, projects, open source and strengths on one page
+- [Profile as JSON](https://atishaykasliwal.com/api/profile.json): the same data, structured, with a [JSON Schema](https://atishaykasliwal.com/api/profile.schema.json)
 - [LinkedIn](https://www.linkedin.com/in/atishay-kasliwal)
 - [GitHub](https://github.com/atishay-kasliwal)
 - [Resume (PDF)](https://atishaykasliwal.com/Atishay-Kasliwal-Resume.pdf)
@@ -63,18 +65,29 @@ Contact: katishay@gmail.com
 - [Atriveo Reel](https://atishaykasliwal.com/projects/atriveo-reel/): A self-hosted editor that turns two clips into a vertical comparison reel, with durable background rendering. Next.js, FFmpeg, Remotion.
 - [Medscan](https://atishaykasliwal.com/projects/medscan/): A proof of concept connecting health and billing data into plain answers about visits and costs, on synthetic data only. Python, PostgreSQL, Neo4j.
 
+<!-- profile:open-source:start -->
 ## Open source contributions
 
-Merged pull requests in projects run by other teams, as of November 2026:
+Pull requests to projects run by other teams, as GitHub reported them on Nov 19, 2026: 51 merged across 17 repositories, 58 open and awaiting review, 7 closed without merging, and 22 reviews of other contributors' pull requests. The full list, with links, is in https://atishaykasliwal.com/api/profile.json and at https://atishaykasliwal.com/profile/#open-source.
 
-- [Keycloak](https://github.com/keycloak/keycloak/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): Named the masthead options toggle shown on narrow screens.
-- [Kiali](https://github.com/kiali/kiali/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): Bounded kube cache reads with a timeout so a lost cluster can't block a read forever.
-- [Cockpit](https://github.com/cockpit-project/cockpit/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 2 merged, including making the terminal scrollbar visible again.
-- [Numaflow](https://github.com/numaproj/numaflow/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 4 merged, plus 2 in numaflow-rs, including rejecting scale.min above scale.max on a MonoVertex.
-- [Red Hat mapt](https://github.com/redhat-developer/mapt/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 4 merged, including a fix for password aging locking users out of SSH on IBM Cloud.
-- [Mezmo Aura](https://github.com/mezmo/aura/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 9 merged in a Rust SRE agent platform.
-- [NVIDIA NVKR](https://github.com/dsx-ai-factory/nvkr/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): 5 merged, including the catalog show command.
-- [PR-Agent](https://github.com/The-PR-Agent/pr-agent/pulls?q=is%3Apr+is%3Amerged+author%3Aatishay-kasliwal): Recorded which config keys PR comments can override.
+- [Aura](https://github.com/mezmo/aura/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (mezmo/aura): 11 merged, including "fix(events): read an unknown tool outcome as unknown", "fix(builder): apply client_tool_filter when preparing a single agent".
+- [NVKR](https://github.com/dsx-ai-factory/nvkr/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (dsx-ai-factory/nvkr): 7 merged, including "feat(catalog): explain one component with catalog show", "feat(run): list recorded local Runs in one attempts root".
+- [Numaflow](https://github.com/numaproj/numaflow/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (numaproj/numaflow): 6 merged, including "feat: log payload size when ISB message exceeds max payload", "docs: use content tabs for user-defined source SDK examples".
+- [mapt](https://github.com/redhat-developer/mapt/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (redhat-developer/mapt): 6 merged, including "fix(spot): give InitNoState a non-nil context", "fix(ibmcloud): stop password aging locking users out of SSH".
+- [Mister Download Manager](https://github.com/anefzaoui/misterdownloadmanager/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (anefzaoui/misterdownloadmanager): 3 merged, including "Use system-installed yt-dlp on Linux and macOS", "Fix video button staying visible after mouse focus".
+- [workload-map](https://github.com/dsx-ai-factory/workload-map/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (dsx-ai-factory/workload-map): 3 merged, including "feat(cli): add --sort-by to kli get", "feat(cli): complete the kli definitions filter flags".
+- [Cockpit](https://github.com/cockpit-project/cockpit/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (cockpit-project/cockpit): 2 merged, including "lib: Make the terminal scrollbar visible again", "lib: Make terminal selection visible in all themes".
+- [Keycloak](https://github.com/keycloak/keycloak/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (keycloak/keycloak): 2 merged, including "Name the direct membership checkboxes in the Account Console Groups page", "Name the masthead options toggle shown on narrow screens".
+- [Kiali](https://github.com/kiali/kiali/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (kiali/kiali): 2 merged, including "Bound kube cache reads with a timeout", "Confirm revoked access before tearing down a cluster cache".
+- [numaflow-rs](https://github.com/numaproj/numaflow-rs/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (numaproj/numaflow-rs): 2 merged, including "example: use active_partitions in simple-source", "test: add side input server tests".
+- [developer-portfolios](https://github.com/emmabostian/developer-portfolios/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (emmabostian/developer-portfolios): 1 merged: "Add Atishay Kasliwal".
+- [math-mcp](https://github.com/EthanHenrickson/math-mcp/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (EthanHenrickson/math-mcp): 1 merged: "Fix median sorting as strings and report division by zero as an error".
+- [numaflow-python](https://github.com/numaproj/numaflow-python/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (numaproj/numaflow-python): 1 merged: "fix: update asyncio_reduce example to the current reducer API (Fixes #338)".
+- [couch-tv](https://github.com/Seagey/couch-tv/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (Seagey/couch-tv): 1 merged: "LG: the build fetches the TV's own icon for apps with no bundled logo".
+- [statsmodels](https://github.com/statsmodels/statsmodels/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (statsmodels/statsmodels): 1 merged: "TST: Check array layouts at the Cython entry points".
+- [PR-Agent](https://github.com/The-PR-Agent/pr-agent/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (The-PR-Agent/pr-agent): 1 merged: "test(config): record the keys PR comments can override".
+- [UsTaxes](https://github.com/ustaxes/UsTaxes/pulls?q=is%3Apr%20is%3Amerged%20author%3Aatishay-kasliwal) (ustaxes/UsTaxes): 1 merged: "Use type-only imports for tooling compatibility".
+<!-- profile:open-source:end -->
 
 ## Volunteering
 

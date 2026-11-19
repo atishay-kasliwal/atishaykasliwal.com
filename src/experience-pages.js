@@ -340,7 +340,7 @@ export const experiencePages = [
     name: "B.Tech, Computer Science",
     kicker: "Education",
     started: "2018-05-01",
-    lastModified: "2026-11-12", // Related row and SEO copy changes
+    lastModified: "2026-11-19", // Corrected the graduation-before-Shriffle chronology
     seo: {
       title: "B.Tech CS - Symbiosis University · Atishay Kasliwal",
       description:
@@ -394,8 +394,8 @@ export const experiencePages = [
         body: "Twenty-two of them, between August 2018 and February 2021. Python for Data Science and AI from IBM, Applied Plotting, Charting and Data Representation in Python from the University of Michigan, an intro to AI and a web development track through Coursera, and a short-term program with the Computer Society of India, plus about fifteen more in machine learning, JavaScript and data science.",
       },
       {
-        title: "Finished first",
-        body: "Graduated in 2022, before the first engineering internship at Shriffle even started. The degree came first. Everything on this site came after it.",
+        title: "Study and work, side by side",
+        body: "Graduated in May 2022. The first engineering internship, at Shriffle from August 2020 to May 2021, ran alongside the degree.",
       },
     ],
   },

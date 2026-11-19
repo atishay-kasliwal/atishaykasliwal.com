@@ -14,7 +14,7 @@
 /atriveo         /  301
 /atriveo/        /  301
 /live.html       /  301
+# /admin/* is the private admin (Cloudflare Access, then functions/admin/_middleware.js).
 /admin           /  301
-/admin/*         /  301
 /workspace       /  301
 /workspace/*     /  301

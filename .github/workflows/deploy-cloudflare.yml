@@ -38,6 +38,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Same rule for the verified open source snapshot behind /profile and /api/profile.json.
+      - name: Refresh open source contributions
+        run: npm run profile:contributions || echo "Using the committed open source snapshot."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build
         run: npm run build
 

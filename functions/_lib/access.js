@@ -2,32 +2,47 @@ import { verifyAccessJwt, constantTimeEqual } from "../../src/photography-core/a
 
 let cachedKeys = null;
 let cachedAt = 0;
+let lastRefresh = 0;
 const KEY_TTL_MS = 60 * 60 * 1000;
+// A token signed with a key we have not seen (Access rotated its keys) triggers one refetch, at
+// most once a minute, so forged kids cannot make every request call the certs endpoint.
+const REFRESH_MIN_INTERVAL_MS = 60 * 1000;
 
-async function accessKeys(env) {
-  if (cachedKeys && Date.now() - cachedAt < KEY_TTL_MS) return cachedKeys;
+async function fetchKeys(env) {
   const response = await fetch(`https://${env.ACCESS_TEAM_DOMAIN}/cdn-cgi/access/certs`);
   if (!response.ok) throw new Error("Access keys unavailable");
   const body = await response.json();
-  cachedKeys = body.keys ?? [];
+  cachedKeys = Array.isArray(body.keys) ? body.keys : [];
   cachedAt = Date.now();
+  lastRefresh = cachedAt;
   return cachedKeys;
 }
 
+async function accessKeys(env) {
+  if (cachedKeys && Date.now() - cachedAt < KEY_TTL_MS) return cachedKeys;
+  return fetchKeys(env);
+}
+
 // The admin is protected twice: Cloudflare Access sits in front of the path, and the Function
-// verifies the signed Access JWT itself so a bypassed proxy still cannot reach upload code.
+// verifies the signed Access JWT itself (signature against the team's published keys, RS256 only,
+// audience, issuer, expiry, not-before, email allowlist), so a bypassed or misconfigured proxy
+// still cannot reach admin code. The token is read only from the header Access sets; a client can
+// send that header too, but cannot sign it. Missing configuration fails closed.
 export async function requireAdmin(request, env) {
   const token = request.headers.get("Cf-Access-Jwt-Assertion");
   if (!token) return { ok: false, status: 401 };
   const allowedEmails = String(env.ADMIN_EMAILS ?? "").split(",").map(item => item.trim()).filter(Boolean);
-  let keys;
+  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || allowedEmails.length === 0) return { ok: false, status: 503 };
+  const options = { audience: env.ACCESS_AUD, issuer: `https://${env.ACCESS_TEAM_DOMAIN}`, allowedEmails };
   try {
-    keys = await accessKeys(env);
+    let result = await verifyAccessJwt(token, { ...options, keys: await accessKeys(env) });
+    if (result.reason === "unknown-key" && Date.now() - lastRefresh > REFRESH_MIN_INTERVAL_MS) {
+      result = await verifyAccessJwt(token, { ...options, keys: await fetchKeys(env) });
+    }
+    return result.ok ? { ok: true, email: result.email } : { ok: false, status: 403 };
   } catch {
     return { ok: false, status: 503 };
   }
-  const result = await verifyAccessJwt(token, { audience: env.ACCESS_AUD, allowedEmails, keys });
-  return result.ok ? { ok: true, email: result.email } : { ok: false, status: 403 };
 }
 
 export function requireIngestSecret(request, env) {

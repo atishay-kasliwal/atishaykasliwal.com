@@ -10,20 +10,15 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = "https://atishaykasliwal.com";
 const PERSON = `${SITE}/#person`;
-// The full Person entity, kept in sync with the one in index.html by hand. Most project pages
-// only need the minimal stub below; the ProfilePage (Beyond the Resume) gets this full version
-// so Google finds the complete entity on that page too, not only the homepage.
-const PERSON_ENTITY = {
-  "@type": "Person",
-  "@id": PERSON,
-  name: "Atishay Kasliwal",
-  url: `${SITE}/`,
-  image: [`${SITE}/atishay-kasliwal-1x1.jpg`, `${SITE}/atishay-kasliwal-4x3.jpg`, `${SITE}/atishay-kasliwal-16x9.jpg`],
-  jobTitle: "Software & AI Engineer",
-  description:
-    "Full-stack and AI engineer with 5+ years in production, building distributed systems, LLM products and the interfaces on top of them.",
-  sameAs: profileLinks,
-};
+// The full Person entity comes from the canonical profile (src/profile/build.js), the same source
+// as the homepage, /profile and /api/profile.json. Most project pages only need the minimal stub
+// below; the ProfilePage (Beyond the Resume) gets the full version so Google finds the complete
+// entity on that page too, not only the homepage.
+async function personEntity() {
+  const { buildProfile, personJsonLd } = await import(`${pathToFileURL(path.join(ROOT, "src/profile/build.js")).href}?t=${Date.now()}`);
+  return personJsonLd(buildProfile());
+}
+let PERSON_ENTITY;
 
 const escape = (value = "") =>
   String(value).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -318,6 +313,7 @@ function ogSource(study) {
 
 export async function buildCaseStudies() {
   const stamp = Date.now();
+  PERSON_ENTITY = await personEntity();
   const { caseStudies, additionalProjectPages, staticPageLastModified } = await import(`${pathToFileURL(path.join(ROOT, "src/case-studies/data.js")).href}?t=${stamp}`);
   const { projects } = await import(`${pathToFileURL(path.join(ROOT, "src/projects.js")).href}?t=${stamp}`);
   const { photographs, photographyPage } = await import(`${pathToFileURL(path.join(ROOT, "src/photography.js")).href}?t=${stamp}`);

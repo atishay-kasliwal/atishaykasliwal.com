@@ -150,7 +150,7 @@ const records = await Promise.all(htmlFiles.map(async file => {
 const indexable = records.filter(record => !record.isNotFound && !/noindex/i.test(record.robots));
 const titles = indexable.map(record => record.title.toLocaleLowerCase());
 assert.equal(new Set(titles).size, titles.length, "Page titles must be unique.");
-assert.equal(indexable.length, projects.length + experiencePages.length + 2, "Expected the homepage, Photography, one page per project and one page per experience entry.");
+assert.equal(indexable.length, projects.length + experiencePages.length + 3, "Expected the homepage, Photography, /profile/, one page per project and one page per experience entry.");
 assert.equal(caseStudies.length + additionalProjectPages.length, projects.length, "Every listed project needs a page record.");
 const projectPagesByName = new Map([...caseStudies, ...additionalProjectPages].map(page => [page.name, page]));
 assert.equal(projectPagesByName.size, projects.length, "Project page names must map one-to-one to carousel projects.");
@@ -262,7 +262,7 @@ const homepageLinks = new Set(
     .filter(target => target.origin === site.origin)
     .map(target => target.pathname),
 );
-for (const record of indexable.filter(record => /[\\/](projects|experience)[\\/]/.test(record.file))) {
+for (const record of indexable.filter(record => /[\\/](projects|experience|profile)[\\/]/.test(record.file))) {
   assert.ok(homepageLinks.has(record.url.pathname), `Homepage has no HTML link to ${record.url.pathname}`);
 }
 const generatedProjectIds = new Set(projectRecords.map(record => record.graph.find(node => node["@id"]?.endsWith("#project"))?.["@id"]));
