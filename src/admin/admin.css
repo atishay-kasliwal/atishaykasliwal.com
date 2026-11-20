@@ -90,8 +90,8 @@ pre.text { white-space: pre-wrap; font-family: var(--mono); font-size: 12px; col
 .live-check { margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; font-size: 12px; }
 
 /* ---------- Résumé admin (src/admin/resume/): rail · review · paper, on one screen ---------- */
-.admin.rz { max-width: 1560px; }
-.rz-head { margin-bottom: 14px; align-items: center; }
+.admin.rz { max-width: 1560px; padding-top: 8px; }
+.admin-head.rz-head { margin-bottom: 8px; align-items: center; }
 .rz-head-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .rz-head-actions button.primary { background: var(--ink); color: #111; border-color: var(--ink); font-weight: 500; }
 .rz-head-actions button.primary:hover { background: #fff; }
@@ -229,7 +229,7 @@ button.link:disabled { opacity: 0.45; }
 
 /* Wide screens: one screen, columns scroll inside. */
 @media (min-width: 1100px) and (min-height: 640px) {
-  .admin.rz { display: flex; flex-direction: column; height: 100dvh; padding-bottom: 20px; }
+  .admin.rz { display: flex; flex-direction: column; height: 100dvh; padding-top: 8px; padding-bottom: 12px; }
   .rz-app { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr); }
   .rz-rail { overflow: auto; }
   .rz-inspector, .rz-doc { min-height: 0; overflow: hidden; }
