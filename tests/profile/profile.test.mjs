@@ -54,8 +54,8 @@ test("every project, role and degree on the site is in the profile, and nothing 
     assert.match(role.startDate, /^\d{4}-\d{2}$/);
     assert.ok(role.endDate === null || role.endDate >= role.startDate, `${role.id} ends before it starts`);
   }
-  // The undergraduate start month is unconfirmed, so only the year is published.
-  assert.equal(json.education.find(e => e.id === "symbiosis-university").startDate, "2018");
+  // The undergraduate start month was confirmed from the résumé on 2026-11-19.
+  assert.equal(json.education.find(e => e.id === "symbiosis-university").startDate, "2018-08");
 });
 
 test("skills: every one has evidence, and its status follows from that evidence", () => {

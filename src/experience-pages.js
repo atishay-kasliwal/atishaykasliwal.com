@@ -145,19 +145,19 @@ export const experiencePages = [
   },
   {
     slug: "accolite",
-    name: "Senior Software Engineer",
+    name: "Senior Software Developer",
     kicker: "Work",
     started: "2021-08-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Senior Software Engineer - Accolite · Atishay Kasliwal",
+      title: "Senior Software Developer - Accolite · Atishay Kasliwal",
       description:
         "Atishay Kasliwal's three years at Accolite: 20+ production microservices across fintech, telecom and commerce, supporting 100,000+ monthly users.",
     },
     headline: "Twenty-plus microservices, three industries, one uptime number.",
     headlineSoft: "Accolite, August 2021 to August 2024.",
     lede:
-      "Three years as a Senior Software Engineer, building production microservices across fintech, telecom and commerce, at a company that, partway through, became part of Bounteous. The systems and the uptime number stayed the same either way.",
+      "Three years as a Senior Software Developer, building production microservices across fintech, telecom and commerce, at a company that, partway through, became part of Bounteous. The systems and the uptime number stayed the same either way.",
     spec: [
       { label: "Where", html: "<b>Accolite</b> · became part of Bounteous in 2021" },
       { label: "Dates", html: "<b>August 2021</b> – August 2024" },
@@ -206,8 +206,8 @@ export const experiencePages = [
         body: "Designed a secure insurance data vault on AWS Lambda and SQL across 15+ providers, with 100% authentication coverage and onboarding 3x faster than before. Fidelity's backend services were secured with Spring Security, OAuth2 and JWT. In-house, an ERP onboarding module served 3,000 employees, and Slack bots filed ERP timesheets from natural-language weekly updates.",
       },
       {
-        title: "Reliability at the TCP layer",
-        body: "Improved reliability of high-traffic Java microservices by tuning TCP connection handling, adding circuit breakers and rate limiting, cutting P99 latency 40% and eliminating a class of production incidents outright.",
+        title: "Fixing the incidents at the data layer",
+        body: "Resolved recurring production incidents for 100K+ British Telecom users by rearchitecting high-traffic Java microservices on Redis and Elasticsearch, cutting P99 latency 40%.",
       },
       {
         title: "CI/CD across 8 teams",
@@ -339,8 +339,8 @@ export const experiencePages = [
     slug: "symbiosis-university",
     name: "B.Tech, Computer Science",
     kicker: "Education",
-    started: "2018-05-01",
-    lastModified: "2026-11-19", // Corrected the graduation-before-Shriffle chronology
+    started: "2018-08-01",
+    lastModified: "2026-11-19", // Start month confirmed from the résumé (Aug 2018)
     seo: {
       title: "B.Tech CS - Symbiosis University · Atishay Kasliwal",
       description:
@@ -352,7 +352,7 @@ export const experiencePages = [
       "A B.Tech in Computer Science and Information Technology at Symbiosis, 2018 to 2022. Distributed systems, machine learning, the software development lifecycle, data structures and algorithms. Four years of it, and every production system I've touched since still leans on this coursework somewhere.",
     spec: [
       { label: "Where", html: "<b>Symbiosis University</b> · Indore, India" },
-      { label: "Dates", html: "<b>May 2018</b> – May 2022" },
+      { label: "Dates", html: "<b>Aug 2018</b> – May 2022" },
     ],
     stats: [{ value: "22", label: "courses & workshops, 2018–2021" }],
     links: [{ label: "Visit Symbiosis University", href: "https://www.symbiosisuniversity.ac.in" }],

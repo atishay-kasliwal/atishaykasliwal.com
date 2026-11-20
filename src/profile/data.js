@@ -213,9 +213,11 @@ export const skills = [
   ] },
   { id: "elasticsearch", name: "Elasticsearch", category: "databases", evidence: [
     e("project:insurance-platform", "Read side of a CQRS split."),
+    e("experience:accolite", "Rearchitected British Telecom services on Redis and Elasticsearch, cutting P99 latency 40%."),
   ] },
   { id: "redis", name: "Redis", category: "databases", evidence: [
     e("project:insurance-platform", "Per-route rate limits at the gateway."),
+    e("experience:accolite", "Redis caching in the British Telecom rearchitecture that cut P99 latency 40%."),
   ] },
   { id: "timescaledb", name: "TimescaleDB", category: "databases", evidence: [
     e("project:atriaa", "Vitals stored in a hypertable."),
@@ -248,7 +250,6 @@ export const skills = [
   ] },
   { id: "resilience-patterns", name: "Resilience: timeouts, circuit breakers, rate limits", category: "distributed-systems", evidence: [
     e("contributions:kiali/kiali", "Timeout on Kubernetes cache reads so a lost cluster cannot block a read."),
-    e("experience:accolite", "Circuit breakers, rate limiting and TCP connection tuning on high-traffic services."),
     e("experience:stony-brook-research", "Connection pooling and circuit breakers on LLM services."),
   ] },
   { id: "stream-processing", name: "Stream processing", category: "distributed-systems", evidence: [

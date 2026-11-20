@@ -75,7 +75,7 @@ try {
     const response = await page.goto(`${base}/profile/`, { waitUntil: "load" });
     check(response.status() === 200, `${label}: /profile/ loads without JavaScript`);
     const visible = await page.locator("main").innerText();
-    for (const fact of ["Atishay Kasliwal", "Software & AI Engineer", "Experience", "Education", "Professional strengths", "Open source contributions", "Senior Software Engineer", "M.S. in Data Science", "InsureRaft", "Kubernetes"]) {
+    for (const fact of ["Atishay Kasliwal", "Software & AI Engineer", "Experience", "Education", "Professional strengths", "Open source contributions", "Senior Software Developer", "M.S. in Data Science", "InsureRaft", "Kubernetes"]) {
       check(visible.toLowerCase().includes(fact.toLowerCase()), `${label}: /profile/ shows "${fact}" without JavaScript`);
     }
     const styled = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);

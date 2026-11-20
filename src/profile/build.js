@@ -239,9 +239,6 @@ export function buildProfile({ onWarning = message => console.warn(`[profile] ${
       work.push({ ...common, title: card.role, ...(details.employmentType ? { employmentType: details.employmentType } : {}) });
     }
   }
-  // Undergraduate start month is unconfirmed (src/profile/review.js: symbiosis-start-month).
-  const symbiosis = education.find(item => item.id === "symbiosis-university");
-  if (symbiosis) symbiosis.startDate = symbiosis.startDate.slice(0, 4);
   for (const item of education) {
     delete item.organization;
   }

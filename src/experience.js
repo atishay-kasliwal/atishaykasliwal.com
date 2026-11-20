@@ -60,7 +60,7 @@ export const experience = [
   entry({
     slug: "accolite",
     tag: "WORK",
-    role: "Senior Software Engineer",
+    role: "Senior Software Developer",
     place: "Accolite",
     start: "Aug 2021",
     end: "Aug 2024",
@@ -101,7 +101,7 @@ export const experience = [
     tag: "EDU",
     role: "B.Tech, Computer Science",
     place: "Symbiosis University",
-    start: "May 2018",
+    start: "Aug 2018",
     end: "May 2022",
     photo: "campus-2",
     thumb: [360, 240],
