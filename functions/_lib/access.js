@@ -33,7 +33,7 @@ async function accessKeys(env) {
 // (ADMIN_SERVICE_TOKEN_ID is its Client ID; unset means no service token is accepted). Only the
 // admin APIs the dashboard proxies opt in, never a page. For those calls the actor recorded in
 // audit logs is the dashboard's X-Admin-Actor header, and only when it names an allowed email.
-export const SERVICE_ACTOR = "service:analytics-dashboard";
+export const SERVICE_ACTOR = "service:admin";
 export async function requireAdmin(request, env, { allowService = false } = {}) {
   const token = request.headers.get("Cf-Access-Jwt-Assertion");
   if (!token) return { ok: false, status: 401 };
