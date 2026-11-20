@@ -93,11 +93,15 @@ try {
   await page.goto(`${base}/admin/resume/`);
   await page.getByText("An outdated résumé is live", { exact: true }).waitFor();
   await page.getByText("live check passed", { exact: true }).waitFor();
-  check(await page.locator("#published").innerText().then(text => text.includes("Stony Brook")), "outdated banner names the conflict");
+  check(await page.locator("#review").innerText().then(text => text.includes("Stony Brook")), "the live bundled PDF opens with its conflicts listed");
   check(!/\bnull\b/.test(await page.locator("#live-check").innerText()), "live check prints no stray null");
   await page.locator("#file").setInputFiles({ name: "qa-consistent.pdf", mimeType: "application/pdf", buffer: Buffer.from(makePdf(consistentResumeLines())) });
   await page.getByRole("button", { name: "Publish this version", exact: true }).waitFor();
   check(await page.locator("#publish-button").isEnabled(), "consistent résumé can publish without conflict acknowledgement");
+  check(await page.locator("#versions .rz-item.is-selected").innerText().then(text => /draft/i.test(text)), "the new upload is selected in the version list");
+  await page.getByRole("tab", { name: "Text" }).click();
+  check(await page.locator(".rz-text").innerText().then(text => text.includes("Atishay Kasliwal")), "the Text tab shows the extracted text");
+  await page.getByRole("tab", { name: "Findings" }).click();
   page.once("dialog", dialog => dialog.accept());
   await page.locator("#publish-button").click();
   await page.getByText("This version is published.", { exact: true }).waitFor();
@@ -128,6 +132,10 @@ try {
       if (name === "photography") await page.getByText("Nothing here yet.", { exact: true }).waitFor();
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       check(overflow <= 1, `${label} ${name} has no page overflow (${overflow}px)`);
+      if (name === "resume" && label === "desktop") {
+        const extra = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+        check(extra <= 1, `desktop résumé admin fits one screen (${extra}px extra)`);
+      }
       await page.screenshot({ path: path.join(evidence, `${name}-${label}.png`), fullPage: true });
     }
   }
