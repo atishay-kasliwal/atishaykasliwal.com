@@ -8,12 +8,14 @@ import { renderPhotographySeo } from "./scripts/photography-seo.mjs";
 import { buildExperiencePages } from "./scripts/build-experience-pages.mjs";
 import { buildProfilePage } from "./scripts/build-profile-page.mjs";
 
-// Google Analytics 4. Runs only on the production host, so local development, Lighthouse CI and
-// Pages preview deployments are not counted, and loads gtag.js once the page is idle so it stays
+// Google Analytics 4. Runs only on the production host and never for the owner (pi_owner cookie),
+// so local development, Lighthouse CI, Pages previews and the owner's own visits are not counted, and loads gtag.js once the page is idle so it stays
 // off the critical rendering path.
 const GA_MEASUREMENT_ID = "G-RX5HTCRR3X";
 const analyticsSnippet = `(function (w, d) {
   if (!/^(www\\.)?atishaykasliwal\\.com$/.test(location.hostname)) return;
+  // The owner's own browsers carry pi_owner=1 (set by the Portfolio Intelligence dashboard): no GA.
+  if (/(?:^|;\\s*)pi_owner=1(?:;|$)/.test(d.cookie)) { w["ga-disable-${GA_MEASUREMENT_ID}"] = true; return; }
   w.dataLayer = w.dataLayer || [];
   w.gtag = function () { w.dataLayer.push(arguments); };
   w.gtag("js", new Date());
