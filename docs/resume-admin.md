@@ -123,11 +123,11 @@ npx wrangler pages dev dist  # public routes against local D1/R2; admin routes n
 ## The admin dashboard's service token
 
 The admin at admin.atishaykasliwal.com calls the résumé API, the photo library API
-(`/api/photography/admin/photos*`), the GitHub feedback admin API and
+(`/api/photography/admin/photos*` and `/upload`), the GitHub feedback admin API and
 `/photography/admin/seo/report.json` server to server with a Cloudflare Access service token.
 `requireAdmin` accepts that token only on those routes (they opt in with `allowService`), only
 when its `common_name` equals `ADMIN_SERVICE_TOKEN_ID` in `wrangler.jsonc` (empty means none is
-accepted), and never for a page, a photo upload, photo insights or the responses inspector. Audit
+accepted), and never for a page, photo insights or the responses inspector. Audit
 logs record the dashboard's `X-Admin-Actor` header when it names an `ADMIN_EMAILS` address, and
 `service:admin` otherwise. The Access application must also include a Service Auth
 policy for the token. Tests: `tests/resume/service-token.test.mjs`.

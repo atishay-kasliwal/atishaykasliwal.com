@@ -71,18 +71,19 @@ test("the recorded actor is X-Admin-Actor only when it names an allowed email", 
   assert.deepEqual(person, { ok: true, email: "owner@example.com" });
 });
 
-test("the dashboard reaches the résumé, photo and feedback APIs it proxies", async () => {
+test("the dashboard reaches the résumé, photo (including upload) and feedback APIs it proxies", async () => {
   assert.equal((await run(apiMiddleware, "/api/admin/resume")).status, 200, "the /api/admin backstop lets résumé paths through");
   assert.equal((await run(stateRoute, "/api/admin/resume")).status, 200);
   assert.equal((await run(photosRoute, "/api/photography/admin/photos")).status, 200);
   assert.equal((await run(feedbackFacets, "/api/github-feedback/admin/facets")).status, 200);
+  // Upload passes the token check and reaches validation (no form here, so 400, not 403).
+  assert.equal((await run(uploadRoute, "/api/photography/admin/upload", { method: "POST" })).status, 400);
 });
 
 test("the service token never opens a page or an API the dashboard does not proxy", async () => {
   assert.equal((await run(apiMiddleware, "/api/admin/responses/context")).status, 403, "backstop refuses non-résumé /api/admin paths");
   assert.equal((await run(contextRoute, "/api/admin/responses/context")).status, 403);
   assert.equal((await run(pageMiddleware, "/admin/resume/")).status, 403, "admin pages refuse it");
-  assert.equal((await run(uploadRoute, "/api/photography/admin/upload", { method: "POST" })).status, 403, "photo upload refuses it");
   assert.equal((await run(insightsRoute, "/api/photography/admin/insights")).status, 403, "photo insights refuse it");
 });
 

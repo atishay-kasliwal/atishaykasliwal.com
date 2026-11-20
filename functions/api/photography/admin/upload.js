@@ -11,7 +11,7 @@ async function contentId(bytes) {
 // Uploads are idempotent on content: the same original always maps to the same photo id, so
 // re-uploading a file never creates a duplicate row or duplicate objects.
 export async function onRequestPost({ request, env }) {
-  const admin = await requireAdmin(request, env);
+  const admin = await requireAdmin(request, env, { allowService: true });
   if (!admin.ok) return Response.json({ error: "forbidden" }, { status: admin.status });
 
   let form;
