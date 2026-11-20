@@ -38,6 +38,8 @@ export const photographyDeckSizes = "(max-height: 460px) and (min-width: 500px) 
 const previewSizes = "(max-width: 700px) calc(100vw - 20px), 736px";
 
 export function photoVariants(photo) {
+  // Uploaded photos carry their own WebP copies (src/photography-core/variants.js).
+  if (Array.isArray(photo.variants) && photo.variants.length) return [...photo.variants].sort((a, b) => a.width - b.width);
   // External photos and the small rainbow never receive generated derivatives.
   if (!photo.src.startsWith("/photography/") || photo.width <= 736) return [];
   const name = photo.src.split("/").at(-1).replace(/\.[^.]+$/, "");

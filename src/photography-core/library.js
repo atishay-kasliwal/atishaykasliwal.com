@@ -20,5 +20,6 @@ export function publicView(photo) {
     colors: photo.colors ?? [],
     tags: photo.tags ?? [],
     origin: photo.origin,
+    variants: photo.variants ?? [],
   };
 }

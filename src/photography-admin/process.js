@@ -1,4 +1,5 @@
 import { classifyPixel, colorShares } from "../photography-core/colors.js";
+import { variantHeightFor, variantWidthsFor } from "../photography-core/variants.js";
 
 const DISPLAY_LONG_EDGE = 2400;
 const SAMPLE_EDGE = 96;
@@ -40,4 +41,27 @@ export async function processPhoto(file) {
 function scale(width, height, longEdge) {
   const ratio = Math.min(1, longEdge / Math.max(width, height));
   return { width: Math.max(1, Math.round(width * ratio)), height: Math.max(1, Math.round(height * ratio)) };
+}
+
+// Smaller WebP copies of a display image for the gallery (src/photography-core/variants.js).
+// Returns null where the browser cannot encode WebP (Safari falls back to PNG); the admin page
+// then leaves the photo for "Make small sizes" from another browser.
+export async function makeVariants(displayBlob) {
+  const bitmap = await createImageBitmap(displayBlob);
+  try {
+    const copies = new Map();
+    for (const width of variantWidthsFor(bitmap.width)) {
+      const height = variantHeightFor(width, bitmap.width, bitmap.height);
+      const canvas = new OffscreenCanvas(width, height);
+      const context = canvas.getContext("2d");
+      context.imageSmoothingQuality = "high";
+      context.drawImage(bitmap, 0, 0, width, height);
+      const blob = await canvas.convertToBlob({ type: "image/webp", quality: 0.82 });
+      if (blob.type !== "image/webp") return null;
+      copies.set(width, blob);
+    }
+    return copies;
+  } finally {
+    bitmap.close();
+  }
 }

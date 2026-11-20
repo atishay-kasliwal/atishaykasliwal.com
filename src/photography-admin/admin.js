@@ -1,6 +1,7 @@
 import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
-import { processPhoto } from "./process.js";
+import { makeVariants, processPhoto } from "./process.js";
+import { variantWidthsFor } from "../photography-core/variants.js";
 
 const queue = document.querySelector("#queue");
 const queueSection = document.querySelector("#queue-section");
@@ -87,12 +88,60 @@ function renderLibrary() {
     library.append(row({ thumb: photo.src, title: photo.id.slice(0, 8), meta: tags, status: statusText, actions, tone: photo.hidden ? "is-hidden" : "" }));
   }
   count.textContent = `${photos.filter(photo => photo.status === "ready" && !photo.hidden).length} visible · ${photos.filter(photo => photo.status === "pending").length} waiting`;
+  renderSizesButton();
 }
 
 async function refresh() {
   const body = await api("/api/photography/admin/photos");
   photos = body.photos;
   renderLibrary();
+}
+
+// ---------- Smaller copies for the gallery ----------
+const sizesButton = document.querySelector("#make-sizes");
+const needsSizes = photo => photo.origin === "r2" && variantWidthsFor(photo.width).length > 0 && !photo.variants?.length;
+let makingSizes = false;
+
+function renderSizesButton() {
+  const missing = photos.filter(needsSizes).length;
+  sizesButton.hidden = !missing;
+  sizesButton.disabled = makingSizes;
+  sizesButton.textContent = makingSizes ? "Making small sizes…" : `Make small sizes (${missing})`;
+}
+
+async function createVariants(photo) {
+  const response = await fetch(`/api/photography/admin/photos/${photo.id}/rotate`, { credentials: "same-origin" });
+  if (!response.ok) throw new Error("Could not load the photo.");
+  const copies = await makeVariants(await response.blob());
+  if (!copies) throw new Error("This browser cannot make WebP copies. Use Chrome, Edge or Firefox.");
+  const form = new FormData();
+  form.append("src", photo.src);
+  for (const [width, blob] of copies) form.append(`w${width}`, blob, `${width}.webp`);
+  const result = await api(`/api/photography/admin/photos/${photo.id}/variants`, { method: "POST", body: form });
+  photo.variants = result.variants;
+}
+
+// One at a time, like uploads; a failure on one photo does not stop the rest.
+async function makeMissingSizes({ quiet = false } = {}) {
+  if (makingSizes) return;
+  makingSizes = true;
+  renderSizesButton();
+  let made = 0;
+  let failed = 0;
+  let lastError = null;
+  for (const photo of photos.filter(needsSizes)) {
+    try {
+      await createVariants(photo);
+      made += 1;
+    } catch (error) {
+      failed += 1;
+      lastError = error.message;
+    }
+    renderSizesButton();
+  }
+  makingSizes = false;
+  renderSizesButton();
+  if (!quiet || failed) say(failed ? `Made small sizes for ${made}; ${failed} failed: ${lastError}` : `Made small sizes for ${made} photo${made === 1 ? "" : "s"}.`);
 }
 
 async function toggleHidden(photo) {
@@ -132,6 +181,11 @@ async function rotatePhoto(photo, direction) {
     const display = await canvas.convertToBlob({ type: 'image/jpeg', quality: .95 });
     const saved = await api(path, { method: 'POST', headers: { 'Content-Type': 'image/jpeg', 'If-Match': etag }, body: display });
     photo.src = saved.src;
+    photo.width = saved.width;
+    photo.height = saved.height;
+    photo.variants = [];
+    // The old small copies were dropped with the rotation; make new ones.
+    if (needsSizes(photo)) await createVariants(photo).catch(error => say(`Rotated. Small sizes: ${error.message}`));
   } catch (error) {
     say(error.message);
   } finally {
@@ -212,6 +266,7 @@ async function uploadAll(files) {
   // One at a time keeps memory bounded on large originals and keeps the queue readable.
   for (const file of images) await uploadFile(file);
   await refresh();
+  await makeMissingSizes({ quiet: true });
 }
 
 drop.addEventListener("dragover", event => {
@@ -225,6 +280,7 @@ drop.addEventListener("drop", event => {
   uploadAll(event.dataTransfer.files);
 });
 document.querySelector("#choose").addEventListener("click", () => fileInput.click());
+sizesButton.addEventListener("click", () => makeMissingSizes());
 fileInput.addEventListener("change", () => {
   uploadAll(fileInput.files);
   fileInput.value = "";

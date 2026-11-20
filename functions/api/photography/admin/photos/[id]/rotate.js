@@ -42,7 +42,8 @@ export async function onRequestPost({ request, env, params }) {
   const src = `${env.PHOTO_PUBLIC_BASE.replace(/\/$/, '')}/${key}`;
   await env.PHOTOS.put(key, rotated, { httpMetadata: { contentType: 'image/jpeg' } });
   const { width, height } = checked.dimensions;
-  const result = await env.DB.prepare('UPDATE photos SET src = ?, width = ?, height = ?, orientation = ?, updated_at = ? WHERE id = ? AND src = ? AND deleted_at IS NULL')
+  // The smaller copies show the old orientation, so they are dropped until the admin remakes them.
+  const result = await env.DB.prepare("UPDATE photos SET src = ?, width = ?, height = ?, orientation = ?, variants_json = '[]', updated_at = ? WHERE id = ? AND src = ? AND deleted_at IS NULL")
     .bind(src, width, height, orientationOf(width, height), new Date().toISOString(), params.id, found.row.src).run();
   if (!result.meta.changes) {
     await env.PHOTOS.delete(key);

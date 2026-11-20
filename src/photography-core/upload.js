@@ -53,6 +53,15 @@ export function readDimensions(bytes, type) {
       const height = 1 + (bytes[27] | (bytes[28] << 8) | (bytes[29] << 16));
       return { width, height };
     }
+    // Simple lossy WebP (what canvas.convertToBlob and most encoders write): a VP8 key frame.
+    if (chunk === "VP8 " && bytes[23] === 0x9d && bytes[24] === 0x01 && bytes[25] === 0x2a) {
+      return { width: (bytes[26] | (bytes[27] << 8)) & 0x3fff, height: (bytes[28] | (bytes[29] << 8)) & 0x3fff };
+    }
+    // Lossless WebP: 14-bit width-1 and height-1 after the 0x2f signature.
+    if (chunk === "VP8L" && bytes[20] === 0x2f) {
+      const bits = (bytes[21] | (bytes[22] << 8) | (bytes[23] << 16) | (bytes[24] << 24)) >>> 0;
+      return { width: (bits & 0x3fff) + 1, height: ((bits >>> 14) & 0x3fff) + 1 };
+    }
     return null;
   }
   return null;

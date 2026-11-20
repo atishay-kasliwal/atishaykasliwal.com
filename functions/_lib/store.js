@@ -1,5 +1,6 @@
 // D1 implementation of the store used by the ingest logic and the public/admin routes.
 import { publicPhotos } from "../../src/photography-core/library.js";
+import { parseVariants } from "../../src/photography-core/variants.js";
 
 export function rowToPhoto(row, tags = []) {
   return {
@@ -16,6 +17,7 @@ export function rowToPhoto(row, tags = []) {
     height: row.height,
     orientation: row.orientation,
     colors: JSON.parse(row.colors_json || "[]"),
+    variants: parseVariants(row.variants_json),
     tags,
     uploadedAt: row.uploaded_at,
   };

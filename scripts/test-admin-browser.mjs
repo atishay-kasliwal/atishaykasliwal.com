@@ -6,6 +6,7 @@ import { readFileSync, existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
+import sharp from "sharp";
 import { accessFixture, memoryD1, memoryR2, makePdf, consistentResumeLines } from "../tests/resume/helpers.mjs";
 import { onRequest as adminMiddleware } from "../functions/admin/_middleware.js";
 import { onRequestGet as adminPage } from "../functions/admin/[[path]].js";
@@ -18,7 +19,8 @@ mkdirSync(evidence, { recursive: true });
 const access = await accessFixture();
 const db = memoryD1();
 db.sqlite.exec(readFileSync(path.join(root, "migrations", "0001_photography.sql"), "utf8"));
-const env = { DB: db, RESUMES: memoryR2(), PHOTOS: memoryR2(), ACCESS_TEAM_DOMAIN: "team.example", ACCESS_AUD: "aud-1", ADMIN_EMAILS: "owner@example.com" };
+db.sqlite.exec(readFileSync(path.join(root, "migrations", "0006_photo_variants.sql"), "utf8"));
+const env = { DB: db, RESUMES: memoryR2(), PHOTOS: memoryR2(), ACCESS_TEAM_DOMAIN: "team.example", ACCESS_AUD: "aud-1", ADMIN_EMAILS: "owner@example.com", PHOTO_PUBLIC_BASE: "https://photos.example" };
 const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".pdf": "application/pdf", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".txt": "text/plain" };
 env.ASSETS = { async fetch(input) {
   const url = new URL(typeof input === "string" ? input : input.url);
@@ -42,6 +44,9 @@ const routes = [
   [/^\/api\/admin\/responses\/fetch$/, "api/admin/responses/fetch.js"],
   [/^\/api\/photography\/admin\/photos$/, "api/photography/admin/photos.js"],
   [/^\/api\/photography\/admin\/insights$/, "api/photography/admin/insights.js"],
+  [/^\/api\/photography\/admin\/upload$/, "api/photography/admin/upload.js"],
+  [/^\/api\/photography\/admin\/photos\/([^/]+)\/rotate$/, "api/photography/admin/photos/[id]/rotate.js"],
+  [/^\/api\/photography\/admin\/photos\/([^/]+)\/variants$/, "api/photography/admin/photos/[id]/variants.js"],
   [/^\/Atishay-Kasliwal-Resume\.pdf$/, "Atishay-Kasliwal-Resume.pdf.js"],
   [/^\/api\/profile\.json$/, "api/profile.json.js"],
 ];
@@ -142,6 +147,21 @@ try {
       await page.screenshot({ path: path.join(evidence, `${name}-${label}.png`), fullPage: true });
     }
   }
+  // Photos: an upload gets its small WebP copies made in the browser automatically.
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${base}/photography/admin/`);
+  await page.getByText("Nothing here yet.", { exact: true }).waitFor();
+  const photo = await sharp({ create: { width: 3000, height: 2000, channels: 3, background: "#2d4a5f" } }).jpeg().toBuffer();
+  await page.locator("#file").setInputFiles({ name: "lake.jpg", mimeType: "image/jpeg", buffer: photo });
+  let listed;
+  for (const started = Date.now(); Date.now() - started < 30_000; await page.waitForTimeout(500)) {
+    listed = await page.evaluate(async () => (await (await fetch("/api/photography/admin/photos", { credentials: "same-origin" })).json()).photos?.[0]);
+    if (listed?.variants?.length) break;
+  }
+  check(Boolean(listed), "the upload reached the library");
+  check(listed.variants.map(variant => variant.width).join() === "640,1280,1920", "an uploaded photo gets 640, 1280 and 1920px WebP copies");
+  check(listed.variants.every(variant => variant.src.startsWith("https://photos.example/variants/")), "copies are stored under variants/");
+  check(await page.locator("#make-sizes").isHidden(), "no photo is left without small sizes");
   check(failures.length === 0, `no browser errors: ${failures.join("; ")}`);
   console.log(`Admin browser QA passed: ${checks} checks. Screenshots: ${evidence}`);
 } finally {
