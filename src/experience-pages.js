@@ -77,12 +77,12 @@ export const experiencePages = [
   },
   {
     slug: "wake-forest-cair",
-    name: "Software Engineer",
+    name: "AI/ML Engineer",
     kicker: "Work",
     started: "2025-05-01",
     lastModified: "2026-11-12", // Related row and SEO copy changes
     seo: {
-      title: "Software Engineer - Wake Forest CAIR · Atishay Kasliwal",
+      title: "AI/ML Engineer - Wake Forest CAIR · Atishay Kasliwal",
       description:
         "Atishay Kasliwal at Wake Forest CAIR: an AI radiology platform on GCP over 10K+ MRI studies that cut tumor segmentation from 3 hours to 2 minutes.",
     },

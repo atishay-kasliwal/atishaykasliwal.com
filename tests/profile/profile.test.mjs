@@ -229,6 +229,6 @@ test("validator: catches a missing project on /profile and a lost homepage link"
 });
 
 test("validator: catches an unsupported claim entering the profile", { skip: !built && "run npm run build first" }, () => {
-  const error = validatorFails(tamperedCopy(copy => replaceIn(path.join(copy, "profile/index.html"), "Open to work</p>", "Open to work · 1,000+ active users</p>")));
-  assert.match(error, /1,000\+ active users/);
+  const error = validatorFails(tamperedCopy(copy => replaceIn(path.join(copy, "profile/index.html"), "Open to work</p>", "Open to work · 2,000+ users</p>")));
+  assert.match(error, /2,000\+ users/);
 });

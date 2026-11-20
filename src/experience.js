@@ -47,7 +47,7 @@ export const experience = [
   entry({
     slug: "wake-forest-cair",
     tag: "WORK",
-    role: "Software Engineer",
+    role: "AI/ML Engineer",
     place: "Wake Forest CAIR",
     start: "May 2025",
     end: "Aug 2025",

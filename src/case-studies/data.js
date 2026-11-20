@@ -22,7 +22,7 @@ export const caseStudies = [
     headline: "Save a job application in one click, from 60 job sites.",
     headlineSoft: "Track everything after it in one place.",
     lede:
-      "It started in February 2026 as an owner-only dashboard on my personal website, built for my own job search. Within two weeks it had public sign-up and a Chrome extension, and it now runs on its own at tracker.atriveo.com.",
+      "It started in February 2026 as an owner-only dashboard on my personal website, built for my own job search. Within two weeks it had public sign-up and a Chrome extension, and it now runs on its own at tracker.atriveo.com, with 1,000+ active users, 2K+ daily queries and a 5.0-star rating on the Chrome Web Store.",
     spec: [
       { label: "Stack", html: "<b>React · Hono · Postgres</b> · Cloudflare Workers · Neon · R2 · Chrome MV3" },
       {

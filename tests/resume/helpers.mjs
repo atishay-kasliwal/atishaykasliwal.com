@@ -169,7 +169,7 @@ export function consistentResumeLines() {
     "Software Engineer, Research | Python, FastAPI, Apache Kafka",
     "* Grew the research platform from 200+ to about 1,000 daily users on Google Cloud.",
     "Wake Forest CAIR May 2025 - August 2025",
-    "Software Engineer | Python, PyTorch",
+    "AI/ML Engineer | Python, PyTorch",
     "* Built an AI radiology platform over 10K+ MRI studies for a physician research team.",
     "Accolite August 2021 - August 2024",
     "Senior Software Engineer | Java, Spring Boot, Kafka",
