@@ -2118,6 +2118,10 @@ html.scroll-story .scroll-cue {
   .hero-copy {
     font-size: clamp(22px, min(7.2vw, 3.5dvh), 32px);
   }
+  /* No room for the second sentence here; the facts row below covers stack and open source. */
+  .hero-copy .soft {
+    display: none;
+  }
   .hero-note {
     margin-top: 12px;
   }
