@@ -6,12 +6,10 @@ import { after, before, test } from "node:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { requireAdmin, SERVICE_ACTOR } from "../../functions/_lib/access.js";
 import { onRequestGet as stateRoute } from "../../functions/api/admin/resume/index.js";
-import { onRequestGet as contextRoute } from "../../functions/api/admin/responses/context.js";
 import { onRequest as apiMiddleware } from "../../functions/api/admin/_middleware.js";
 import { onRequest as pageMiddleware } from "../../functions/admin/_middleware.js";
 import { onRequestGet as photosRoute } from "../../functions/api/photography/admin/photos.js";
 import { onRequestPost as uploadRoute } from "../../functions/api/photography/admin/upload.js";
-import { onRequestGet as insightsRoute } from "../../functions/api/photography/admin/insights.js";
 import { onRequestGet as feedbackFacets } from "../../functions/api/github-feedback/admin/facets.js";
 import { accessFixture, memoryAssets, memoryD1, memoryR2, SITE } from "./helpers.mjs";
 
@@ -82,9 +80,7 @@ test("the dashboard reaches the résumé, photo (including upload) and feedback 
 
 test("the service token never opens a page or an API the dashboard does not proxy", async () => {
   assert.equal((await run(apiMiddleware, "/api/admin/responses/context")).status, 403, "backstop refuses non-résumé /api/admin paths");
-  assert.equal((await run(contextRoute, "/api/admin/responses/context")).status, 403);
   assert.equal((await run(pageMiddleware, "/admin/resume/")).status, 403, "admin pages refuse it");
-  assert.equal((await run(insightsRoute, "/api/photography/admin/insights")).status, 403, "photo insights refuse it");
 });
 
 test("on the photography admin route, only the SEO report JSON accepts it", async t => {

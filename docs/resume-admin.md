@@ -1,9 +1,10 @@
-# Résumé admin and response inspector
+# Résumé admin
 
-Two private pages behind Cloudflare Access:
+One private page behind Cloudflare Access, until résumé upload moves to Admin:
 
 - `/admin/resume/`: upload, preview, validate, publish and restore the résumé PDF without a rebuild.
-- `/admin/responses/`: see exactly what `/api/profile.json`, `/`, `/profile/` and the other public files return to browsers and crawlers, checked against the canonical profile.
+
+Everything else is in Admin at admin.atishaykasliwal.com (the portfolio-intelligence repository): photos (upload, rotate, small copies, hide, delete), the SEO report and its site files, GitHub feedback, and the response inspector. The old `/admin/responses/`, `/photography/admin/` and `/photography/admin/seo/` pages were removed on 2026-11-20 and answer 404 after sign-in; `/photography/admin/seo/report.json` stays, because Admin reads it.
 
 The canonical profile (`src/profile/`, see [profile-architecture.md](profile-architecture.md)) stays the only source of professional facts. A PDF is checked against it and never changes it.
 
@@ -67,22 +68,6 @@ Findings are `conflict`, `unverified` or `info`, and link to the review item tha
 
 The Stony Brook research role ended in **May 2026** (user-confirmed 2026-11-19, review item `stony-brook-research-end-date`). The bundled PDF still says "November 2024 – Present", and every upload that does is flagged as a conflict.
 
-## Response inspector
-
-`/admin/responses/` fetches one of `/api/profile.json`, `/`, `/profile/`, `/api/profile.schema.json`, `/llms.txt`, `/robots.txt` or the résumé PDF, either:
-
-- **from your browser, signed out** (`credentials: "omit"`, `cache: "no-store"`), or
-- **as a simulated crawler** (`/api/admin/responses/fetch`): this site's server sends Chrome's, GPTBot's, ClaudeBot's, PerplexityBot's or Googlebot's User-Agent string, following redirects on this origin and showing each hop. Only those fixed paths on the site's own origin can be fetched. These are **not** requests from those providers. Real crawlers come from their own IP ranges and Cloudflare's bot detection identifies them, so bot rules (for example blocking AI crawlers) can answer them differently. The menu, the response summary and the API response (`simulated: true`) all say so.
-
-It shows status, headers, content type, size, time to headers and total, `cf-cache-status`, and the SHA-256 of the body. JSON is shown as a collapsible tree or raw. HTML is shown raw, rendered in an empty sandbox (no scripts, as a non-JavaScript crawler sees it), or as extracted title, description, canonical link, robots, H1, JSON-LD, links and visible text. Copy and Download export the body.
-
-Checks (`src/admin/responses/checks.js`), against `/api/admin/responses/context`, which returns the built profile and schema from the asset store, the review register and the expected résumé version:
-
-- `/api/profile.json`: schema errors, missing fields, values that differ from the canonical profile, fields the canonical profile lacks, phrases a review item keeps out, and whether `profile.resume.version` names the published PDF. A published résumé is expected, not reported as drift.
-- `/` and `/profile/`: title, description, canonical link, robots, Person JSON-LD against the profile, links to the résumé, `/profile/` and the API, and on `/profile/` every role's organisation and dates
-- schema: equality with the deployed schema
-- résumé PDF: content type and hash against the published (or bundled) version
-
 ## Security
 
 - **Two layers.** Cloudflare Access protects `/admin/*` and `/api/admin/*`. Behind it, every admin page and API call verifies the Access JWT itself: `functions/admin/_middleware.js`, `functions/api/admin/_middleware.js`, and `adminRoute` in `functions/_lib/admin.js` on each handler. A misconfigured or bypassed Access application still cannot expose them.
@@ -127,7 +112,7 @@ The admin at admin.atishaykasliwal.com calls the résumé API, the photo library
 `/photography/admin/seo/report.json` server to server with a Cloudflare Access service token.
 `requireAdmin` accepts that token only on those routes (they opt in with `allowService`), only
 when its `common_name` equals `ADMIN_SERVICE_TOKEN_ID` in `wrangler.jsonc` (empty means none is
-accepted), and never for a page, photo insights or the responses inspector. Audit
+accepted), and never for a page. Audit
 logs record the dashboard's `X-Admin-Actor` header when it names an `ADMIN_EMAILS` address, and
 `service:admin` otherwise. The Access application must also include a Service Auth
 policy for the token. Tests: `tests/resume/service-token.test.mjs`.

@@ -5,7 +5,8 @@ import pages from "../_generated/admin-pages.js";
 // the build), never in the public asset store, so no URL spelling can reach it without the check.
 export function onRequestGet({ request }) {
   const pathname = new URL(request.url).pathname;
-  const match = /^\/admin\/(resume|responses)(\/|\/index\.html)?$/.exec(pathname);
+  // The responses inspector moved to Admin (admin.atishaykasliwal.com/inspector).
+  const match = /^\/admin\/(resume)(\/|\/index\.html)?$/.exec(pathname);
   if (!match || !pages[match[1]]) return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   if (match[2] !== "/") return new Response(null, { status: 308, headers: { Location: `/admin/${match[1]}/` } });
   return new Response(pages[match[1]], { headers: { "Content-Type": "text/html; charset=utf-8" } });

@@ -57,9 +57,7 @@ export default defineConfig(async () => {
           ...photography,
           ...experience.inputs,
           ...profile.inputs,
-          "photography/admin/index": path.resolve("src/photography-admin/index.html"),
           "admin/resume/index": path.resolve("src/admin/resume/index.html"),
-          "admin/responses/index": path.resolve("src/admin/responses/index.html"),
         },
       },
     },
@@ -69,7 +67,6 @@ export default defineConfig(async () => {
         name: "google-analytics",
         apply: "build",
         transformIndexHtml(html, ctx) {
-          if (ctx.filename.includes(`${path.sep}photography-admin${path.sep}`)) return html;
           if (ctx.filename.includes(`${path.sep}src${path.sep}admin${path.sep}`)) return html;
           return [{ tag: "script", children: analyticsSnippet, injectTo: "head" }];
         },
@@ -82,9 +79,7 @@ export default defineConfig(async () => {
         name: "admin-routes",
         closeBundle() {
           const pages = {};
-          const photography = path.resolve("dist/src/photography-admin/index.html");
-          if (fs.existsSync(photography)) pages.photography = fs.readFileSync(photography, "utf8");
-          for (const name of ["resume", "responses"]) {
+          for (const name of ["resume"]) {
             const file = path.resolve(`dist/src/admin/${name}/index.html`);
             if (fs.existsSync(file)) pages[name] = fs.readFileSync(file, "utf8");
           }

@@ -1,4 +1,4 @@
-/* Private admin pages under /admin/. Loaded after src/photography-admin/admin.css and uses its
+/* Private admin pages under /admin/. Loaded after src/admin/base.css and uses its
    tokens; purple stays on the dot and focus rings only. */
 :root { --warn: #c9a76b; --ok: #9fb59a; }
 

@@ -110,7 +110,7 @@ function renderLive() {
       { class: "rz-live-links" },
       h("a", { href: state.publicPath, target: "_blank", rel: "noopener" }, "Open ", arrow()),
       h("button", { type: "button", class: "link", onclick: liveCheck }, "Check again"),
-      h("a", { href: "/admin/responses/" }, "Inspect ", arrow("→")),
+      h("a", { href: "https://admin.atishaykasliwal.com/inspector", target: "_blank", rel: "noopener" }, "Inspect ", arrow()),
     ),
   );
   liveCheck();

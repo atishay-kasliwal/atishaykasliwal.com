@@ -58,7 +58,6 @@ export const shortSha = sha => (sha ? sha.slice(0, 12) : "—");
 export function nav(current) {
   const pages = [
     ["resume", "Résumé", "/admin/resume/"],
-    ["responses", "Responses", "/admin/responses/"],
   ];
   return h(
     "nav",

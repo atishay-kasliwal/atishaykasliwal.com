@@ -6,7 +6,6 @@ import { readFileSync, existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
-import sharp from "sharp";
 import { accessFixture, memoryD1, memoryR2, makePdf, consistentResumeLines } from "../tests/resume/helpers.mjs";
 import { onRequest as adminMiddleware } from "../functions/admin/_middleware.js";
 import { onRequestGet as adminPage } from "../functions/admin/[[path]].js";
@@ -40,13 +39,6 @@ const routes = [
   [/^\/api\/admin\/resume\/versions\/([^/]+)\/publish$/, "api/admin/resume/versions/[id]/publish.js"],
   [/^\/api\/admin\/resume\/versions\/([^/]+)\/recheck$/, "api/admin/resume/versions/[id]/recheck.js"],
   [/^\/api\/admin\/resume\/versions\/([^/]+)$/, "api/admin/resume/versions/[id].js"],
-  [/^\/api\/admin\/responses\/context$/, "api/admin/responses/context.js"],
-  [/^\/api\/admin\/responses\/fetch$/, "api/admin/responses/fetch.js"],
-  [/^\/api\/photography\/admin\/photos$/, "api/photography/admin/photos.js"],
-  [/^\/api\/photography\/admin\/insights$/, "api/photography/admin/insights.js"],
-  [/^\/api\/photography\/admin\/upload$/, "api/photography/admin/upload.js"],
-  [/^\/api\/photography\/admin\/photos\/([^/]+)\/rotate$/, "api/photography/admin/photos/[id]/rotate.js"],
-  [/^\/api\/photography\/admin\/photos\/([^/]+)\/variants$/, "api/photography/admin/photos/[id]/variants.js"],
   [/^\/Atishay-Kasliwal-Resume\.pdf$/, "Atishay-Kasliwal-Resume.pdf.js"],
   [/^\/api\/profile\.json$/, "api/profile.json.js"],
 ];
@@ -121,47 +113,22 @@ try {
   await page.getByText("✓ Public URL verified", { exact: true }).waitFor();
   check(true, "missing R2 object shows fallback and verifies the served PDF");
   env.RESUMES = savedBucket;
-  await page.goto(`${base}/admin/responses/`);
-  await page.locator("#summary").getByText("Your browser, signed out", { exact: true }).waitFor();
-  await page.locator("#agent").selectOption("gptbot");
-  await page.locator("#summary").getByText("Simulated GPTBot", { exact: true }).waitFor();
-  check((await page.locator("#summary").innerText()).includes("Not a verified request"), "inspector labels simulation honestly");
+  // The responses inspector, photography admin and SEO page moved to Admin: gone even signed in.
+  for (const route of ["/admin/responses/", "/photography/admin/", "/photography/admin/seo/"]) {
+    check((await page.goto(`${base}${route}`)).status() === 404, `${route} is gone (moved to Admin)`);
+  }
   for (const [label, viewport] of [["desktop", { width: 1440, height: 1000 }], ["phone", { width: 390, height: 844 }]]) {
     await page.setViewportSize(viewport);
-    for (const [name, route, ready] of [
-      ["resume", "/admin/resume/", "#live-check .good"],
-      ["responses", "/admin/responses/", "#headers tbody"],
-      ["photography", "/photography/admin/", "#admin-count"],
-      ["seo", "/photography/admin/seo/", "#meta"],
-    ]) {
-      await page.goto(`${base}${route}`);
-      await page.locator(ready).waitFor({ state: "visible" });
-      if (name === "seo") await page.waitForFunction(() => !/Loading|Could not load/.test(document.querySelector("#meta").textContent));
-      if (name === "photography") await page.getByText("Nothing here yet.", { exact: true }).waitFor();
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-      check(overflow <= 1, `${label} ${name} has no page overflow (${overflow}px)`);
-      if (name === "resume" && label === "desktop") {
-        const extra = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
-        check(extra <= 1, `desktop résumé admin fits one screen (${extra}px extra)`);
-      }
-      await page.screenshot({ path: path.join(evidence, `${name}-${label}.png`), fullPage: true });
+    await page.goto(`${base}/admin/resume/`);
+    await page.locator("#live-check .good").waitFor({ state: "visible" });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    check(overflow <= 1, `${label} résumé admin has no page overflow (${overflow}px)`);
+    if (label === "desktop") {
+      const extra = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+      check(extra <= 1, `desktop résumé admin fits one screen (${extra}px extra)`);
     }
+    await page.screenshot({ path: path.join(evidence, `resume-${label}.png`), fullPage: true });
   }
-  // Photos: an upload gets its small WebP copies made in the browser automatically.
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`${base}/photography/admin/`);
-  await page.getByText("Nothing here yet.", { exact: true }).waitFor();
-  const photo = await sharp({ create: { width: 3000, height: 2000, channels: 3, background: "#2d4a5f" } }).jpeg().toBuffer();
-  await page.locator("#file").setInputFiles({ name: "lake.jpg", mimeType: "image/jpeg", buffer: photo });
-  let listed;
-  for (const started = Date.now(); Date.now() - started < 30_000; await page.waitForTimeout(500)) {
-    listed = await page.evaluate(async () => (await (await fetch("/api/photography/admin/photos", { credentials: "same-origin" })).json()).photos?.[0]);
-    if (listed?.variants?.length) break;
-  }
-  check(Boolean(listed), "the upload reached the library");
-  check(listed.variants.map(variant => variant.width).join() === "640,1280,1920", "an uploaded photo gets 640, 1280 and 1920px WebP copies");
-  check(listed.variants.every(variant => variant.src.startsWith("https://photos.example/variants/")), "copies are stored under variants/");
-  check(await page.locator("#make-sizes").isHidden(), "no photo is left without small sizes");
   check(failures.length === 0, `no browser errors: ${failures.join("; ")}`);
   console.log(`Admin browser QA passed: ${checks} checks. Screenshots: ${evidence}`);
 } finally {

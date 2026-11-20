@@ -10,8 +10,6 @@ import { onRequestPost as publishRoute } from "../../functions/api/admin/resume/
 import { onRequestPost as recheckRoute } from "../../functions/api/admin/resume/versions/[id]/recheck.js";
 import { onRequestGet as bundledRoute } from "../../functions/api/admin/resume/bundled.js";
 import { onRequestGet as resumeContextRoute } from "../../functions/api/admin/resume/context.js";
-import { onRequestGet as contextRoute } from "../../functions/api/admin/responses/context.js";
-import { onRequestGet as fetchRoute } from "../../functions/api/admin/responses/fetch.js";
 import { onRequest as apiMiddleware } from "../../functions/api/admin/_middleware.js";
 import { onRequest as pageMiddleware } from "../../functions/admin/_middleware.js";
 import { onRequest as publicResume } from "../../functions/Atishay-Kasliwal-Resume.pdf.js";
@@ -77,11 +75,10 @@ test("admin routes and pages need an Access sign-in from an allowed email", asyn
     [recheckRoute, "/api/admin/resume/versions/0123456789abcdef/recheck", "POST"],
     [bundledRoute, "/api/admin/resume/bundled", "GET"],
     [resumeContextRoute, "/api/admin/resume/context", "GET"],
-    [contextRoute, "/api/admin/responses/context", "GET"],
-    [fetchRoute, "/api/admin/responses/fetch?target=home", "GET"],
     [apiMiddleware, "/api/admin/anything", "GET"],
     [pageMiddleware, "/admin/resume/", "GET"],
     [pageMiddleware, "/admin/responses/", "GET"],
+    [pageMiddleware, "/admin/anything/", "GET"],
   ];
   for (const [handler, path, method] of routes) {
     const params = { id: "0123456789abcdef" };
@@ -160,7 +157,7 @@ test("the admin pages are served by the Function after the Access check, never a
   const page = await get("/admin/resume/");
   assert.equal(page.status, 200);
   assert.match(await page.text(), /<title>Résumé admin<\/title>/);
-  assert.match(await (await get("/admin/responses/")).text(), /<title>Response inspector<\/title>/);
+  assert.equal((await get("/admin/responses/")).status, 404, "the responses inspector moved to Admin");
   assert.equal((await get("/admin/resume")).status, 308);
   assert.equal((await get("/admin/other/")).status, 404);
   // And nothing in the build output serves them.
@@ -172,17 +169,13 @@ test("the admin pages are served by the Function after the Access check, never a
     const request = new Request(`${SITE}${path}`);
     assert.equal((await photography({ request, env })).status, 401, path);
   }
-  const request = new Request(`${SITE}/photography/admin/`, { headers: { "Cf-Access-Jwt-Assertion": await access.token("owner@example.com") } });
-  const photoPage = await photography({ request, env });
-  assert.equal(photoPage.status, 200);
-  assert.match(await photoPage.text(), /<title>Photography admin<\/title>/);
-  assert.equal(photoPage.headers.get("Cache-Control"), "no-store");
-  assert.match(photoPage.headers.get("Content-Security-Policy"), /frame-ancestors 'none'/);
+  // The photography admin pages moved to Admin: signed in, they are a 404; only the report JSON remains.
   const authHeaders = { "Cf-Access-Jwt-Assertion": await access.token("owner@example.com") };
-  const seoPage = await photography({ request: new Request(`${SITE}/photography/admin/seo/`, { headers: authHeaders }), env });
-  assert.equal(seoPage.status, 200);
-  assert.match(await seoPage.text(), /<title>SEO admin<\/title>/);
-  assert.match(seoPage.headers.get("Content-Security-Policy"), /script-src 'self' 'sha256-/);
+  for (const path of ["/photography/admin/", "/photography/admin/seo/"]) {
+    const moved = await photography({ request: new Request(`${SITE}${path}`, { headers: authHeaders }), env });
+    assert.equal(moved.status, 404, path);
+    assert.equal(moved.headers.get("Cache-Control"), "no-store");
+  }
   const report = await photography({ request: new Request(`${SITE}/photography/admin/seo/report.json`, { headers: authHeaders }), env });
   assert.equal(report.status, 200);
   assert.ok((await report.json()).summary.pages > 0);
@@ -390,23 +383,3 @@ test("if D1 or R2 fails the public URL falls back to the bundled PDF", async () 
   }
 });
 
-test("the inspector context and server fetch are fixed to this site", async () => {
-  const context = await (await call(contextRoute, "/api/admin/responses/context")).json();
-  assert.equal(context.resume.expected.sha256, first.sha256);
-  assert.equal(context.resume.expected.source, "published");
-  assert.equal(context.canonical.profile.resume.version.source, "bundled", "canonical is the build output, not the overlay");
-  assert.ok(context.reviewItems.some(item => item.id === "stony-brook-research-end-date"));
-
-  assert.equal((await call(fetchRoute, "/api/admin/responses/fetch?target=https://evil.example/")).status, 400);
-  assert.equal((await call(fetchRoute, "/api/admin/responses/fetch?target=home&agent=wget")).status, 400);
-  const result = await (await call(fetchRoute, "/api/admin/responses/fetch?target=profile&agent=gptbot")).json();
-  assert.equal(result.url, `${SITE}/profile/`);
-  assert.equal(result.status, 200);
-  assert.match(result.userAgent, /GPTBot/);
-  assert.equal(result.simulated, true);
-  assert.match(result.note, /not a verified request/);
-  assert.equal(result.body, "<!doctype html><title>t</title>");
-  const sent = publicFetches.at(-1);
-  assert.equal(sent.init.headers["User-Agent"], result.userAgent);
-  assert.equal(sent.init.headers.Cookie, undefined, "no admin credentials are forwarded");
-});
