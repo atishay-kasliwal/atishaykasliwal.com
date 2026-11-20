@@ -140,6 +140,10 @@ function render(study, { number, total, next }) {
   const panels = study.sections
     ? study.sections.slice(0, 4).map((section, i) => panel("point", `${pad(i + 1)}`, `<h2>${escape(section.title)}</h2><p>${escape(lead(section.body))}</p>`)).join("\n        ")
     : [
+        study.rules?.length
+          ? panel("rules", "How the game works", `<h2>${escape(study.name)} rules, in brief</h2>
+          <dl>${study.rules.map(rule => `<div><dt>${escape(rule.label)}</dt><dd>${escape(rule.text)}</dd></div>`).join("")}</dl>`)
+          : "",
         panel("storyline", "The story", `<div class="beat"><span>Problem</span><h2>${escape(study.problem.title)}</h2><p>${escape(lead(study.problem.body))}</p></div>
           <div class="beat"><span>Built</span><h2>${escape(study.solution.title)}</h2><p>${escape(lead(study.solution.body))}</p></div>`),
         study.engineering?.nodes?.length

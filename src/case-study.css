@@ -287,8 +287,39 @@ h1 .line {
 .panels > .panel {
   grid-column: span 6;
 }
-.panels > :only-child {
+.panels > :only-child,
+.panels > .rules {
   grid-column: 1 / -1;
+}
+.rules dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 28px;
+}
+.rules dl > div {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.rules dt {
+  font: 12px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rules dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+@media (max-width: 900px) {
+  .rules dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .rules dl { grid-template-columns: 1fr; }
 }
 .points .panel {
   grid-column: span 6;

@@ -714,9 +714,9 @@ export const caseStudies = [
     name: "InsureRaft",
     live: false,
     started: "2026-04-28", // first commit: "Initial commit: InsureRaft distributed insurance data transfer system"
-    lastModified: "2026-11-12", // Related row and SEO copy changes
+    lastModified: "2026-11-20", // "NuRaft" in the title and the lede's first sentence
     seo: {
-      title: "InsureRaft - Raft Insurance Event Log · Atishay Kasliwal",
+      title: "InsureRaft - NuRaft Insurance Event Log in C++ · Atishay Kasliwal",
       description:
         "How Atishay Kasliwal built InsureRaft: a Raft-replicated log of insurance events in C++ on NuRaft, where the log itself is the audit trail.",
       language: "C++",
@@ -724,7 +724,7 @@ export const caseStudies = [
     headline: "A claim isn't approved until a quorum of nodes agrees.",
     headlineSoft: "The replicated log is the audit trail, not a copy of it.",
     lede:
-      "Carriers, brokers, reinsurers and regulators all need the same ordered history of a policy: created, claimed, approved, paid. InsureRaft replicates that history across a Raft cluster in C++ on NuRaft, so no single party's copy is the one everyone else has to trust.",
+      "InsureRaft replicates the ordered history of an insurance policy (created, claimed, approved, paid) across a Raft cluster in C++ on NuRaft, so no single party's copy is the one everyone else has to trust. Carriers, brokers, reinsurers and regulators all need that same history.",
     spec: [
       { label: "Stack", html: "<b>C++ · NuRaft · CMake</b> · OpenSSL" },
       {
@@ -791,14 +791,14 @@ export const caseStudies = [
     name: "Kaggriculture",
     live: false,
     started: "2026-08-06", // first commit: "Phase 1: environment setup, PASS/single-crop agents, crop profitability measurement"
-    lastModified: "2026-11-12", // Related row and SEO copy changes
+    lastModified: "2026-11-20", // Rules panel and "rules" in the title
     seo: {
       // People reach this page searching "kaggriculture", "kaggriculture kaggle", "kaggriculture
-      // competition" and "kaggriculture github" (Search Console, Aug-Nov 2026), so the title and
-      // snippet answer those first.
-      title: "Kaggriculture Kaggle Agent and Strategy · Atishay Kasliwal",
+      // competition", "kaggriculture rules" and "kaggriculture github" (Search Console, Aug-Nov
+      // 2026), so the title, snippet and the rules panel near the top answer those first.
+      title: "Kaggriculture Rules, Strategy and Kaggle Agent · Atishay Kasliwal",
       description:
-        "Kaggriculture is a two-player Kaggle farming competition. How the game works, and an agent that simulates the real engine and plans ahead. Code on GitHub.",
+        "Kaggriculture rules in brief: a two-player Kaggle farming game over a 30-day season. Then an agent that simulates the real engine and plans ahead. Code on GitHub.",
       language: "Python",
     },
     headline: "An agent that plans ahead by simulating the real rules.",
@@ -818,6 +818,15 @@ export const caseStudies = [
       { value: "1,738", label: "lines of Python" },
     ],
     windowStack: "Python · kaggle-environments",
+    // From the rules in the repository README (default settings).
+    rules: [
+      { label: "Goal", text: "Two players farm separate 10×10 boards. Whoever has the most money in the bank after one 30-day season (24 turns a day, 720 in all) wins." },
+      { label: "Land", text: "You start with one 5×5 quadrant and can buy the other three, each for a larger fee." },
+      { label: "Crops and animals", text: "Wheat, carrot and melon yield once. Tomato and strawberry keep producing. Geese, cows and sheep lay eggs, give milk and grow wool for as long as they're fed wheat." },
+      { label: "Upkeep", text: "Water every plant and feed every animal each day. Two missed days in a row turn a plant into a weed and let an animal escape for good." },
+      { label: "Market", text: "Seeds sell at fixed prices, but sell prices move with market stock: selling a lot pushes your own price down. Town shops unlock every 3 days and buy products up." },
+      { label: "Workers", text: "Each farmer takes one action a turn. Extra farm hands can be hired daily at a rising Fibonacci cost (1, 1, 2, 3, 5…) and leave at the end of the day." },
+    ],
     links: [{ label: "View code", href: "https://github.com/atishay-kasliwal/kaggriculture" }],
     media: {
       video: "/projects/video/kaggriculture.mp4",
