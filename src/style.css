@@ -7,7 +7,7 @@
   --ink: #efefec;
   --soft: #b6b5ae;
   --muted: #848480;
-  --accent: #8554ff;
+  --accent: #8c5eff;
   --gutter: 24px;
   --card-width: 270px;
   --card-height: 166px;
@@ -709,7 +709,7 @@ html.scroll-story .scroll-cue {
   justify-content: space-between;
   font-family: var(--mono);
   font-size: 12px;
-  color: #747470;
+  color: #787874;
   margin: 8px var(--gutter) 0;
   padding: 12px 0 max(15px, env(safe-area-inset-bottom));
   border-top: 1px solid #2a2a27;
@@ -1411,7 +1411,7 @@ html.scroll-story .scroll-cue {
 .preview-open:hover,
 .preview-open:focus-visible {
   border-color: var(--accent);
-  background: #8554ff1f;
+  background: #8c5eff1f;
 }
 .preview-open.primary:hover,
 .preview-open.primary:focus-visible {

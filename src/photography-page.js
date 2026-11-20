@@ -99,6 +99,7 @@ async function openPhoto({ initial = false } = {}) {
   viewer.show();
   const to = lifted.image.getBoundingClientRect();
   canvas.classList.add('is-viewing');
+  cards()[selected].tabIndex = -1;
   viewer.querySelector('[data-close-viewer]').focus({ preventScroll: true });
   if (initial || reducedMotion.matches) return;
   const opening = lifted.image.animate([
@@ -168,7 +169,8 @@ function selectPhoto(index, { announce = true } = {}) {
     card.style.setProperty('--depth', Math.abs(offset));
     card.style.zIndex = String(position === selected ? 100 : 50 - Math.min(Math.abs(offset), 49));
     card.classList.toggle('is-selected', position === selected);
-    card.tabIndex = position === selected ? 0 : -1;
+    // While the viewer shows this photo, its card is invisible, so it leaves the tab order.
+    card.tabIndex = position === selected && !canvas.classList.contains('is-viewing') ? 0 : -1;
     if (position === selected) card.setAttribute('aria-current', 'true');
     else card.removeAttribute('aria-current');
     // Load the visible run of planes so the stacks show real photo edges.

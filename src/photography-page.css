@@ -39,8 +39,9 @@ html[data-photography-page], [data-photography-page] body {
 .photo-canvas.is-dragging .photo-page-card { transition: none; }
 .stack-navigation > p { transition: opacity 300ms ease; }
 .photography-content.has-interacted .stack-navigation > p { opacity: 0; }
-html[data-photography-page] :focus,
-html[data-photography-page] :focus-visible { outline: none; }
+/* Mouse and touch focus stay quiet; keyboard focus gets the site-wide ring from style.css. */
+html[data-photography-page] :focus:not(:focus-visible) { outline: none; }
+.photo-canvas:focus-visible { outline-offset: -4px; }
 .photo-page-card {
   position: absolute;
   display: block;
