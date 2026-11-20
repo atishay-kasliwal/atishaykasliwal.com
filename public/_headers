@@ -19,6 +19,25 @@
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 /projects/media/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+# Experience page images follow the same rule. Only the media folder: /experience/<slug>/ is HTML.
+/experience/media/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Photographs rarely change but keep their names when they do: cache for a week, refresh quietly
+# for a day. Folders hold only images; the originals are listed one by one because /photography/
+# itself is the HTML gallery (scripts/validate-photography.mjs checks every local original is here).
+/photography/responsive/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/photography/social/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/photography/rainbow-over-autumn-trees.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/photography/manhattan-skyline-at-dusk.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/photography/sunset-over-parking-lot.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/photography/person-on-rocky-beach-at-sunset.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 # The public profile API (/api/profile.json and its schema) is generated at build time from
 # src/profile/. Same URL across deploys, so a short cache with background refresh; any origin may

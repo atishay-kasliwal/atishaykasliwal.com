@@ -125,5 +125,10 @@ export async function validatePhotography({ home, page, entries, dist }) {
   assert.ok(!homeUrls.some(src => expected.includes(src)), "Photography belongs to its canonical page in the image sitemap.");
   const robots = fs.readFileSync(path.join(dist, "robots.txt"), "utf8");
   assert.doesNotMatch(robots, /^Disallow:\s*\/(?:photography)?(?:\/|\s|$)/m, "robots.txt must not block Photography.");
+  // Every local original gets a long browser cache (public/_headers lists them one by one).
+  const headers = fs.readFileSync(path.join(dist, "_headers"), "utf8");
+  for (const photo of photographs.filter(photo => photo.src.startsWith("/photography/") && !photo.src.startsWith("/photography/responsive/"))) {
+    assert.match(headers, new RegExp(`^${photo.src.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\n  Cache-Control: public, max-age=604800`, "m"), `${photo.src} has no cache rule in public/_headers`);
+  }
   console.log("Photography validation passed: 16 initial images, responsive assets, canonical credits, gallery schema and image sitemap.");
 }
