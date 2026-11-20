@@ -89,7 +89,7 @@ async function liveCheck() {
     box.replaceChildren(
       h("span", { class: `pill ${ok ? "good" : "bad"}` }, ok ? "live check passed" : "live check failed"),
       h("span", { class: "mono soft" }, ` ${response.status} · serving the ${label}`),
-      !ok && expected ? h("span", { class: "mono" }, ` · expected ${expected.source} ${expected.id}. A stale deploy or cache may be answering.`) : null,
+      !ok && expected ? h("span", { class: "mono" }, ` · expected ${expected.source} ${expected.id}. A stale deploy or cache may be answering.`) : "",
     );
   } catch (error) {
     box.replaceChildren(h("span", { class: "pill bad" }, "live check failed"), h("span", { class: "mono soft" }, ` ${error.message}`));

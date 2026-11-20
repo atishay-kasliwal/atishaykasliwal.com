@@ -93,6 +93,7 @@ try {
   await page.getByText("An outdated résumé is live", { exact: true }).waitFor();
   await page.getByText("live check passed", { exact: true }).waitFor();
   check(await page.locator("#published").innerText().then(text => text.includes("Stony Brook")), "outdated banner names the conflict");
+  check(!/\bnull\b/.test(await page.locator("#live-check").innerText()), "live check prints no stray null");
   await page.locator("#file").setInputFiles({ name: "qa-consistent.pdf", mimeType: "application/pdf", buffer: Buffer.from(makePdf(consistentResumeLines())) });
   await page.getByRole("button", { name: "Publish this version", exact: true }).waitFor();
   check(await page.locator("#publish-button").isEnabled(), "consistent résumé can publish without conflict acknowledgement");

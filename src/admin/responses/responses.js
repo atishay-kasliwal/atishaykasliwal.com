@@ -252,7 +252,7 @@ function renderBody(validation) {
   if (r.body === null) {
     box.replaceChildren(
       h("pre", {}, r.target.kind === "pdf" ? `Binary PDF, ${formatBytes(r.sizeBytes)}, sha256 ${r.sha256}.` : "No text body."),
-      r.target.kind === "pdf" ? h("div", { class: "card-actions pdf-actions" }, h("a", { href: r.target.path, target: "_blank", rel: "noopener" }, "Open the PDF ", h("span", { class: "arrow", "aria-hidden": "true" }, "↗"))) : null,
+      r.target.kind === "pdf" ? h("div", { class: "card-actions pdf-actions" }, h("a", { href: r.target.path, target: "_blank", rel: "noopener" }, "Open the PDF ", h("span", { class: "arrow", "aria-hidden": "true" }, "↗"))) : "",
     );
     return;
   }
