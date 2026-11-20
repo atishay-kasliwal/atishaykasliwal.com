@@ -7,7 +7,7 @@ import { compareWithProfile, parseRange } from "../../src/resume-core/consistenc
 import { withActiveResume } from "../../src/resume-core/overlay.js";
 import { validateSchema } from "../../src/profile/schema-check.js";
 import { reviewItems } from "../../src/profile/review.js";
-import { bundledPdf, canonicalProfile, consistentResumeLines, makePdf, profileSchema } from "./helpers.mjs";
+import { bundledPdf, outdatedPdf, canonicalProfile, consistentResumeLines, makePdf, profileSchema } from "./helpers.mjs";
 
 const profile = canonicalProfile();
 const accepts = (bytes, options = { filename: "resume.pdf", contentType: "application/pdf" }) => inspectPdf(bytes, options);
@@ -19,6 +19,9 @@ test("the bundled résumé passes validation and yields its text", async () => {
   assert.equal(result.info.pages, 1);
   assert.ok(result.info.textChars > 1000);
   assert.ok(result.lines.some(line => line.includes("Stony Brook University")));
+  // The fallback served when nothing is published must agree with the profile.
+  const { items, summary } = compareWithProfile(result.lines, profile, reviewItems);
+  assert.equal(summary.conflict, 0, items.filter(item => item.severity === "conflict").map(item => item.message).join("\n"));
 });
 
 test("invalid uploads are rejected with a reason", async () => {
@@ -29,7 +32,7 @@ test("invalid uploads are rejected with a reason", async () => {
     ["not a pdf", new TextEncoder().encode("<html>".padEnd(4096, " ")), /PDF header/],
     ["too small", new TextEncoder().encode("%PDF-1.4\n%%EOF"), /too small/],
     ["too large", Uint8Array.from([...new TextEncoder().encode("%PDF-1.4\n"), ...new Uint8Array(5 * 1024 * 1024)]), /limit is 5 MB/],
-    ["truncated", bundledPdf().slice(0, 60000), /truncated/],
+    ["truncated", outdatedPdf().slice(0, 60000), /truncated/],
     ["encrypted", makePdf(consistentResumeLines(), { trailerExtra: "/Encrypt << /Filter /Standard >> " }), /Encrypted/],
     ["javascript", makePdf(consistentResumeLines(), { catalogExtra: "/OpenAction 6 0 R ", extraObjects: ["<< /S /JavaScript /JS (app.alert(1)) >>"] }), /JavaScript/],
     ["hex-escaped javascript", makePdf(consistentResumeLines(), { catalogExtra: "/OpenAction 6 0 R ", extraObjects: ["<< /S /J#61vaScript /J#53 (app.alert(1)) >>"] }), /JavaScript/],
@@ -80,7 +83,7 @@ test("date ranges parse in the forms résumés use", () => {
 });
 
 test("the outdated 'Present' on the bundled PDF is flagged against the confirmed May 2026 end date", async () => {
-  const { lines } = await accepts(bundledPdf());
+  const { lines } = await accepts(outdatedPdf());
   const report = compareWithProfile(lines, profile, reviewItems);
   const endDate = report.items.find(item => item.id === "stony-brook-research-end-date");
   assert.ok(endDate, "Stony Brook end date discrepancy is reported");
@@ -92,7 +95,7 @@ test("the outdated 'Present' on the bundled PDF is flagged against the confirmed
 });
 
 test("the consistency report covers dates, titles, skills, education and accomplishments", async () => {
-  const { lines } = await accepts(bundledPdf());
+  const { lines } = await accepts(outdatedPdf());
   const { items, summary } = compareWithProfile(lines, profile, reviewItems);
   const ids = new Set(items.map(item => item.id));
   assert.ok(ids.has("wake-forest-cair-title"), "internship only on the PDF");
@@ -131,7 +134,7 @@ test("a résumé that agrees with the profile reports nothing, and changed facts
 
 test("consistency checks never modify the canonical profile", async () => {
   const before = JSON.stringify(profile);
-  const { lines } = await accepts(bundledPdf());
+  const { lines } = await accepts(outdatedPdf());
   compareWithProfile(lines, profile, reviewItems);
   assert.equal(JSON.stringify(profile), before);
 });

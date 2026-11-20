@@ -6,6 +6,8 @@ import { buildProfile } from "../../src/profile/build.js";
 const root = new URL("../../", import.meta.url);
 export const SITE = "https://atishaykasliwal.com";
 export const bundledPdf = () => new Uint8Array(readFileSync(new URL("public/Atishay-Kasliwal-Resume.pdf", root)));
+// The résumé that was bundled until 2026-11-19: real, and outdated against the profile in known ways.
+export const outdatedPdf = () => new Uint8Array(readFileSync(new URL("tests/resume/fixtures/outdated-resume.pdf", root)));
 export const profileSchema = () => JSON.parse(readFileSync(new URL("src/profile/profile.schema.json", root), "utf8"));
 export const canonicalProfile = () => JSON.parse(JSON.stringify(buildProfile({ onWarning() {} })));
 

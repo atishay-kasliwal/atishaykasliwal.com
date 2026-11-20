@@ -91,9 +91,9 @@ try {
   page.on("pageerror", error => failures.push(error.message));
   page.on("console", message => { if (message.type() === "error" && /Content Security Policy|Refused to/.test(message.text())) failures.push(message.text()); });
   await page.goto(`${base}/admin/resume/`);
-  await page.getByText("An outdated résumé is live", { exact: true }).waitFor();
+  await page.getByText("The bundled résumé is live", { exact: true }).waitFor();
   await page.getByText("live check passed", { exact: true }).waitFor();
-  check(await page.locator("#review").innerText().then(text => text.includes("Stony Brook")), "the live bundled PDF opens with its conflicts listed");
+  check(await page.locator("#review").innerText().then(text => /0 conflicts/i.test(text) && text.includes("Bundled PDF")), "the live bundled PDF opens with its report");
   check(!/\bnull\b/.test(await page.locator("#live-check").innerText()), "live check prints no stray null");
   await page.locator("#file").setInputFiles({ name: "qa-consistent.pdf", mimeType: "application/pdf", buffer: Buffer.from(makePdf(consistentResumeLines())) });
   await page.getByRole("button", { name: "Publish this version", exact: true }).waitFor();

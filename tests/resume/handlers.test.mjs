@@ -18,7 +18,7 @@ import { validateSchema } from "../../src/profile/schema-check.js";
 import { sha256Hex } from "../../src/resume-core/constants.js";
 import { checkResume, recheckText } from "../../src/resume-core/report.js";
 import { reviewItems } from "../../src/profile/review.js";
-import { accessFixture, bundledPdf, canonicalProfile, consistentResumeLines, makePdf, memoryAssets, memoryD1, memoryR2, profileSchema, SITE } from "./helpers.mjs";
+import { accessFixture, bundledPdf, outdatedPdf, canonicalProfile, consistentResumeLines, makePdf, memoryAssets, memoryD1, memoryR2, profileSchema, SITE } from "./helpers.mjs";
 
 const env = { ACCESS_TEAM_DOMAIN: "team.example", ACCESS_AUD: "aud-1", ADMIN_EMAILS: "owner@example.com" };
 let access;
@@ -190,12 +190,12 @@ test("before anything is published the bundled PDF and the built profile are ser
   const profile = await publicProfile({ request: new Request(`${SITE}/api/profile.json`), env });
   const body = await profile.json();
   assert.equal(body.profile.resume.version.source, "bundled");
-  // The dashboard says the bundled PDF is live and that it is outdated.
+  // The dashboard says the bundled PDF is live, with its build-time report (it agrees with the profile).
   const state = await (await call(stateRoute, "/api/admin/resume")).json();
   assert.deepEqual(state.serving, { source: "bundled", reason: "nothing-published" });
   assert.equal(state.bundled.sha256, await sha256Hex(bundledPdf()));
-  assert.ok(state.bundled.report.consistency.summary.conflict > 0);
-  assert.ok(state.bundled.report.consistency.items.some(item => item.id === "stony-brook-research-end-date"));
+  assert.equal(state.bundled.report.consistency.summary.conflict, 0);
+  assert.ok(state.bundled.report.checkedAt);
   assert.equal(profile.headers.get("X-Resume-Version"), "bundled");
   assert.equal(profile.headers.get("Access-Control-Allow-Origin"), "*");
 });
@@ -235,17 +235,17 @@ test("an upload needs the browser's report for that exact file, and its counts a
 });
 
 test("upload stores a private, unpublished version with its report", async () => {
-  const response = await upload(bundledPdf(), { name: "Atishay Kasliwal Resume.pdf" });
+  const response = await upload(outdatedPdf(), { name: "Atishay Kasliwal Resume.pdf" });
   assert.equal(response.status, 201);
   first = (await response.json()).version;
-  assert.equal(first.sha256, await sha256Hex(bundledPdf()));
+  assert.equal(first.sha256, await sha256Hex(outdatedPdf()));
   assert.equal(first.active, false);
   assert.ok(env.RESUMES.objects.has(`versions/${first.sha256}.pdf`));
   assert.ok(first.report.consistency.items.some(item => item.id === "stony-brook-research-end-date"), "outdated Present is flagged on upload");
   assert.equal(first.report.validation.checkedIn, "browser");
   assert.ok(first.report.validation.serverChecks.some(check => check.id === "active-content" && check.ok), "the server's own screen is recorded");
 
-  const again = await upload(bundledPdf());
+  const again = await upload(outdatedPdf());
   assert.equal(again.status, 200);
   assert.equal((await again.json()).duplicate, true);
 
@@ -253,7 +253,7 @@ test("upload stores a private, unpublished version with its report", async () =>
   assert.equal(preview.status, 200);
   assert.equal(preview.headers.get("Content-Type"), "application/pdf");
   assert.equal(preview.headers.get("X-Frame-Options"), "SAMEORIGIN");
-  assert.equal((await preview.arrayBuffer()).byteLength, bundledPdf().length);
+  assert.equal((await preview.arrayBuffer()).byteLength, outdatedPdf().length);
 
   // Uploading changes nothing public.
   const pdf = await publicResume({ request: new Request(`${SITE}/Atishay-Kasliwal-Resume.pdf`), env });
