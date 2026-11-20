@@ -282,7 +282,8 @@ if (!resume) {
     if (item.startDate.length === 4) warn(`résumé: ${item.id} start month is unconfirmed; PDF shows "${near.match(/[A-Z][a-z]{2}\.? \d{4}/)?.[0]}" (review item symbiosis-start-month)`);
     else if (!longOrShort(item.startDate).some(v => contains(near, v))) mismatch(`${item.id}-start-date`, `${item.id} start ${item.startDate}`);
   }
-  if (!contains(resume, json.profile.contact.email)) mismatch("resume-email", "email differs");
+  const resumeEmails = [json.profile.contact.email, ...reviewItems.flatMap(item => item.acceptedOnResume ?? [])];
+  if (!resumeEmails.some(address => contains(resume, address))) mismatch("resume-email", "email differs");
 }
 
 // ---------------- E: discovery from the homepage ----------------

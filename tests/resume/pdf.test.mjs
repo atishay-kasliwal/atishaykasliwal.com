@@ -101,6 +101,10 @@ test("the consistency report covers dates, titles, skills, education and accompl
   assert.ok(ids.has("review-wake-forest-scale-50k-scans"), "50K+ scans vs the settled 10K+ MRI studies");
   const atriveo = compareWithProfile([...consistentResumeLines(), "• Founded Atriveo to track 50K+ applications and tailor 50K+ resumes in a year."], profile, reviewItems);
   assert.ok(!atriveo.items.some(item => item.reviewItem?.id === "wake-forest-scale"), "Atriveo's 50K+ applications is not the Wake Forest scan count");
+  const applicationEmail = consistentResumeLines().map(line => line.replace("katishay@gmail.com", "katishay45@gmail.com"));
+  assert.ok(!compareWithProfile(applicationEmail, profile, reviewItems).items.some(item => item.id === "resume-email"), "the job-application address is accepted");
+  const otherEmail = consistentResumeLines().map(line => line.replace("katishay@gmail.com", "someone@example.com"));
+  assert.ok(compareWithProfile(otherEmail, profile, reviewItems).items.some(item => item.id === "resume-email"), "any other address is still a conflict");
   assert.ok(items.some(item => item.category === "accomplishments" && item.severity === "unverified"), "metrics with no canonical counterpart");
   assert.ok(!ids.has("symbiosis-university-start-date"), "the PDF's Aug. 2018 matches the confirmed start month");
   assert.equal(summary.conflict, items.filter(item => item.severity === "conflict").length);

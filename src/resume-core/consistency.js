@@ -192,7 +192,9 @@ export function compareWithProfile(lines, profile, reviewItems = []) {
     add({ id: "identity-name", category: "contact", severity: "conflict", field: "profile.name", message: `The name "${profile.profile.name}" does not appear on the résumé.`, canonical: profile.profile.name });
   }
   const email = profile.profile?.contact?.email;
-  if (email && !contains(text, email)) {
+  // Addresses a review item accepts on the résumé in place of the site's (never published).
+  const resumeEmails = [email, ...reviewItems.flatMap(item => item.acceptedOnResume ?? [])].filter(Boolean);
+  if (email && !resumeEmails.some(address => contains(text, address))) {
     const onPdf = text.match(/[^\s@|]+@[^\s@|]+\.[a-z]{2,}/i)?.[0] ?? null;
     add({ id: "resume-email", category: "contact", severity: "conflict", field: "profile.contact.email", message: onPdf ? "The email address differs from the canonical profile." : "No email address was found on the résumé.", resume: onPdf, canonical: email });
   }

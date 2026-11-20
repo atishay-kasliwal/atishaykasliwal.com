@@ -73,6 +73,16 @@ export const reviewItems = [
     mustNotAppear: ["Bounteous in 2021"],
   },
   {
+    id: "resume-email",
+    field: "profile.contact.email",
+    values: { site: "katishay@gmail.com (main address)", resumePdf: "katishay45@gmail.com (job applications)" },
+    status: "resolved",
+    canonical: "katishay@gmail.com",
+    resolution: "Atishay confirmed on 2026-11-19: katishay@gmail.com is the main address everywhere on the site; katishay45@gmail.com is the job-application address and belongs on the résumé. The checker accepts either on the résumé.",
+    acceptedOnResume: ["katishay45@gmail.com"],
+    action: null,
+  },
+  {
     id: "accolite-title",
     field: "experience.accolite.title",
     values: { site: "Senior Software Engineer (before 2026-11-19)", resumePdf: "Senior Software Engineer (bundled PDF); Senior Software Developer (current résumé)", user: "Senior Software Developer (the résumé, confirmed 2026-11-19)" },
