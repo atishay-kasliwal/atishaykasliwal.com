@@ -9,6 +9,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "parse5";
 import { XMLParser } from "fast-xml-parser";
+import { inspectPdf } from "../src/resume-core/pdf.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -168,9 +169,10 @@ site.push(check("sitemap", "sitemap.xml", missingFromSitemap.length || sitemapOr
 
 const resume = path.join(dist, "Atishay-Kasliwal-Resume.pdf");
 if (fs.existsSync(resume)) {
-  // PDF literal strings escape some characters as \ddd octal codes (a hyphen is \055).
-  const pdfTitle = (fs.readFileSync(resume, "latin1").match(/\/Title\s*\(([^)]*)\)/)?.[1] ?? "")
-    .replace(/\\([0-7]{3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8))).replace(/\\(.)/g, "$1");
+  // Read with pdf.js (as the résumé admin does): PDF 1.5 files keep the Info dictionary inside a
+  // compressed object stream, where a byte search cannot see it.
+  const { info } = await inspectPdf(new Uint8Array(fs.readFileSync(resume)), { filename: "resume.pdf", contentType: "application/pdf" });
+  const pdfTitle = info.title ?? "";
   site.push(check("resume", "Résumé PDF title", pdfTitle ? "pass" : "warn",
     pdfTitle ? `"${pdfTitle}"` : "No title in the PDF, so search results show the file name."));
 }

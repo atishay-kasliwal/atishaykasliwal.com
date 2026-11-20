@@ -54,6 +54,9 @@ function structuredData(entry) {
 // The screen shows at most ~600px wide on desktop and the full content width on phones, so a
 // 720px variant serves most visits; the original stays in the srcset for high-density screens.
 const SCREEN_VARIANT_WIDTH = 720;
+// Larger originals are served as a 2000px variant instead (the slot is at most 1232px wide), so no
+// srcset candidate is oversized for high-density screens' needs.
+const SCREEN_MAX_WIDTH = 2000;
 const SCREEN_SIZES = "(max-width: 700px) calc(100vw - 36px), min(1232px, calc(100vw - 48px))";
 
 async function addScreenVariants(entry) {
@@ -68,7 +71,17 @@ async function addScreenVariants(entry) {
     if (stale) {
       await sharp(source).resize({ width: SCREEN_VARIANT_WIDTH }).webp({ quality: 82 }).toFile(output);
     }
-    item.srcset = `${variant} ${SCREEN_VARIANT_WIDTH}w, ${item.src} ${width}w`;
+    let largest = { src: item.src, width };
+    if (width > SCREEN_MAX_WIDTH) {
+      const capped = item.src.replace(/\.webp$/, `-${SCREEN_MAX_WIDTH}.webp`);
+      const cappedOutput = path.join(ROOT, "public", capped);
+      if (!fs.existsSync(cappedOutput) || fs.statSync(cappedOutput).mtimeMs < fs.statSync(source).mtimeMs) {
+        await sharp(source).resize({ width: SCREEN_MAX_WIDTH }).webp({ quality: 82 }).toFile(cappedOutput);
+      }
+      largest = { src: capped, width: SCREEN_MAX_WIDTH };
+      item.src = capped;
+    }
+    item.srcset = `${variant} ${SCREEN_VARIANT_WIDTH}w, ${largest.src} ${largest.width}w`;
   }
 }
 

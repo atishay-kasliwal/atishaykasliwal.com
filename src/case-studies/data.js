@@ -1112,6 +1112,8 @@ export const caseStudies = [
   {
     slug: "medscan",
     name: "Medscan",
+    // Private repository: a case study, not inspectable source code.
+    schemaType: "CreativeWork",
     live: false,
     started: "2026-10-25", // repo created
     lastModified: "2026-11-12", // Related row and SEO copy changes

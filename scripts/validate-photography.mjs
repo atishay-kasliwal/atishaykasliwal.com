@@ -35,7 +35,10 @@ export async function validatePhotography({ home, page, entries, dist }) {
     assert.ok(container);
     const images = elementsIn(container).filter(node => node.tagName === "img");
     assert.equal(images.length, 16, "Initial HTML must contain all 16 photographs exactly once.");
-    assert.deepEqual(images.map(image => attribute(image, "src")), photographs.map(photo => photo.src), "Photograph order or URL changed.");
+    // src is the largest srcset candidate (or the original when there are no variants).
+    const largestCandidate = image => attribute(image, "srcset")?.split(",").at(-1).trim().split(/\s+/)[0];
+    assert.deepEqual(images.map(image => attribute(image, "src")), images.map((image, index) => largestCandidate(image) ?? photographs[index].src), "Photograph order or URL changed.");
+    assert.deepEqual(images.map(image => (largestCandidate(image) ?? attribute(image, "src")).replace(/^\/photography\/responsive\/(.+)-\d+\.webp$/, "$1")), photographs.map(photo => (photoVariants(photo).length ? photo.src.split("/").at(-1).replace(/\.[^.]+$/, "") : photo.src)), "Photograph order changed.");
     if (record === page) {
       assert.equal(attribute(container, "hidden"), undefined);
       for (const card of elementsIn(container).filter(node => attribute(node, "data-photo-index") !== undefined)) {
@@ -47,8 +50,11 @@ export async function validatePhotography({ home, page, entries, dist }) {
     for (const [index, image] of images.entries()) {
       const photo = photographs[index];
       assert.equal(attribute(image, "alt"), photo.alt);
-      assert.equal(Number(attribute(image, "width")), photo.width);
-      assert.equal(Number(attribute(image, "height")), photo.height);
+      // Width and height describe the src shown (a variant) at the original's aspect ratio.
+      const width = Number(attribute(image, "width"));
+      const height = Number(attribute(image, "height"));
+      assert.ok(width <= photo.width && width <= 2000, `${photo.src}: width ${width} exceeds the variant cap`);
+      assert.ok(Math.abs(width / height - photo.width / photo.height) < 0.01, `${photo.src}: aspect ratio changed`);
       assert.equal(attribute(image, "loading"), record === page && index === Math.floor(photographs.length / 2) ? "eager" : "lazy");
       if (photoVariants(photo).length) {
         assert.ok(attribute(image, "srcset"));

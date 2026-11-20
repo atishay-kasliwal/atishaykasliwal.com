@@ -27,6 +27,11 @@ const pageUrl = slug => `${SITE}/projects/${slug}/`;
 const exists = publicPath => fs.existsSync(path.join(ROOT, "public", publicPath));
 const TEXT_ARROW = "↗︎";
 
+// "Open site" and "Code" read fine beside the project, but not when a crawler or screen reader lists
+// links on their own, so the project name follows as visually hidden text.
+const linkText = (link, study) =>
+  link.label.includes(study.name) ? escape(link.label) : `${escape(link.label)}<span class="visually-hidden"> for ${escape(study.name)}</span>`;
+
 function structuredData(study, image) {
   const url = pageUrl(study.slug);
   const project = {
@@ -169,7 +174,7 @@ function render(study, { number, total, next }) {
 
 
   const actions = study.links
-    .map((l, i) => `<a class="btn${i === 0 ? " primary" : ""}" href="${escape(l.href)}">${escape(l.label)} <b aria-hidden="true">${TEXT_ARROW}</b></a>`)
+    .map((l, i) => `<a class="btn${i === 0 ? " primary" : ""}" href="${escape(l.href)}">${linkText(l, study)} <b aria-hidden="true">${TEXT_ARROW}</b></a>`)
     .join("");
 
   const nextLink = next
@@ -250,7 +255,7 @@ ${JSON.stringify(structuredData(study, og), null, 2)}
 
       <nav class="thumb-bar" aria-label="${escape(study.name)} links">
 ${study.links
-  .map((l, i) => `        <a class="thumb-button${i === 0 ? " primary" : ""}" href="${escape(l.href)}">${escape(l.label)} ${TEXT_ARROW}</a>`)
+  .map((l, i) => `        <a class="thumb-button${i === 0 ? " primary" : ""}" href="${escape(l.href)}">${linkText(l, study)} ${TEXT_ARROW}</a>`)
   .join("\n")}
         <a class="thumb-button go-next" href="${next ? `/projects/${next.slug}/` : "/"}" aria-label="${next ? `Next project: ${escape(next.name)}` : "All work"}">→</a>
       </nav>

@@ -167,7 +167,7 @@ export const experiencePages = [
       { value: "100,000+", label: "monthly active users" },
       { value: "99.9%", label: "uptime" },
     ],
-    links: [{ label: "Visit Accolite", href: "https://www.accolite.com" }],
+    links: [{ label: "Visit Bounteous", href: "https://www.bounteous.com" }],
     media: {
       items: [
         {
@@ -355,7 +355,7 @@ export const experiencePages = [
       { label: "Dates", html: "<b>Aug 2018</b> – May 2022" },
     ],
     stats: [{ value: "22", label: "courses & workshops, 2018–2021" }],
-    links: [{ label: "Visit Symbiosis University", href: "https://www.symbiosisuniversity.ac.in" }],
+    links: [{ label: "Visit Symbiosis University", href: "https://suas.ac.in" }],
     media: {
       items: [
         {

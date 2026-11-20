@@ -648,11 +648,11 @@ export const repositoryCheckableStats = {
 export const experienceDetails = {
   "stony-brook-research": { location: { locality: "Stony Brook", region: "NY", country: "US" }, organizationUrl: "https://www.stonybrook.edu" },
   "wake-forest-cair": { location: { locality: "Winston-Salem", region: "NC", country: "US" }, organization: "Wake Forest University School of Medicine, Center for Artificial Intelligence Research (CAIR)", organizationUrl: "https://school.wakehealth.edu" },
-  accolite: { location: { locality: "Hyderabad", region: "Telangana", country: "IN" }, alternateNames: ["Accolite Digital", "Bounteous x Accolite"], organizationUrl: "https://www.accolite.com" },
+  accolite: { location: { locality: "Hyderabad", region: "Telangana", country: "IN" }, alternateNames: ["Accolite Digital", "Bounteous x Accolite"], organizationUrl: "https://www.bounteous.com" },
   shriffle: { organization: "Shriffle Technologies", employmentType: "internship" },
   "stony-brook-university": { location: { locality: "Stony Brook", region: "NY", country: "US" }, degree: "Master of Science", field: "Data Science", organizationUrl: "https://www.stonybrook.edu" },
   // Name and degree title as printed on the résumé; the site uses the short forms.
-  "symbiosis-university": { location: { locality: "Indore", region: "Madhya Pradesh", country: "IN" }, organization: "Symbiosis University of Applied Sciences", degree: "Bachelor of Technology", field: "Computer Science and Information Technology", organizationUrl: "https://www.symbiosisuniversity.ac.in" },
+  "symbiosis-university": { location: { locality: "Indore", region: "Madhya Pradesh", country: "IN" }, organization: "Symbiosis University of Applied Sciences", degree: "Bachelor of Technology", field: "Computer Science and Information Technology", organizationUrl: "https://suas.ac.in" },
 };
 
 // Public repositories that are evidence but not portfolio projects.

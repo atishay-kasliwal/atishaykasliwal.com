@@ -29,7 +29,9 @@ export const photographyPage = {
   lastModified: "2026-09-28",
   socialImage: "/photography/social/manhattan-skyline-at-dusk.jpg",
 };
-export const photographyWidths = [320, 640, 960, 1200, 1600, 2400];
+// 2000 px covers the enlarged view (58vw) on 2x laptop screens; the originals stay the
+// ImageObject contentUrl and image-sitemap entries, so image search still gets full resolution.
+export const photographyWidths = [320, 640, 960, 1200, 1600, 2000];
 export const photographyCardSizes = "(max-height: 460px) and (min-width: 500px) 180px, (max-height: 670px) and (min-width: 701px) 225px, (max-height: 600px) and (max-width: 700px) 57vw, (max-width: 459px) 74vw, (max-width: 700px) 340px, (min-width: 1700px) 320px, 270px";
 export const photographyDeckSizes = "(max-height: 460px) and (min-width: 500px) calc((100svh - 180px) * 4 / 3), (max-width: 700px) 78vw, (max-width: 1107px) 56vw, 620px";
 const previewSizes = "(max-width: 700px) calc(100vw - 20px), 736px";
@@ -42,12 +44,20 @@ export function photoVariants(photo) {
     src: `/photography/responsive/${name}-${width}.webp`, width,
   }));
 }
+export function photoDisplay(photo, candidates = photoVariants(photo)) {
+  const largest = candidates.at(-1);
+  if (!largest) return { src: photo.src, width: photo.width, height: photo.height };
+  return { src: largest.src, width: largest.width, height: Math.round((photo.height * largest.width) / photo.width) };
+}
 export function photoMarkup(photo, { lazy = true, sizes = photographyCardSizes, preview = false } = {}) {
   const candidates = photoVariants(photo).filter(variant => preview || variant.width <= 1200);
   const srcset = candidates.length
     ? ` srcset="${candidates.map(variant => `${variant.src} ${variant.width}w`).join(", ")}" sizes="${escape(sizes)}"`
     : "";
-  return `<img src="${escape(photo.src)}"${srcset} width="${photo.width}" height="${photo.height}" alt="${escape(photo.alt)}" loading="${lazy ? "lazy" : "eager"}" decoding="async" />`;
+  // The fallback src is the largest listed variant, not the original, so a parser that ignores
+  // srcset never downloads a multi-megabyte JPEG; width and height keep the original's ratio.
+  const display = photoDisplay(photo, candidates);
+  return `<img src="${escape(display.src)}"${srcset} width="${display.width}" height="${display.height}" alt="${escape(photo.alt)}" loading="${lazy ? "lazy" : "eager"}" decoding="async" />`;
 }
 
 export const photographs = images.map((photo, index) => ({
