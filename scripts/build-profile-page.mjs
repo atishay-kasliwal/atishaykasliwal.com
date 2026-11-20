@@ -35,7 +35,9 @@ const STATUS_LABEL = {
   self_reported: "Self-reported",
   needs_review: "Needs review",
 };
-const status = value => `<span class="status status-${value.replace("_", "-")}">${STATUS_LABEL[value]}</span>`;
+// The leading space keeps "Python" and "Public evidence" apart in rendered text (innerText), which
+// browser agents and some screen readers use; flex layouts ignore it.
+const status = value => ` <span class="status status-${value.replace("_", "-")}">${STATUS_LABEL[value]}</span>`;
 
 function metricsList(metrics) {
   if (!metrics.length) return "";
