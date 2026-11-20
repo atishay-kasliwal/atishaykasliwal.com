@@ -191,24 +191,14 @@
       </header>
 
       <section class="intro" aria-label="Introduction">
-        <!-- On desktop, scrolling swaps these statements word by word (see scroll-story.js).
-             Phones and reduced motion show only the first. -->
         <div class="statements">
           <p class="hero-copy statement">
-            Software engineer building distributed systems
-            <span class="soft">and the interfaces on top of them.</span>
-          </p>
-          <p class="hero-copy statement">
-            Five years shipping to production, from Kafka pipelines to React screens.
-            <span class="soft">Previously Bounteous, now building Atriveo.</span>
-          </p>
-          <p class="hero-copy statement">
-            Based in New York, with a Master's in Data Science from Stony Brook.
-            <span class="soft">Building AI products end to end, from the data up.</span>
+            I build software. Sometimes complicated, always useful.
+            <span class="soft">Five years of engineering across distributed systems, full stack, blockchain, and AI/ML Engineering.</span>
           </p>
         </div>
-        <!-- The first-screen facts: where, what with, and one result anyone can check. The open
-             source count comes from the GitHub snapshot (vite.config.js), like the info sheet's. -->
+        <!-- The first-screen facts: where, what with, and whose projects merged the work. Each
+             organization has merged pull requests listed on /profile/#open-source. -->
         <dl class="hero-facts">
           <div>
             <dt>Based</dt>
@@ -218,14 +208,73 @@
             <dt>Stack</dt>
             <dd>Java · Python · Go<span class="hero-fact-more"> · React · Kafka</span></dd>
           </div>
-          <!-- github:hero -->
+          <div>
+            <dt>Open source</dt>
+            <dd><a href="/profile/#open-source">NVIDIA · Red Hat · Intuit · Mezmo <span class="arrow" aria-hidden="true">↗︎</span></a></dd>
+          </div>
         </dl>
-        <div class="hero-quote-row">
-          <p class="hero-note hero-quote">
-            <span class="hero-quote-desktop">A person who works with their hands is a worker. A person who works with their hands and mind is a craftsman. A person who works with their hands, mind, and heart is an artist. Be an artist.</span>
-            <span class="hero-quote-mobile">Work with your hands. Think with your mind. Create with your heart. Be an artist.</span>
-          </p>
-        </div>
+        <!-- Wide screens only (style.css): word-for-word maintainer comments from public pull requests,
+             each linking to the original, and the 3D QR tree (src/hero-tree.js). -->
+        <aside class="hero-side" aria-label="From code review">
+          <section class="hero-quotes" data-hero-quotes aria-roledescription="carousel" aria-label="What maintainers said in code review">
+            <p class="hero-side-label">From code review</p>
+            <div class="hero-quote-stage">
+              <figure class="hero-quote">
+                <blockquote><p>Thanks for picking up #2058, and for reproducing the issue’s exact sequence as a unit test. That’s exactly what we needed.</p></blockquote>
+                <figcaption>
+                  <img src="https://avatars.githubusercontent.com/danbudris?s=64" alt="" width="28" height="28" loading="lazy" decoding="async" />
+                  <span><b>danbudris</b><a href="https://github.com/dsx-ai-factory/nvke/pull/2246#issuecomment-6769183830">dsx-ai-factory/nvke <span class="arrow" aria-hidden="true">↗︎</span></a></span>
+                </figcaption>
+              </figure>
+              <figure class="hero-quote" hidden>
+                <blockquote><p>Thanks for picking this up so quickly. The ledger matches what comments can set today, and the test fails both on a new unlisted key and on a stale entry, which is what item 5 needed. Approving.</p></blockquote>
+                <figcaption>
+                  <img src="https://avatars.githubusercontent.com/IsmaelMartinez?s=64" alt="" width="28" height="28" loading="lazy" decoding="async" />
+                  <span><b>IsmaelMartinez</b><a href="https://github.com/The-PR-Agent/pr-agent/pull/4706#pullrequestreview-5793729975">The-PR-Agent/pr-agent <span class="arrow" aria-hidden="true">↗︎</span></a></span>
+                </figcaption>
+              </figure>
+              <figure class="hero-quote" hidden>
+                <blockquote><p>Thanks, this looks right now. Half-width for two and four cards is the layout I wanted…</p></blockquote>
+                <figcaption>
+                  <img src="https://avatars.githubusercontent.com/vancura?s=64" alt="" width="28" height="28" loading="lazy" decoding="async" />
+                  <span><b>vancura</b><a href="https://github.com/podman-desktop/podman-desktop/pull/20128#pullrequestreview-5858426633">podman-desktop/podman-desktop <span class="arrow" aria-hidden="true">↗︎</span></a></span>
+                </figcaption>
+              </figure>
+              <figure class="hero-quote" hidden>
+                <blockquote><p>Thanks for the PR, looks good and I checked it out with dark and light terminal and it is visible in all options.</p></blockquote>
+                <figcaption>
+                  <img src="https://avatars.githubusercontent.com/tomasmatus?s=64" alt="" width="28" height="28" loading="lazy" decoding="async" />
+                  <span><b>tomasmatus</b><a href="https://github.com/cockpit-project/cockpit/pull/23897#issuecomment-6661984713">cockpit-project/cockpit <span class="arrow" aria-hidden="true">↗︎</span></a></span>
+                </figcaption>
+              </figure>
+              <figure class="hero-quote" hidden>
+                <blockquote><p>Thank you @atishay-kasliwal for the contribution! I have reviewed your code and I think this useful feature. It should be visible at the next release.</p></blockquote>
+                <figcaption>
+                  <img src="https://avatars.githubusercontent.com/AlfredClemedtson?s=64" alt="" width="28" height="28" loading="lazy" decoding="async" />
+                  <span><b>AlfredClemedtson</b><a href="https://github.com/neo4j/graph-data-science/pull/379#issuecomment-6981202574">neo4j/graph-data-science <span class="arrow" aria-hidden="true">↗︎</span></a></span>
+                </figcaption>
+              </figure>
+              <figure class="hero-quote" hidden>
+                <blockquote><p>Thanks for tracking this down. I ran all four self-tests, and the read-back now polls through a 5xx as expected.</p></blockquote>
+                <figcaption>
+                  <img src="https://avatars.githubusercontent.com/jakedipity?s=64" alt="" width="28" height="28" loading="lazy" decoding="async" />
+                  <span><b>jakedipity</b><a href="https://github.com/mezmo/aura/pull/867#pullrequestreview-5762306871">mezmo/aura <span class="arrow" aria-hidden="true">↗︎</span></a></span>
+                </figcaption>
+              </figure>
+            </div>
+            <div class="hero-quote-nav">
+              <button type="button" class="hero-quote-dot" aria-label="Quote 1 of 6" aria-current="true"></button><button type="button" class="hero-quote-dot" aria-label="Quote 2 of 6"></button><button type="button" class="hero-quote-dot" aria-label="Quote 3 of 6"></button><button type="button" class="hero-quote-dot" aria-label="Quote 4 of 6"></button><button type="button" class="hero-quote-dot" aria-label="Quote 5 of 6"></button><button type="button" class="hero-quote-dot" aria-label="Quote 6 of 6"></button>
+              <button type="button" class="hero-quote-pause" aria-label="Pause the quotes">Ⅱ</button>
+            </div>
+          </section>
+          <div class="hero-tree" data-hero-tree hidden>
+            <canvas aria-hidden="true"></canvas>
+            <a class="hero-tree-label" data-tree-link href="/Atishay-Kasliwal-Resume.pdf" data-resume="https://atishaykasliwal.com/Atishay-Kasliwal-Resume.pdf" data-linkedin="https://www.linkedin.com/in/atishay-kasliwal" data-github="https://github.com/atishay-kasliwal">
+              <i data-tree-dot aria-hidden="true"></i><span>Scan for</span> <b data-tree-name>Résumé</b><span class="soft" data-tree-note></span> <span class="arrow" aria-hidden="true">↗︎</span>
+            </a>
+            <p class="hero-tree-hint" aria-hidden="true">Tap the tree for the code</p>
+          </div>
+        </aside>
         <div class="scroll-cue" aria-hidden="true"><span>Scroll</span><i><b></b></i></div>
       </section>
 

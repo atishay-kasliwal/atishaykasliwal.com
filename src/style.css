@@ -217,7 +217,8 @@ h3 {
   font-weight: 450;
   line-height: 1.12;
   letter-spacing: -0.04em;
-  max-width: 600px;
+  /* Up to half the page, never narrower than 600px (phones set their own width). */
+  max-width: max(600px, 50%);
   text-wrap: pretty;
 }
 .hero-copy .soft {
@@ -249,12 +250,12 @@ h3 {
 .hero-quote-mobile {
   display: none;
 }
-/* First-screen facts under the headline: the info sheet's spec labels, laid out in a row. */
+/* First-screen facts, in the row below the headline: the info sheet's spec labels, laid out in a row. */
 .hero-facts {
   display: grid;
   grid-template-columns: repeat(3, max-content);
   gap: 8px clamp(28px, 4vw, 64px);
-  margin: 28px 0 0;
+  margin: 24px 0 0;
 }
 .hero-facts div {
   display: grid;
@@ -277,13 +278,18 @@ h3 {
 .hero-facts a:hover {
   color: #fff;
 }
+/* Small, like the footer's Résumé ↗. */
 .hero-facts .arrow {
+  margin-left: 2px;
+  font: 12px var(--mono);
   color: var(--accent);
 }
 /* Keep the headline centered while the quote and scroll cue sit near the work. */
 @media (min-width: 701px) and (min-height: 741px) {
   .portfolio > .intro {
     display: grid;
+    /* One full-width column: as a grid, .intro's justify-content: center would center it sideways. */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) auto auto;
     padding-bottom: 18px;
   }
@@ -291,17 +297,7 @@ h3 {
     align-self: center;
   }
 }
-/* The headline and its facts read as one block: centered together in the free space. */
-.portfolio > .intro:has(> .hero-facts) {
-  grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr) auto auto;
-}
-.intro:has(> .hero-facts) > .statements {
-  grid-row: 2;
-  align-self: auto;
-}
-.intro:has(> .hero-facts) > .hero-facts { grid-row: 3; }
-.intro:has(> .hero-facts) > .hero-quote-row { grid-row: 5; }
-.intro:has(> .hero-facts) > .scroll-cue { grid-row: 6; }
+
 /* Scroll story (desktop; see scroll-story.js). Everywhere else only the first statement shows. */
 .statement + .statement,
 .scroll-cue {
@@ -329,25 +325,6 @@ html.scroll-story .portfolio {
   position: fixed;
   inset: 0 0 auto;
   width: 100%;
-}
-/* A little smaller than the single headline, so each statement fits in three or four lines. */
-html.scroll-story .hero-copy {
-  font-size: clamp(24px, 2.35vw, 38px);
-}
-html.scroll-story .statements {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: clamp(32px, 3vw, 56px);
-  align-items: start;
-}
-html.scroll-story .statement + .statement {
-  display: block;
-}
-html.scroll-story .statement:nth-child(2) {
-  justify-self: center;
-}
-html.scroll-story .statement:nth-child(3) {
-  justify-self: end;
 }
 /* Each word rises out of its own mask; the padding keeps descenders from being clipped. */
 .word-mask {
@@ -1753,7 +1730,7 @@ html.scroll-story .scroll-cue {
     font-size: 12px;
   }
   .hero-copy {
-    max-width: 680px;
+    max-width: 50%;
     font-size: 49px;
   }
 }
@@ -1900,7 +1877,7 @@ html.scroll-story .scroll-cue {
     grid-template-columns: repeat(3, auto);
     justify-content: start;
     gap: 6px 22px;
-    margin-top: 18px;
+    margin-top: 12px;
   }
   .hero-facts dd {
     font-size: 13px;
@@ -2170,6 +2147,7 @@ html.scroll-story .scroll-cue {
   }
   .hero-note,
   .hero-quote-row,
+  .hero-facts,
   .intro-mark {
     display: none;
   }
@@ -2271,6 +2249,7 @@ html.scroll-story .scroll-cue {
   }
   .hero-note,
   .hero-quote-row,
+  .hero-facts,
   .intro-mark {
     display: none;
   }
@@ -2727,3 +2706,191 @@ html.scroll-story .scroll-cue {
 
 /* Plain black background: the gallery lighting and grain layer is switched off. */
 .gallery-atmosphere { display: none; }
+
+/* ---------- Hero right side: maintainer quotes and the 3D QR tree (wide screens only) ---------- */
+.hero-side {
+  display: none;
+}
+@media (min-width: 1281px) and (min-height: 741px) {
+  .portfolio > .intro {
+    position: relative;
+  }
+  .hero-side {
+    position: absolute;
+    top: 12px;
+    bottom: 18px;
+    left: 52%;
+    right: var(--gutter);
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(24px, 3vw, 64px);
+  }
+  .hero-quotes {
+    display: grid;
+    gap: 16px;
+    max-width: 380px;
+    justify-self: end;
+  }
+  .hero-side-label,
+  .hero-tree-hint {
+    margin: 0;
+    font: 12px var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-quote[hidden] {
+    display: none;
+  }
+  .hero-quote {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    animation: hero-quote-in 0.5s ease both;
+  }
+  .hero-quote blockquote {
+    margin: 0;
+  }
+  .hero-quote blockquote p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .hero-quote blockquote p::before {
+    content: "“";
+    display: block;
+    height: 22px;
+    font-size: 40px;
+    line-height: 1;
+    color: #4a4a45;
+  }
+  .hero-quote figcaption {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid #2a2a27;
+  }
+  .hero-quote figcaption img {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1c1c1a;
+    filter: grayscale(1);
+  }
+  .hero-quote figcaption > span {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .hero-quote figcaption b {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .hero-quote figcaption a {
+    font: 12px var(--mono);
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .hero-quote figcaption a:hover {
+    color: var(--ink);
+  }
+  .hero-quote .arrow,
+  .hero-tree-label .arrow {
+    color: var(--accent);
+  }
+  .hero-quote-nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-left: -9px;
+  }
+  .hero-quote-dot {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+  }
+  .hero-quote-dot::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3a3a36;
+    transition: background 0.2s;
+  }
+  .hero-quote-dot[aria-current="true"]::before {
+    background: var(--accent);
+  }
+  .hero-quote-dot:hover::before {
+    background: var(--muted);
+  }
+  .hero-quote-pause {
+    margin-left: 8px;
+    min-width: 24px;
+    height: 24px;
+    font: 12px var(--mono);
+    color: var(--muted);
+  }
+  .hero-quote-pause:hover {
+    color: var(--ink);
+  }
+  .hero-tree[hidden] {
+    display: none;
+  }
+  .hero-tree {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 8px;
+    min-height: 0;
+    max-height: 100%;
+  }
+  /* A fixed proportion keeps the label right under the tree. */
+  .hero-tree canvas {
+    width: 100%;
+    max-height: 56vh;
+    aspect-ratio: 6 / 5;
+    cursor: pointer;
+    transition: opacity 0.26s ease;
+  }
+  .hero-tree.is-changing canvas {
+    opacity: 0;
+  }
+  .hero-tree-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font: 12px var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-tree-label b {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .hero-tree-label i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .hero-tree.is-code .hero-tree-hint {
+    visibility: hidden;
+  }
+}
+@keyframes hero-quote-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-quote { animation: none; }
+}
