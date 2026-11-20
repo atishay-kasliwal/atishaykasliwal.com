@@ -16,7 +16,9 @@ export function decodeJson(part) {
 // refusal, never an exception. `issuer` is required by functions/_lib/access.js.
 const CLOCK_SKEW_MS = 60 * 1000;
 
-export async function verifyAccessJwt(token, { audience, issuer = null, allowedEmails, keys, now = Date.now() }) {
+// `serviceTokenId` (optional) also accepts a service-token JWT: it carries no email, and its
+// common_name is the token's Client ID. Callers pass it only for routes a service may call.
+export async function verifyAccessJwt(token, { audience, issuer = null, allowedEmails, keys, serviceTokenId = "", now = Date.now() }) {
   const parts = String(token ?? "").split(".");
   if (parts.length !== 3 || !parts[0] || !parts[1] || parts.some(part => !/^[A-Za-z0-9_-]*$/.test(part))) return { ok: false, reason: "malformed" };
   const [headerPart, payloadPart, signaturePart] = parts;
@@ -46,6 +48,9 @@ export async function verifyAccessJwt(token, { audience, issuer = null, allowedE
   if (typeof payload.exp !== "number" || payload.exp * 1000 <= now) return { ok: false, reason: "expired" };
   if (payload.nbf !== undefined && (typeof payload.nbf !== "number" || payload.nbf * 1000 > now + CLOCK_SKEW_MS)) return { ok: false, reason: "not-yet-valid" };
   const email = typeof payload.email === "string" ? payload.email.trim().toLowerCase() : "";
+  if (!email && serviceTokenId && typeof payload.common_name === "string" && constantTimeEqual(payload.common_name, serviceTokenId)) {
+    return { ok: true, service: true, commonName: payload.common_name };
+  }
   const allowed = (allowedEmails ?? []).map(item => String(item).trim().toLowerCase()).filter(Boolean);
   if (!email || !allowed.includes(email)) return { ok: false, reason: "not-allowed" };
   return { ok: true, email };

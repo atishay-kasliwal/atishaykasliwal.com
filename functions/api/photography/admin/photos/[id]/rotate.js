@@ -3,7 +3,7 @@ import { validateRotation } from '../../../../../../src/photography-core/rotatio
 import { MAX_DISPLAY_BYTES, orientationOf } from '../../../../../../src/photography-core/upload.js';
 
 async function lookup(request, env, id) {
-  const admin = await requireAdmin(request, env);
+  const admin = await requireAdmin(request, env, { allowService: true });
   if (!admin.ok) return { error: Response.json({ error: 'forbidden' }, { status: admin.status }) };
   if (!/^[a-f0-9]{24}$/.test(id)) return { error: Response.json({ error: 'unknown photo' }, { status: 404 }) };
   const row = await env.DB.prepare('SELECT src, origin FROM photos WHERE id = ? AND deleted_at IS NULL').bind(id).first();

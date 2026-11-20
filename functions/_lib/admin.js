@@ -16,9 +16,9 @@ const SAFE_METHODS = new Set(["GET", "HEAD"]);
 // from an email in ADMIN_EMAILS (see access.js). Calls that change state must also come from this
 // site's own pages: browsers always send Origin on POST, so a cross-site form or script cannot
 // publish even if the Access cookie were sent along.
-export function adminRoute(handler) {
+export function adminRoute(handler, { allowService = false } = {}) {
   return async context => {
-    const admin = await requireAdmin(context.request, context.env);
+    const admin = await requireAdmin(context.request, context.env, { allowService });
     if (!admin.ok) return json({ error: admin.status === 401 ? "sign in through Cloudflare Access" : "forbidden" }, admin.status);
     if (!SAFE_METHODS.has(context.request.method)) {
       const origin = context.request.headers.get("Origin");
@@ -33,3 +33,6 @@ export function adminRoute(handler) {
     }
   };
 }
+
+// The résumé API, which the analytics dashboard also calls with its service token (access.js).
+export const serviceAdminRoute = handler => adminRoute(handler, { allowService: true });

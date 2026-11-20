@@ -119,3 +119,15 @@ npm test                     # everything, including the build
 npx wrangler d1 migrations apply photography --local
 npx wrangler pages dev dist  # public routes against local D1/R2; admin routes need an Access JWT
 ```
+
+## The analytics dashboard's service token
+
+The admin at analytics.atishaykasliwal.com calls the résumé API, the photo library API
+(`/api/photography/admin/photos*`), the GitHub feedback admin API and
+`/photography/admin/seo/report.json` server to server with a Cloudflare Access service token.
+`requireAdmin` accepts that token only on those routes (they opt in with `allowService`), only
+when its `common_name` equals `ADMIN_SERVICE_TOKEN_ID` in `wrangler.jsonc` (empty means none is
+accepted), and never for a page, a photo upload, photo insights or the responses inspector. Audit
+logs record the dashboard's `X-Admin-Actor` header when it names an `ADMIN_EMAILS` address, and
+`service:analytics-dashboard` otherwise. The Access application must also include a Service Auth
+policy for the token. Tests: `tests/resume/service-token.test.mjs`.

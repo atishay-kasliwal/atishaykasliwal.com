@@ -1,4 +1,4 @@
-import { adminRoute, PRIVATE_HEADERS } from "../../../_lib/admin.js";
+import { serviceAdminRoute, PRIVATE_HEADERS } from "../../../_lib/admin.js";
 import { ResumeRequestError } from "../../../../src/resume-core/store.js";
 import { reviewItems } from "../../../../src/profile/review.js";
 
@@ -6,7 +6,7 @@ import { reviewItems } from "../../../../src/profile/review.js";
 // file, never the live overlaid response) and the internal review register, which only ever
 // leaves through admin routes. The profile is passed through as text, not parsed, to keep this
 // Function's CPU time small.
-export const onRequestGet = adminRoute(async ({ request, env }) => {
+export const onRequestGet = serviceAdminRoute(async ({ request, env }) => {
   const response = await env.ASSETS.fetch(new Request(new URL("/api/profile.json", request.url)));
   if (!response.ok) throw new ResumeRequestError("the canonical profile is unavailable", 503);
   const body = `{"reviewItems":${JSON.stringify(reviewItems)},"profile":${await response.text()}}`;

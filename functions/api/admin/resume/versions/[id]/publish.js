@@ -1,11 +1,11 @@
-import { adminRoute, json } from "../../../../../_lib/admin.js";
+import { serviceAdminRoute, json } from "../../../../../_lib/admin.js";
 import { getVersion, publishVersion, ResumeRequestError } from "../../../../../../src/resume-core/store.js";
 
 // POST {"sha256": "...", "acknowledgeConflicts": true, "reason": "..."}: serve this version at the
 // public résumé URL. Publishing an earlier version is recorded as a restore. The request must name
 // the exact file (sha256), and a version with conflicts against the canonical profile needs an
 // explicit acknowledgement; publishing never changes the profile itself.
-export const onRequestPost = adminRoute(async ({ request, env, params }, admin) => {
+export const onRequestPost = serviceAdminRoute(async ({ request, env, params }, admin) => {
   if (!String(request.headers.get("Content-Type")).startsWith("application/json")) throw new ResumeRequestError("expected JSON", 415);
   let body;
   try {

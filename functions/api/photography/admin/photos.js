@@ -2,7 +2,7 @@ import { requireAdmin } from "../../../_lib/access.js";
 import { loadLibrary } from "../../../_lib/store.js";
 
 export async function onRequestGet({ request, env }) {
-  const admin = await requireAdmin(request, env);
+  const admin = await requireAdmin(request, env, { allowService: true });
   if (!admin.ok) return Response.json({ error: "forbidden" }, { status: admin.status });
   const photos = (await loadLibrary(env.DB)).map(photo => ({
     id: photo.id,

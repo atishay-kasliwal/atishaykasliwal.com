@@ -3,7 +3,7 @@ import { requireAdmin } from "../../../../_lib/access.js";
 const ID_PATTERN = /^[a-f0-9]{24}$/;
 
 export async function onRequestPatch({ request, env, params }) {
-  const admin = await requireAdmin(request, env);
+  const admin = await requireAdmin(request, env, { allowService: true });
   if (!admin.ok) return Response.json({ error: "forbidden" }, { status: admin.status });
   if (!ID_PATTERN.test(params.id)) return Response.json({ error: "unknown photo" }, { status: 404 });
   let body;
@@ -26,7 +26,7 @@ export async function onRequestPatch({ request, env, params }) {
 // (so it vanishes from exhibition and search at once), then storage is removed, then rows are
 // dropped. A failure after step one leaves a hidden orphan that a retry cleans up.
 export async function onRequestDelete({ request, env, params }) {
-  const admin = await requireAdmin(request, env);
+  const admin = await requireAdmin(request, env, { allowService: true });
   if (!admin.ok) return Response.json({ error: "forbidden" }, { status: admin.status });
   if (!ID_PATTERN.test(params.id)) return Response.json({ error: "unknown photo" }, { status: 404 });
   const row = await env.DB.prepare("SELECT original_key, src FROM photos WHERE id = ?").bind(params.id).first();

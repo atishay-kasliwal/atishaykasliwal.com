@@ -15,7 +15,10 @@
     "PHOTO_PUBLIC_BASE": "https://photos.atishaykasliwal.com",
     "ACCESS_TEAM_DOMAIN": "blue-pine-d929.cloudflareaccess.com",
     "ACCESS_AUD": "7449787b940d32dc305d6d18ae710e285610d463f4a292fac7ce8cc38cee4298",
-    "ADMIN_EMAILS": "katishay@gmail.com"
+    "ADMIN_EMAILS": "katishay@gmail.com",
+    // Client ID of the analytics dashboard's Access service token (not a secret). Empty: no
+    // service token is accepted. See functions/_lib/access.js.
+    "ADMIN_SERVICE_TOKEN_ID": ""
   },
   "r2_buckets": [
     {

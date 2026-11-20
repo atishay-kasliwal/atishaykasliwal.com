@@ -1,11 +1,11 @@
-import { adminRoute, json } from "../../../../../_lib/admin.js";
+import { serviceAdminRoute, json } from "../../../../../_lib/admin.js";
 import { acceptedConsistency } from "../../../../../_lib/resume.js";
 import { getVersion, ResumeRequestError, updateReport } from "../../../../../../src/resume-core/store.js";
 
 // POST {"consistency": {...}}: the browser compared this version's kept text with the canonical
 // profile as deployed now (src/resume-core/report.js recheckText), for example after the profile
 // changed. Replaces the stored consistency report; the PDF and what is published are untouched.
-export const onRequestPost = adminRoute(async ({ request, env, params }, admin) => {
+export const onRequestPost = serviceAdminRoute(async ({ request, env, params }, admin) => {
   if (!String(request.headers.get("Content-Type")).startsWith("application/json")) throw new ResumeRequestError("expected JSON", 415);
   let body;
   try {

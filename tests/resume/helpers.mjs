@@ -117,9 +117,10 @@ export async function accessFixture() {
   const jwk = await crypto.subtle.exportKey("jwk", pair.publicKey);
   return {
     certs: { keys: [{ ...jwk, kid: "k1" }] },
-    async token(email, { aud = "aud-1", iss = "https://team.example", kid = "k1", exp = Math.floor(Date.now() / 1000) + 600, nbf } = {}) {
+    // `claims` adds or overrides payload fields, e.g. a service token's common_name (pass email: undefined).
+    async token(email, { aud = "aud-1", iss = "https://team.example", kid = "k1", exp = Math.floor(Date.now() / 1000) + 600, nbf, claims = {} } = {}) {
       const header = b64url(JSON.stringify({ alg: "RS256", kid }));
-      const payload = b64url(JSON.stringify({ aud, iss, email, exp, ...(nbf === undefined ? {} : { nbf }) }));
+      const payload = b64url(JSON.stringify({ aud, iss, email, exp, ...(nbf === undefined ? {} : { nbf }), ...claims }));
       const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", pair.privateKey, new TextEncoder().encode(`${header}.${payload}`));
       return `${header}.${payload}.${b64url(signature)}`;
     },

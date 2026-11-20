@@ -23,10 +23,11 @@ const headers = {
 };
 
 // No static copy exists, so encoded spellings cannot bypass the verified page route.
+// The analytics dashboard's service token may read the SEO report JSON, never a page.
 export async function onRequestGet({ request, env }) {
-  const admin = await requireAdmin(request, env);
-  if (!admin.ok) return new Response("Sign in through Cloudflare Access to open the admin.", { status: admin.status, headers });
   const pathname = new URL(request.url).pathname;
+  const admin = await requireAdmin(request, env, { allowService: pathname === "/photography/admin/seo/report.json" });
+  if (!admin.ok) return new Response("Sign in through Cloudflare Access to open the admin.", { status: admin.status, headers });
   if (pathname === "/photography/admin/seo/report.json") return Response.json(seo.report, { headers: PRIVATE_HEADERS });
   if (/^\/photography\/admin\/seo(?:\/|\/index\.html)?$/.test(pathname)) {
     if (pathname !== "/photography/admin/seo/") return new Response(null, { status: 308, headers: { ...headers, Location: "/photography/admin/seo/" } });

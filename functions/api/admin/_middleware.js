@@ -3,8 +3,11 @@ import { json, PRIVATE_HEADERS } from "../../_lib/admin.js";
 
 // Backstop for every route under /api/admin/: each handler also checks through adminRoute, but a
 // route added later without it still cannot answer an unauthenticated request.
+// The résumé API also takes the dashboard's service token; its handlers check that again themselves.
+const SERVICE_PATHS = /^\/api\/admin\/resume(?:\/|$)/;
 export async function onRequest(context) {
-  const admin = await requireAdmin(context.request, context.env);
+  const allowService = SERVICE_PATHS.test(new URL(context.request.url).pathname);
+  const admin = await requireAdmin(context.request, context.env, { allowService });
   if (!admin.ok) return json({ error: admin.status === 401 ? "sign in through Cloudflare Access" : "forbidden" }, admin.status);
   const response = await context.next();
   const out = new Response(response.body, response);

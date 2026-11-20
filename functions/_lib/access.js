@@ -28,18 +28,29 @@ async function accessKeys(env) {
 // audience, issuer, expiry, not-before, email allowlist), so a bypassed or misconfigured proxy
 // still cannot reach admin code. The token is read only from the header Access sets; a client can
 // send that header too, but cannot sign it. Missing configuration fails closed.
-export async function requireAdmin(request, env) {
+//
+// `allowService` lets one route also accept the analytics dashboard's Access service token
+// (ADMIN_SERVICE_TOKEN_ID is its Client ID; unset means no service token is accepted). Only the
+// admin APIs the dashboard proxies opt in, never a page. For those calls the actor recorded in
+// audit logs is the dashboard's X-Admin-Actor header, and only when it names an allowed email.
+export const SERVICE_ACTOR = "service:analytics-dashboard";
+export async function requireAdmin(request, env, { allowService = false } = {}) {
   const token = request.headers.get("Cf-Access-Jwt-Assertion");
   if (!token) return { ok: false, status: 401 };
   const allowedEmails = String(env.ADMIN_EMAILS ?? "").split(",").map(item => item.trim()).filter(Boolean);
   if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || allowedEmails.length === 0) return { ok: false, status: 503 };
-  const options = { audience: env.ACCESS_AUD, issuer: `https://${env.ACCESS_TEAM_DOMAIN}`, allowedEmails };
+  const serviceTokenId = allowService ? String(env.ADMIN_SERVICE_TOKEN_ID ?? "").trim() : "";
+  const options = { audience: env.ACCESS_AUD, issuer: `https://${env.ACCESS_TEAM_DOMAIN}`, allowedEmails, serviceTokenId };
   try {
     let result = await verifyAccessJwt(token, { ...options, keys: await accessKeys(env) });
     if (result.reason === "unknown-key" && Date.now() - lastRefresh > REFRESH_MIN_INTERVAL_MS) {
       result = await verifyAccessJwt(token, { ...options, keys: await fetchKeys(env) });
     }
-    return result.ok ? { ok: true, email: result.email } : { ok: false, status: 403 };
+    if (!result.ok) return { ok: false, status: 403 };
+    if (!result.service) return { ok: true, email: result.email };
+    const actor = String(request.headers.get("X-Admin-Actor") ?? "").trim().toLowerCase();
+    const named = allowedEmails.map(item => item.toLowerCase()).includes(actor);
+    return { ok: true, email: named ? actor : SERVICE_ACTOR, service: true };
   } catch {
     return { ok: false, status: 503 };
   }

@@ -7,7 +7,7 @@ const FORM_OVERHEAD = 64 * 1024;
 // made by the admin page. Stores them under a new token, so a cached old copy never shows a
 // rotated photo the wrong way, and records them only if the photo has not changed meanwhile.
 export async function onRequestPost({ request, env, params }) {
-  const admin = await requireAdmin(request, env);
+  const admin = await requireAdmin(request, env, { allowService: true });
   if (!admin.ok) return Response.json({ error: "forbidden" }, { status: admin.status });
   if (!/^[a-f0-9]{24}$/.test(params.id)) return Response.json({ error: "unknown photo" }, { status: 404 });
   if (Number(request.headers.get("Content-Length")) > VARIANT_WIDTHS.length * MAX_VARIANT_BYTES + FORM_OVERHEAD) {
