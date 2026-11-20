@@ -69,15 +69,19 @@ async function inflate(bytes, budget) {
 // them and scan their contents too. Page content and image streams cannot hold actions and are skipped.
 async function objectStreamText(bytes, raw, budget) {
   const texts = [];
-  const streamKeyword = /stream\r?\n/g;
+  // Not the "stream" inside "endstream": after one object stream that would start a second, bogus one.
+  const streamKeyword = /(?<!end)stream\r?\n/g;
   let match;
   while ((match = streamKeyword.exec(raw))) {
     const dictStart = raw.lastIndexOf("obj", match.index);
     const dict = raw.slice(dictStart, match.index);
     if (!/\/Type\s*\/ObjStm/.test(dict) || !/\/FlateDecode/.test(dict)) continue;
     const start = match.index + match[0].length;
-    const length = /\/Length\s+(\d+)(?!\s+\d+\s+R)/.exec(dict);
-    const end = length ? start + Number(length[1]) : raw.indexOf("endstream", start);
+    // \b keeps "/Length 12 0 R" (an indirect length) from matching as the number 1.
+    const length = /\/Length\s+(\d+)\b(?!\s+\d+\s+R)/.exec(dict);
+    let end = length ? start + Number(length[1]) : raw.indexOf("endstream", start);
+    // Without a direct length the data ends at "endstream", less the end-of-line before it.
+    if (!length && end > start) end -= raw[end - 2] === "\r" && raw[end - 1] === "\n" ? 2 : /[\r\n]/.test(raw[end - 1]) ? 1 : 0;
     if (end <= start || end > bytes.length) throw new Error("object stream runs past the end of the file");
     texts.push(latin1(await inflate(bytes.subarray(start, end), budget)));
     streamKeyword.lastIndex = end;

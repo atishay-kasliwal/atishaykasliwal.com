@@ -1,6 +1,7 @@
 // Server-side PDF validation and the consistency report (src/resume-core/).
 import assert from "node:assert/strict";
 import test from "node:test";
+import { deflateSync } from "node:zlib";
 import { inspectPdf } from "../../src/resume-core/pdf.js";
 import { compareWithProfile, parseRange } from "../../src/resume-core/consistency.js";
 import { withActiveResume } from "../../src/resume-core/overlay.js";
@@ -44,6 +45,31 @@ test("invalid uploads are rejected with a reason", async () => {
   assert.equal((await accepts(valid, { filename: "resume.exe", contentType: "application/pdf" })).ok, false, "wrong extension");
   assert.equal((await accepts(valid, { filename: "resume.pdf", contentType: "application/x-msdownload" })).ok, false, "wrong declared type");
   assert.ok((await accepts(valid)).ok, "the well-formed fixture is accepted");
+});
+
+// A compressed object stream (PDF 1.5, as xdvipdfmx/Tectonic writes) holding the given objects.
+const objectStream = (bodies, { indirectLength = false } = {}) => {
+  const offsets = [];
+  let data = "";
+  for (const body of bodies) {
+    offsets.push(data.length);
+    data += `${body}\n`;
+  }
+  const head = bodies.map((_, i) => `${100 + i} ${offsets[i]}`).join(" ") + " ";
+  const packed = String.fromCharCode(...deflateSync(Buffer.from(head + data, "latin1")));
+  const length = indirectLength ? "12 0 R" : String(packed.length);
+  return `<< /Type /ObjStm /N ${bodies.length} /First ${head.length} /Filter /FlateDecode /Length ${length} >>\nstream\n${packed}\nendstream`;
+};
+
+test("compressed object streams are read, and actions hidden in them are still refused", async () => {
+  const plain = makePdf(consistentResumeLines(), { extraObjects: [objectStream(["<< /Type /Annot /Subtype /Link /Rect [0 0 1 1] >>"])] });
+  const result = await accepts(plain);
+  assert.deepEqual(result.errors, [], "an object stream followed by endstream is not read twice");
+  const indirect = await accepts(makePdf(consistentResumeLines(), { extraObjects: [objectStream(["<< /Type /Annot >>"], { indirectLength: true })] }));
+  assert.deepEqual(indirect.errors, [], "an indirect /Length falls back to endstream");
+  const hidden = await accepts(makePdf(consistentResumeLines(), { catalogExtra: "/OpenAction 100 0 R ", extraObjects: [objectStream(["<< /S /JavaScript /JS (app.alert(1)) >>"])] }));
+  assert.equal(hidden.ok, false);
+  assert.match(hidden.errors.join(" "), /JavaScript/);
 });
 
 test("date ranges parse in the forms résumés use", () => {
