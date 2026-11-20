@@ -18,7 +18,7 @@
     "ADMIN_EMAILS": "katishay@gmail.com",
     // Client ID of the analytics dashboard's Access service token (not a secret). Empty: no
     // service token is accepted. See functions/_lib/access.js.
-    "ADMIN_SERVICE_TOKEN_ID": ""
+    "ADMIN_SERVICE_TOKEN_ID": "d839d9db6d195dd1a8e45ba8a080e248.access"
   },
   "r2_buckets": [
     {
