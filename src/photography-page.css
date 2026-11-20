@@ -69,12 +69,12 @@ html[data-photography-page] :focus-visible { outline: none; }
 .photo-categories nav { display: flex; flex-direction: column; align-items: flex-end; max-height: min(40dvh, 320px); overflow-y: auto; }
 .photo-categories button { min-height: 28px; padding: 3px 0 3px 8px; color: var(--muted); }
 .photo-categories button[aria-pressed="true"] { color: var(--ink); }
-.photo-categories sup { font-size: 8px; margin-left: 3px; }
+.photo-categories sup { font-size: 12px; margin-left: 3px; }
 .photo-page-card img { display: block; width: auto; height: auto; max-width: var(--photo-width); max-height: min(42dvh, 380px); pointer-events: none; }
 .photo-canvas.is-viewing { --photo-width: clamp(185px, 20vw, 335px); --stack-gap: 41vw; --stack-rise: 25vh; }
 .photo-canvas.is-viewing .photo-page-card.is-selected { opacity: 0; }
 .photography-content:has(.photo-canvas.is-viewing) .stack-navigation { visibility: hidden; }
-.stack-navigation { position: absolute; inset: auto 0 0; z-index: 150; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 var(--gutter) 4px; background: transparent; pointer-events: none; font: 10px var(--mono); color: var(--muted); }
+.stack-navigation { position: absolute; inset: auto 0 0; z-index: 150; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 var(--gutter) 4px; background: transparent; pointer-events: none; font: 12px var(--mono); color: var(--muted); }
 .stack-controls { pointer-events: auto; }
 .stack-controls { display: flex; align-items: center; gap: 20px; }
 .stack-controls p { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
@@ -93,19 +93,19 @@ html[data-photography-page] :focus-visible { outline: none; }
 .viewer-next { right: 8px; top: calc(50% - 22px); }
 html:has(.photo-viewer[open]) { overflow: hidden; }
 @media (max-width: 700px) {
-  .photo-categories { bottom: 66px; width: 130px; font-size: 10px; }
+  .photo-categories { bottom: 66px; width: 130px; font-size: 12px; }
   .photo-categories[open] { padding: 8px 12px; background: #111; border: 1px solid #2a2a27; }
   .photo-categories button { min-height: 36px; }
   .photography-portfolio { min-height: 560px; }
   .photography-header { padding: 0 var(--gutter); }
-  .photography-header a { font-size: 10px; }
+  .photography-header a { font-size: 12px; }
   .photo-canvas { --photo-width: 72vw; --stack-gap: 56vw; --stack-rise: clamp(70px, 14dvh, 115px); --step-x: 5px; --step-y: -4px; perspective: 1400px; }
   .photo-page-card img { max-height: 34dvh; }
   .photo-canvas.is-viewing { --photo-width: 44vw; --stack-gap: 52vw; --stack-rise: 25dvh; }
-  .stack-navigation { bottom: 0; flex-direction: row; gap: 8px; padding-bottom: 0; font-size: 8px; }
-  .stack-navigation > p { white-space: nowrap; font-size: 8px; line-height: 1.5; }
+  .stack-navigation { bottom: 0; flex-direction: row; gap: 8px; padding-bottom: 0; font-size: 12px; }
+  .stack-navigation > p { white-space: nowrap; font-size: 12px; line-height: 1.5; }
   .stack-controls { gap: 2px; }
-  .stack-controls p { min-width: 40px; font-size: 9px; }
+  .stack-controls p { min-width: 40px; font-size: 12px; }
   .stack-controls button { font-size: 14px; }
   .photo-viewer { padding: 44px 0 70px; }
   .photo-viewer img { width: min(90vw, calc(62dvh * var(--viewer-ratio, 1.5))); max-width: 90vw; max-height: 62dvh; }
