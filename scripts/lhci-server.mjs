@@ -1,7 +1,10 @@
 // Serves the production build for Lighthouse CI the way Cloudflare Pages does: clean URLs, the
-// custom 404 page, and fixtures for the Pages Functions the public pages call. A plain static
+// custom 404 page, Brotli or gzip for text (Cloudflare compresses it; uncompressed, the homepage
+// HTML is about nine times larger than what visitors download), and fixtures for the Pages
+// Functions the public pages call. A plain static
 // server answers those APIs with a 404, which Lighthouse reports as a console error.
 import http from "node:http";
+import zlib from "node:zlib";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,6 +35,23 @@ const exhibition = JSON.stringify({
   photos: photographs.map(({ src, alt, width, height }) => ({ src, alt, width, height, tags: [] })),
 });
 
+const compressible = new Set([".html", ".js", ".css", ".json", ".svg", ".xml", ".txt"]);
+
+// Sends a body the way Cloudflare's edge does: Brotli when the client accepts it, else gzip.
+function send(request, response, status, type, body) {
+  const accepted = String(request.headers["accept-encoding"] ?? "");
+  const headers = { "content-type": type, vary: "Accept-Encoding" };
+  if (/\bbr\b/.test(accepted)) {
+    body = zlib.brotliCompressSync(body);
+    headers["content-encoding"] = "br";
+  } else if (/\bgzip\b/.test(accepted)) {
+    body = zlib.gzipSync(body);
+    headers["content-encoding"] = "gzip";
+  }
+  response.writeHead(status, { ...headers, "content-length": body.length });
+  response.end(body);
+}
+
 const githubActivity = path.resolve(dist, "../src/github-activity.json");
 
 function resolve(pathname) {
@@ -47,19 +67,21 @@ http
     const { pathname } = new URL(request.url, "http://localhost");
     // The live GitHub activity: the snapshot the build rendered, so the page keeps it as it is.
     if (pathname === "/api/github-activity") {
-      response.writeHead(200, { "content-type": "application/json" });
-      fs.createReadStream(githubActivity).pipe(response);
+      send(request, response, 200, "application/json", fs.readFileSync(githubActivity));
       return;
     }
     if (pathname === "/api/photography/exhibition") {
-      response.writeHead(200, { "content-type": "application/json" });
-      response.end(exhibition);
+      send(request, response, 200, "application/json", Buffer.from(exhibition));
       return;
     }
     const file = resolve(pathname) ?? path.join(dist, "404.html");
-    response.writeHead(file.endsWith("404.html") ? 404 : 200, {
-      "content-type": types[path.extname(file)] ?? "application/octet-stream",
-    });
+    const status = file.endsWith("404.html") ? 404 : 200;
+    const type = types[path.extname(file)] ?? "application/octet-stream";
+    if (compressible.has(path.extname(file))) {
+      send(request, response, status, type, fs.readFileSync(file));
+      return;
+    }
+    response.writeHead(status, { "content-type": type });
     fs.createReadStream(file).pipe(response);
   })
   .listen(port, "127.0.0.1", () => console.log(`Lighthouse server listening on http://127.0.0.1:${port}`));
