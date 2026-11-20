@@ -52,8 +52,6 @@ export async function buildPhotography() {
   <meta property="og:image:height" content="900" />
   <meta property="og:image:alt" content="${escape(photographs[1].alt)}" />
   <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@AtishayKasliwal" />
-    <meta name="twitter:creator" content="@AtishayKasliwal" />
   <meta name="twitter:title" content="${escape(page.title)}" />
   <meta name="twitter:description" content="${escape(page.description)}" />
   <meta name="twitter:image" content="${social}" />

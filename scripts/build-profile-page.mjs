@@ -237,8 +237,6 @@ function render(profile) {
     <meta property="profile:first_name" content="${escape(p.givenName)}" />
     <meta property="profile:last_name" content="${escape(p.familyName)}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@AtishayKasliwal" />
-    <meta name="twitter:creator" content="@AtishayKasliwal" />
     <meta name="twitter:title" content="${escape(title)}" />
     <meta name="twitter:description" content="${escape(description)}" />
     <meta name="twitter:image" content="https://atishaykasliwal.com/og.jpg" />
