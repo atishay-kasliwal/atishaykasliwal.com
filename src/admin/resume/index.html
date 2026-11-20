@@ -14,30 +14,33 @@
   <main class="admin rz" id="admin">
     <header class="admin-head rz-head">
       <p class="admin-title"><i aria-hidden="true"></i>Admin / Résumé</p>
-      <div id="nav"></div>
+      <div class="rz-head-actions">
+        <button type="button" class="primary" id="choose">Upload PDF</button>
+        <div id="nav"></div>
+      </div>
+      <input id="file" type="file" accept="application/pdf,.pdf" hidden />
     </header>
-
-    <!-- What the public URL serves right now. -->
-    <section class="rz-strip" id="published" aria-label="Live résumé"><p class="muted">Loading…</p></section>
     <p class="notice rz-notice" id="notice" role="status" aria-live="polite" hidden></p>
 
-    <div class="rz-grid">
-      <aside class="rz-side" aria-label="Versions">
-        <div class="drop rz-drop" id="drop">
-          <p class="drop-title">Drop a PDF</p>
-          <p class="drop-sub">or <button type="button" id="choose">choose a file</button> · up to <span id="limit">5 MB</span>. Nothing goes live until you publish.</p>
-          <input id="file" type="file" accept="application/pdf,.pdf" hidden />
-        </div>
-        <h2 class="label rz-side-label">Versions</h2>
+    <div class="rz-app">
+      <!-- What is live, and every version. -->
+      <aside class="rz-rail" aria-label="Versions">
+        <section class="rz-live" id="published" aria-label="Live résumé"><p class="muted">Loading…</p></section>
+        <h2 class="label rz-rail-label">Versions</h2>
         <ul class="rz-list" id="versions"></ul>
         <details class="rz-history">
           <summary class="label">Activity <span class="rz-count" id="history-count"></span></summary>
           <ol class="rz-log" id="history"></ol>
         </details>
+        <p class="rz-limit muted">PDF up to <span id="limit">5 MB</span>. Drop it anywhere on this page. Nothing goes live until you publish.</p>
       </aside>
 
-      <section class="rz-work" id="review" aria-live="polite"></section>
+      <!-- The selected version: its review, then the résumé itself. -->
+      <section class="rz-inspector" id="review" aria-live="polite"></section>
+      <section class="rz-doc" id="doc" aria-label="Résumé preview"></section>
     </div>
+
+    <div class="rz-drop" id="drop" hidden><p>Drop the PDF to check and upload it</p></div>
   </main>
   <script type="module" src="/src/admin/resume/resume.js"></script>
 </body>

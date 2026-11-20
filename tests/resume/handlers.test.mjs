@@ -8,6 +8,8 @@ import { onRequestGet as versionRoute } from "../../functions/api/admin/resume/v
 import { onRequestGet as fileRoute } from "../../functions/api/admin/resume/versions/[id]/file.js";
 import { onRequestPost as publishRoute } from "../../functions/api/admin/resume/versions/[id]/publish.js";
 import { onRequestPost as recheckRoute } from "../../functions/api/admin/resume/versions/[id]/recheck.js";
+import { onRequestGet as bundledRoute } from "../../functions/api/admin/resume/bundled.js";
+import { onRequestGet as resumeContextRoute } from "../../functions/api/admin/resume/context.js";
 import { onRequestGet as contextRoute } from "../../functions/api/admin/responses/context.js";
 import { onRequestGet as fetchRoute } from "../../functions/api/admin/responses/fetch.js";
 import { onRequest as apiMiddleware } from "../../functions/api/admin/_middleware.js";
@@ -73,6 +75,8 @@ test("admin routes and pages need an Access sign-in from an allowed email", asyn
     [fileRoute, "/api/admin/resume/versions/0123456789abcdef/file", "GET"],
     [publishRoute, "/api/admin/resume/versions/0123456789abcdef/publish", "POST"],
     [recheckRoute, "/api/admin/resume/versions/0123456789abcdef/recheck", "POST"],
+    [bundledRoute, "/api/admin/resume/bundled", "GET"],
+    [resumeContextRoute, "/api/admin/resume/context", "GET"],
     [contextRoute, "/api/admin/responses/context", "GET"],
     [fetchRoute, "/api/admin/responses/fetch?target=home", "GET"],
     [apiMiddleware, "/api/admin/anything", "GET"],
@@ -182,6 +186,17 @@ test("the admin pages are served by the Function after the Access check, never a
   const report = await photography({ request: new Request(`${SITE}/photography/admin/seo/report.json`, { headers: authHeaders }), env });
   assert.equal(report.status, 200);
   assert.ok((await report.json()).summary.pages > 0);
+});
+
+test("the admin can preview the bundled PDF and load what uploads are checked against", async () => {
+  const bundled = await call(bundledRoute, "/api/admin/resume/bundled");
+  assert.equal(bundled.status, 200);
+  assert.equal(bundled.headers.get("Content-Type"), "application/pdf");
+  assert.equal(bundled.headers.get("Cache-Control"), "no-store");
+  assert.equal(await sha256Hex(await bundled.arrayBuffer()), await sha256Hex(bundledPdf()));
+  const context = await (await call(resumeContextRoute, "/api/admin/resume/context")).json();
+  assert.ok(context.profile.profile.name);
+  assert.ok(context.reviewItems.some(item => item.acceptedOnResume?.length), "the full review register, for the browser's check");
 });
 
 test("before anything is published the bundled PDF and the built profile are served", async () => {

@@ -1,15 +1,17 @@
-import { api, ApiError, formatBytes, formatDate, h, nav, shortSha, time } from "../common.js";
+import { api, ApiError, formatBytes, h, nav, shortSha, time } from "../common.js";
+import { showPdf } from "./paper.js";
 
-// One-screen résumé admin: a strip saying what the public URL serves, a side column (upload,
-// versions, activity) and a workspace for the selected item (PDF preview beside its report, with
-// publishing at the top). The full PDF check runs here in the browser; the Pages Function only
-// screens the file, to stay within the Workers Free plan's CPU limit.
+// Résumé admin on one screen: a rail (what is live, versions, activity), the review of the
+// selected version (summary, findings, publishing) and the résumé itself drawn as paper. The full
+// PDF check runs here in the browser; the Pages Function only screens the file, to stay within
+// the Workers Free plan's CPU limit.
 
 const $ = id => document.getElementById(id);
 const notice = $("notice");
-const LIVE = "live";
+const BUNDLED = "bundled";
+const BUNDLED_URL = "/api/admin/resume/bundled";
 
-// pdf.js is large, so it loads on the first upload or re-check.
+// pdf.js is large, so the checker loads on the first upload or re-check.
 let checker = null;
 const loadChecker = () => (checker ??= import("../../resume-core/report.js"));
 let context = null;
@@ -19,20 +21,15 @@ let state = null;
 let selected = null;
 let tab = "Findings";
 
-const ACTION_LABELS = {
-  upload: "Uploaded",
-  upload_duplicate: "Re-uploaded",
-  upload_rejected: "Rejected",
-  publish: "Published",
-  restore: "Restored",
-  recheck: "Re-checked",
+const ACTION_LABELS = { upload: "Uploaded", upload_duplicate: "Re-uploaded", upload_rejected: "Rejected", publish: "Published", restore: "Restored", recheck: "Re-checked" };
+const GROUPS = {
+  conflict: ["Conflicts", "The résumé contradicts the profile. Fix the PDF, or acknowledge them when publishing."],
+  unverified: ["To verify", "On the résumé, but nothing on the site backs it. These never block publishing."],
+  info: ["Notes", "Worth knowing. Nothing to fix."],
 };
-const GROUPS = [
-  ["conflict", "Conflicts"],
-  ["unverified", "Unverified"],
-  ["info", "Info"],
-];
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+const arrow = (symbol = "↗") => h("span", { class: "arrow", "aria-hidden": "true" }, symbol);
+const shortDate = iso => (iso ? new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "—");
 
 function say(message, tone = "error") {
   notice.hidden = !message;
@@ -40,16 +37,15 @@ function say(message, tone = "error") {
   notice.className = `notice rz-notice ${tone === "error" ? "" : tone}`.trim();
 }
 
-const counts = (summary, { compact = false } = {}) =>
-  summary
-    ? h(
-        "span",
-        { class: "counts" },
-        h("span", { class: `pill ${summary.conflict ? "conflict" : "good"}` }, plural(summary.conflict, "conflict")),
-        summary.unverified ? h("span", { class: "pill unverified" }, `${summary.unverified} unverified`) : "",
-        summary.info && !compact ? h("span", { class: "pill info" }, `${summary.info} info`) : "",
-      )
-    : h("span", { class: "muted" }, "—");
+function tally(summary) {
+  if (!summary) return h("span", { class: "rz-tally muted" }, "Not checked");
+  return h(
+    "span",
+    { class: "rz-tally" },
+    h("span", { class: summary.conflict ? "is-bad" : "is-good" }, plural(summary.conflict, "conflict")),
+    summary.unverified ? h("span", { class: "is-warn" }, `${summary.unverified} to verify`) : "",
+  );
+}
 
 // ---------- What is live ----------
 const FALLBACK_REASONS = {
@@ -64,68 +60,71 @@ function expectedLive() {
   return state.bundled ? { id: state.bundled.id, sha256: state.bundled.sha256, source: "bundled" } : null;
 }
 
-function liveHeadline() {
-  if (state.serving.source === "published") return { tone: "good", title: `Published version ${state.active.id} is live`, detail: `Since ${formatDate(state.active.publishedAt)} · ${state.active.publishedBy}` };
-  const conflicts = state.bundled?.report?.consistency?.summary?.conflict ?? 0;
-  const fellBack = state.serving.reason !== "nothing-published";
-  if (fellBack) return { tone: "bad", title: "Fallback: the public URL is serving the bundled PDF, not the published version", detail: `${FALLBACK_REASONS[state.serving.reason] ?? ""} Check the R2 bucket and binding, then republish.` };
-  if (conflicts) return { tone: "bad", title: "An outdated résumé is live", detail: `The PDF bundled with the deploy contradicts the profile in ${plural(conflicts, "place")}. Upload and publish a current one.` };
-  return { tone: "info", title: "The bundled résumé is live", detail: FALLBACK_REASONS["nothing-published"] };
-}
-
 // Fetch the public URL signed out, as a visitor would, and compare the bytes with what should be live.
 async function liveCheck() {
   const box = $("live-check");
   if (!box) return;
   const expected = expectedLive();
-  box.replaceChildren(h("span", { class: "muted mono" }, "Checking the public URL…"));
+  box.replaceChildren(h("span", { class: "muted" }, "Checking the public URL…"));
   try {
     const response = await fetch(state.publicPath, { cache: "no-store", credentials: "omit" });
     const digest = await crypto.subtle.digest("SHA-256", await response.arrayBuffer());
     const sha256 = [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("");
-    const label = state.active && sha256 === state.active.sha256 ? `published ${state.active.id}` : state.bundled && sha256 === state.bundled.sha256 ? `bundled ${state.bundled.id}` : `unknown file ${sha256.slice(0, 16)}`;
     const ok = response.ok && expected && sha256 === expected.sha256;
     box.replaceChildren(
-      h("span", { class: `pill ${ok ? "good" : "bad"}` }, ok ? "live check passed" : "live check failed"),
-      h("span", { class: "mono soft" }, ` ${response.status} · serving ${label}`),
-      !ok && expected ? h("span", { class: "mono" }, ` · expected ${expected.source} ${expected.id}. A stale deploy or cache may be answering.`) : "",
+      ok
+        ? h("span", { class: "good", title: `${response.status} · ${sha256}` }, "✓ Public URL verified")
+        : h("span", { class: "bad" }, `✕ Public URL serves ${sha256.slice(0, 12)}, expected ${expected?.source ?? "?"} ${expected?.id ?? ""}. A stale deploy or cache may be answering.`),
     );
   } catch (error) {
-    box.replaceChildren(h("span", { class: "pill bad" }, "live check failed"), h("span", { class: "mono soft" }, ` ${error.message}`));
+    box.replaceChildren(h("span", { class: "bad" }, `✕ ${error.message}`));
   }
 }
 
-function renderStrip() {
-  const { tone, title, detail } = liveHeadline();
+function renderLive() {
+  const published = state.serving.source === "published";
+  const conflicts = state.bundled?.report?.consistency?.summary?.conflict ?? 0;
+  const fellBack = !published && state.serving.reason !== "nothing-published";
+  const tone = published ? "good" : fellBack || conflicts ? "bad" : "good";
+  const title = published
+    ? shortDate(state.active.publishedAt)
+    : fellBack
+      ? "Fallback: the public URL is serving the bundled PDF, not the published version"
+      : conflicts
+        ? "An outdated résumé is live"
+        : "The bundled résumé is live";
+  const detail = published
+    ? `${state.active.filename} · published by ${state.active.publishedBy}`
+    : fellBack
+      ? `${FALLBACK_REASONS[state.serving.reason] ?? ""} Check the R2 bucket and binding, then republish.`
+      : conflicts
+        ? `The PDF bundled with the deploy contradicts the profile in ${plural(conflicts, "place")}.`
+        : "The PDF bundled with the deploy. Publish a version to replace it.";
   $("published").replaceChildren(
+    h("p", { class: `label rz-live-label ${tone}` }, h("i", { "aria-hidden": "true" }), "Live now"),
+    h("button", { type: "button", class: "rz-live-title", onclick: () => select(published ? state.active.id : BUNDLED) }, title),
+    h("p", { class: "rz-live-detail" }, detail),
+    h("p", { class: "rz-live-check", id: "live-check" }),
     h(
-      "div",
-      { class: "rz-strip-main" },
-      h("p", { class: "label" }, "Live at ", h("span", { class: "rz-path" }, state.publicPath)),
-      h("p", { class: `rz-headline ${tone}` }, title),
-      h("p", { class: "rz-detail soft" }, detail),
-      h("p", { class: "live-check", id: "live-check" }),
-    ),
-    h(
-      "div",
-      { class: "rz-strip-actions" },
-      state.serving.source === "bundled" ? h("button", { type: "button", onclick: () => select(LIVE) }, "Review live PDF") : h("button", { type: "button", onclick: () => select(state.active.id) }, "Review"),
-      h("button", { type: "button", onclick: liveCheck }, "Check again"),
-      h("a", { href: state.publicPath, target: "_blank", rel: "noopener" }, "Open ", h("span", { class: "arrow", "aria-hidden": "true" }, "↗")),
-      h("a", { href: "/admin/responses/" }, "Inspect ", h("span", { class: "arrow", "aria-hidden": "true" }, "→")),
+      "p",
+      { class: "rz-live-links" },
+      h("a", { href: state.publicPath, target: "_blank", rel: "noopener" }, "Open ", arrow()),
+      h("button", { type: "button", class: "link", onclick: liveCheck }, "Check again"),
+      h("a", { href: "/admin/responses/" }, "Inspect ", arrow("→")),
     ),
   );
   liveCheck();
 }
 
-// ---------- Side column ----------
-function statusPill(version) {
-  if (version.active) return h("span", { class: "pill good" }, "Live");
-  if (version.firstPublishedAt) return h("span", { class: "pill info" }, "Was live");
-  return h("span", { class: "pill" }, "Draft");
+// ---------- Versions ----------
+function statusOf(version) {
+  if (version === BUNDLED) return state.serving.source === "bundled" ? ["live", "Live"] : ["fallback", "Fallback"];
+  if (version.active) return ["live", "Live"];
+  if (version.firstPublishedAt) return ["past", "Was live"];
+  return ["draft", "Draft"];
 }
 
-function listItem({ id, title, status, meta, summary }) {
+function versionItem({ id, title, sub, status: [kind, label], summary }) {
   const current = selected === id;
   return h(
     "li",
@@ -133,37 +132,20 @@ function listItem({ id, title, status, meta, summary }) {
     h(
       "button",
       { type: "button", class: `rz-item${current ? " is-selected" : ""}`, "aria-pressed": String(current), onclick: () => select(id) },
-      h("span", { class: "rz-item-top" }, h("span", { class: "rz-item-id" }, title), status),
-      h("span", { class: "rz-item-meta" }, meta),
-      counts(summary, { compact: true }),
+      h("span", { class: "rz-item-top" }, h("span", { class: "rz-item-title" }, title), h("span", { class: `rz-status ${kind}` }, label)),
+      h("span", { class: "rz-item-sub" }, sub),
+      tally(summary),
     ),
   );
 }
 
 function renderVersions() {
-  const list = $("versions");
   const items = state.versions.map(version =>
-    listItem({
-      id: version.id,
-      title: version.id,
-      status: statusPill(version),
-      meta: `${version.filename} · ${formatBytes(version.sizeBytes)} · ${formatDate(version.uploadedAt)}`,
-      summary: version.report?.summary,
-    }),
+    versionItem({ id: version.id, title: shortDate(version.uploadedAt), sub: version.filename, status: statusOf(version), summary: version.report?.summary }),
   );
-  if (state.bundled) {
-    items.push(
-      listItem({
-        id: LIVE,
-        title: "Bundled PDF",
-        status: state.serving.source === "bundled" ? h("span", { class: `pill ${state.bundled.report?.consistency?.summary?.conflict ? "bad" : "good"}` }, "Live") : h("span", { class: "pill info" }, "Fallback"),
-        meta: `${state.bundled.id} · ${formatBytes(state.bundled.sizeBytes)} · ships with each deploy`,
-        summary: state.bundled.report?.consistency?.summary,
-      }),
-    );
-  }
-  list.replaceChildren(...items);
-  if (!state.versions.length) list.prepend(h("li", { class: "empty rz-empty" }, "No uploads yet"));
+  if (!items.length) items.push(h("li", { class: "rz-empty" }, "No uploads yet. Drop a PDF anywhere on this page."));
+  if (state.bundled) items.push(versionItem({ id: BUNDLED, title: "Bundled PDF", sub: "Ships with every deploy", status: statusOf(BUNDLED), summary: state.bundled.report?.consistency?.summary }));
+  $("versions").replaceChildren(...items);
 }
 
 function historyDetail(entry) {
@@ -171,7 +153,7 @@ function historyDetail(entry) {
   if (entry.action === "upload_rejected") return d.errors?.join(" ") ?? d.reason ?? "";
   if (entry.action === "publish" || entry.action === "restore") return [d.previousVersionId ? `replaced ${d.previousVersionId}` : "replaced the bundled PDF", d.reason ? `“${d.reason}”` : null].filter(Boolean).join(" · ");
   const c = d.consistency;
-  return [d.filename, c ? `${plural(c.conflict, "conflict")}, ${c.unverified} unverified` : null].filter(Boolean).join(" · ");
+  return [d.filename, c ? `${plural(c.conflict, "conflict")}, ${c.unverified} to verify` : null].filter(Boolean).join(" · ");
 }
 
 function renderHistory() {
@@ -182,16 +164,88 @@ function renderHistory() {
           h(
             "li",
             {},
-            h("span", { class: "rz-log-head" }, h("span", { class: `pill ${entry.action === "upload_rejected" ? "bad" : entry.action === "publish" || entry.action === "restore" ? "good" : ""}` }, ACTION_LABELS[entry.action] ?? entry.action), h("span", { class: "mono soft", title: entry.sha256 ?? "" }, entry.versionId ?? (entry.sha256 ? shortSha(entry.sha256) : ""))),
-            h("span", { class: "rz-log-detail" }, historyDetail(entry)),
-            h("span", { class: "rz-log-when mono muted" }, time(entry.at), ` · ${entry.actor}`),
+            h("span", { class: "rz-log-head" }, h("span", { class: `rz-log-action ${entry.action}` }, ACTION_LABELS[entry.action] ?? entry.action), h("span", { class: "muted", title: entry.sha256 ?? "" }, entry.versionId ?? (entry.sha256 ? shortSha(entry.sha256) : ""))),
+            historyDetail(entry) ? h("span", { class: "rz-log-detail" }, historyDetail(entry)) : "",
+            h("span", { class: "rz-log-when" }, time(entry.at), ` · ${entry.actor}`),
           ),
         )
-      : [h("li", { class: "empty rz-empty" }, "No activity yet")]),
+      : [h("li", { class: "rz-empty" }, "No activity yet.")]),
   );
 }
 
-// ---------- Report ----------
+// ---------- Findings ----------
+// Wrap each of `terms` inside `text` in a highlight.
+function highlight(text, terms) {
+  const unique = [...new Set(terms.filter(Boolean))].sort((a, b) => b.length - a.length);
+  if (!unique.length) return [text];
+  const nodes = [];
+  let rest = String(text);
+  for (;;) {
+    let at = -1;
+    let term = null;
+    for (const candidate of unique) {
+      const index = rest.indexOf(candidate);
+      if (index !== -1 && (at === -1 || index < at)) [at, term] = [index, candidate];
+    }
+    if (at === -1) break;
+    nodes.push(rest.slice(0, at), h("strong", { class: "rz-hl" }, term));
+    rest = rest.slice(at + term.length);
+  }
+  nodes.push(rest);
+  return nodes;
+}
+
+const metricTerms = item => [...new Set((/^(.*?) (?:does|do) not appear anywhere/.exec(item.message)?.[1] ?? "").split(", "))];
+const quotedTerm = item => /^"([^"]+)"/.exec(item.message)?.[1];
+
+function findingRow(item) {
+  if (item.severity === "unverified" && item.category === "accomplishments" && item.resume) {
+    const terms = metricTerms(item);
+    return h("li", { class: "rz-f" }, h("p", { class: "rz-f-quote" }, highlight(item.resume, terms)), h("p", { class: "rz-f-note" }, `${terms.join(", ")} ${terms.length === 1 ? "isn't" : "aren't"} on the site`));
+  }
+  const compare = item.severity === "conflict" && (item.resume || item.canonical);
+  return h(
+    "li",
+    { class: "rz-f" },
+    h("p", { class: "rz-f-msg" }, item.message),
+    compare
+      ? h(
+          "dl",
+          { class: "rz-f-compare" },
+          item.resume ? [h("dt", {}, "Résumé"), h("dd", {}, highlight(item.resume, [quotedTerm(item)]))] : "",
+          item.canonical ? [h("dt", {}, "Profile"), h("dd", {}, item.canonical)] : "",
+        )
+      : "",
+    item.reviewItem ? h("p", { class: "rz-f-note", title: item.reviewItem.resolution ?? "" }, `Review item ${item.reviewItem.id} · ${item.reviewItem.status}`) : "",
+  );
+}
+
+function findings(consistency) {
+  if (!consistency?.items?.length) return h("p", { class: "rz-clear" }, "✓ Everything on the résumé matches the profile.");
+  return h(
+    "div",
+    { class: "rz-groups" },
+    Object.entries(GROUPS).map(([severity, [label, explain]]) => {
+      const items = consistency.items.filter(item => item.severity === severity);
+      if (!items.length) return "";
+      const skills = severity === "unverified" ? items.filter(item => item.category === "skills") : [];
+      const rest = items.filter(item => !skills.includes(item));
+      return h(
+        "section",
+        { class: `rz-group ${severity}` },
+        h("h3", { class: "rz-group-head" }, h("span", {}, label), h("span", { class: "rz-group-count" }, items.length)),
+        h("p", { class: "rz-group-explain" }, explain),
+        h(
+          "ul",
+          { class: "rz-fs" },
+          skills.length ? h("li", { class: "rz-f" }, h("p", { class: "rz-f-msg" }, `${plural(skills.length, "skill")} with no evidence on the site`), h("p", { class: "rz-chips" }, skills.map(item => h("span", { class: "rz-chip" }, item.resume)))) : "",
+          rest.map(findingRow),
+        ),
+      );
+    }),
+  );
+}
+
 function checksList(validation) {
   return h(
     "ul",
@@ -199,55 +253,6 @@ function checksList(validation) {
     validation.checks.map(item =>
       h("li", {}, h("span", { class: `mark ${item.ok ? "ok" : "fail"}`, "aria-label": item.ok ? "passed" : "failed" }, item.ok ? "✓" : "✕"), h("span", {}, item.label), h("span", { class: "soft" }, item.detail)),
     ),
-  );
-}
-
-function findingRow(item) {
-  return h(
-    "li",
-    {},
-    h("span", { class: "rz-finding-cat" }, item.category),
-    h(
-      "div",
-      { class: "rz-finding-body" },
-      h("p", { class: "rz-finding-msg" }, item.message),
-      item.resume && item.resume !== item.message ? h("p", { class: "rz-finding-quote", title: item.resume }, item.resume) : "",
-      item.reviewItem ? h("p", { class: "rz-finding-review mono muted", title: item.reviewItem.resolution ?? "" }, `review item ${item.reviewItem.id} · ${item.reviewItem.status}`) : "",
-    ),
-  );
-}
-
-// Findings grouped by severity. Skills with no evidence collapse into one row of names.
-function findings(consistency) {
-  if (!consistency?.items?.length) return h("p", { class: "rz-clear" }, "No discrepancies with the canonical profile.");
-  const first = GROUPS.find(([severity]) => consistency.items.some(item => item.severity === severity))?.[0];
-  return h(
-    "div",
-    { class: "rz-groups" },
-    GROUPS.map(([severity, label]) => {
-      const items = consistency.items.filter(item => item.severity === severity);
-      if (!items.length) return "";
-      const skills = items.filter(item => item.category === "skills" && severity === "unverified");
-      const rest = items.filter(item => !skills.includes(item));
-      return h(
-        "details",
-        { class: `rz-group ${severity}`, open: severity === first || severity === "conflict" || items.length <= 4 },
-        h("summary", {}, h("span", { class: `pill ${severity}` }, label), h("span", { class: "rz-group-count" }, items.length)),
-        h(
-          "ul",
-          { class: "rz-findings" },
-          skills.length
-            ? h(
-                "li",
-                {},
-                h("span", { class: "rz-finding-cat" }, "skills"),
-                h("div", { class: "rz-finding-body" }, h("p", { class: "rz-finding-msg" }, `${plural(skills.length, "skill")} with no evidence on the site`), h("p", { class: "rz-chips" }, skills.map(item => h("span", { class: "rz-chip" }, item.resume)))),
-              )
-            : "",
-          rest.map(findingRow),
-        ),
-      );
-    }),
   );
 }
 
@@ -261,7 +266,7 @@ async function publish(version, { acknowledge, reason, button }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sha256: version.sha256, acknowledgeConflicts: acknowledge, reason }),
     });
-    say(`${result.action === "restore" ? "Restored" : "Published"} ${version.id}. ${state.publicPath} and /api/profile.json now serve it.`, "ok");
+    say(`${result.action === "restore" ? "Restored" : "Published"}. ${state.publicPath} and /api/profile.json now serve it.`, "ok");
     await load();
   } catch (error) {
     say(error.message);
@@ -269,8 +274,8 @@ async function publish(version, { acknowledge, reason, button }) {
   }
 }
 
-function publishBar(version) {
-  if (version.active) return h("p", { class: "rz-published" }, "This version is published.");
+function publishPanel(version) {
+  if (version.active) return h("div", { class: "rz-action is-live" }, h("p", { class: "rz-action-title" }, "This version is published."), h("p", { class: "rz-action-sub" }, `Visitors get it at ${state.publicPath}.`));
   const conflicts = version.report?.consistency?.summary?.conflict ?? 0;
   const verb = version.firstPublishedAt ? "Restore" : "Publish";
   const acknowledge = h("input", { type: "checkbox", id: "acknowledge" });
@@ -280,40 +285,45 @@ function publishBar(version) {
     button.disabled = conflicts > 0 && !acknowledge.checked;
   });
   button.addEventListener("click", () => {
-    if (!window.confirm(`${verb} ${version.id} at ${state.publicPath}? Visitors get it on their next request.`)) return;
+    if (!window.confirm(`${verb} this version at ${state.publicPath}? Visitors get it on their next request.`)) return;
     publish(version, { acknowledge: acknowledge.checked, reason: reason.value, button });
   });
   return h(
     "div",
-    { class: "rz-publish" },
-    conflicts > 0 ? h("label", { for: "acknowledge", class: "rz-ack" }, acknowledge, h("span", {}, `Publish despite ${plural(conflicts, "conflict")}. The profile does not change.`)) : "",
-    reason,
-    button,
+    { class: `rz-action ${conflicts ? "has-conflicts" : "is-ready"}` },
+    h("p", { class: "rz-action-title" }, conflicts ? `${plural(conflicts, "conflict")} to review` : version.firstPublishedAt ? "Ready to restore" : "Ready to publish"),
+    conflicts ? h("label", { for: "acknowledge", class: "rz-ack" }, acknowledge, h("span", {}, "Publish anyway. The profile does not change.")) : "",
+    h("div", { class: "rz-action-row" }, reason, button),
   );
 }
 
-// ---------- Workspace ----------
+// ---------- The selected version ----------
 function tabs(names, render) {
   const panel = h("div", { class: "rz-panel", role: "tabpanel" });
-  if (!names.includes(tab)) tab = names[0];
+  if (!names.some(name => name.startsWith(tab))) tab = names[0];
   const bar = h(
     "div",
     { class: "rz-tabs", role: "tablist" },
     names.map(name => {
-      const button = h("button", { type: "button", role: "tab", "aria-selected": String(name === tab) }, name);
+      const button = h("button", { type: "button", role: "tab", "aria-selected": String(name.startsWith(tab)) }, name);
       button.addEventListener("click", () => {
-        tab = name;
+        tab = name.split(" ")[0];
         bar.querySelectorAll("[role=tab]").forEach(node => node.setAttribute("aria-selected", String(node === button)));
         panel.replaceChildren(render(name));
       });
       return button;
     }),
   );
-  panel.replaceChildren(render(tab));
+  panel.replaceChildren(render(names.find(name => name.startsWith(tab))));
   return [bar, panel];
 }
 
-function workspace({ heading, status, meta, actions, preview, report, recheck }) {
+function stats(summary) {
+  const stat = (key, value, label) => h("div", { class: `rz-stat ${key}${value ? " has" : ""}`, "data-stat": key }, h("span", { class: "rz-stat-n" }, value ?? "—"), h("span", { class: "rz-stat-l" }, label));
+  return h("div", { class: "rz-stats" }, stat("conflict", summary?.conflict, "Conflicts"), stat("unverified", summary?.unverified, "To verify"), stat("info", summary?.info, "Notes"));
+}
+
+function renderSelection({ title, status, filename, meta, action, report, pdfUrl, recheck }) {
   const checks = report?.validation?.checks ?? [];
   const names = ["Findings", ...(checks.length ? [`Checks ${checks.filter(item => item.ok).length}/${checks.length}`] : []), ...(report?.text?.length ? ["Text"] : [])];
   const [bar, panel] = tabs(names, name =>
@@ -323,57 +333,38 @@ function workspace({ heading, status, meta, actions, preview, report, recheck })
         ? h("pre", { class: "text rz-text" }, report.text.join("\n"))
         : checksList(report.validation),
   );
-  return [
-    h(
-      "header",
-      { class: "rz-work-head" },
-      h("div", { class: "rz-work-title" }, h("h2", { class: "rz-work-id" }, heading), status, h("p", { class: "rz-work-meta mono muted" }, meta)),
-      actions,
-    ),
-    h(
-      "div",
-      { class: "rz-work-body" },
-      // Chrome's viewer: page fitted to the width, thumbnails sidebar closed.
-      h("iframe", { class: "preview rz-preview", src: `${preview}#view=FitH&navpanes=0`, title: `Preview of ${heading}` }),
-      h(
-        "div",
-        { class: "rz-report" },
-        h("div", { class: "rz-report-head" }, counts(report?.consistency?.summary), bar),
-        panel,
-        h(
-          "div",
-          { class: "rz-report-foot" },
-          recheck ?? "",
-          report?.checkedAt ? h("span", { class: "muted mono" }, "checked ", time(report.checkedAt)) : "",
-          h("a", { href: preview, target: "_blank", rel: "noopener" }, "Open PDF ", h("span", { class: "arrow", "aria-hidden": "true" }, "↗")),
-        ),
-      ),
-    ),
-  ];
+  $("review").replaceChildren(
+    h("header", { class: "rz-sel-head" }, h("p", { class: "label" }, "Reviewing"), h("h2", { class: "rz-sel-title" }, title, h("span", { class: `rz-status ${status[0]}` }, status[1])), h("p", { class: "rz-sel-meta" }, meta)),
+    action,
+    stats(report?.consistency?.summary),
+    bar,
+    panel,
+    h("footer", { class: "rz-sel-foot" }, recheck ?? "", report?.checkedAt ? h("span", { class: "muted" }, "Checked ", time(report.checkedAt)) : ""),
+  );
+  const sheet = h("div", { class: "rz-paper" });
+  $("doc").replaceChildren(h("div", { class: "rz-doc-bar" }, h("span", { class: "rz-doc-name" }, filename), h("a", { href: pdfUrl, target: "_blank", rel: "noopener" }, "Open PDF ", arrow())), sheet);
+  showPdf(sheet, pdfUrl);
 }
 
-async function renderWork() {
-  const box = $("review");
-  if (selected === LIVE) {
+async function renderSelected() {
+  if (selected === BUNDLED) {
     const bundled = state.bundled;
-    box.replaceChildren(
-      ...workspace({
-        heading: "Bundled PDF",
-        status: state.serving.source === "bundled" ? h("span", { class: "pill bad" }, "Live") : h("span", { class: "pill info" }, "Fallback"),
-        meta: `${bundled.id} · ${formatBytes(bundled.sizeBytes)} · ships with each deploy and is served when nothing is published`,
-        actions: h("p", { class: "rz-work-note soft" }, "To replace it, upload a current PDF and publish it."),
-        preview: state.publicPath,
-        report: bundled.report,
-      }),
-    );
+    renderSelection({
+      title: "Bundled PDF",
+      status: statusOf(BUNDLED),
+      filename: "Atishay-Kasliwal-Resume.pdf",
+      meta: `In the repository · ${formatBytes(bundled.sizeBytes)} · ${bundled.id}`,
+      action: h("div", { class: "rz-action" }, h("p", { class: "rz-action-sub" }, "Ships with every deploy and is served whenever nothing published can be read. To change it, replace public/Atishay-Kasliwal-Resume.pdf in the repository.")),
+      report: bundled.report,
+      pdfUrl: BUNDLED_URL,
+    });
     return;
   }
-  box.replaceChildren(h("p", { class: "muted rz-loading" }, "Loading…"));
+  $("review").replaceChildren(h("p", { class: "muted rz-loading" }, "Loading…"));
   try {
     const { version } = await api(`/api/admin/resume/versions/${selected}`);
     const report = version.report ?? {};
-    const recheck = h("button", { type: "button" }, "Re-check");
-    recheck.title = "Compare this version's text with the current profile";
+    const recheck = h("button", { type: "button", class: "link", title: "Compare this version's text with the current profile" }, "Re-check");
     recheck.addEventListener("click", async () => {
       recheck.disabled = true;
       try {
@@ -386,35 +377,33 @@ async function renderWork() {
         recheck.disabled = false;
       }
     });
-    const pages = version.pages ? ` · ${version.pages} p` : "";
-    box.replaceChildren(
-      ...workspace({
-        heading: version.id,
-        status: statusPill(version),
-        meta: `${version.filename} · ${formatBytes(version.sizeBytes)}${pages} · uploaded ${formatDate(version.uploadedAt)}`,
-        actions: publishBar(version),
-        preview: `/api/admin/resume/versions/${version.id}/file`,
-        report,
-        recheck,
-      }),
-    );
+    renderSelection({
+      title: shortDate(version.uploadedAt),
+      status: statusOf(version),
+      filename: version.filename,
+      meta: `${version.pages ? `${plural(version.pages, "page")} · ` : ""}${formatBytes(version.sizeBytes)} · ${version.id}`,
+      action: publishPanel(version),
+      report,
+      pdfUrl: `/api/admin/resume/versions/${version.id}/file`,
+      recheck,
+    });
   } catch (error) {
-    box.replaceChildren(h("p", { class: "notice" }, error.message));
+    $("review").replaceChildren(h("p", { class: "notice" }, error.message));
   }
 }
 
 function select(id) {
   selected = id;
   renderVersions();
-  renderWork();
+  renderSelected();
 }
 
 // What to show first: the newest draft if it is newer than what is live, else what is live.
 function defaultSelection() {
-  if (selected === LIVE || state.versions.some(version => version.id === selected)) return selected;
+  if (selected === BUNDLED || state.versions.some(version => version.id === selected)) return selected;
   const newest = state.versions[0];
   if (newest && !newest.active) return newest.id;
-  return state.active?.id ?? (state.bundled ? LIVE : null);
+  return state.active?.id ?? (state.bundled ? BUNDLED : null);
 }
 
 // ---------- Upload ----------
@@ -433,7 +422,7 @@ async function upload(file) {
     form.append("file", file, file.name);
     form.append("report", JSON.stringify(report));
     const result = await api("/api/admin/resume/versions", { method: "POST", body: form });
-    say(result.duplicate ? `This exact file is already stored as ${result.version.id}.` : `Stored as ${result.version.id}. Review it, then publish when ready.`, "ok");
+    say(result.duplicate ? "This exact file is already stored; it is selected." : "Uploaded as a draft. Review it, then publish.", "ok");
     selected = result.version.id;
     await load();
   } catch (error) {
@@ -445,21 +434,31 @@ async function upload(file) {
 }
 
 function wireUpload() {
-  const drop = $("drop");
+  const overlay = $("drop");
   const input = $("file");
   $("choose").addEventListener("click", () => input.click());
   input.addEventListener("change", () => {
     upload(input.files[0]);
     input.value = "";
   });
-  drop.addEventListener("dragover", event => {
-    event.preventDefault();
-    drop.classList.add("is-over");
+  // Drop a PDF anywhere on the page.
+  let depth = 0;
+  const hasFiles = event => [...(event.dataTransfer?.types ?? [])].includes("Files");
+  window.addEventListener("dragenter", event => {
+    if (!hasFiles(event)) return;
+    depth += 1;
+    overlay.hidden = false;
   });
-  drop.addEventListener("dragleave", () => drop.classList.remove("is-over"));
-  drop.addEventListener("drop", event => {
+  window.addEventListener("dragleave", () => {
+    depth = Math.max(0, depth - 1);
+    if (!depth) overlay.hidden = true;
+  });
+  window.addEventListener("dragover", event => hasFiles(event) && event.preventDefault());
+  window.addEventListener("drop", event => {
+    if (!hasFiles(event)) return;
     event.preventDefault();
-    drop.classList.remove("is-over");
+    depth = 0;
+    overlay.hidden = true;
     if (event.dataTransfer.files.length > 1) return say("Upload one PDF at a time.");
     upload(event.dataTransfer.files[0]);
   });
@@ -470,10 +469,10 @@ async function load() {
   $("limit").textContent = formatBytes(state.limits.maxBytes);
   if (!state.storageReady) say("Résumé storage is not configured: bind the private R2 bucket as RESUMES (see docs/resume-admin.md).");
   selected = defaultSelection();
-  renderStrip();
+  renderLive();
   renderVersions();
   renderHistory();
-  await renderWork();
+  await renderSelected();
 }
 
 $("nav").append(nav("resume"));

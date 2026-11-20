@@ -32,6 +32,7 @@ globalThis.fetch = (input, init) => String(input) === "https://team.example/cdn-
 const routes = [
   [/^\/api\/admin\/resume$/, "api/admin/resume/index.js"],
   [/^\/api\/admin\/resume\/context$/, "api/admin/resume/context.js"],
+  [/^\/api\/admin\/resume\/bundled$/, "api/admin/resume/bundled.js"],
   [/^\/api\/admin\/resume\/versions$/, "api/admin/resume/versions.js"],
   [/^\/api\/admin\/resume\/versions\/([^/]+)\/file$/, "api/admin/resume/versions/[id]/file.js"],
   [/^\/api\/admin\/resume\/versions\/([^/]+)\/publish$/, "api/admin/resume/versions/[id]/publish.js"],
@@ -92,8 +93,10 @@ try {
   page.on("console", message => { if (message.type() === "error" && /Content Security Policy|Refused to/.test(message.text())) failures.push(message.text()); });
   await page.goto(`${base}/admin/resume/`);
   await page.getByText("The bundled résumé is live", { exact: true }).waitFor();
-  await page.getByText("live check passed", { exact: true }).waitFor();
-  check(await page.locator("#review").innerText().then(text => /0 conflicts/i.test(text) && text.includes("Bundled PDF")), "the live bundled PDF opens with its report");
+  await page.getByText("✓ Public URL verified", { exact: true }).waitFor();
+  check(await page.locator("#review").innerText().then(text => text.includes("Bundled PDF")) && (await page.locator('#review [data-stat="conflict"] .rz-stat-n').innerText()) === "0", "the live bundled PDF opens with its report");
+  await page.locator("#doc canvas.rz-page").first().waitFor();
+  check(await page.locator("#doc canvas.rz-page").first().evaluate(canvas => canvas.width > 300 && canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data.some((value, i) => i % 4 !== 3 && value < 128)), "the résumé is drawn as a page with visible text");
   check(!/\bnull\b/.test(await page.locator("#live-check").innerText()), "live check prints no stray null");
   await page.locator("#file").setInputFiles({ name: "qa-consistent.pdf", mimeType: "application/pdf", buffer: Buffer.from(makePdf(consistentResumeLines())) });
   await page.getByRole("button", { name: "Publish this version", exact: true }).waitFor();
@@ -110,7 +113,7 @@ try {
   env.RESUMES = memoryR2();
   await page.reload();
   await page.getByText("Fallback: the public URL is serving the bundled PDF, not the published version", { exact: true }).waitFor();
-  await page.getByText("live check passed", { exact: true }).waitFor();
+  await page.getByText("✓ Public URL verified", { exact: true }).waitFor();
   check(true, "missing R2 object shows fallback and verifies the served PDF");
   env.RESUMES = savedBucket;
   await page.goto(`${base}/admin/responses/`);
