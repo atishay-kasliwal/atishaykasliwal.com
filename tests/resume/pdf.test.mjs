@@ -98,6 +98,9 @@ test("the consistency report covers dates, titles, skills, education and accompl
   assert.ok(ids.has("wake-forest-cair-title"), "internship only on the PDF");
   assert.ok(items.some(item => item.category === "skills" && item.severity === "unverified"), "skills without evidence");
   assert.ok(items.some(item => item.category === "accomplishments" && item.reviewItem?.id === "stony-brook-users"), "2,000+ users vs the settled ~1,000");
+  assert.ok(ids.has("review-wake-forest-scale-50k-scans"), "50K+ scans vs the settled 10K+ MRI studies");
+  const atriveo = compareWithProfile([...consistentResumeLines(), "• Founded Atriveo to track 50K+ applications and tailor 50K+ resumes in a year."], profile, reviewItems);
+  assert.ok(!atriveo.items.some(item => item.reviewItem?.id === "wake-forest-scale"), "Atriveo's 50K+ applications is not the Wake Forest scan count");
   assert.ok(items.some(item => item.category === "accomplishments" && item.severity === "unverified"), "metrics with no canonical counterpart");
   assert.ok(items.some(item => item.category === "education" && item.reviewItem?.id === "symbiosis-start-month"), "unconfirmed start month");
   assert.equal(summary.conflict, items.filter(item => item.severity === "conflict").length);

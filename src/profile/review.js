@@ -99,7 +99,8 @@ export const reviewItems = [
     canonical: "10K+ MRI studies; 20-person physician-research team",
     resolution: "50K+ scans was dropped as unconfirmed (commit aeef323). '8 radiologists' may describe dashboard users rather than the team; it is not repeated.",
     action: "Regenerate the résumé PDF.",
-    mustNotAppear: ["50K+", "8 radiologists"],
+    // "50K+ scans", not bare "50K+": Atriveo's 50K+ applications a year is a separate, confirmed figure.
+    mustNotAppear: ["50K+ scans", "8 radiologists"],
   },
   {
     id: "atriveo-usage-metrics",
