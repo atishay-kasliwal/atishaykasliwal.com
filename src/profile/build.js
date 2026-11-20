@@ -168,9 +168,8 @@ export function buildProfile({ onWarning = message => console.warn(`[profile] ${
           : null,
         technicalDecisions: (study.decisions ?? []).map(strip),
         engineeringChallenge: study.note ? { title: `${study.note.strong} ${study.note.soft}`, detail: study.note.body } : null,
-        // A personal profile page (Beyond the Resume) restates the experience section in prose, and
-        // its Shriffle figure is under review (src/profile/review.js: shriffle-volume), so only its
-        // summary enters the canonical profile.
+        // A personal profile page (Beyond the Resume) restates the experience section in prose, so
+        // only its summary enters the canonical profile; the roles themselves come from experience.
         highlights: status === "profile" ? [] : (study.sections ?? []).map(section => ({ title: section.title, detail: section.body })),
         technologies,
         metrics: study.stats.map(stat => {
@@ -488,6 +487,17 @@ export function buildProfile({ onWarning = message => console.warn(`[profile] ${
   };
 }
 
+// Atriveo is Atishay's own company (founded September 2025), not an employer, so the Person has no
+// worksFor; the Organization names him as founder (src/profile/review.js: atriveo-employment).
+export const atriveoJsonLd = () => ({
+  "@type": "Organization",
+  "@id": "https://atriveo.com/#organization",
+  name: "Atriveo",
+  url: "https://atriveo.com",
+  foundingDate: "2025-09",
+  founder: { "@id": PERSON_ID },
+});
+
 // schema.org Person for the homepage, /profile and the Beyond the Resume page, from the same data.
 export function personJsonLd(profile, { mainEntityOfPage } = {}) {
   const education = profile.education;
@@ -516,7 +526,6 @@ export function personJsonLd(profile, { mainEntityOfPage } = {}) {
       name: `${item.degree} in ${item.field}`,
       recognizedBy: { "@type": "CollegeOrUniversity", name: item.institution.alternateNames?.[0] ?? item.institution.name },
     })),
-    worksFor: { "@type": "Organization", name: "Atriveo", url: "https://atriveo.com" },
     knowsAbout: [...specializationsNames(profile), ...profile.skills.map(skill => skill.name)],
     sameAs: profile.profile.profiles.map(link => link.url),
     subjectOf: { "@type": "WebPage", url: PROFILE_PAGE, name: "Full professional profile" },

@@ -39,7 +39,7 @@ Contact: katishay@gmail.com
 - Accolite CI/CD: Jenkins, Docker and Kubernetes for 20 engineers, deploys from 6 hours to 90 seconds, 20+ releases a month. In-house, an ERP onboarding module for 3,000 employees.
 - Stony Brook: a research platform that grew to about 1,000 daily users, with Kafka and FastAPI on Google Cloud.
 - Wake Forest CAIR: tumor segmentation from about 3 hours to 2 minutes per scan across a 10K+ MRI study corpus.
-- Atriveo: 1,000+ active users and 2K+ daily queries at 99.9% uptime on Cloudflare Workers. The Chrome extension holds a 5.0-star rating and captures applications from 20+ ATS platforms. Ingestion processes 1K+ new job postings a day and filters out 75% of the noise.
+- Atriveo: 1,000+ active users and 2K+ daily queries at 99.9% uptime on Cloudflare Workers. The Chrome extension holds a 5.0-star rating and captures applications from 60 job sites (25 applicant tracking platforms and 35 company career sites). Ingestion processes 1K+ new job postings a day and filters out 75% of the noise.
 
 ## Education
 

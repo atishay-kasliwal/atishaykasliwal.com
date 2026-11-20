@@ -198,6 +198,7 @@ function render(profile) {
         ],
       },
       profile.personJsonLd,
+      profile.atriveoJsonLd,
       {
         "@type": "ItemList",
         "@id": `${p.urls.profilePage}#projects`,
@@ -382,9 +383,9 @@ function llmsOpenSource(profile) {
 
 export async function buildProfilePage() {
   const stamp = Date.now();
-  const { buildProfile, personJsonLd } = await import(`${pathToFileURL(path.join(ROOT, "src/profile/build.js")).href}?t=${stamp}`);
+  const { buildProfile, personJsonLd, atriveoJsonLd } = await import(`${pathToFileURL(path.join(ROOT, "src/profile/build.js")).href}?t=${stamp}`);
   const profile = buildProfile();
-  const html = render({ ...profile, personJsonLd: personJsonLd(profile) });
+  const html = render({ ...profile, personJsonLd: personJsonLd(profile), atriveoJsonLd: atriveoJsonLd() });
 
   const outDir = path.join(ROOT, "profile");
   fs.rmSync(outDir, { recursive: true, force: true });

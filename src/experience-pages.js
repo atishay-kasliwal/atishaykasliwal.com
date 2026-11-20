@@ -159,7 +159,7 @@ export const experiencePages = [
     lede:
       "Three years as a Senior Software Developer, building production microservices across fintech, telecom and commerce, at a company that, partway through, became part of Bounteous. The systems and the uptime number stayed the same either way.",
     spec: [
-      { label: "Where", html: "<b>Accolite</b> · became part of Bounteous in 2021" },
+      { label: "Where", html: "<b>Accolite</b> · later part of Bounteous" },
       { label: "Dates", html: "<b>August 2021</b> – August 2024" },
     ],
     stats: [
