@@ -53,7 +53,7 @@ export async function validatePhotography({ home, page, entries, dist }) {
       // Width and height describe the src shown (a variant) at the original's aspect ratio.
       const width = Number(attribute(image, "width"));
       const height = Number(attribute(image, "height"));
-      assert.ok(width <= photo.width && width <= 2000, `${photo.src}: width ${width} exceeds the variant cap`);
+      assert.ok(width <= photo.width && width < 2000, `${photo.src}: width ${width} exceeds the variant cap`);
       assert.ok(Math.abs(width / height - photo.width / photo.height) < 0.01, `${photo.src}: aspect ratio changed`);
       assert.equal(attribute(image, "loading"), record === page && index === Math.floor(photographs.length / 2) ? "eager" : "lazy");
       if (photoVariants(photo).length) {

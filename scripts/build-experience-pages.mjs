@@ -54,9 +54,9 @@ function structuredData(entry) {
 // The screen shows at most ~600px wide on desktop and the full content width on phones, so a
 // 720px variant serves most visits; the original stays in the srcset for high-density screens.
 const SCREEN_VARIANT_WIDTH = 720;
-// Larger originals are served as a 2000px variant instead (the slot is at most 1232px wide), so no
-// srcset candidate is oversized for high-density screens' needs.
-const SCREEN_MAX_WIDTH = 2000;
+// Larger originals are served as a 1920px variant instead (the slot is at most 1232px wide), which
+// keeps every srcset candidate under the 2000px "oversized image" threshold.
+const SCREEN_MAX_WIDTH = 1920;
 const SCREEN_SIZES = "(max-width: 700px) calc(100vw - 36px), min(1232px, calc(100vw - 48px))";
 
 async function addScreenVariants(entry) {

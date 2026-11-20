@@ -29,9 +29,10 @@ export const photographyPage = {
   lastModified: "2026-09-28",
   socialImage: "/photography/social/manhattan-skyline-at-dusk.jpg",
 };
-// 2000 px covers the enlarged view (58vw) on 2x laptop screens; the originals stay the
-// ImageObject contentUrl and image-sitemap entries, so image search still gets full resolution.
-export const photographyWidths = [320, 640, 960, 1200, 1600, 2000];
+// 1920 px covers the enlarged view (58vw) on 2x laptop screens and stays under the 2000 px
+// "oversized image" threshold; the originals stay the ImageObject contentUrl and image-sitemap
+// entries, so image search still gets full resolution.
+export const photographyWidths = [320, 640, 960, 1200, 1600, 1920];
 export const photographyCardSizes = "(max-height: 460px) and (min-width: 500px) 180px, (max-height: 670px) and (min-width: 701px) 225px, (max-height: 600px) and (max-width: 700px) 57vw, (max-width: 459px) 74vw, (max-width: 700px) 340px, (min-width: 1700px) 320px, 270px";
 export const photographyDeckSizes = "(max-height: 460px) and (min-width: 500px) calc((100svh - 180px) * 4 / 3), (max-width: 700px) 78vw, (max-width: 1107px) 56vw, 620px";
 const previewSizes = "(max-width: 700px) calc(100vw - 20px), 736px";
