@@ -1,6 +1,13 @@
 import { api, ApiError, formatBytes, h, nav, shortSha, time } from "../common.js";
 
 const $ = id => document.getElementById(id);
+
+// The full PDF check runs here in the browser (the Pages Function only screens the file, to stay
+// within the Workers Free plan's CPU limit). pdf.js is large, so it loads on the first upload.
+let checker = null;
+const loadChecker = () => (checker ??= import("../../resume-core/report.js"));
+let context = null;
+const loadContext = async () => (context ??= await api("/api/admin/resume/context"));
 const notice = $("notice");
 let state = null;
 
@@ -325,7 +332,13 @@ async function openReview(id, { focusPublish = false } = {}) {
     recheck.addEventListener("click", async () => {
       recheck.disabled = true;
       try {
-        await api(`/api/admin/resume/versions/${version.id}/recheck`, { method: "POST" });
+        const [{ recheckText }, { profile, reviewItems }] = await Promise.all([loadChecker(), loadContext()]);
+        const consistency = recheckText(report.text ?? [], { profile, reviewItems });
+        await api(`/api/admin/resume/versions/${version.id}/recheck`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ consistency }),
+        });
         await load();
         await openReview(version.id);
       } catch (error) {
@@ -373,10 +386,15 @@ async function upload(file) {
   if (!file) return;
   if (!/\.pdf$/i.test(file.name) || (file.type && file.type !== "application/pdf")) return say("Only PDF files can be uploaded.");
   if (file.size > state.limits.maxBytes) return say(`That file is ${formatBytes(file.size)}; the limit is ${formatBytes(state.limits.maxBytes)}.`);
-  say(`Uploading and checking ${file.name}…`, "info");
-  const form = new FormData();
-  form.append("file", file, file.name);
+  say(`Checking ${file.name}…`, "info");
   try {
+    const [{ checkResume }, { profile, reviewItems }] = await Promise.all([loadChecker(), loadContext()]);
+    const report = await checkResume(new Uint8Array(await file.arrayBuffer()), { filename: file.name, contentType: file.type, profile, reviewItems });
+    if (!report.ok) throw new ApiError("Rejected", 422, { validation: report.validation });
+    say(`Uploading ${file.name}…`, "info");
+    const form = new FormData();
+    form.append("file", file, file.name);
+    form.append("report", JSON.stringify(report));
     const result = await api("/api/admin/resume/versions", { method: "POST", body: form });
     say(result.duplicate ? `This exact file is already stored as ${result.version.id}.` : `Stored as ${result.version.id}. Review it below, then publish when ready.`, "ok");
     await load();

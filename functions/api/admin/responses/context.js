@@ -13,7 +13,7 @@ export const onRequestGet = adminRoute(async ({ request, env }) => {
     canonicalProfile(env, request),
     schemaResponse.ok ? schemaResponse.json() : null,
     activeResume(env.DB).catch(() => null),
-    bundledResume(env, request),
+    bundledResume(),
   ]);
   return json({
     checkedAt: new Date().toISOString(),

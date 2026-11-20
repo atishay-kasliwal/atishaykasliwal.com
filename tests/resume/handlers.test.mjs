@@ -16,7 +16,9 @@ import { onRequest as publicResume } from "../../functions/Atishay-Kasliwal-Resu
 import { onRequest as publicProfile } from "../../functions/api/profile.json.js";
 import { validateSchema } from "../../src/profile/schema-check.js";
 import { sha256Hex } from "../../src/resume-core/constants.js";
-import { accessFixture, bundledPdf, consistentResumeLines, makePdf, memoryAssets, memoryD1, memoryR2, profileSchema, SITE } from "./helpers.mjs";
+import { checkResume, recheckText } from "../../src/resume-core/report.js";
+import { reviewItems } from "../../src/profile/review.js";
+import { accessFixture, bundledPdf, canonicalProfile, consistentResumeLines, makePdf, memoryAssets, memoryD1, memoryR2, profileSchema, SITE } from "./helpers.mjs";
 
 const env = { ACCESS_TEAM_DOMAIN: "team.example", ACCESS_AUD: "aud-1", ADMIN_EMAILS: "owner@example.com" };
 let access;
@@ -50,12 +52,16 @@ async function call(handler, path, { email = "owner@example.com", method = "GET"
   return handler({ request, env: { ...env }, params, data: {}, next: async () => new Response("static page", { headers: { "Content-Type": "text/html" } }) });
 }
 
-const pdfForm = (bytes, name = "resume.pdf", type = "application/pdf") => {
+// As the admin page does: the full check runs first (in the browser), and its report goes with the file.
+const browserReport = (bytes, name = "resume.pdf", type = "application/pdf") => checkResume(bytes, { filename: name, contentType: type, profile: canonicalProfile(), reviewItems });
+const pdfForm = async (bytes, name = "resume.pdf", type = "application/pdf", report) => {
   const form = new FormData();
   form.append("file", new File([bytes], name, { type }));
+  const value = report === undefined ? await browserReport(bytes, name, type) : report;
+  if (value !== null) form.append("report", typeof value === "string" ? value : JSON.stringify(value));
   return form;
 };
-const upload = (bytes, options = {}) => call(uploadRoute, "/api/admin/resume/versions", { method: "POST", body: pdfForm(bytes, options.name, options.type), ...options });
+const upload = async (bytes, options = {}) => call(uploadRoute, "/api/admin/resume/versions", { method: "POST", body: await pdfForm(bytes, options.name, options.type, options.report), ...options });
 const publish = (id, body, options = {}) =>
   call(publishRoute, `/api/admin/resume/versions/${id}/publish`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" }, params: { id }, ...options });
 
@@ -202,14 +208,30 @@ test("invalid uploads are rejected and audited, and nothing is stored", async ()
   const exe = await upload(Uint8Array.from([0x4d, 0x5a, ...new Uint8Array(4096)]), { name: "resume.pdf" });
   assert.equal(exe.status, 422);
   assert.match((await exe.json()).validation.errors.join(" "), /executable/);
-  const script = await upload(makePdf(consistentResumeLines(), { catalogExtra: "/OpenAction 6 0 R ", extraObjects: ["<< /S /JavaScript /JS (app.alert(1)) >>"] }));
+  // The server screens the file itself: a forged "passing" report does not get a script through.
+  const scripted = makePdf(consistentResumeLines(), { catalogExtra: "/OpenAction 6 0 R ", extraObjects: ["<< /S /JavaScript /JS (app.alert(1)) >>"] });
+  const forged = { ...(await browserReport(makePdf(consistentResumeLines()))), sha256: await sha256Hex(scripted) };
+  const script = await upload(scripted, { report: forged });
   assert.equal(script.status, 422);
+  assert.match((await script.json()).validation.errors.join(" "), /JavaScript/);
   const huge = await call(uploadRoute, "/api/admin/resume/versions", { method: "POST", body: "x", headers: { "Content-Length": String(6 * 1024 * 1024) } });
   assert.equal(huge.status, 413);
   assert.equal(env.RESUMES.objects.size, before);
   const state = await (await call(stateRoute, "/api/admin/resume")).json();
   assert.equal(state.versions.length, 0);
   assert.equal(state.audit.filter(entry => entry.action === "upload_rejected").length, 3);
+});
+
+test("an upload needs the browser's report for that exact file, and its counts are recomputed", async () => {
+  const bytes = makePdf([...consistentResumeLines(), "Extra line for a distinct file"]);
+  assert.equal((await upload(bytes, { report: null })).status, 400, "no report");
+  assert.equal((await upload(bytes, { report: "{" })).status, 400, "not JSON");
+  const other = await browserReport(makePdf(consistentResumeLines()));
+  assert.equal((await upload(bytes, { report: other })).status, 400, "report for a different file");
+  const report = await browserReport(bytes);
+  assert.equal((await upload(bytes, { report: { ...report, text: "not lines" } })).status, 400, "malformed text");
+  assert.equal((await upload(bytes, { report: { ...report, validation: { ...report.validation, info: { ...report.validation.info, pages: 99 } } } })).status, 400, "impossible page count");
+  assert.equal(env.RESUMES.objects.size, 0, "nothing stored for a bad report");
 });
 
 test("upload stores a private, unpublished version with its report", async () => {
@@ -220,6 +242,8 @@ test("upload stores a private, unpublished version with its report", async () =>
   assert.equal(first.active, false);
   assert.ok(env.RESUMES.objects.has(`versions/${first.sha256}.pdf`));
   assert.ok(first.report.consistency.items.some(item => item.id === "stony-brook-research-end-date"), "outdated Present is flagged on upload");
+  assert.equal(first.report.validation.checkedIn, "browser");
+  assert.ok(first.report.validation.serverChecks.some(check => check.id === "active-content" && check.ok), "the server's own screen is recorded");
 
   const again = await upload(bundledPdf());
   assert.equal(again.status, 200);
@@ -280,9 +304,13 @@ test("the stable public URL, the profile API and caching follow the published ve
 });
 
 test("a new version replaces it, and an earlier one can be restored", async () => {
-  const response = await upload(makePdf(consistentResumeLines()), { name: "regenerated.pdf" });
+  // A report that under-counts its own conflicts is stored with the real count.
+  const bytes = makePdf(consistentResumeLines());
+  const report = await browserReport(bytes, "regenerated.pdf");
+  const response = await upload(bytes, { name: "regenerated.pdf", report: { ...report, consistency: { ...report.consistency, summary: { conflict: 0, unverified: 0, info: 0 } } } });
   assert.equal(response.status, 201);
   second = (await response.json()).version;
+  assert.equal(second.report.consistency.summary.unverified, report.consistency.summary.unverified);
   assert.equal(second.report.consistency.summary.conflict, 0);
   assert.equal((await publish(second.id, { sha256: second.sha256 })).status, 200, "no conflicts, no acknowledgement needed");
   let pdf = await publicResume({ request: new Request(`${SITE}/Atishay-Kasliwal-Resume.pdf`), env });
@@ -307,8 +335,13 @@ test("a new version replaces it, and an earlier one can be restored", async () =
 });
 
 test("re-checking replaces the report without publishing anything", async () => {
-  const response = await call(recheckRoute, `/api/admin/resume/versions/${second.id}/recheck`, { method: "POST", params: { id: second.id } });
+  const { version } = await (await call(versionRoute, `/api/admin/resume/versions/${second.id}`, { params: { id: second.id } })).json();
+  const consistency = recheckText(version.report.text, { profile: canonicalProfile(), reviewItems });
+  const recheck = body => call(recheckRoute, `/api/admin/resume/versions/${second.id}/recheck`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" }, params: { id: second.id } });
+  assert.equal((await recheck({ consistency: { items: [{ id: "x", severity: "nonsense", message: "m" }] } })).status, 400);
+  const response = await recheck({ consistency });
   assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).version.report.consistency.summary, consistency.summary);
   const state = await (await call(stateRoute, "/api/admin/resume")).json();
   assert.equal(state.active.id, first.id);
   assert.equal(state.audit[0].action, "recheck");

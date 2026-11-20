@@ -32,16 +32,22 @@ Caching: Function responses are not cached at Cloudflare's edge. The PDF is sent
 
 Versions are never deleted, so any earlier one can be restored.
 
-## Validation (server side)
+## Validation
 
-`src/resume-core/pdf.js` runs in the Function on every upload. The browser's checks are only a convenience. An upload is rejected (422, audited, nothing stored) unless it:
+The site runs on the Workers **Free** plan, whose Functions get about 10 ms of CPU per request. Reading a PDF's text with pdf.js takes 10–120 ms, so the check is split:
+
+**In the browser, before uploading** (`src/resume-core/report.js`: `pdf.js`, then `consistency.js`). The admin page loads pdf.js on the first upload, checks the file in full, and refuses it there if it fails. A passing file is uploaded together with the report (validation, extracted text, consistency).
+
+**In the Function, on every upload** (`src/resume-core/screen.js`, about 1 ms). It never trusts the browser for safety. An upload is rejected (422, audited, nothing stored) unless the file:
 
 - is 1 KB to 5 MB, named `.pdf`, and declared `application/pdf` (or unspecified)
 - is not an executable, archive or script (magic bytes), and starts with a `%PDF-1.x`/`2.0` header with an end-of-file marker and cross-reference
 - is not encrypted
-- has no active content: JavaScript, launch actions, embedded files, rich media, XFA, form submission, remote go-to or automatic actions. Hex-escaped names and compressed object streams are scanned too, and pdf.js confirms no scripts or attachments.
-- parses in pdf.js (with `isEvalSupported: false`) and has 1–6 pages
-- yields at least 300 characters of text, so scanned or image-only PDFs are refused
+- has no active content: JavaScript, launch actions, embedded files, rich media, XFA, form submission, remote go-to or automatic actions. Hex-escaped names and compressed object streams are scanned too.
+
+The browser's report is then accepted only if it describes this exact file (same SHA-256 and size) and is well formed: passing validation, 1–6 pages, at least 300 characters of text, at most 600 kept lines. The Function recomputes the conflict counts from the findings, so the publish gate never relies on the browser's numbers. A missing or malformed report is refused (400). The browser additionally confirms, with pdf.js, that the PDF parses (`isEvalSupported: false`) and has no scripts or attachments; only the signed-in admin can upload, so the text and consistency it reports are trusted as the admin's own.
+
+**At build time** `scripts/build-resume-report.mjs` checks the bundled PDF against the profile and writes `functions/_generated/bundled-resume.js`, so the dashboard shows its report without parsing a PDF per request. **Re-check** runs in the browser too, from the version's kept text, and sends only the new consistency report.
 
 A request body over the limit is refused (413) before it is read.
 
@@ -103,7 +109,7 @@ These change Cloudflare resources and are not run by the deploy workflow:
 3. In Zero Trust → Access, add `atishaykasliwal.com/admin/*` and `atishaykasliwal.com/api/admin/*` to the existing application whose audience is `ACCESS_AUD` (same allow policy), so the AUD the Functions verify matches.
 4. Deploy as usual. `wrangler.jsonc` binds `RESUMES`; the deploy fails if the bucket does not exist, so do step 1 first.
 
-PDF parsing runs in the Function and uses roughly 50–150 ms of CPU for a one-page résumé. That fits the Workers Paid plan. The Free plan's 10 ms CPU limit would stop uploads (serving is unaffected).
+Everything runs on the Workers Free plan: PDF parsing happens in the browser and at build time, never in a Function (see Validation).
 
 ## Local checks
 

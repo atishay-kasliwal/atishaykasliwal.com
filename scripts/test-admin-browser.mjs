@@ -31,6 +31,7 @@ const realFetch = globalThis.fetch;
 globalThis.fetch = (input, init) => String(input) === "https://team.example/cdn-cgi/access/certs" ? Promise.resolve(Response.json(access.certs)) : realFetch(input, init);
 const routes = [
   [/^\/api\/admin\/resume$/, "api/admin/resume/index.js"],
+  [/^\/api\/admin\/resume\/context$/, "api/admin/resume/context.js"],
   [/^\/api\/admin\/resume\/versions$/, "api/admin/resume/versions.js"],
   [/^\/api\/admin\/resume\/versions\/([^/]+)\/file$/, "api/admin/resume/versions/[id]/file.js"],
   [/^\/api\/admin\/resume\/versions\/([^/]+)\/publish$/, "api/admin/resume/versions/[id]/publish.js"],

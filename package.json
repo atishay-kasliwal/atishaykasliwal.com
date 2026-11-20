@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/asset-versions.mjs && vite build && node scripts/build-seo-report.mjs",
+    "build": "node scripts/asset-versions.mjs && vite build && node scripts/build-seo-report.mjs && node scripts/build-resume-report.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "validate:seo": "node scripts/validate-seo.mjs",
     "validate:profile": "node scripts/validate-profile.mjs",

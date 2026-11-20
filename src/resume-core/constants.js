@@ -15,6 +15,8 @@ export const LIMITS = {
   minTextChars: 300,
   // Decompressed bytes scanned for active content, so a crafted stream cannot exhaust memory.
   maxInflatedBytes: 32 * 1024 * 1024,
+  // Lines of extracted text kept with a version, so it can be re-checked without the PDF parser.
+  keptLines: 600,
 };
 
 export const versionIdOf = sha256 => sha256.slice(0, 16);
