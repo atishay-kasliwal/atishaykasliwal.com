@@ -118,13 +118,14 @@ export default defineConfig(async () => {
           async handler(html) {
             if (!html.includes("<!-- github:column -->")) return html;
             const stamp = Date.now();
-            const { renderGithubColumn, renderGithubFact } = await import(
+            const { renderGithubColumn, renderGithubFact, renderGithubHeroFact } = await import(
               `${pathToFileURL(path.resolve("src/github-activity.js")).href}?t=${stamp}`
             );
             const activity = JSON.parse(fs.readFileSync(path.resolve("src/github-activity.json"), "utf8"));
             return html
               .replace("<!-- github:column -->", renderGithubColumn(activity))
-              .replace("<!-- github:fact -->", renderGithubFact(activity));
+              .replace("<!-- github:fact -->", renderGithubFact(activity))
+              .replace("<!-- github:hero -->", renderGithubHeroFact(activity));
           },
         },
       },

@@ -249,6 +249,37 @@ h3 {
 .hero-quote-mobile {
   display: none;
 }
+/* First-screen facts under the headline: the info sheet's spec labels, laid out in a row. */
+.hero-facts {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  gap: 8px clamp(28px, 4vw, 64px);
+  margin: 28px 0 0;
+}
+.hero-facts div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.hero-facts dt {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.hero-facts dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.hero-facts a:hover {
+  color: #fff;
+}
+.hero-facts .arrow {
+  color: var(--accent);
+}
 /* Keep the headline centered while the quote and scroll cue sit near the work. */
 @media (min-width: 701px) and (min-height: 741px) {
   .portfolio > .intro {
@@ -260,6 +291,17 @@ h3 {
     align-self: center;
   }
 }
+/* The headline and its facts read as one block: centered together in the free space. */
+.portfolio > .intro:has(> .hero-facts) {
+  grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr) auto auto;
+}
+.intro:has(> .hero-facts) > .statements {
+  grid-row: 2;
+  align-self: auto;
+}
+.intro:has(> .hero-facts) > .hero-facts { grid-row: 3; }
+.intro:has(> .hero-facts) > .hero-quote-row { grid-row: 5; }
+.intro:has(> .hero-facts) > .scroll-cue { grid-row: 6; }
 /* Scroll story (desktop; see scroll-story.js). Everywhere else only the first statement shows. */
 .statement + .statement,
 .scroll-cue {
@@ -1853,6 +1895,18 @@ html.scroll-story .scroll-cue {
   }
   .hero-quote-mobile {
     display: inline;
+  }
+  .hero-facts {
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: 6px 22px;
+    margin-top: 18px;
+  }
+  .hero-facts dd {
+    font-size: 13px;
+  }
+  .hero-fact-more {
+    display: none;
   }
   .intro-mark {
     font-size: 24px;
