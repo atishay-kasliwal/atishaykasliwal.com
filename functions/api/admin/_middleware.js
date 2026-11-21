@@ -3,8 +3,9 @@ import { json, PRIVATE_HEADERS } from "../../_lib/admin.js";
 
 // Backstop for every route under /api/admin/: each handler also checks through adminRoute, but a
 // route added later without it still cannot answer an unauthenticated request.
-// The résumé API also takes the dashboard's service token; its handlers check that again themselves.
-const SERVICE_PATHS = /^\/api\/admin\/resume(?:\/|$)/;
+// The résumé and card thumbnail APIs also take the dashboard's service token; their handlers check
+// that again themselves.
+const SERVICE_PATHS = /^\/api\/admin\/(?:resume|thumbnails)(?:\/|$)/;
 export async function onRequest(context) {
   const allowService = SERVICE_PATHS.test(new URL(context.request.url).pathname);
   const admin = await requireAdmin(context.request, context.env, { allowService });

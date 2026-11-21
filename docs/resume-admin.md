@@ -4,7 +4,7 @@ One private page behind Cloudflare Access, until résumé upload moves to Admin:
 
 - `/admin/resume/`: upload, preview, validate, publish and restore the résumé PDF without a rebuild.
 
-Everything else is in Admin at admin.atishaykasliwal.com (the portfolio-intelligence repository): photos (upload, rotate, small copies, hide, delete), the SEO report and its site files, GitHub feedback, and the response inspector. The old `/admin/responses/`, `/photography/admin/` and `/photography/admin/seo/` pages were removed on 2026-11-20 and answer 404 after sign-in; `/photography/admin/seo/report.json` stays, because Admin reads it.
+Everything else is in Admin at admin.atishaykasliwal.com (the portfolio-intelligence repository): photos (upload, rotate, small copies, hide, delete), card thumbnails ([card-thumbnails.md](card-thumbnails.md)), the SEO report and its site files, GitHub feedback, and the response inspector. The old `/admin/responses/`, `/photography/admin/` and `/photography/admin/seo/` pages were removed on 2026-11-20 and answer 404 after sign-in; `/photography/admin/seo/report.json` stays, because Admin reads it.
 
 The canonical profile (`src/profile/`, see [profile-architecture.md](profile-architecture.md)) stays the only source of professional facts. A PDF is checked against it and never changes it.
 
@@ -108,7 +108,8 @@ npx wrangler pages dev dist  # public routes against local D1/R2; admin routes n
 ## The admin dashboard's service token
 
 The admin at admin.atishaykasliwal.com calls the résumé API, the photo library API
-(`/api/photography/admin/photos*` and `/upload`), the GitHub feedback admin API and
+(`/api/photography/admin/photos*` and `/upload`), the card thumbnail API (`/api/admin/thumbnails*`,
+see [card-thumbnails.md](card-thumbnails.md)), the GitHub feedback admin API and
 `/photography/admin/seo/report.json` server to server with a Cloudflare Access service token.
 `requireAdmin` accepts that token only on those routes (they opt in with `allowService`), only
 when its `common_name` equals `ADMIN_SERVICE_TOKEN_ID` in `wrangler.jsonc` (empty means none is

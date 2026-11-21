@@ -31,7 +31,7 @@ export function renderCarouselTrack(items, { photoOnly = false, eagerFirst = fal
         const element = item.caseStudy && !photoOnly ? "a" : "button";
         const link = element === "a" ? ` href="${item.caseStudy}" draggable="false"` : "";
         return `
-    <${element} class="project-card ${item.theme}"${link} data-index="${index}" data-position="${copy * count + index}"
+    <${element} class="project-card ${item.theme}"${link}${item.id ? ` data-card="${item.id}"` : ""} data-index="${index}" data-position="${copy * count + index}"
       tabindex="-1" ${hidden ? 'aria-hidden="true"' : ""}
       aria-label="${label}">
       <span class="project-art">${art}</span>

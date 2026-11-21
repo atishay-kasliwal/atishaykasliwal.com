@@ -5,6 +5,7 @@
 // Merged counts come from the verified GitHub snapshot (npm run profile:contributions), the same
 // file the canonical profile and /api/profile.json read, so the cards can never claim more.
 import contributions from "./profile/open-source-contributions.json" with { type: "json" };
+import { withThumbnails } from "./card-thumbnails.js";
 
 const AUTHOR = "atishay-kasliwal";
 const mergedIn = repo => contributions.pullRequests.filter(pr => pr.repository === repo && pr.state === "merged").length;
@@ -14,6 +15,7 @@ const entry = ({ slug, name, repo, stack, description, featured }) => {
   const src = `/open-source/cards/${slug}.webp`;
   const img = `<img src="${src}" srcset="/open-source/cards/${slug}-640.webp 640w, ${src} 1080w" sizes="305px" width="1080" height="664" alt="" decoding="async" />`;
   return {
+    slug,
     name,
     category: `${repo} · ${merged} merged`,
     tag: "OSS",
@@ -28,7 +30,7 @@ const entry = ({ slug, name, repo, stack, description, featured }) => {
   };
 };
 
-export const openSource = [
+export const openSource = withThumbnails("open-source", [
   entry({ slug: "keycloak", name: "Keycloak", repo: "keycloak/keycloak", stack: "Java · TypeScript",
     description: "Open source identity and access management.", featured: "Name the masthead options toggle shown on narrow screens" }),
   entry({ slug: "pr-agent", name: "PR-Agent", repo: "The-PR-Agent/pr-agent", stack: "Python",
@@ -51,4 +53,4 @@ export const openSource = [
     description: "Math and statistics tools for LLMs over MCP.", featured: "Fix median sorting as strings and report division by zero as an error" }),
   entry({ slug: "couch-tv", name: "couch-tv", repo: "Seagey/couch-tv", stack: "Python · JavaScript · Kotlin",
     description: "Your own Google TV home screen and phone remote.", featured: "The build fetches the TV's own icon for apps with no bundled logo" }),
-];
+], { art: true });
