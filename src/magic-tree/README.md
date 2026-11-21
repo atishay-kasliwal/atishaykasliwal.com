@@ -12,6 +12,8 @@ Changes from upstream, all in `scene/index.ts`:
   canvas and down where the ground was;
 - `SceneOptions` (`qrVersion`, `treeSeed`, with matching parameters in `qr.ts` and `canopy.ts`), so
   one tree can stand over several links' codes of the same size;
+- `setPaletteTurn` (and `turnLeaves` in `canopy.ts`): a season change where the leaves turn a few
+  at a time in random order instead of all at once;
 - `setFallingLeaves` (and its options in `motes.ts`): leaf-sized falling leaves that break off
   the crown and flutter down, instead of small motes drifting over the plot;
 - a two-storey option in `species.ts` and `tree.ts`: the crown raised on a taller trunk, with a

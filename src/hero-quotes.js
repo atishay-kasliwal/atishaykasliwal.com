@@ -1,8 +1,8 @@
 // Rotates the homepage's maintainer quotes (index.html, .hero-quotes): one at a time, a new one
-// every 7 seconds. Pauses while hovered or focused, and with the pause button; with reduced motion
-// it never moves on its own. The dots pick a quote directly. Each automatic change fires
-// "hero-side:advance" on the page, which moves the QR tree on with it (src/hero-tree.js).
-const ROTATE_MS = 7000;
+// every 5 seconds, cross-fading. Pauses while hovered or focused, and with the pause button; with
+// reduced motion it never moves on its own. The dots pick a quote directly. Each automatic change
+// fires "hero-side:advance" on the page, which moves the QR tree on with it (src/hero-tree.js).
+const ROTATE_MS = 5000;
 
 export function setupHeroQuotes(root = document.querySelector("[data-hero-quotes]")) {
   if (!root) return;
@@ -14,11 +14,23 @@ export function setupHeroQuotes(root = document.querySelector("[data-hero-quotes
   let paused = reduced;
   let hovered = false;
 
+  // All quotes share one spot (style.css, .is-crossfade), so the card keeps the height of the
+  // longest and one fades into the next. The ones not showing can't be reached or read out.
+  const setActive = (quote, active) => {
+    quote.hidden = false;
+    quote.classList.toggle("is-active", active);
+    quote.inert = !active;
+    if (active) quote.removeAttribute("aria-hidden");
+    else quote.setAttribute("aria-hidden", "true");
+  };
+  quotes.forEach((quote, i) => setActive(quote, i === index));
+  quotes[0].parentElement.classList.add("is-crossfade");
+
   const show = next => {
-    quotes[index].hidden = true;
+    setActive(quotes[index], false);
     dots[index].removeAttribute("aria-current");
     index = (next + quotes.length) % quotes.length;
-    quotes[index].hidden = false;
+    setActive(quotes[index], true);
     dots[index].setAttribute("aria-current", "true");
   };
   const setPaused = value => {

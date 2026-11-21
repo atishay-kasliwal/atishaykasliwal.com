@@ -225,6 +225,18 @@ export class MagicTreeScene {
     this.motes.applyPalette(palette);
   }
 
+  /**
+   * Site addition: a season change. The ground, grass, bark and falling leaves take `mixed` (the
+   * caller's even blend of the two); the canopy's leaves turn from `from` to `to` a few at a time.
+   */
+  setPaletteTurn(from: Palette, to: Palette, progress: number, mixed: Palette) {
+    this.palette = mixed;
+    this.plot.applyPalette(mixed);
+    this.canopy.applyPalette(mixed);
+    this.canopy.turnLeaves(from, to, progress);
+    this.motes.applyPalette(mixed);
+  }
+
   setMode(mode: ViewMode) {
     this.morphTarget = mode === 'code' ? 1 : 0;
   }

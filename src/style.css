@@ -2727,6 +2727,26 @@ html.scroll-story .portfolio {
   .hero-quote[hidden] {
     display: none;
   }
+  /* With JavaScript (hero-quotes.js) every quote sits in one cell, the card as tall as the longest,
+     and they cross-fade: the old one leaves as the new one arrives. */
+  .hero-quote-stage.is-crossfade {
+    display: grid;
+  }
+  .is-crossfade > .hero-quote {
+    grid-area: 1 / 1;
+    align-self: end;
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease, visibility 0s linear 0.6s;
+  }
+  .is-crossfade > .hero-quote.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s, visibility 0s;
+  }
   .hero-quote {
     display: grid;
     gap: 10px;
@@ -2857,6 +2877,10 @@ html.scroll-story .portfolio {
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--muted);
+    transition: opacity 0.35s ease;
+  }
+  .hero-tree-label.is-fading {
+    opacity: 0;
   }
   .hero-tree-label b {
     font-weight: 500;
@@ -2874,5 +2898,8 @@ html.scroll-story .portfolio {
   to { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-quote { animation: none; }
+  .hero-quote,
+  .is-crossfade > .hero-quote,
+  .is-crossfade > .hero-quote.is-active,
+  .hero-tree-label { animation: none; transition: none; }
 }

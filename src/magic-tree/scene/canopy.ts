@@ -16,6 +16,8 @@ export interface Canopy {
   /** 0 = grown tree, 1 = settled into the code. */
   setMorph: (t: number, time: number) => void;
   applyPalette: (p: Palette) => void;
+  /** Site addition: leaves turn from `from` to `to` a few at a time as `progress` goes 0 → 1. */
+  turnLeaves: (from: Palette, to: Palette, progress: number) => void;
   dispose: () => void;
 }
 
@@ -117,6 +119,30 @@ export function buildCanopy(qr: QrMatrix, palette: Palette, species: Species, se
     );
     if (branches.instanceColor) branches.instanceColor.needsUpdate = true;
     paintedFor = -1; // force a colour rewrite on the next frame
+  };
+
+  // Site addition: when each leaf turns, in random order. A leaf starts at `turnAt` and takes
+  // TURN_SPAN of the progress to change, so at 10% progress about a tenth of the tree has turned,
+  // then a third, a half, and so on, like leaves turning one by one.
+  const TURN_SPAN = 0.25;
+  const rngT = makeRng(seed ^ 0x5ea50);
+  const turnAt = Float32Array.from({ length: leafCount }, () => rngT() * (1 - TURN_SPAN));
+  const turnLeaves = (from: Palette, to: Palette, progress: number) => {
+    if (from.leaf.length !== to.leaf.length) {
+      applyPalette(progress < 0.5 ? from : to);
+      return;
+    }
+    const rngC = makeRng(seed ^ 0x1234abcd); // the same draw as applyPalette: leaf i keeps its slot
+    const a = from.leaf.map((c) => new THREE.Color(c));
+    const b = to.leaf.map((c) => new THREE.Color(c));
+    for (let i = 0; i < leafCount; i++) {
+      const k = Math.floor(rngC() * b.length);
+      const t = smoothstep(clamp01((progress - turnAt[i]) / TURN_SPAN));
+      treeColors[i * 3] = a[k].r + (b[k].r - a[k].r) * t;
+      treeColors[i * 3 + 1] = a[k].g + (b[k].g - a[k].g) * t;
+      treeColors[i * 3 + 2] = a[k].b + (b[k].b - a[k].b) * t;
+    }
+    paintedFor = -1;
   };
 
   const mat4 = new THREE.Matrix4();
@@ -241,5 +267,5 @@ export function buildCanopy(qr: QrMatrix, palette: Palette, species: Species, se
 
   applyPalette(palette);
 
-  return { group, leaves, branches, model, leafCount, setMorph, applyPalette, dispose };
+  return { group, leaves, branches, model, leafCount, setMorph, applyPalette, turnLeaves, dispose };
 }

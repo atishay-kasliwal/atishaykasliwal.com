@@ -3,7 +3,7 @@
 // tree: the résumé follows the calendar (Thanksgiving in November, Christmas in December, and so
 // on), LinkedIn is winter in LinkedIn blue and frost white, GitHub is spring in contribution greens
 // with merged-pull-request purple blossom. The tree keeps its shape; only the code under it changes,
-// and the leaves blend into the next season's colours over a few seconds. Tapping the tree drops the
+// and its leaves turn to the next season's colours a few at a time, over a few seconds. Tapping the tree drops the
 // leaves into the code to scan, and holds it until tapped again. It changes together with the
 // maintainer quotes (src/hero-quotes.js), so it pauses whenever they do.
 // Loaded by src/main.js only on wide screens, after the page has loaded, without reduced motion.
@@ -32,7 +32,8 @@ const TREE = (s => ({ ...s, storeys: 2, heightFactor: s.heightFactor * 1.2, leaf
 // Every link's code at one size (version 6, 41 modules: what the résumé URL needs at level H) and one
 // tree shape over all of them, so the ground, the framing and the tree never move.
 const SCENE = { qrVersion: 6, treeSeed: "atishaykasliwal.com" };
-const BLEND_MS = 3000;
+const BLEND_MS = 3600;
+const LABEL_FADE_MS = 350;
 
 // Colour lists at fixed lengths, so leaf i takes the same slot in every season and can blend.
 const LENGTHS = { leaf: 6, qrLeaf: 3, hedge: 3 };
@@ -91,6 +92,16 @@ export function mountHeroTree(root) {
   };
   show(list[0]);
   requestAnimationFrame(() => scene.resize());
+  // The label fades out, changes, and fades back in (style.css, .is-fading).
+  let labelTimer = 0;
+  const fadeTo = target => {
+    clearTimeout(labelTimer);
+    link.classList.add("is-fading");
+    labelTimer = setTimeout(() => {
+      show(target);
+      link.classList.remove("is-fading");
+    }, LABEL_FADE_MS);
+  };
 
   // The code switches at once (the tree over it stays the same); the colours follow over BLEND_MS.
   let shown = list[0].palette;
@@ -100,7 +111,7 @@ export function mountHeroTree(root) {
     index = (index + 1) % list.length;
     const target = list[index];
     scene.setText(target.href);
-    show(target);
+    fadeTo(target);
     cancelAnimationFrame(blend);
     const from = shown;
     const start = performance.now();
@@ -109,7 +120,8 @@ export function mountHeroTree(root) {
       const t = Math.min(1, (now - start) / BLEND_MS);
       const eased = t * t * (3 - 2 * t);
       // Every other frame is smooth enough for a colour change and halves the repainting.
-      if (t === 1 || frame++ % 2 === 0) scene.setPalette((shown = mix(from, target.palette, eased)));
+      // The leaves turn a few at a time (canopy.ts, turnLeaves); everything else blends evenly.
+      if (t === 1 || frame++ % 2 === 0) scene.setPaletteTurn(from, target.palette, t, (shown = mix(from, target.palette, eased)));
       if (t < 1) blend = requestAnimationFrame(step);
     };
     blend = requestAnimationFrame(step);
