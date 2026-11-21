@@ -1,9 +1,10 @@
 // The homepage's 3D tree (src/magic-tree, MIT, by the Magic Tree contributors). Its plot is a real
-// QR code, rotating between the résumé, LinkedIn and GitHub, and each link is a season of the same
+// QR code, rotating between the résumé, LinkedIn and GitHub, each in its own colours on the same
 // tree: the résumé follows the calendar (Thanksgiving in November, Christmas in December, and so
-// on), LinkedIn is winter in LinkedIn blue and frost white, GitHub is spring in contribution greens
-// with merged-pull-request purple blossom. The tree keeps its shape; only the code under it changes,
-// and its leaves turn to the next season's colours a few at a time, over a few seconds. Tapping the tree drops the
+// on), LinkedIn is LinkedIn blue and white, GitHub its contribution greens with merged-pull-request
+// purple. The tree keeps its shape; only the code under it changes, and its leaves turn to the next
+// colours a few at a time, over a few seconds. The label under it reads "Click and scan for …".
+// Tapping the tree drops the
 // leaves into the code to scan, and holds it until tapped again. It changes together with the
 // maintainer quotes (src/hero-quotes.js), so it pauses whenever they do.
 // Loaded by src/main.js only on wide screens, after the page has loaded, without reduced motion.
@@ -56,10 +57,10 @@ export function seasonFor(date = new Date()) {
 function targets(links) {
   const season = seasonFor();
   return [
-    { id: "resume", label: "Résumé", note: season.name, href: links.resume, palette: even(season.palette), color: season.palette.leaf[0] },
-    { id: "linkedin", label: "LinkedIn", note: "Winter", href: links.linkedin, color: "#378fe9",
+    { id: "resume", label: "Résumé", href: links.resume, palette: even(season.palette), color: season.palette.leaf[0] },
+    { id: "linkedin", label: "LinkedIn", href: links.linkedin, color: "#378fe9",
       palette: even(palette("linkedin", ["#0a66c2", "#378fe9", "#ffffff", "#70b5f9", "#e8f1fb", "#ffffff"], ["#0a2540", "#0b2e52", "#082036"], ["#dfe7ea", "#cfdae0", "#eef3f5"], "#6b737d", "#454c55")) },
-    { id: "github", label: "GitHub", note: "Spring", href: links.github, color: "#40c463",
+    { id: "github", label: "GitHub", href: links.github, color: "#40c463",
       palette: even(palette("github", ["#40c463", "#30a14e", "#216e39", "#8957e5", "#a371f7", "#39d353"], ["#0e4429", "#0b3a22", "#3c1e70"], ["#26a641", "#006d32", "#39d353"], "#8b949e", "#6e7681")) },
   ];
 }
