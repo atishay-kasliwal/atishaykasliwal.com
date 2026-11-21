@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { buildQr, type QrMatrix } from './qr';
 import { buildPlot, type PlotMeshes } from './plot';
 import { buildCanopy, type Canopy } from './canopy';
-import { buildMotes, type Motes } from './motes';
+import { buildMotes, type Motes, type FallingLeaves } from './motes';
 import { CELL, HEDGE_RING, ISO_AZIMUTH, ISO_ELEVATION, TOP_ELEVATION } from './constants';
 import { clamp01, lerp, easeInOutCubic } from './rng';
 import type { Palette } from './palette';
@@ -94,7 +94,7 @@ export class MagicTreeScene {
     this.qr = buildQr(text);
     this.plot = buildPlot(this.qr, this.palette);
     this.canopy = buildCanopy(this.qr, this.palette, this.species);
-    this.motes = buildMotes(this.qr, this.palette);
+    this.motes = buildMotes(this.qr, this.palette, this.leafFall());
     this.world.add(this.plot.group, this.canopy.group, this.motes.points);
 
     const rim = (this.qr.plot + HEDGE_RING * 2) * CELL;
@@ -255,6 +255,21 @@ export class MagicTreeScene {
    */
   /** Zooms the top-down code view out (1 = the plot fills the canvas). Set by ../../hero-tree.js. */
   codeZoomOut = 1;
+  /** Falling leaves that break off the crown (motes.ts); unset keeps the original drifting motes. */
+  private fallingLeaves: Omit<FallingLeaves, 'from'> | null = null;
+
+  private leafFall(): FallingLeaves | undefined {
+    if (!this.fallingLeaves) return undefined;
+    return { ...this.fallingLeaves, from: this.canopy.model.leaves };
+  }
+
+  setFallingLeaves(options: Omit<FallingLeaves, 'from'>) {
+    this.fallingLeaves = options;
+    this.world.remove(this.motes.points);
+    this.motes.dispose();
+    this.motes = buildMotes(this.qr, this.palette, this.leafFall());
+    this.world.add(this.motes.points);
+  }
   /** Settles the code view at the bottom of the canvas, where the ground was, instead of centring it. */
   codeAtBottom = false;
 

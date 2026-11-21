@@ -10,6 +10,8 @@ Changes from upstream, all in `scene/index.ts`:
 - pixel ratio capped at 1.5 and a 1024px shadow map, to stay light on the homepage;
 - `codeZoomOut` and `codeAtBottom`, so the tapped code view can show the code smaller than the
   canvas and down where the ground was;
+- `setFallingLeaves` (and its options in `motes.ts`): leaf-sized falling leaves that break off
+  the crown and flutter down, instead of small motes drifting over the plot;
 - a two-storey option in `species.ts` and `tree.ts`: the crown raised on a taller trunk, with a
   smaller tier of branches and leaves partway up it.
 

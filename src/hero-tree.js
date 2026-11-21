@@ -61,6 +61,7 @@ export function mountHeroTree(root) {
     scene = new MagicTreeScene(canvas, first.href, first.palette, species(first.species));
     scene.codeZoomOut = 2.15; // The tapped code at about the size of the ground, not filling the canvas,
     scene.codeAtBottom = true; // and down where the ground is, just above the label.
+    scene.setFallingLeaves({ count: 80, size: 3.6 }); // Leaf-sized, breaking off the crown.
   } catch {
     return; // No WebGL: the side column keeps only the quotes.
   }
