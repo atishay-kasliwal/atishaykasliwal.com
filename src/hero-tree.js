@@ -68,7 +68,6 @@ export function mountHeroTree(root) {
   const canvas = root.querySelector("canvas");
   const link = root.querySelector("[data-tree-link]");
   const name = root.querySelector("[data-tree-name]");
-  const note = root.querySelector("[data-tree-note]");
   const dot = root.querySelector("[data-tree-dot]");
   const list = targets({ resume: link.dataset.resume, linkedin: link.dataset.linkedin, github: link.dataset.github });
   let index = 0;
@@ -86,7 +85,6 @@ export function mountHeroTree(root) {
   const show = target => {
     link.href = target.href;
     name.textContent = target.label;
-    note.textContent = target.note ? ` · ${target.note}` : "";
     dot.style.background = target.color;
     link.setAttribute("aria-label", `${target.label}: ${target.href}`);
   };
