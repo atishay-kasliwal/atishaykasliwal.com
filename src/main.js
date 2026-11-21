@@ -12,6 +12,7 @@ import { setupScrollStory } from "./scroll-story.js";
 import { createProjectCarousel } from "./project-carousel.js";
 import { setupSectionAccordion } from "./section-accordion.js";
 import { setupClockTimes, setupGithubFeed, setupRelativeTimes } from "./github-feed.js";
+import { setupHeroQuotes } from "./hero-quotes.js";
 
 setupRelativeTimes();
 setupClockTimes();
@@ -73,3 +74,19 @@ setupScrollStory({
 
 setupInfoSheet();
 startIntro();
+
+// The hero's right side (wide screens): rotating maintainer quotes, and the 3D QR tree. The tree
+// pulls in three.js, so it loads only where it is shown, after the page has loaded, and never with
+// reduced motion.
+const wide = matchMedia("(min-width: 1281px) and (min-height: 741px)");
+if (wide.matches) setupHeroQuotes();
+const treeRoot = document.querySelector("[data-hero-tree]");
+const loadTree = () => {
+  if (!treeRoot || !wide.matches || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setTimeout(() => {
+    const run = () => import("./hero-tree.js").then(({ mountHeroTree }) => mountHeroTree(treeRoot)).catch(() => {});
+    "requestIdleCallback" in window ? requestIdleCallback(run, { timeout: 3000 }) : run();
+  }, 1200);
+};
+if (document.readyState === "complete") loadTree();
+else addEventListener("load", loadTree, { once: true });

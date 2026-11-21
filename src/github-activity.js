@@ -134,15 +134,6 @@ export function renderGithubFact(activity) {
         </div>`;
 }
 
-// The homepage's first-screen open source fact: one verified number, linked to its source.
-export function renderGithubHeroFact(activity) {
-  const { mergedUpstream } = activity;
-  return `<div class="hero-fact-github">
-            <dt>Open source</dt>
-            <dd><a href="${escape(mergedUpstream.url)}" ${external}>${number(mergedUpstream.pullRequests)} PRs merged upstream <span class="arrow" aria-hidden="true">↗︎</span></a></dd>
-          </div>`;
-}
-
 // The prerendered block is as old as the last deploy. Fetch the live activity and, if it is newer,
 // re-render in place: the button and panel keep their elements (and listeners, and open state).
 export async function setupLiveGithub() {
@@ -174,10 +165,9 @@ export async function setupLiveGithub() {
   feed.querySelector(".github-feed-list").scrollTop = scroll;
   const updated = [trigger, feed];
 
-  for (const [selector, render] of [[".github-fact", renderGithubFact], [".hero-fact-github", renderGithubHeroFact]]) {
-    const fact = document.querySelector(selector);
-    if (!fact) continue;
-    fresh.innerHTML = render(activity);
+  const fact = document.querySelector(".github-fact");
+  if (fact) {
+    fresh.innerHTML = renderGithubFact(activity);
     fact.innerHTML = fresh.firstElementChild.innerHTML;
     updated.push(fact);
   }
