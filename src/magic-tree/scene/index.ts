@@ -253,6 +253,11 @@ export class MagicTreeScene {
    * Frames the crown in the iso view and, in the top-down view, fits the whole
    * plot into the area *above* the control dock so no UI ever covers a module.
    */
+  /** Zooms the top-down code view out (1 = the plot fills the canvas). Set by ../../hero-tree.js. */
+  codeZoomOut = 1;
+  /** Settles the code view at the bottom of the canvas, where the ground was, instead of centring it. */
+  codeAtBottom = false;
+
   private updateCamera(force = false) {
     // The camera runs on an eased copy of the morph so the swing eases in and
     // out instead of starting and stopping dead.
@@ -276,9 +281,11 @@ export class MagicTreeScene {
 
     const isoFit = fit(this.isoHalfW, this.isoHalfV);
     const halfRim = this.rimUnits / 2;
-    const topFit = fit(halfRim, halfRim);
+    const topFit = fit(halfRim * this.codeZoomOut, halfRim * this.codeZoomOut);
 
     const half = lerp(isoFit.half, topFit.half, t);
+    // How far to slide the code down so its rim sits just above the canvas's bottom edge.
+    const codeDrop = this.codeAtBottom ? Math.max(0, topFit.half - topFit.shift - halfRim * 1.04) * t : 0;
     const shift = lerp(isoFit.shift, topFit.shift, t);
 
     this.camera.left = -half * aspect;
@@ -311,7 +318,7 @@ export class MagicTreeScene {
     this.target
       .copy(this.isoCenter)
       .multiplyScalar(1 - t)
-      .addScaledVector(this.screenUp, -shift);
+      .addScaledVector(this.screenUp, codeDrop - shift);
     this.camera.position.copy(this.target).add(this.offset);
     this.camera.up.set(0, 1, 0);
     this.camera.lookAt(this.target);

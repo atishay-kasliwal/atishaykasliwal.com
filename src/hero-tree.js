@@ -1,12 +1,12 @@
 // The homepage's 3D tree (src/magic-tree, MIT, by the Magic Tree contributors). Its plot is a real
-// QR code, rotating between the résumé, LinkedIn and GitHub, each in its own colours; the résumé
-// tree follows the calendar (Thanksgiving in November, Christmas in December, and so on). Tapping
-// the tree drops the leaves into the code to scan, and pauses the rotation until tapped again.
+// QR code, rotating between the résumé, LinkedIn and GitHub. The résumé tree follows the calendar
+// (fall leaves for Thanksgiving in November, Christmas in December, and so on); LinkedIn wears
+// LinkedIn blue and white, GitHub its contribution greens and merged-pull-request purple. Tapping
+// the tree drops the leaves into the code to scan, and holds it until tapped again. It changes
+// together with the maintainer quotes (src/hero-quotes.js), so it pauses whenever they do.
 // Loaded by src/main.js only on wide screens, after the page has loaded, without reduced motion.
 import { MagicTreeScene } from "./magic-tree/scene/index.ts";
 import { SPECIES } from "./magic-tree/scene/species.ts";
-
-const ROTATE_MS = 15_000;
 
 // The plot stays pale so the code scans; the slab and rim sit dark on the black page.
 const ground = { moduleDark: "#cfcdc4", moduleLight: "#efefec", slab: "#1c1c1a", ground: "#000000" };
@@ -24,6 +24,13 @@ const SEASONS = [
   { name: "Christmas", from: [12, 1], to: [12, 31], species: "pine", palette: palette("christmas", ["#1f6b3a", "#2a8048", "#17552d", "#236f40", "#1f6b3a", "#b3261e"], ["#0d2e18", "#0a2613", "#11381e"], ["#e8eef0", "#dfe7ea", "#f4f8f9"], "#5a4232", "#3d2c21") },
 ];
 
+// Two-storey trees (the crown raised on a bare trunk, src/magic-tree/scene/tree.ts) with a fuller
+// crown: a fifth larger, half again bigger leaves, packed tighter. The leaf count is fixed by the QR code.
+const species = id => {
+  const s = SPECIES[id];
+  return { ...s, storeys: 2, heightFactor: s.heightFactor * 1.2, leafSize: s.leafSize.map(v => v * 1.5), cluster: s.cluster.map(v => v * 0.8) };
+};
+
 export function seasonFor(date = new Date()) {
   const key = (date.getMonth() + 1) * 100 + date.getDate();
   return SEASONS.find(s => key >= s.from[0] * 100 + s.from[1] && key <= s.to[0] * 100 + s.to[1]) ?? SEASONS[3];
@@ -33,10 +40,10 @@ function targets(links) {
   const season = seasonFor();
   return [
     { id: "resume", label: "Résumé", note: season.name, href: links.resume, species: season.species, palette: season.palette, color: season.palette.leaf[0] },
-    { id: "linkedin", label: "LinkedIn", note: "Profile", href: links.linkedin, species: "oak", color: "#378fe9",
-      palette: palette("linkedin", ["#0a66c2", "#378fe9", "#70b5f9", "#0b4f99"], ["#0a2540", "#0b2e52", "#082036"], ["#2b5d8f", "#24507c", "#3a6fa3"], "#5b6470", "#3c434c") },
+    { id: "linkedin", label: "LinkedIn", note: "Profile", href: links.linkedin, species: "oak", color: "#0a66c2",
+      palette: palette("linkedin", ["#0a66c2", "#378fe9", "#ffffff", "#70b5f9", "#e8f1fb"], ["#0a2540", "#0b2e52", "#082036"], ["#2b5d8f", "#24507c", "#3a6fa3"], "#5b6470", "#3c434c") },
     { id: "github", label: "GitHub", note: "Code", href: links.github, species: "birch", color: "#40c463",
-      palette: palette("github", ["#9be9a8", "#40c463", "#30a14e", "#216e39"], ["#0e4429", "#0b3a22", "#126633"], ["#26a641", "#006d32", "#39d353"], "#8b949e", "#6e7681") },
+      palette: palette("github", ["#40c463", "#30a14e", "#216e39", "#8957e5", "#a371f7"], ["#0e4429", "#0b3a22", "#3c1e70"], ["#26a641", "#006d32", "#39d353"], "#8b949e", "#6e7681") },
   ];
 }
 
@@ -51,7 +58,9 @@ export function mountHeroTree(root) {
   let scene;
   try {
     const first = list[0];
-    scene = new MagicTreeScene(canvas, first.href, first.palette, SPECIES[first.species]);
+    scene = new MagicTreeScene(canvas, first.href, first.palette, species(first.species));
+    scene.codeZoomOut = 2.15; // The tapped code at about the size of the ground, not filling the canvas,
+    scene.codeAtBottom = true; // and down where the ground is, just above the label.
   } catch {
     return; // No WebGL: the side column keeps only the quotes.
   }
@@ -73,19 +82,17 @@ export function mountHeroTree(root) {
     root.classList.add("is-changing");
     setTimeout(() => {
       scene.setPalette(target.palette);
-      scene.setSpecies(SPECIES[target.species]);
+      scene.setSpecies(species(target.species));
       scene.setText(target.href);
       show(target);
       root.classList.remove("is-changing");
     }, 260);
   };
-  let timer = setInterval(next, ROTATE_MS);
+  document.addEventListener("hero-side:advance", next);
 
   canvas.addEventListener("click", () => {
     const mode = scene.toggleMode();
     root.classList.toggle("is-code", mode === "code");
-    clearInterval(timer);
-    if (mode === "tree") timer = setInterval(next, ROTATE_MS);
   });
   new ResizeObserver(() => scene.resize()).observe(canvas);
 }

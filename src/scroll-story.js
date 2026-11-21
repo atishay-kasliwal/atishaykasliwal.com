@@ -1,5 +1,5 @@
 // Desktop scroll track, after Elliott Mangham's portfolio: the page gets a scroll track while the
-// layout stays pinned, and scrolling moves the carousels and fills the scroll cue. With more than
+// layout stays pinned, and scrolling moves the carousels. With more than
 // one .statement it also swaps them word by word (each word rises out of its own mask); the
 // homepage now has one. Off below 1101px wide, on short landscape screens and with reduced motion.
 const enabled = matchMedia("(min-width: 1101px) and (min-height: 461px) and (prefers-reduced-motion: no-preference)");
@@ -50,10 +50,9 @@ function wordProgress(progress, [start, end], i, n) {
 
 export function setupScrollStory({ onScroll } = {}) {
   // With a single statement there is nothing to swap: it stays put, and scrolling only drives the
-  // carousels and the scroll cue.
+  // carousels.
   const all = [...document.querySelectorAll(".statement")];
   const statements = all.length > 1 ? all : [];
-  const cueBar = document.querySelector(".scroll-cue b");
   const root = document.documentElement;
   let words = null;
   let frame = 0;
@@ -63,7 +62,6 @@ export function setupScrollStory({ onScroll } = {}) {
     frame = 0;
     const max = root.scrollHeight - innerHeight;
     const progress = max > 0 ? clamp(scrollY / max) : 0;
-    cueBar.style.transform = `scaleX(${progress})`;
     words.forEach((list, s) => {
       const { enter, leave } = windows[s];
       list.forEach((word, i) => {

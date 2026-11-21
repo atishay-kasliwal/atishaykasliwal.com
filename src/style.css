@@ -284,13 +284,13 @@ h3 {
   font: 12px var(--mono);
   color: var(--accent);
 }
-/* Keep the headline centered while the quote and scroll cue sit near the work. */
+/* Keep the headline centered while the facts row sits near the work. */
 @media (min-width: 701px) and (min-height: 741px) {
   .portfolio > .intro {
     display: grid;
     /* One full-width column: as a grid, .intro's justify-content: center would center it sideways. */
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto auto;
+    grid-template-rows: minmax(0, 1fr) auto;
     padding-bottom: 18px;
   }
   .intro > .statements {
@@ -299,8 +299,7 @@ h3 {
 }
 
 /* Scroll story (desktop; see scroll-story.js). Everywhere else only the first statement shows. */
-.statement + .statement,
-.scroll-cue {
+.statement + .statement {
   display: none;
 }
 html.scroll-story,
@@ -337,30 +336,6 @@ html.scroll-story .portfolio {
 .word {
   display: inline-block;
   will-change: transform;
-}
-html.scroll-story .scroll-cue {
-  display: flex;
-  margin-top: 22px;
-  align-items: center;
-  gap: 14px;
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.scroll-cue i {
-  width: 64px;
-  height: 1px;
-  background: #3a3a36;
-  overflow: hidden;
-}
-.scroll-cue b {
-  display: block;
-  height: 100%;
-  background: var(--ink);
-  transform: scaleX(0);
-  transform-origin: left;
 }
 /* Pill that follows the pointer over project cards (cursor-marquee.js). */
 .cursor-marquee {
@@ -2742,8 +2717,7 @@ html.scroll-story .scroll-cue {
     gap: 10px;
     width: clamp(210px, 15vw, 280px);
   }
-  .hero-side-label,
-  .hero-tree-hint {
+  .hero-side-label {
     margin: 0;
     font: 11px var(--mono);
     letter-spacing: 0.08em;
@@ -2865,8 +2839,9 @@ html.scroll-story .scroll-cue {
   /* A fixed proportion keeps the label right under the tree. */
   .hero-tree canvas {
     width: clamp(200px, 14.4vw, 380px);
-    max-height: 34vh;
-    aspect-ratio: 6 / 5;
+    max-height: 48vh;
+    /* Tall enough for the two-storey tree with the ground at the same size. */
+    aspect-ratio: 6 / 7.5;
     cursor: pointer;
     transition: opacity 0.26s ease;
   }
@@ -2891,9 +2866,6 @@ html.scroll-story .scroll-cue {
     height: 6px;
     border-radius: 50%;
     background: var(--accent);
-  }
-  .hero-tree.is-code .hero-tree-hint {
-    visibility: hidden;
   }
 }
 @keyframes hero-quote-in {

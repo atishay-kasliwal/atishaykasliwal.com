@@ -32,6 +32,8 @@ export interface Species {
   leafSize: [number, number];
   /** Narrows the canopy toward the top: 0 is columnar, 1 is a cone. */
   taper: number;
+  /** 2 raises the crown on a bare trunk about as tall as itself (this site's addition). */
+  storeys?: 1 | 2;
   bark?: { bark: string; barkDark: string };
 }
 

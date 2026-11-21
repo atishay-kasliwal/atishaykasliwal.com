@@ -1,6 +1,7 @@
 // Rotates the homepage's maintainer quotes (index.html, .hero-quotes): one at a time, a new one
 // every 7 seconds. Pauses while hovered or focused, and with the pause button; with reduced motion
-// it never moves on its own. The dots pick a quote directly.
+// it never moves on its own. The dots pick a quote directly. Each automatic change fires
+// "hero-side:advance" on the page, which moves the QR tree on with it (src/hero-tree.js).
 const ROTATE_MS = 7000;
 
 export function setupHeroQuotes(root = document.querySelector("[data-hero-quotes]")) {
@@ -34,5 +35,6 @@ export function setupHeroQuotes(root = document.querySelector("[data-hero-quotes
   setInterval(() => {
     if (paused || hovered || root.contains(document.activeElement) || document.hidden) return;
     show(index + 1);
+    root.dispatchEvent(new CustomEvent("hero-side:advance", { bubbles: true }));
   }, ROTATE_MS);
 }

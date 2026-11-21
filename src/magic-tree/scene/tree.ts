@@ -87,8 +87,18 @@ export function growTree(seed: number, opts: GrowOptions): TreeModel {
     }
   };
 
+  // Two storeys: the crown raised on a taller trunk, with a smaller tier of branches and leaves
+  // growing out of the trunk partway up, so it doesn't stand bare.
+  const base = new THREE.Vector3(0, 0, 0);
+  if (sp.storeys === 2) {
+    base.y = opts.height * 0.6;
+    const trunkR = opts.height * sp.trunkRadius * 1.08;
+    branches.push({ start: new THREE.Vector3(0, 0, 0), end: base.clone(), radius: trunkR, depth: 0 });
+    // Starting a generation in keeps the tier smaller than the crown, so most leaves stay in the crown.
+    grow(new THREE.Vector3(0, base.y * 0.38, 0), new THREE.Vector3(0, 1, 0), trunkLen * 0.7, trunkR * 0.6, 1, false);
+  }
   grow(
-    new THREE.Vector3(0, 0, 0),
+    base,
     new THREE.Vector3(rng() * 0.1 - 0.05, 1, rng() * 0.1 - 0.05).normalize(),
     trunkLen,
     opts.height * sp.trunkRadius,
