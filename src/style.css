@@ -213,7 +213,7 @@ h3 {
   padding: 20px var(--gutter) 35px;
 }
 .hero-copy {
-  font-size: clamp(26px, 2.7vw, 43px);
+  font-size: clamp(23.4px, 2.43vw, 38.7px);
   font-weight: 450;
   line-height: 1.12;
   letter-spacing: -0.04em;
@@ -1706,7 +1706,7 @@ html.scroll-story .portfolio {
   }
   .hero-copy {
     max-width: 50%;
-    font-size: 49px;
+    font-size: 44.1px;
   }
 }
 @media (max-width: 1100px) and (min-width: 701px) {
@@ -1718,7 +1718,7 @@ html.scroll-story .portfolio {
     font-size: 12.5px;
   }
   .hero-copy {
-    font-size: 34px;
+    font-size: 30.6px;
     max-width: 480px;
   }
   .work-label .muted {
@@ -1827,7 +1827,7 @@ html.scroll-story .portfolio {
     align-self: center;
   }
   .hero-copy {
-    font-size: clamp(22px, min(7.2vw, 3.5dvh), 32px);
+    font-size: clamp(19.8px, min(6.48vw, 3.15dvh), 28.8px);
     line-height: 1.12;
     letter-spacing: -0.04em;
     max-width: 480px;
@@ -2091,7 +2091,7 @@ html.scroll-story .portfolio {
     min-height: 36px;
   }
   .hero-copy {
-    font-size: clamp(22px, min(7.2vw, 3.5dvh), 32px);
+    font-size: clamp(19.8px, min(6.48vw, 3.15dvh), 28.8px);
   }
   /* No room for the second sentence here; the facts row below covers stack and open source. */
   .hero-copy .soft {
@@ -2131,7 +2131,7 @@ html.scroll-story .portfolio {
     display: none;
   }
   .hero-copy {
-    font-size: clamp(20px, min(6.7vw, 4.4dvh), 28px);
+    font-size: clamp(18px, min(6.03vw, 3.96dvh), 25.2px);
   }
   .intro {
     padding-block: 8px;
@@ -2159,7 +2159,7 @@ html.scroll-story .portfolio {
     line-height: 1.3;
   }
   .hero-copy {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.1;
   }
   .intro {
@@ -2175,7 +2175,7 @@ html.scroll-story .portfolio {
     --card-height: 138px;
   }
   .hero-copy {
-    font-size: 29px;
+    font-size: 26.1px;
     max-width: 480px;
   }
   .intro {
@@ -2223,7 +2223,7 @@ html.scroll-story .portfolio {
     padding: 10px var(--gutter);
   }
   .hero-copy {
-    font-size: 25px;
+    font-size: 22.5px;
     max-width: 330px;
   }
   .hero-note,
