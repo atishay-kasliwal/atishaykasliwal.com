@@ -1,4 +1,5 @@
 import versions from "./asset-versions.json" with { type: "json" };
+import { withThumbnails } from "./card-thumbnails.js";
 
 // Fourteen projects from github.com/atishay-kasliwal.
 // `art` is the card and preview-window artwork: a screenshot for live products,
@@ -91,7 +92,8 @@ const medscanArt = `
     <div class="ops-card-foot"><span>HEALTH</span><span>BILLING</span><span>ACCESS</span><span>GRAPH</span></div>
   </div>`;
 
-export const projects = [
+// withThumbnails gives each project its card id and any thumbnail chosen in Admin (card-thumbnails.js).
+export const projects = withThumbnails("project", [
   {
     name: "Atriveo Tracker",
     url: "https://tracker.atriveo.com",
@@ -314,4 +316,4 @@ export const projects = [
       "An end-to-end marketing mix model covering adstock, saturation, holdout validation, uncertainty simulation, channel ROI, and budget allocation across 156 weeks.",
     art: mmmArt,
   },
-];
+]);

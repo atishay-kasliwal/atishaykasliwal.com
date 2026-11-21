@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/asset-versions.mjs && vite build && node scripts/build-seo-report.mjs && node scripts/build-resume-report.mjs",
+    "build": "node scripts/asset-versions.mjs && node scripts/build-card-catalog.mjs && vite build && node scripts/build-seo-report.mjs && node scripts/build-resume-report.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "validate:seo": "node scripts/validate-seo.mjs",
     "validate:profile": "node scripts/validate-profile.mjs",
@@ -14,7 +14,7 @@
     "test:resume": "node --test \"tests/resume/*.test.mjs\"",
     "test:admin:browser": "node scripts/test-admin-browser.mjs",
     "profile:contributions": "node scripts/fetch-open-source-contributions.mjs",
-    "test": "npm run build && npm run validate:seo && npm run validate:profile && npm run test:photography && npm run test:github-feedback && npm run test:profile && npm run test:resume",
+    "test": "npm run build && npm run validate:seo && npm run validate:profile && npm run test:photography && npm run test:github-feedback && npm run test:profile && npm run test:resume && npm run test:thumbnails",
     "seo:sitemap:live": "seo crawl --sitemap-url https://atishaykasliwal.com/sitemap.xml --health --format json --output artifacts/seo-sitemap.json",
     "seo:crawl:live": "seo crawl https://atishaykasliwal.com --max-pages 100 --max-depth 8 --format json --output artifacts/seo-crawl.json",
     "lhci": "npx --yes @lhci/cli@0.15.1 autorun",
@@ -24,7 +24,8 @@
     "github:activity": "node scripts/fetch-github-activity.mjs",
     "test:github-feedback": "node --test \"tests/github-feedback/*.test.mjs\"",
     "github:feedback:import": "node scripts/import-github-feedback.mjs",
-    "github:feedback:summaries": "node scripts/import-github-feedback-summaries.mjs"
+    "github:feedback:summaries": "node scripts/import-github-feedback-summaries.mjs",
+    "test:thumbnails": "node --test \"tests/thumbnails/*.test.mjs\""
   },
   "devDependencies": {
     "fast-xml-parser": "^5.11.1",
