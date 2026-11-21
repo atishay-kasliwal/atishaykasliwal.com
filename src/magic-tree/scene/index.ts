@@ -10,6 +10,15 @@ import { SPECIES, type Species, type SpeciesId } from './species';
 
 export type ViewMode = 'tree' | 'code';
 
+/**
+ * Site additions. `qrVersion` draws every link's code at one size, and `treeSeed` grows the same
+ * tree whatever the code says, so switching links changes only the code and the colours.
+ */
+export interface SceneOptions {
+  qrVersion?: number;
+  treeSeed?: string;
+}
+
 /** Seconds for a full canopy <-> code transition. */
 const MORPH_SECONDS = 0.95;
 
@@ -57,7 +66,9 @@ export class MagicTreeScene {
     text: string,
     palette: Palette,
     species: Species = SPECIES.oak,
+    options: SceneOptions = {},
   ) {
+    this.options = options;
     this.canvas = canvas;
     this.palette = palette;
     this.species = species;
@@ -91,9 +102,9 @@ export class MagicTreeScene {
   // ---------------------------------------------------------------- build
 
   private build(text: string) {
-    this.qr = buildQr(text);
+    this.qr = buildQr(text, this.options.qrVersion);
     this.plot = buildPlot(this.qr, this.palette);
-    this.canopy = buildCanopy(this.qr, this.palette, this.species);
+    this.canopy = buildCanopy(this.qr, this.palette, this.species, this.options.treeSeed);
     this.motes = buildMotes(this.qr, this.palette, this.leafFall());
     this.world.add(this.plot.group, this.canopy.group, this.motes.points);
 
@@ -255,6 +266,7 @@ export class MagicTreeScene {
    */
   /** Zooms the top-down code view out (1 = the plot fills the canvas). Set by ../../hero-tree.js. */
   codeZoomOut = 1;
+  private options: SceneOptions;
   /** Falling leaves that break off the crown (motes.ts); unset keeps the original drifting motes. */
   private fallingLeaves: Omit<FallingLeaves, 'from'> | null = null;
 

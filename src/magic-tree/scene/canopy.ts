@@ -23,8 +23,9 @@ export interface Canopy {
  * Builds the tree and, for every leaf, the module cell it flies down to.
  * Leaf count is derived from the code so each dark module ends up evenly packed.
  */
-export function buildCanopy(qr: QrMatrix, palette: Palette, species: Species): Canopy {
-  const seed = hashString(qr.text);
+export function buildCanopy(qr: QrMatrix, palette: Palette, species: Species, seedText = qr.text): Canopy {
+  // Site change: `seedText` keeps one tree shape while the code under it changes.
+  const seed = hashString(seedText);
   const rng = makeRng(seed ^ 0x9e3779b9);
 
   const darkCells = qr.darkCells;

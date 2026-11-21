@@ -1,9 +1,11 @@
 // The homepage's 3D tree (src/magic-tree, MIT, by the Magic Tree contributors). Its plot is a real
-// QR code, rotating between the résumé, LinkedIn and GitHub. The résumé tree follows the calendar
-// (fall leaves for Thanksgiving in November, Christmas in December, and so on); LinkedIn wears
-// LinkedIn blue and white, GitHub its contribution greens and merged-pull-request purple. Tapping
-// the tree drops the leaves into the code to scan, and holds it until tapped again. It changes
-// together with the maintainer quotes (src/hero-quotes.js), so it pauses whenever they do.
+// QR code, rotating between the résumé, LinkedIn and GitHub, and each link is a season of the same
+// tree: the résumé follows the calendar (Thanksgiving in November, Christmas in December, and so
+// on), LinkedIn is winter in LinkedIn blue and frost white, GitHub is spring in contribution greens
+// with merged-pull-request purple blossom. The tree keeps its shape; only the code under it changes,
+// and the leaves blend into the next season's colours over a few seconds. Tapping the tree drops the
+// leaves into the code to scan, and holds it until tapped again. It changes together with the
+// maintainer quotes (src/hero-quotes.js), so it pauses whenever they do.
 // Loaded by src/main.js only on wide screens, after the page has loaded, without reduced motion.
 import { MagicTreeScene } from "./magic-tree/scene/index.ts";
 import { SPECIES } from "./magic-tree/scene/species.ts";
@@ -24,12 +26,26 @@ const SEASONS = [
   { name: "Christmas", from: [12, 1], to: [12, 31], species: "pine", palette: palette("christmas", ["#1f6b3a", "#2a8048", "#17552d", "#236f40", "#1f6b3a", "#b3261e"], ["#0d2e18", "#0a2613", "#11381e"], ["#e8eef0", "#dfe7ea", "#f4f8f9"], "#5a4232", "#3d2c21") },
 ];
 
-// Two-storey trees (the crown raised on a bare trunk, src/magic-tree/scene/tree.ts) with a fuller
+// One two-storey oak (the crown raised on a taller trunk, src/magic-tree/scene/tree.ts) with a fuller
 // crown: a fifth larger, half again bigger leaves, packed tighter. The leaf count is fixed by the QR code.
-const species = id => {
-  const s = SPECIES[id];
-  return { ...s, storeys: 2, heightFactor: s.heightFactor * 1.2, leafSize: s.leafSize.map(v => v * 1.5), cluster: s.cluster.map(v => v * 0.8) };
-};
+const TREE = (s => ({ ...s, storeys: 2, heightFactor: s.heightFactor * 1.2, leafSize: s.leafSize.map(v => v * 1.5), cluster: s.cluster.map(v => v * 0.8) }))(SPECIES.oak);
+// Every link's code at one size (version 6, 41 modules: what the résumé URL needs at level H) and one
+// tree shape over all of them, so the ground, the framing and the tree never move.
+const SCENE = { qrVersion: 6, treeSeed: "atishaykasliwal.com" };
+const BLEND_MS = 3000;
+
+// Colour lists at fixed lengths, so leaf i takes the same slot in every season and can blend.
+const LENGTHS = { leaf: 6, qrLeaf: 3, hedge: 3 };
+const fit = (list, n) => Array.from({ length: n }, (_, i) => list[i % list.length]);
+const even = p => ({ ...p, leaf: fit(p.leaf, LENGTHS.leaf), qrLeaf: fit(p.qrLeaf, LENGTHS.qrLeaf), hedge: fit(p.hedge, LENGTHS.hedge) });
+const rgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+const mixHex = (a, b, t) => `#${rgb(a).map((v, i) => Math.round(v + (rgb(b)[i] - v) * t).toString(16).padStart(2, "0")).join("")}`;
+function mix(a, b, t) {
+  const out = { ...b };
+  for (const key of Object.keys(LENGTHS)) out[key] = a[key].map((c, i) => mixHex(c, b[key][i], t));
+  for (const key of ["bark", "barkDark", "moduleDark", "moduleLight", "slab"]) out[key] = mixHex(a[key], b[key], t);
+  return out;
+}
 
 export function seasonFor(date = new Date()) {
   const key = (date.getMonth() + 1) * 100 + date.getDate();
@@ -39,11 +55,11 @@ export function seasonFor(date = new Date()) {
 function targets(links) {
   const season = seasonFor();
   return [
-    { id: "resume", label: "Résumé", note: season.name, href: links.resume, species: season.species, palette: season.palette, color: season.palette.leaf[0] },
-    { id: "linkedin", label: "LinkedIn", note: "Profile", href: links.linkedin, species: "oak", color: "#0a66c2",
-      palette: palette("linkedin", ["#0a66c2", "#378fe9", "#ffffff", "#70b5f9", "#e8f1fb"], ["#0a2540", "#0b2e52", "#082036"], ["#2b5d8f", "#24507c", "#3a6fa3"], "#5b6470", "#3c434c") },
-    { id: "github", label: "GitHub", note: "Code", href: links.github, species: "birch", color: "#40c463",
-      palette: palette("github", ["#40c463", "#30a14e", "#216e39", "#8957e5", "#a371f7"], ["#0e4429", "#0b3a22", "#3c1e70"], ["#26a641", "#006d32", "#39d353"], "#8b949e", "#6e7681") },
+    { id: "resume", label: "Résumé", note: season.name, href: links.resume, palette: even(season.palette), color: season.palette.leaf[0] },
+    { id: "linkedin", label: "LinkedIn", note: "Winter", href: links.linkedin, color: "#378fe9",
+      palette: even(palette("linkedin", ["#0a66c2", "#378fe9", "#ffffff", "#70b5f9", "#e8f1fb", "#ffffff"], ["#0a2540", "#0b2e52", "#082036"], ["#dfe7ea", "#cfdae0", "#eef3f5"], "#6b737d", "#454c55")) },
+    { id: "github", label: "GitHub", note: "Spring", href: links.github, color: "#40c463",
+      palette: even(palette("github", ["#40c463", "#30a14e", "#216e39", "#8957e5", "#a371f7", "#39d353"], ["#0e4429", "#0b3a22", "#3c1e70"], ["#26a641", "#006d32", "#39d353"], "#8b949e", "#6e7681")) },
   ];
 }
 
@@ -58,7 +74,7 @@ export function mountHeroTree(root) {
   let scene;
   try {
     const first = list[0];
-    scene = new MagicTreeScene(canvas, first.href, first.palette, species(first.species));
+    scene = new MagicTreeScene(canvas, first.href, first.palette, TREE, SCENE);
     scene.codeZoomOut = 2.15; // The tapped code at about the size of the ground, not filling the canvas,
     scene.codeAtBottom = true; // and down where the ground is, just above the label.
     scene.setFallingLeaves({ count: 80, size: 3.6 }); // Leaf-sized, breaking off the crown.
@@ -76,18 +92,27 @@ export function mountHeroTree(root) {
   show(list[0]);
   requestAnimationFrame(() => scene.resize());
 
+  // The code switches at once (the tree over it stays the same); the colours follow over BLEND_MS.
+  let shown = list[0].palette;
+  let blend = 0;
   const next = () => {
     if (scene.mode === "code") return; // Someone is scanning: leave the code up.
     index = (index + 1) % list.length;
     const target = list[index];
-    root.classList.add("is-changing");
-    setTimeout(() => {
-      scene.setPalette(target.palette);
-      scene.setSpecies(species(target.species));
-      scene.setText(target.href);
-      show(target);
-      root.classList.remove("is-changing");
-    }, 260);
+    scene.setText(target.href);
+    show(target);
+    cancelAnimationFrame(blend);
+    const from = shown;
+    const start = performance.now();
+    let frame = 0;
+    const step = now => {
+      const t = Math.min(1, (now - start) / BLEND_MS);
+      const eased = t * t * (3 - 2 * t);
+      // Every other frame is smooth enough for a colour change and halves the repainting.
+      if (t === 1 || frame++ % 2 === 0) scene.setPalette((shown = mix(from, target.palette, eased)));
+      if (t < 1) blend = requestAnimationFrame(step);
+    };
+    blend = requestAnimationFrame(step);
   };
   document.addEventListener("hero-side:advance", next);
 

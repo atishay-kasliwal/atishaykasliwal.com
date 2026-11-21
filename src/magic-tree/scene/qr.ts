@@ -25,8 +25,9 @@ const isFinder = (x: number, y: number, size: number) => {
  * Encodes `text` with error correction level H. The high redundancy is what lets
  * the canopy sit on top of the plot without breaking the scan.
  */
-export function buildQr(text: string): QrMatrix {
-  const qr = QRCode.create(text || ' ', { errorCorrectionLevel: 'H' });
+export function buildQr(text: string, version?: number): QrMatrix {
+  // Site change: a fixed `version` gives several links codes of one size.
+  const qr = QRCode.create(text || ' ', { errorCorrectionLevel: 'H', ...(version ? { version } : {}) });
   const size = qr.modules.size;
   const data = qr.modules.data;
 
