@@ -2,7 +2,8 @@
 // QR code, rotating between the résumé, LinkedIn and GitHub, each in its own colours on the same
 // tree: the résumé follows the calendar (Thanksgiving in November, Christmas in December, and so
 // on), LinkedIn is LinkedIn blue and white, GitHub its contribution greens with merged-pull-request
-// purple. The tree keeps its shape; only the code under it changes, and its leaves turn to the next
+// purple. The plot is a formal garden: the code is planted as hedges, with a flower bed around it.
+// The tree keeps its shape; only the code under it changes, and its leaves turn to the next
 // colours a few at a time, over a few seconds. The label under it reads "Click and scan for …".
 // Tapping the tree drops the
 // leaves into the code to scan, and holds it until tapped again. It changes together with the
@@ -13,7 +14,13 @@ import { SPECIES } from "./magic-tree/scene/species.ts";
 
 // The plot stays pale so the code scans; the slab and rim sit dark on the black page.
 const ground = { moduleDark: "#cfcdc4", moduleLight: "#efefec", slab: "#1c1c1a", ground: "#000000" };
-const palette = (id, leaf, qrLeaf, hedge, bark = "#6f5540", barkDark = "#4a382a") => ({ id, label: id, leaf, qrLeaf, hedge, bark, barkDark, ...ground });
+// The plot is a formal garden: the code's dark modules are clipped hedges (src/magic-tree/scene/plot.ts),
+// in a green that suits each theme, and the rim is a bed of flowers in the canopy's colours.
+const HEDGES = {
+  "new-year": "#4d6b52", valentine: "#5a9446", spring: "#5a9446", summer: "#4a8c3c", autumn: "#71833a",
+  halloween: "#5a5a32", thanksgiving: "#7a7a36", christmas: "#2f6b3f", linkedin: "#2f6fb0", github: "#2ea043",
+};
+const palette = (id, leaf, qrLeaf, hedge, bark = "#6f5540", barkDark = "#4a382a") => ({ id, label: id, leaf, qrLeaf, hedge, bark, barkDark, ...ground, moduleDark: HEDGES[id] ?? ground.moduleDark });
 
 // The résumé tree for today's date: [first month, first day, last month, last day] (months 1–12).
 const SEASONS = [

@@ -18,5 +18,8 @@ Changes from upstream, all in `scene/index.ts`:
   the crown and flutter down, instead of small motes drifting over the plot;
 - a two-storey option in `species.ts` and `tree.ts`: the crown raised on a taller trunk, with a
   smaller tier of branches and leaves partway up it.
+- a garden in `plot.ts`: the code's dark modules are clipped hedges (top at 0.28, under the settled
+  leaves, so the code view still scans), each a slightly different shade, and the rim outside the
+  quiet zone is a bed of flowers in the canopy's colours, shrubs and stones. The plot's size is unchanged.
 
 Themes (LinkedIn, GitHub, seasonal résumé) are this site's own, in `../hero-tree.js`.
