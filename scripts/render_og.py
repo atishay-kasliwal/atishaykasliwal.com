@@ -4,7 +4,7 @@
 
 public/og.jpg             1200×630 share card from scripts/og.html (headline + project cards)
 public/projects/media/<slug>/og.jpg  one per case study (run `npm run build` first to write scripts/og/)
-public/apple-touch-icon.png  180×180 from public/favicon.svg, on a solid background (iOS rounds it)
+public/apple-touch-icon.png  180×180 from scripts/apple-touch-icon.svg: the favicon, full bleed (iOS rounds it)
 """
 
 from pathlib import Path
@@ -38,7 +38,7 @@ with sync_playwright() as p:
 
     if not projects_only:
         icon = browser.new_page(viewport={"width": 180, "height": 180})
-        svg = (PUBLIC / "favicon.svg").read_text().replace("<svg ", '<svg width="180" height="180" ', 1)
+        svg = (ROOT / "scripts" / "apple-touch-icon.svg").read_text().replace("<svg ", '<svg width="180" height="180" ', 1)
         icon.set_content(f'<body style="margin:0;background:#111">{svg}</body>')
         icon.screenshot(path=str(PUBLIC / "apple-touch-icon.png"))
 
