@@ -34,7 +34,8 @@ export function renderCarouselTrack(items, { photoOnly = false, eagerFirst = fal
     <${element} class="project-card ${item.theme}"${link}${item.id ? ` data-card="${item.id}"` : ""} data-index="${index}" data-position="${copy * count + index}"
       tabindex="-1" ${hidden ? 'aria-hidden="true"' : ""}
       aria-label="${label}">
-      <span class="project-art">${art}</span>
+      <span class="project-art" aria-hidden="true">${art}</span>
+      <span class="pocket-card-caption"><span><b>${item.name}</b><small>${photoOnly ? "Photography" : item.category}</small></span><i aria-hidden="true">↗︎</i></span>
       ${photoOnly ? "" : `<span class="card-title">${item.name}</span>
       <span class="card-tag">${tag}</span>`}
     </${element}>`;

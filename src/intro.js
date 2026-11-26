@@ -63,7 +63,7 @@ export function startIntro() {
 
   // Skipped when returning from another page of the site (see the inline script in index.html),
   // or when the visitor prefers reduced motion.
-  if (motion.matches || !document.documentElement.classList.contains("has-intro")) {
+  if (window.matchMedia("(max-width: 700px)").matches || motion.matches || !document.documentElement.classList.contains("has-intro")) {
     cleanup();
     return;
   }

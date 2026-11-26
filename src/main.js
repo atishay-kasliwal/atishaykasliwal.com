@@ -14,6 +14,20 @@ import { setupSectionAccordion } from "./section-accordion.js";
 import { setupClockTimes, setupGithubFeed, setupRelativeTimes } from "./github-feed.js";
 import { setupHeroQuotes } from "./hero-quotes.js";
 
+// Reuse the same live GitHub disclosure in the phone introduction and desktop masthead.
+const pocketGithub = document.querySelector(".pocket-github");
+const githubColumn = document.querySelector(".masthead .github");
+if (pocketGithub && githubColumn) {
+  const masthead = githubColumn.parentElement;
+  const phoneLayout = matchMedia("(max-width: 700px)");
+  const placeGithub = () => {
+    if (phoneLayout.matches) pocketGithub.append(githubColumn);
+    else masthead.insertBefore(githubColumn, masthead.querySelector(".phone-status"));
+  };
+  placeGithub();
+  phoneLayout.addEventListener("change", placeGithub);
+}
+
 setupRelativeTimes();
 setupClockTimes();
 setupGithubFeed();

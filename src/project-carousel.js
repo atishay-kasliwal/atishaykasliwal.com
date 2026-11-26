@@ -6,6 +6,7 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   const track = work.querySelector(".carousel-track");
   const workPanel = work.querySelector(".section-panel");
   const pauseButton = work.querySelector("[data-carousel-motion]");
+  const phone = window.matchMedia("(max-width: 700px)");
   let count = projects.length;
   let selected = 0;
   let cursor = count + selected;
@@ -60,14 +61,14 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
         ? "transform 480ms cubic-bezier(.22,.75,.22,1)"
         : "none";
     const x = viewport.clientWidth / 2 - cardWidth / 2 - cursor * step + offset;
-    track.style.transform = `translate3d(${x}px, 0, 0)`;
+    track.style.transform = phone.matches ? "none" : `translate3d(${x}px, 0, 0)`;
     if (renderedCursor === cursor) return;
     renderedCursor = cursor;
     cards.forEach((card, position) => {
       const active = position === cursor;
       card.classList.toggle("is-active", active);
       card.tabIndex =
-        active && position >= count && position < count * 2 ? 0 : -1;
+        (active || phone.matches) && position >= count && position < count * 2 ? 0 : -1;
       if (active) card.setAttribute("aria-current", "true");
       else card.removeAttribute("aria-current");
     });
@@ -102,6 +103,7 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
     lastFrame = timestamp;
     const blocked =
       workPanel.hidden ||
+      phone.matches ||
       paused ||
       reducedMotion.matches ||
       hovered ||
@@ -189,6 +191,11 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   }
 
   function moveBy(delta) {
+    if (phone.matches) {
+      const next = (selected + delta + count) % count;
+      viewport.scrollTo({ left: next * step, behavior: reducedMotion.matches ? "instant" : "smooth" });
+      return;
+    }
     if (busy || !delta) return;
     projectPreview.close({ immediate: true });
     busy = true;
@@ -222,6 +229,7 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   });
 
   viewport.addEventListener("pointerdown", (event) => {
+    if (phone.matches) return;
     if ((event.pointerType === "mouse" && event.button !== 0) || busy) return;
     clearTimeout(clickResetTimer);
     projectPreview.close({ immediate: true });
@@ -294,7 +302,7 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   viewport.addEventListener(
     "wheel",
     (event) => {
-      if (event.ctrlKey || busy || dragging) return;
+      if (phone.matches || event.ctrlKey || busy || dragging) return;
       const delta =
         Math.abs(event.deltaX) > Math.abs(event.deltaY)
           ? event.deltaX
@@ -321,6 +329,21 @@ export function createProjectCarousel(work, { projects, projectPreview, photoOnl
   work
     .querySelector("[data-carousel-open]")
     ?.addEventListener("click", event => projectPreview.open(selected, event.currentTarget, viewport, projects));
+  viewport.addEventListener("scroll", () => {
+    if (!phone.matches || !step) return;
+    const next = Math.max(0, Math.min(count - 1, Math.round(viewport.scrollLeft / step)));
+    if (next === selected) return;
+    selected = next;
+    cursor = count + selected;
+    updateCaption();
+    draw();
+  }, { passive: true });
+  phone.addEventListener("change", () => {
+    renderedCursor = -1;
+    offset = 0;
+    viewport.scrollLeft = 0;
+    measure();
+  });
   new ResizeObserver(measure).observe(viewport);
   work.querySelector(".project-counter").setAttribute("aria-live", "off");
   updateCaption();
