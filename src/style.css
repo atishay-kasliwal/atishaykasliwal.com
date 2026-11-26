@@ -2926,7 +2926,7 @@ html.scroll-story .portfolio {
     flex-direction: column;
     height: auto;
     min-height: 100svh;
-    padding: max(22px, env(safe-area-inset-top)) 0 0;
+    padding: max(16px, env(safe-area-inset-top)) 0 0;
     background: #000000;
     color: var(--ink);
     color-scheme: dark;
@@ -2937,15 +2937,15 @@ html.scroll-story .portfolio {
   .info-column.has-photo {
     position: relative;
     display: grid;
-    grid-template-columns: 46px minmax(0, 1fr) auto;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
     grid-template-rows: auto auto;
     column-gap: 12px;
     align-items: center;
   }
   .masthead-photo {
     display: block;
-    width: 46px;
-    height: 52px;
+    width: 40px;
+    height: 46px;
     border-radius: 8px;
     box-shadow: none;
   }
@@ -2979,7 +2979,7 @@ html.scroll-story .portfolio {
     background: #a5b8a1;
     box-shadow: 0 0 0 5px #a5b8a112;
   }
-  .pocket-intro { display: block; padding: 32px var(--gutter) 26px; }
+  .pocket-intro { display: block; padding: 20px var(--gutter) 14px; }
   .pocket-location {
     display: flex;
     align-items: center;
@@ -2989,18 +2989,18 @@ html.scroll-story .portfolio {
   }
   .pocket-location > span { color: var(--accent); font-size: 17px; }
   .pocket-headline {
-    margin-top: 13px;
-    font-size: clamp(38px, 10vw, 45px);
+    margin-top: 8px;
+    font-size: clamp(32px, 8.7vw, 38px);
     font-weight: 550;
     letter-spacing: -0.065em;
     line-height: 0.98;
   }
   .pocket-headline > span { color: var(--accent); }
   .pocket-bio {
-    max-width: 32ch;
-    margin-top: 16px;
+    max-width: 38ch;
+    margin-top: 10px;
     font-size: 14px;
-    line-height: 1.55;
+    line-height: 1.45;
     letter-spacing: -0.01em;
     color: var(--soft);
   }
@@ -3010,7 +3010,7 @@ html.scroll-story .portfolio {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    padding: 0 var(--gutter) 10px;
+    padding: 0 var(--gutter) 2px;
     font-family: var(--sans);
   }
   .work-label { min-height: 44px; }
@@ -3047,7 +3047,7 @@ html.scroll-story .portfolio {
   .carousel-viewport::-webkit-scrollbar { display: none; }
   .carousel-track {
     gap: 12px;
-    padding: 0 var(--gutter) 10px;
+    padding: 0 var(--gutter) 2px;
     transform: none;
     will-change: auto;
   }
@@ -3076,7 +3076,7 @@ html.scroll-story .portfolio {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 12px 1px 16px;
+    padding: 10px 1px 8px;
     color: var(--ink);
   }
   .pocket-card-caption b { display: block; font-size: 14px; font-weight: 550; letter-spacing: -0.025em; }
@@ -3096,8 +3096,8 @@ html.scroll-story .portfolio {
   .project-card:hover .pocket-card-caption i { transform: rotate(45deg); }
   .work + .work { margin-top: 0; }
   .work + .work::before { margin-bottom: 0; background: #2a2a27; }
-  .work + .work .work-toolbar { padding-block: 8px; }
-  .work + .work .work-label, .work + .work .section-toggle { min-height: 52px; }
+  .work + .work .work-toolbar { padding-block: 2px; }
+  .work + .work .work-label, .work + .work .section-toggle { min-height: 44px; }
   .work + .work .section-toggle::before {
     content: "0" counter(pocket-section);
     margin-right: 4px;
@@ -3118,8 +3118,8 @@ html.scroll-story .portfolio {
     display: grid;
     grid-template-columns: 1fr auto 44px;
     gap: 8px;
-    margin: 16px var(--gutter) 0;
-    padding: 0 0 max(22px, env(safe-area-inset-bottom));
+    margin: 12px var(--gutter) 0;
+    padding: 0 0 max(16px, env(safe-area-inset-bottom));
     border: 0;
   }
   .thumb-button {
@@ -3148,7 +3148,7 @@ html.scroll-story .portfolio {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    padding: 0 var(--gutter) 14px;
+    padding: 0 var(--gutter) 8px;
     color: var(--soft);
     font-size: 11px;
   }
@@ -3156,11 +3156,11 @@ html.scroll-story .portfolio {
   .photography #photography-toggle, .photography .section-page-link { display: none; }
   .pocket-gallery-link {
     position: absolute;
-    inset: 8px var(--gutter);
+    inset: 2px var(--gutter);
     display: flex;
     align-items: center;
     gap: 13px;
-    min-height: 52px;
+    min-height: 44px;
     font: 500 15px var(--sans);
     letter-spacing: -0.025em;
     text-transform: none;
@@ -3171,8 +3171,8 @@ html.scroll-story .portfolio {
   .pocket-review {
     position: relative;
     display: block;
-    margin: 20px var(--gutter) 12px;
-    padding: 17px 0 14px 24px;
+    margin: 12px var(--gutter) 8px;
+    padding: 12px 0 8px 24px;
     border-top: 1px solid #2a2a27;
   }
   .pocket-review-mark { position: absolute; top: 9px; left: 0; font-size: 38px; color: var(--accent); }
@@ -3184,8 +3184,8 @@ html.scroll-story .portfolio {
 @media (max-width: 700px) {
   .pocket-github {
     display: block;
-    margin-top: 23px;
-    padding: 14px;
+    margin-top: 14px;
+    padding: 10px 12px;
     border: 1px solid #2a2a27;
     border-radius: 10px;
     background: #151514;

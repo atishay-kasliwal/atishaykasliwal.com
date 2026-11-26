@@ -26,3 +26,5 @@ Composition:
 - Contact: dark full-width primary action and two secondary actions.
 
 Genericness check: Remove the desktop’s centered moving card, system-fact grid, control cluster, and uppercase mono headings. Keep the owner’s real portrait, first-person voice, live GitHub activity, and original code-review evidence. No invented credentials or images.
+
+Spacing revision: compact the cover and section transitions on phones. Use a 46px portrait, 20px intro padding, a 32–38px headline, a shorter bio, and 44px accordion touch targets. Keep the project artwork readable and remove stacked margins around captions, the review, and contact. Match the existing desktop palette.
