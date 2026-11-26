@@ -28,3 +28,5 @@ Composition:
 Genericness check: Remove the desktop’s centered moving card, system-fact grid, control cluster, and uppercase mono headings. Keep the owner’s real portrait, first-person voice, live GitHub activity, and original code-review evidence. No invented credentials or images.
 
 Spacing revision: compact the cover and section transitions on phones. Use a 46px portrait, 20px intro padding, a 32–38px headline, a shorter bio, and 44px accordion touch targets. Keep the project artwork readable and remove stacked margins around captions, the review, and contact. Match the existing desktop palette.
+
+Site-wide revision: scope homepage-only rules to home-portfolio. Project and experience pages share 24px mobile section gaps, undistorted landscape thumbnails, and titles below the product image. Profile sections use 32px gaps and compact panels. Mobile photography becomes a two-column contact sheet, with filters before the images and a one-tap modal viewer; the desktop archive keeps its spatial composition.

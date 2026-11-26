@@ -27,7 +27,7 @@ export async function buildPhotography() {
     const offset = index - initial;
     const side = Math.sign(offset);
     return `<a class="photo-page-card${index === initial ? ' is-selected' : ''}" href="${escape(photo.src)}" data-photo-index="${index}" style="--offset:${offset};--side:${side};--depth:${Math.abs(offset)};z-index:${index === initial ? 100 : 50 - index}" aria-label="${escape(photo.alt)}">
-      ${photoMarkup(photo, { lazy: index !== initial, sizes: '(max-width: 700px) 72vw, (min-width: 1600px) 480px, 30vw', preview: true })}
+      ${photoMarkup(photo, { lazy: index !== initial, sizes: '(max-width: 700px) calc((100vw - 48px) / 2), (min-width: 1600px) 480px, 30vw', preview: true })}
     </a>`;
   }).join("\n");
   const social = new URL(page.socialImage, page.url).href;
@@ -70,7 +70,11 @@ export async function buildPhotography() {
       <a href="/" class="home-link">← Back</a>
     </header>
     <section class="photography-content" aria-labelledby="photography-title">
-      <h1 id="photography-title" class="visually-hidden">Photography</h1>
+      <div class="photo-page-intro"><h1 id="photography-title">Photography<span aria-hidden="true">.</span></h1><p>A few moments worth keeping. Tap a photo to take a closer look.</p></div>
+  <details class="photo-categories" data-photo-categories hidden>
+    <summary>Categories</summary>
+    <nav data-photo-filters aria-label="Filter photographs by category"></nav>
+  </details>
       <div class="photo-canvas" id="photo-deck" data-photo-canvas aria-label="Photographs" tabindex="0" aria-describedby="stack-help">
         ${cards}
       </div>
@@ -92,10 +96,7 @@ export async function buildPhotography() {
     <button class="viewer-next" data-next-photo aria-label="Next photograph">→</button>
     <p data-viewer-caption class="visually-hidden" aria-live="polite"></p>
   </dialog>
-  <details class="photo-categories" data-photo-categories hidden>
-    <summary>Categories</summary>
-    <nav data-photo-filters aria-label="Filter photographs by category"></nav>
-  </details>
+
   <script type="module" src="/src/photography-page.js"></script>
 </body>
 </html>\n`;

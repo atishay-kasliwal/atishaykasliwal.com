@@ -2915,7 +2915,7 @@ html.scroll-story .portfolio {
     overscroll-behavior-y: auto;
     background: #000000;
   }
-  .portfolio {
+  .home-portfolio {
     --gutter: 20px;
     --card-width: calc(100vw - 60px);
     --ink: #efefec;
@@ -2931,8 +2931,8 @@ html.scroll-story .portfolio {
     color: var(--ink);
     color-scheme: dark;
   }
-  .portfolio a:hover, .portfolio button:hover { color: var(--ink); }
-  .portfolio .intro, .portfolio .github, .portfolio .phone-status { display: none; }
+  .home-portfolio a:hover, .home-portfolio button:hover { color: var(--ink); }
+  .home-portfolio .intro, .home-portfolio .github, .home-portfolio .phone-status { display: none; }
   .masthead { display: block; padding-inline: var(--gutter); }
   .info-column.has-photo {
     position: relative;
@@ -3138,9 +3138,9 @@ html.scroll-story .portfolio {
   .thumb-button.more { padding: 0; }
 }
 @media (max-width: 700px) {
-  .portfolio .project-card { background: transparent; }
-  .portfolio .project-card .project-art { border-radius: 12px; overflow: hidden; }
-  .portfolio .project-card .pocket-card-caption { background: #000000; }
+  .home-portfolio .project-card { background: transparent; }
+  .home-portfolio .project-card .project-art { border-radius: 12px; overflow: hidden; }
+  .home-portfolio .project-card .pocket-card-caption { background: #000000; }
 }
 .pocket-swipe, .pocket-gallery-link, .pocket-review { display: none; }
 @media (max-width: 700px) {
@@ -3203,5 +3203,5 @@ html.scroll-story .portfolio {
   .pocket-github .github-feed { width: 100%; top: calc(100% + 20px); }
 }
 @media (max-width: 700px) {
-  .portfolio .reel-card-panels i { color: #969ba7; }
+  .home-portfolio .reel-card-panels i { color: #969ba7; }
 }

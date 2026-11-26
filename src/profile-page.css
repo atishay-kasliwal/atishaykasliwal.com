@@ -493,3 +493,19 @@
     grid-template-columns: 1fr 1fr 48px;
   }
 }
+
+@media (max-width: 700px) {
+  .profile { gap: 32px; padding-top: 4px; }
+  .hero { gap: 18px; }
+  .summary { gap: 10px; }
+  .facts { gap: 12px 18px; }
+  .block { gap: 16px; }
+  .block > h2 { padding-top: 14px; font-size: 26px; }
+  .entry, .repo, .skill-group .strengths { padding: 16px; border-radius: 12px; }
+  .entry { gap: 12px; }
+  .grid, .repos { gap: 12px; }
+  .skills > li { padding: 14px 16px; }
+  .toc a { min-height: 44px; }
+  .profile a, .profile code { overflow-wrap: anywhere; }
+  .status { white-space: normal; }
+}

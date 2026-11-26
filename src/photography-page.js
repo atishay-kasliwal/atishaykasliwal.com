@@ -8,6 +8,7 @@ const viewer = document.querySelector("[data-photo-viewer]");
 const media = viewer.querySelector('[data-viewer-media]');
 const caption = viewer.querySelector('[data-viewer-caption]');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const phoneLayout = matchMedia('(max-width: 700px)');
 let selected = Math.floor(canvas.children.length / 2);
 const allCards = () => [...collection.querySelectorAll('.photo-page-card')];
 const cards = () => allCards().filter(card => !card.hidden);
@@ -90,13 +91,15 @@ function projectedTransform(from, to) {
   // scene and modal. Its source box and viewer box set the translation/scale.
   const dx = from.bounds.x + from.bounds.width / 2 - to.x - to.width / 2;
   const dy = from.bounds.y + from.bounds.height / 2 - to.y - to.height / 2;
+  if (phoneLayout.matches) return `translate3d(${dx}px, ${dy}px, 0) scale(${from.width / to.width}, ${from.height / to.height})`;
   return `perspective(1800px) translate3d(${dx}px, ${dy}px, 0) rotateY(-28deg) skewY(16deg) scale(${from.width / to.width}, ${from.height / to.height})`;
 }
 async function openPhoto({ initial = false } = {}) {
   if (viewer.open || closing || !cards().length) return;
   interacted();
   const from = liftImage(selected);
-  viewer.show();
+  if (phoneLayout.matches) viewer.showModal();
+  else viewer.show();
   const to = lifted.image.getBoundingClientRect();
   canvas.classList.add('is-viewing');
   cards()[selected].tabIndex = -1;
@@ -170,7 +173,7 @@ function selectPhoto(index, { announce = true } = {}) {
     card.style.zIndex = String(position === selected ? 100 : 50 - Math.min(Math.abs(offset), 49));
     card.classList.toggle('is-selected', position === selected);
     // While the viewer shows this photo, its card is invisible, so it leaves the tab order.
-    card.tabIndex = position === selected && !canvas.classList.contains('is-viewing') ? 0 : -1;
+    card.tabIndex = (phoneLayout.matches || position === selected) && !canvas.classList.contains('is-viewing') ? 0 : -1;
     if (position === selected) card.setAttribute('aria-current', 'true');
     else card.removeAttribute('aria-current');
     // Load the visible run of planes so the stacks show real photo edges.
@@ -191,7 +194,10 @@ collection.addEventListener('click', event => {
   if (suppressClick) { suppressClick = false; return; }
   const index = cards().indexOf(card);
   interacted();
-  if (index !== selected) { selectPhoto(index); return; }
+  if (index !== selected) {
+    selectPhoto(index);
+    if (!phoneLayout.matches) return;
+  }
   openPhoto();
 });
 canvas.addEventListener('keydown', event => {
@@ -237,7 +243,7 @@ function wheelStep(event) {
   return Math.sign(wheelTotal);
 }
 canvas.addEventListener('wheel', event => {
-  if (event.ctrlKey || viewer.open || cards().length < 2) return;
+  if (phoneLayout.matches || event.ctrlKey || viewer.open || cards().length < 2) return;
   const step = wheelStep(event);
   if (step) selectPhoto(selected + step);
 }, { passive: false });
@@ -256,7 +262,7 @@ function clearDrag() {
   canvas.style.setProperty('--drag-y', '0px');
 }
 canvas.addEventListener('pointerdown', event => {
-  if (event.button !== 0 || viewer.open) return;
+  if (phoneLayout.matches || event.button !== 0 || viewer.open) return;
   drag = { x: event.clientX, y: event.clientY, dx: 0, pointerId: event.pointerId, active: false };
   suppressClick = false;
 });
@@ -295,6 +301,14 @@ window.addEventListener('pointerup', event => {
 window.addEventListener('pointercancel', () => { drag = null; clearDrag(); });
 canvas.addEventListener('dragstart', event => event.preventDefault());
 selectPhoto(selected, { announce: false });
+phoneLayout.addEventListener('change', () => {
+  flight?.cancel();
+  flight = null;
+  closing = false;
+  restoreImage();
+  if (viewer.open) viewer.close();
+  selectPhoto(selected, { announce: false });
+});
 viewer.querySelector("[data-close-viewer]").addEventListener("click", closePhoto);
 viewer.addEventListener('click', event => {
   if (event.target === viewer || event.target === media) closePhoto();
@@ -342,7 +356,7 @@ async function loadUploads() {
       card.className = "photo-page-card";
       card.href = url.href;
       card.setAttribute("aria-label", photo.alt || "Photograph");
-      card.innerHTML = photoMarkup(photo, { sizes: "(max-width: 700px) 72vw, (min-width: 1600px) 480px, 30vw", preview: true });
+      card.innerHTML = photoMarkup(photo, { sizes: "(max-width: 700px) calc((100vw - 48px) / 2), (min-width: 1600px) 480px, 30vw", preview: true });
       canvas.append(card);
     });
     // Keep delegation and the viewer's sequence shared across both canvases.
